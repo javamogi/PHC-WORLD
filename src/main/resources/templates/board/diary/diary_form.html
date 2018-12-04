@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+	<title>일지 글 쓰기</title>
+	<link rel="stylesheet" href="/daumeditor/css/editor.css" type="text/css" charset="utf-8"/>
+	<script src="/daumeditor/js/editor_loader.js?environment=development" type="text/javascript" charset="utf-8"></script>
+	{{> /include/header}}
+
+</head>
+<body>
+        {{> /include/header-navbar}}
+      {{> /include/side-navbar}}
+
+<div id="wrapper">
+        <div id="page-wrapper">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h1 class="page-header">일기</h1>
+                </div>
+                <!-- /.col-lg-12 -->
+            </div>
+            <!-- /.row -->
+            
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="panel panel-yellow">
+                        <div class="panel-heading">
+                            Diary
+                        </div>
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-lg-12 col-md-12">
+                                
+                                    <form role="form" class="form-group" id="form-group" name="diary" method="post" action="/diary">
+                                    	<input type="hidden" id="hiddenThumbnail" name="thumbnail" value="no-image-icon.gif">
+                                        <div class="form-group">
+                                            <label for="title">제목</label>
+                                            <input class="form-control" id="title" name="title" placeholder="Title">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="contents">내용</label>
+     											<!-- <div id="editor_frame"></div> -->
+     											{{> /board/editor}}
+     											<textarea id="sample_contents_source" style="display:none;">
+												</textarea>
+                                        </div>
+                                        <!-- <button type="submit" id="save_button" class="btn btn-primary">확인</button> -->
+                                        <!-- <button type="submit" onclick='saveContent()' class="btn btn-primary">확인</button> -->
+                                        <button type="submit" onclick='saveContent()' class="btn btn-warning">확인</button>
+  										<a class="btn btn-danger" href="/diary/list" role="button">취소</a>
+                                    </form>
+                                    <!-- /form -->
+                                  </div>
+                                  <!-- /.col-lg-12 -->
+                                </div>
+                                <!-- /.row -->
+                              </div>
+                              <!-- /.panel-body -->
+                            </div>
+                            <!-- /.panel panel-default -->
+                          </div>
+                          <!-- /.col-lg-12 -->
+                        </div>
+                        <!-- /.row -->
+                                  
+        
+    	</div>
+        <!-- /#page-wrapper -->
+
+    </div>
+    <!-- /#wrapper -->
+    
+    {{> /include/footer}}
+	<script src="/daumeditor/js/daumeditor_diary.js?ver=1"></script>
+
+</body>
+</html>

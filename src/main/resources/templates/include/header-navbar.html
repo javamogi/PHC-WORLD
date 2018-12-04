@@ -1,0 +1,131 @@
+ <!-- Navigation -->
+        <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="/dashboard">PHC World</a>
+            </div>
+            <!-- /.navbar-header -->
+            
+            <ul class="nav navbar-top-links navbar-right">
+            {{#sessionedUser}}
+            <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                        <i class="fa fa-envelope fa-fw"></i><span id="countOfMessageHeader" class="badge badge-danger">{{countMessages}}</span> <i class="fa fa-caret-down"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-messages">
+            		{{#messages}}
+                        <li>
+                            <a href="/users/{{toUser.id}}/profile#tab-item-3">
+                                <div>
+                                    <strong>{{fromUser.name}}</strong>
+                                    <span class="pull-right text-muted">
+                                        <em>{{formattedCreateDate}}</em>
+                                    </span>
+                                </div>
+                                <div>{{{contents}}}</div>
+                            </a>
+                        </li>
+                        <li class="divider"></li>
+                        {{/messages}}
+                        {{^messages}}
+                        <li> 메세지가 없습니다. </li>
+                   		<li class="divider"></li>
+                        {{/messages}}                        
+                        <li>
+                            <a class="text-center" href="#">
+                                <strong>Read All Messages</strong>
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        </li>
+                    </ul>
+                    <!-- /.dropdown-messages -->
+                </li>
+                <!-- /.dropdown -->
+                <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                        <i class="fa fa-bell fa-fw"></i> <i class="fa fa-caret-down"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-alerts">
+                    {{#alerts}}
+                    	{{#freeBoardAnswer}}
+                    	<li>
+                            <a href="/alert/{{id}}">
+                                <div>
+                                    {{freeBoardAnswer.writer.name}}님이 {{type}} 게시물에 댓글을 달았습니다.
+                                    <span class="pull-right text-muted small">{{getFormattedSaveDate}}</span>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="divider"></li>
+                        {{/freeBoardAnswer}}
+                        {{#diaryAnswer}}
+                        <li>
+                            <a href="/alert/{{id}}">
+                                <div>
+                                    {{diaryAnswer.writer.name}}님이 {{type}} 게시물에 댓글을 달았습니다.
+                                    <span class="pull-right text-muted small">{{getFormattedSaveDate}}</span>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="divider"></li>
+                        {{/diaryAnswer}}
+                        {{#good}}
+                        <li>
+                            <a href="/alert/{{id}}">
+                                <div>
+                                    {{good.user.name}}님이 {{type}} 게시물에 좋아요를 눌렀습니다.
+                                    <span class="pull-right text-muted small">{{getFormattedSaveDate}}</span>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="divider"></li>
+                        {{/good}}
+                    {{/alerts}}      
+                    {{^alerts}}
+                    <li> 알림이 없습니다. </li>
+                    <li class="divider"></li>
+                    {{/alerts}}              
+                    <li>
+                            <a class="text-center" href="#">
+                                <strong>See All Alerts</strong>
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        </li>
+                     </ul>
+                    <!-- /.dropdown-alerts -->
+                </li>
+                <!-- /.dropdown -->
+                <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                        <i class="fa fa-user fa-fw"></i> <i class="fa fa-caret-down"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-user">
+                        <li><a href="/users/{{id}}/profile"><i class="fa fa-user fa-fw"></i> User Profile</a>
+                        </li>
+                        <li><a href="/users/{{id}}/form"><i class="fa fa-gear fa-fw"></i> Settings</a>
+                        </li>
+                        <li class="divider"></li>
+                        <li><a href="/users/logout"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
+                        </li>
+                    </ul>
+                    <!-- /.dropdown-user -->
+                </li>
+                <!-- /.dropdown -->
+			{{/sessionedUser}}
+			{{^sessionedUser}}
+			<li class="dropdown">
+               <a href="/users/loginForm"><i class="fa fa-sign-in"> 로그인</i></a>
+             </li>
+                <!-- /.dropdown -->
+			<li class="dropdown">
+               <a href="/users/form"><i class="fa fa-pencil-square-o"> 회원가입</i></a>
+            </li>
+                <!-- /.dropdown -->
+			{{/sessionedUser}}
+            </ul>
+            <!-- /.navbar-top-links -->

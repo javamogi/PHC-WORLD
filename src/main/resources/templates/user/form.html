@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+
+    {{> /include/header}}
+
+</head>
+
+<body>
+
+    {{> /include/header-navbar}}
+    </nav>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4 col-md-offset-4">
+                <div class="login-panel panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Please Sign Up</h3>
+                    </div>
+                    <div class="panel-body">
+                    {{#errorMessage}}
+                    	<div class="alert alert-danger alert-dismissable">
+                        	<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                             {{errorMessage}} 
+                         </div>
+                    {{/errorMessage}}
+                        <form role="form" method="post" action="/users">
+                            <fieldset>
+                                <div class="form-group">
+                                    <input class="form-control" placeholder="E-mail" name="email" type="email" autofocus>
+                                </div>
+                                <div class="form-group">
+                                    <input class="form-control" placeholder="Password" name="password" type="password" value="">
+                                </div>
+                                <div class="form-group">
+                                    <input class="form-control" placeholder="Name" name="name" type="text" value="">
+                                </div>
+                                <!-- Change this to a button or input when using this as a form -->
+                                <button type="submit" class="btn btn-lg btn-success btn-block">Sign Up</button>
+                            </fieldset>
+                        </form>
+                    </div>
+                    <div class="panel-body">
+                        <a class="btn btn-block btn-social btn-facebook">
+                           <i class="fa fa-facebook"></i> Sign in with Facebook
+                        </a>
+                        <a class="btn btn-block btn-social btn-google-plus">
+                           <i class="fa fa-google-plus"></i> Sign in with Google
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {{> /include/footer}}
+
+</body>
+
+</html>

@@ -1,0 +1,27 @@
+package com.phcworld.domain.board;
+
+
+import java.util.List;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+
+import com.phcworld.domain.user.User;
+
+public interface DiaryService {
+	Page<Diary> findPageDiaryByWriter(User loginUser, PageRequest pageRequest, User requestUser);
+	
+	Diary createDiary(User user, String title, String contents, String thumbnail);
+	
+	Diary getOneDiary(Long id);
+	
+	Diary updateDiary(Diary diary, String contents, String thumbnail);
+	
+	void deleteDiaryById(Long id);
+	
+	Diary addDiaryAnswer(Long id);
+	
+	Diary deleteDiaryAnswer(Long id);
+	
+	List<Diary> findDiaryListByWriter(User loginUser);
+}

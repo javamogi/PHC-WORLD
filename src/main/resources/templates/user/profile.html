@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<link href="/vendor/bootstrap/css/profile.css" rel="stylesheet">
+<title>회원 정보</title>
+{{> /include/header}}
+<!-- <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet"> -->
+</head>
+<body>
+{{> /include/header-navbar}}
+    </nav>
+<div class="container">
+	{{#user}}
+	<div class="row">
+		<div class="col-xs-12 col-md-4 col-lg-3">
+			<div class="userProfileInfo">
+				<div class="image text-center">
+					<img src="/images/profile/{{profileImage}}" alt="#" class="img-responsive">
+				</div>
+				<div class="box">
+					<div class="name"><strong>{{name}}</strong></div>
+					<div class="info">
+						<span><i class="fa fa-fw fa-envelope-o"></i> {{email}}</span>
+						<span><i class="fa fa-fw fa-clock-o"></i> {{getFormattedCreateDate}}</span>
+						<span><i class="fa fa-fw fa-smile-o"></i>{{name}}</span>
+					</div>
+					<div class="socialIcons clearfix">
+						<a href="#" title="#" class="fb">
+							<i class="fa fa-facebook"></i>
+						</a>
+						<a href="#" title="#" class="twitter">
+							<i class="fa fa-twitter"></i>
+						</a>
+						<a href="#" title="#" class="google-plus">
+							<i class="fa fa-google-plus"></i>
+						</a>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="col-xs-12 col-md-8 col-lg-9">
+			<div class="box">
+				<h2 class="boxTitle">Personal information</h2>
+				<!-- Tabs -->
+				<ul id="profileTabs" class="nav nav-tabs userProfileTabs" role="tablist">
+					<li role="presentation" class="active"><a href="#tab-item-2" aria-controls="tab-item-2" role="tab" data-toggle="tab" aria-expanded="true">Activities</a></li>
+					{{#equalLoginUser}}
+					<li role="presentation" class=""><a href="#tab-item-3" aria-controls="tab-item-3" role="tab" data-toggle="tab" aria-expanded="false">Receive Message<span id="countOfMessagePage" class="badge badge-danger">{{countMessages}}</span></a></li>
+					<li role="presentation" class=""><a href="#tab-item-4" aria-controls="tab-item-4" role="tab" data-toggle="tab" aria-expanded="false">Send Message</a></li>
+					{{/equalLoginUser}}
+				</ul>
+
+				<div class="tab-content">
+					<!-- Activities -->
+					<div role="tabpanel" class="tab-pane fade active in" id="tab-item-2">
+					{{#timeline}}
+						<div class="userActivities">
+							<div class="i">
+								<a href="#" title="#" class="image">
+								{{#user}}
+									<img src="/images/profile/{{profileImage}}" alt="#" width="44" height="44">
+								{{/user}}
+								</a>
+								<div class="activityContent">
+									<ul class="simpleListings status">
+									{{#diary}}
+										<li>
+											<div class="title">
+												<a href="/diary/{{diary.id}}/detail" title="{{diary.title}}">{{diary.title}}</a>
+											</div>
+											<div class="info">{{formattedSaveDate}}</div>
+											<p>{{type}}</p>
+											<div class="share">
+												<a href="/diary/{{diary.id}}/detail" title="#"><i class="fa fa-comments"></i> {{diary.countOfAnswer}}</a>
+											</div>
+										</li>
+									{{/diary}}
+									{{^diary}}
+										<li>
+											<div class="title">
+												<a href="/freeboard/{{freeBoard.id}}/detail" title="{{freeBoard.title}}">{{freeBoard.title}}</a>
+											</div>
+											<div class="info">{{formattedSaveDate}}</div>
+											<p>{{type}}</p>
+											<div class="share">
+												<a href="/freeboard/{{freeBoard.id}}/detail" title="#"><i class="fa fa-comments"></i> {{freeBoard.countOfAnswer}}</a>
+											</div>
+										</li>									
+									{{/diary}}
+									</ul>
+
+								</div>
+							</div>
+						</div>
+					 {{/timeline}}
+						<!-- Show more -->
+						{{#show more}}
+						{{#user}}
+						<a href="/users/{{id}}/timelineList?timelinePageNum=1" title="show more" id="showmore" class="btn btn-primary showMore"><i class="fa fa-refresh"></i> Show more</a>
+						{{/user}}
+						{{/show more}}
+					</div>
+
+					<!-- Receive Message -->
+					<div role="tabpanel" class="tab-pane fade" id="tab-item-3">
+						<!-- Message container -->
+						<div class="container">
+<div class="row">
+<div class="col-md-6">
+	<div class="chat_container">
+		<div class="job-box">
+			<div class="job-box-filter">
+				<div class="row">
+					<div class="col-md-6 col-sm-6">
+					<label>Show 
+					<select name="datatable_length" class="form-control input-sm">
+					<option value="10">10</option>
+					<option value="25">25</option>
+					<option value="50">50</option>
+					<option value="100">100</option>
+					</select>
+					entries</label>
+					</div>
+				</div>
+			</div>
+			<div class="inbox-message">
+				<ul>
+				{{#receiveMessages}}
+					<li>
+							<div class="message-avatar">
+								<img src="/images/profile/{{fromUser.profileImage}}" alt="">
+							</div>
+							<div class="message-body">
+								<div class="message-body-heading">
+									<h5><a href="/message/info/{{id}}" id="getUserInfo">{{fromUser.name}}</a> <a href="/message/{{id}}" id="messageConfirm"><span class="{{className}}">{{confirm}}</span></a></h5>
+									<span>{{formattedCreateDate}}</span>
+								</div>
+								<p>{{{contents}}}</p>
+							</div>
+					</li>
+				{{/receiveMessages}}
+				</ul>
+			</div>
+			<!-- pagenation -->
+			<div class="text-center">
+  					<ul class="pagination justify-content-center">
+  					{{#receivepreviousPage}}
+        				<li class="page-item">
+          					{{#user}}
+          					<a class="page-link" href="/users/{{id}}/profile?receivePageNum={{previousPage}}" aria-label="Previous">
+            					<span aria-hidden="true">&laquo;</span>
+            					<span class="sr-only">Previous</span>
+          					</a>
+          					{{/user}}
+        				</li>
+        			{{/receivepreviousPage}}
+  				{{#receivepageNations}}
+        				<li class="page-item">
+        					{{#user}}
+          					<a class="page-link" href="/users/{{id}}/profile?receivePageNum={{intValue}}">{{intValue}}</a>
+          					{{/user}}
+        				</li>
+  				 {{/receivepageNations}}
+  				 {{#receivenextPage}}
+        				<li class="page-item">
+          					{{#user}}
+          					<a class="page-link" href="/users/{{id}}/profile?receivePageNum={{nextPage}}" aria-label="Next">
+            					<span aria-hidden="true">&raquo;</span>
+            					<span class="sr-only">Next</span>
+          					</a>
+          				{{/user}}
+        				</li>
+        		{{/receivenextPage}}
+      				</ul>
+      			</div>
+		</div>
+	</div>
+</div>
+</div>
+</div>
+					</div>
+					
+					<!-- /.modal compose message -->
+    <div class="modal fade" id="modalCompose">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header modal-header-info">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h4 class="modal-title"><span class="glyphicon glyphicon-envelope"></span> Send Message</h4>
+          </div>
+          <div class="modal-body">
+            <form role="form" class="form-horizontal" id="sendMessage" action="/message">
+                <div class="form-group">
+                  <label class="col-sm-2" for="inputTo"><span class="glyphicon glyphicon-user"></span>To</label>
+                  <div class="col-sm-10"><input type="email" name="toUserEmail" class="form-control" id="inputTo" placeholder="Email Address"></div>
+                </div>
+                <div class="form-group">
+                  <label class="col-sm-12" for="inputBody"><span class="glyphicon glyphicon-list"></span>Message</label>
+                  <div class="col-sm-12"><textarea name="contents" class="form-control" id="inputBody" rows="8"></textarea></div>
+                </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Cancel</button> 
+            <button type="button" class="btn btn-primary " id="btn-sendMessage">Send <i class="fa fa-arrow-circle-right fa-lg"></i></button>
+            
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal compose message -->
+
+					<!-- Send Message -->
+					<div role="tabpanel" class="tab-pane fade" id="tab-item-4">
+						<div class="container">
+<div class="row">
+<div class="col-md-6">
+	<div class="chat_container">
+		<div class="job-box">
+			<div class="job-box-filter">
+				<div class="row">
+					<div class="col-md-6 col-sm-6">
+					<label>Show 
+					<select name="datatable_length" class="form-control input-sm">
+					<option value="10">10</option>
+					<option value="25">25</option>
+					<option value="50">50</option>
+					<option value="100">100</option>
+					</select>
+					entries</label>
+					</div>
+					<div class="col-md-6 col-sm-6">
+						<div class="filter-search-box text-right">
+							<label>Search:<input type="search" class="form-control input-sm" placeholder=""></label>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="inbox-message">
+				<ul id="sendMessageBox">
+				{{#sendMessages}}
+					<li>
+							<div class="message-avatar">
+								<img src="/images/profile/{{fromUser.profileImage}}" alt="">
+							</div>
+							<div class="message-body">
+								<div class="message-body-heading">
+									<h5>{{toUser.name}} <span class="{{className}}">{{confirm}}</span></h5>
+									<span>{{formattedCreateDate}}</span>
+								</div>
+								<p>{{{contents}}}</p>
+							</div>
+					</li>
+				{{/sendMessages}}
+				</ul>
+			</div>
+			<!-- pagenation -->
+			<div class="text-center">
+  					<ul class="pagination justify-content-center">
+  					{{#sendpreviousPage}}
+        				<li class="page-item">
+        				{{#user}}
+          					<a class="page-link" href="/users/{{id}}/profile?sendPageNum={{previousPage}}" aria-label="Previous">
+            					<span aria-hidden="true">&laquo;</span>
+            					<span class="sr-only">Previous</span>
+          					</a>
+          				{{/user}}
+        				</li>
+        			{{/sendpreviousPage}}
+  				{{#sendpageNations}}
+        				<li class="page-item">
+        				{{#user}}
+          					<a class="page-link" href="/users/{{id}}/profile?sendPageNum={{intValue}}">{{intValue}}</a>
+          				{{/user}}
+        				</li>
+  				 {{/sendpageNations}}
+  				 {{#sendnextPage}}
+        				<li class="page-item">
+        				{{#user}}
+          					<a class="page-link" href="/users/{{id}}/profile?sendPageNum={{nextPage}}" aria-label="Next">
+            					<span aria-hidden="true">&raquo;</span>
+            					<span class="sr-only">Next</span>
+          					</a>
+          				{{/user}}
+        				</li>
+        		{{/sendnextPage}}
+      				</ul>
+      			</div>
+		</div>
+	</div>
+</div>
+</div>
+					<button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#modalCompose">Send</button>
+</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	{{/user}}
+</div>
+
+{{> /include/footer}}
+
+<script src="/js/message_scripts.js"></script>
+
+</body>
+</html>

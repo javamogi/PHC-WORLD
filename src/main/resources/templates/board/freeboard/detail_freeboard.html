@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+	<link href="/vendor/bootstrap/css/freeBoard.css" rel="stylesheet">
+	<title>일지 보기</title>
+	<!-- 
+	<link rel="stylesheet" href="/daumeditor/css/editor.css" type="text/css" charset="utf-8"/>
+	<script src="/daumeditor/js/editor_loader.js?environment=development" type="text/javascript" charset="utf-8"></script>
+	 -->
+	{{> /include/header}}
+	
+	
+</head>
+
+<body>
+
+    <div id="wrapper">
+
+       {{> /include/header-navbar}}
+       {{> /include/side-navbar}}
+
+        <div id="page-wrapper">
+
+            <div class="container-fluid">
+
+                <!-- Page Heading -->
+                <div class="row">
+                    <div class="col-lg-12">
+                        <h1 class="page-header">
+                            자유게시판 보기 
+                        </h1>
+                    </div>
+                    <!-- /.col-lg-12 -->
+                </div>
+                <!-- /.row -->
+
+                <div class="row">
+				{{#freeBoard}}
+                	
+  						<div class="col-lg-12 col-md-12">
+    						<label for="title">제목</label>
+     						<div class="form-group">
+        						<input type="text" class="form-control" id="exampleInputTitle" name="title" value="{{title}}" title="{{title}}" disabled>
+    						</div>
+ 						</div>
+ 						<div class="col-lg-12 col-md-12">
+    						<label for="userId">이름</label>
+     						<div class="form-group">
+      							<input type="text" class="form-control" id="exampleInputName" name="userId" value="{{writer.name}}" disabled>
+    						</div>
+  						</div>
+   						<div class="col-lg-12 col-md-12">
+  							<label for="contents">내용</label>
+  							<div class="form-group">
+  								<div class="well" style="line-height:2.8em; width:100%;">
+  								{{{contents}}}
+  								</div>
+  							</div>
+ 						</div>
+ 						
+ 						<div class="col-lg-12 col-md-12">
+ 						<article class="answer-template">
+ 							<label for="contents"><h1 class="comments-title"><span class="fa fa-comments"></span> Comments<span id="countOfAnswer">{{countOfAnswer}}</span></h1></label>
+							{{#freeBoardAnswers}}
+							<article class="answer-article" id="answer-article">
+							<div class="be-comment">
+								<div class="be-img-comment">	
+									<a href="/users/{{writer.id}}/profile">
+										<img src="/images/profile/{{writer.profileImage}}" alt="" class="be-ava-comment">
+									</a>
+								</div>
+								<div class="be-comment-content">
+									<span class="be-comment-name">
+										<a href="/users/{{writer.id}}/profile">{{writer.name}}</a>
+									</span>
+									<span class="be-comment-time">
+										<a class="answer-delete" href="/freeboard/{{freeBoard.id}}/answer/{{id}}">삭제</a>
+										<i class="fa fa-clock-o"></i>
+											{{formattedCreateDate}}
+									</span>
+									<p class="be-comment-text">
+										{{{contents}}}
+									</p>
+								</div>
+							</div>
+							</article>
+							{{/freeBoardAnswers}}
+ 						</article>
+ 						</div>
+ 						
+ 						{{#user}}
+ 						<!-- answer ajax를 이용하여 댓글 추가하기 댓글 나오는 폼 만들기-->
+   						<div class="col-lg-12 col-md-12">
+ 							<form class="write-answer" id="form-group" action="/freeboard/{{id}}/answer" method="post">
+  								<label for="contents">댓글 쓰기</label>
+  								<div class="form-group">
+     								<textarea class="col-lg-10 col-md-10" id="contents" name="contents" placeholder="내용"></textarea>
+     								<div class="col-lg-2 col-md-2">
+  										<button type="submit" id="save_button" class="btn btn-default">댓글등록</button>
+  									</div>
+     								<!-- <input type="hidden" name="writer" value="test">
+     								<input type="hidden" name="boardId" value="test">
+   						  			<div class="col-md-2 col-md-offset-10"></div> -->
+  								</div>
+							</form>
+  						</div>
+               		<!-- /.answer -->
+               		{{/user}}
+               		{{^user}}
+               		<div class="col-lg-12 col-md-12">
+ 							<div class="bg-info">
+ 								<a href="/users/loginForm">로그인</a>을 해야 댓글을 작성할 수 있습니다.
+  							</div>
+ 					</div>
+ 					{{/user}}
+ 					<div class="col-lg-12 col-md-12"><br></div>
+ 					<div class="col-lg-12 col-md-12">
+	 					<a class="btn btn-primary" href="/freeboard/list" role="button">목록</a>
+	 					{{#matchUser}}
+   						<a class="btn btn-info" href="/freeboard/{{id}}/form" role="button">수정</a>
+   						<form class="form-delete" action="/freeboard/{{id}}/delete" method="POST" style="display:inline;">
+   							<input type="hidden" name="_method" value="DELETE">
+   							<button class="btn btn-danger" type="submit">삭제</button>
+   						</form>
+   						{{/matchUser}}
+	 					{{#matchAuthority}}
+   						<form class="form-delete" action="/freeboard/{{id}}/delete" method="POST" style="display:inline;">
+   							<input type="hidden" name="_method" value="DELETE">
+   							<button class="btn btn-danger" type="submit">삭제</button>
+   						</form>
+   						{{/matchAuthority}}
+ 					</div>
+                </div>
+                <!-- /.row -->
+                {{/freeBoard}}
+            </div>
+            <!-- /.container-fluid -->
+
+        </div>
+        <!-- /#page-wrapper -->
+
+    </div>
+    <!-- /#wrapper -->
+    
+     {{> /include/footer}}
+     
+     <!-- 
+	<script src="/daumeditor/js/daumeditor.js?ver=1"></script>
+	 -->
+	<script src="/js/scripts.js"></script>
+	
+</body>
+
+</html>
