@@ -225,7 +225,7 @@ public class FreeBoardControllerTest {
 		this.mvc.perform(get("/freeboard/{id}/form", 1L)
 				.session(mockSession))
 		.andDo(print())
-		.andExpect(view().name(containsString("/board/freeboard/freeBoard_updateForm")))
+		.andExpect(view().name(containsString("/board/freeboard/freeboard_updateForm")))
 		.andExpect(status().isOk())
 		.andExpect(model().attribute("freeBoard", freeBoard))
 		.andExpect(model().size(1));
