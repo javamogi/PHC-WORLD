@@ -112,7 +112,7 @@ public class UploadController {
 		try {
 //			multipartFile.transferTo(new File(pathStr + File.separator + "src" + File.separator + "main" + File.separator + "resources"+ File.separator +"static"+ File.separator +"images" + File.separator +"profile" + File.separator + randName));
 			// 로컬환경
-			multipartFile.transferTo(new File(realPath + File.separator + "WEB-INF"+ File.separator +"classes"+ File.separator +"static" + File.separator + "images" + File.separator + randName));
+			multipartFile.transferTo(new File(realPath + File.separator + "WEB-INF"+ File.separator +"classes"+ File.separator +"static" + File.separator + "images" + File.separator +"profile" + File.separator + randName));
 		} catch(Exception e) {
 			log.debug("Error : {}", e);;
 		}
