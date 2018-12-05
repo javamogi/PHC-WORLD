@@ -107,7 +107,7 @@ public class FreeBoardController {
 			return "/user/login";
 		}
 		model.addAttribute("freeBoard", freeBoard);
-		return "/board/freeboard/freeBoard_updateForm";
+		return "/board/freeboard/freeboard_updateForm";
 	}
 
 	@PutMapping("/{id}")
