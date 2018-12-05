@@ -23,7 +23,7 @@ $(document).ready(function(){
 		e.preventDefault();
 //		console.log("btn-sendMessage click!!");
 		var queryString = $("#sendMessage").serialize();
-//		var url = $("#sendMessage").attr("action");
+		var url = $("#sendMessage").attr("action");
 //		console.log("query : " + queryString);
 //		console.log("url : " + url);
 		
