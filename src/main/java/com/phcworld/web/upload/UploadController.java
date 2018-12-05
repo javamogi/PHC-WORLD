@@ -5,6 +5,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.UUID;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
@@ -36,7 +37,7 @@ public class UploadController {
 	private UserService userService;
 	
 	@PostMapping("/imageUpload")
-	public Image create(@RequestParam("imageFile") MultipartFile multipartFile, HttpSession session, Exception exception) {
+	public Image create(@RequestParam("imageFile") MultipartFile multipartFile, HttpServletRequest request, HttpSession session, Exception exception) {
 		Long size = null;
 		String originalName = "", fileExtension = "", randName = "";
 		if(multipartFile != null) {
@@ -51,8 +52,15 @@ public class UploadController {
 		Path path = Paths.get("");
 		String pathStr = path.toAbsolutePath().toString();
 		
+		log.debug("pathStr : {}", pathStr);
+		
+		String realPath = request.getSession().getServletContext().getRealPath("/");
+		log.debug("realPath : {}", realPath);
+		
 		try {
-			multipartFile.transferTo(new File(pathStr + File.separator + "src" + File.separator + "main" + File.separator + "resources"+ File.separator +"static"+ File.separator +"images" + File.separator + randName));
+//			multipartFile.transferTo(new File(pathStr + File.separator + "src" + File.separator + "main" + File.separator + "resources"+ File.separator +"static"+ File.separator +"images" + File.separator + randName));
+			// 로컬환경
+			multipartFile.transferTo(new File(realPath + File.separator + "webapps" + File.separator + "ROOT" + File.separator + "WEB-INF"+ File.separator +"classes"+ File.separator +"static" + File.separator + "images" + File.separator + randName));
 		} catch(Exception e) {
 			log.debug("Error : {}", e);;
 		}
