@@ -16,7 +16,7 @@ public class PortfolioApplicationTest {
 		encryptor.setAlgorithm("PBEWithMD5AndDES");
 		encryptor.setStringOutputType("base63");
 		String encryptedText = encryptor.encrypt("smtp.gmail.com");
-		String plainText = encryptor.decrypt("ltOMVMdJXrZELApjAKVc2YVR1z4I8Fei");
+		String plainText = encryptor.decrypt(encryptedText);
 		
 		System.out.println("encryptedText : " + encryptedText);
 		System.out.println("plainText : " + plainText);
