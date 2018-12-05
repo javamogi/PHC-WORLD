@@ -69,14 +69,19 @@ public class UploadController {
 	}
 	
 	@GetMapping("/deleteImage")
-	public String delete(@RequestParam("randFileName") String randName) {
+	public String delete(@RequestParam("randFileName") String randName, HttpServletRequest request) {
 		Image img = imageService.findImageByRandFileName(randName);
 		if(img != null) {
 			imageService.deleteImageById(img.getId());
 		}
 		Path path = Paths.get("");
 		String pathStr = path.toAbsolutePath().toString();
-		File deleteFile = new File(pathStr + File.separator + "src" + File.separator + "main" + File.separator + "resources"+ File.separator +"static"+ File.separator +"images" + File.separator + randName);
+		
+		String realPath = request.getSession().getServletContext().getRealPath("/");
+		
+//		File deleteFile = new File(pathStr + File.separator + "src" + File.separator + "main" + File.separator + "resources"+ File.separator +"static"+ File.separator +"images" + File.separator + randName);
+		
+		File deleteFile = new File(realPath + File.separator + "WEB-INF"+ File.separator +"classes"+ File.separator +"static" + File.separator + "images" + File.separator + randName);
 		if(deleteFile.exists()) {
 			if(deleteFile.delete()) {
 				log.debug("delete success");
@@ -93,7 +98,7 @@ public class UploadController {
 	}
 	
 	@PostMapping("/profileUpload")
-	public User profileUpload(@RequestParam("profileImage") MultipartFile multipartFile, HttpSession session, Exception exception) {
+	public User profileUpload(@RequestParam("profileImage") MultipartFile multipartFile, HttpServletRequest request, HttpSession session, Exception exception) {
 		String originalName = multipartFile.getOriginalFilename();
 		String fileExtension = originalName.substring(originalName.lastIndexOf("."));
 		String randName = UUID.randomUUID().toString().replaceAll("-", "") + fileExtension;
@@ -102,8 +107,12 @@ public class UploadController {
 		Path path = Paths.get("");
 		String pathStr = path.toAbsolutePath().toString();
 		
+		String realPath = request.getSession().getServletContext().getRealPath("/");
+		
 		try {
-			multipartFile.transferTo(new File(pathStr + File.separator + "src" + File.separator + "main" + File.separator + "resources"+ File.separator +"static"+ File.separator +"images" + File.separator +"profile" + File.separator + randName));
+//			multipartFile.transferTo(new File(pathStr + File.separator + "src" + File.separator + "main" + File.separator + "resources"+ File.separator +"static"+ File.separator +"images" + File.separator +"profile" + File.separator + randName));
+			// 로컬환경
+			multipartFile.transferTo(new File(realPath + File.separator + "WEB-INF"+ File.separator +"classes"+ File.separator +"static" + File.separator + "images" + File.separator + randName));
 		} catch(Exception e) {
 			log.debug("Error : {}", e);;
 		}
