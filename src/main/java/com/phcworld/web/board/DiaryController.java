@@ -58,10 +58,12 @@ public class DiaryController {
 	}
 
 	@GetMapping("/form")
-	public String form(HttpSession session) {
+	public String form(HttpSession session, Model model) {
 		if (!HttpSessionUtils.isLoginUser(session)) {
 			return "/user/login";
 		}
+		User loginUser = HttpSessionUtils.getUserFromSession(session);
+		model.addAttribute("user", loginUser);
 		return "/board/diary/diary_form";
 	}
 

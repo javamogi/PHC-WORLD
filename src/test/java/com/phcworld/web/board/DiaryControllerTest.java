@@ -170,6 +170,7 @@ public class DiaryControllerTest {
 		this.mvc.perform(get("/diary/form")
 				.session(mockSession))
 		.andExpect(view().name(containsString("/board/diary/diary_form")))
+		.andExpect(model().attribute("user", user))
 		.andExpect(status().isOk());
 	}
 	
