@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 public class LocalDateTimeUtils {
-
+	
 	public static final int MIN = 60;
 	public static final int HOUR = 24;
 
@@ -13,7 +13,11 @@ public class LocalDateTimeUtils {
 		if(inputDate == null) {
 			return "";
 		}
+		if(LocalDateTime.now().getYear() - inputDate.getYear() > 0) {
+			return inputDate.format(DateTimeFormatter.ofPattern("yyyy.MM.dd"));
+		}
 		long minutesGap = Duration.between(inputDate, LocalDateTime.now()).toMinutes();
+		
 		if (minutesGap / MIN < HOUR) {
 			if (minutesGap / MIN < 1) {
 				if (minutesGap == 0) {
