@@ -27,7 +27,7 @@ public class EmailService {
 		MimeMessageHelper helper = new MimeMessageHelper(msg);
 		helper.setTo(email);
 		helper.setSubject("PHC WORLD 이메일 인증");
-		helper.setText(new StringBuffer().append("<h1>메일인증</h1>").append("<a href='http://54.180.147.113:8080/email/emailConfirm?email=").append(email).append("&authKey=").append(authKey).append("' target='_blenk'>이메일 인증 확인</a>").toString(), true);
+		helper.setText(new StringBuffer().append("<h1>메일인증</h1>").append("<a href='http://54.180.124.85:8080/email/emailConfirm?email=").append(email).append("&authKey=").append(authKey).append("' target='_blenk'>이메일 인증 확인</a>").toString(), true);
 		emailSender.send(msg);
 	}
 
