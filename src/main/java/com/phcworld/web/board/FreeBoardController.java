@@ -37,9 +37,11 @@ public class FreeBoardController {
 		List<FreeBoard> list = freeBoardService.findFreeBoardAllList();
 		for (int i = 0; i < list.size(); i++) {
 			long minutesGap = Duration.between(list.get(i).getCreateDate(), LocalDateTime.now()).toMinutes();
+			FreeBoard freeBoard = list.get(i);
 			if (minutesGap / 60 < 24) {
-				FreeBoard freeBoard = list.get(i);
 				freeBoard.setBadge("New");
+			} else {
+				freeBoard.setBadge("");
 			}
 		}
 
