@@ -15,7 +15,7 @@ $(document).ready(function(){
 			return;
 		} else {
 			if($("#remember").prop("checked")) {
-				$.cookie("loginEmail", $("#email").val());
+				$.cookie("loginEmail", $("#email").val(), {expires:7});
 			} else {
 				$.removeCookie("loginEmail");
 			}
