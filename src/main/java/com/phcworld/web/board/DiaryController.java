@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.phcworld.domain.board.Diary;
 import com.phcworld.domain.board.DiaryServiceImpl;
 import com.phcworld.domain.user.User;
-import com.phcworld.domain.user.UserService;
+import com.phcworld.service.user.UserService;
 import com.phcworld.web.HttpSessionUtils;
 import com.phcworld.web.PageNationsUtil;
 

@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.phcworld.domain.timeline.Timeline;
 import com.phcworld.domain.timeline.TimelineServiceImpl;
 import com.phcworld.domain.user.User;
-import com.phcworld.domain.user.UserService;
+import com.phcworld.service.user.UserService;
 
 @RestController
 public class UserRestController {

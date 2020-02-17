@@ -1,38 +1,54 @@
-package com.phcworld.domain.user;
+package com.phcworld.service.user;
 
 import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.*;
-
+import static org.mockito.Mockito.when;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mock;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
+
+import com.phcworld.domain.user.User;
+import com.phcworld.repository.user.UserRepository;
+import com.phcworld.service.user.UserService;
+
+import lombok.extern.slf4j.Slf4j;
 
 
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest
+@Slf4j
 public class UserServiceTest {
 	
-	private static final Logger log = LoggerFactory.getLogger(UserServiceTest.class);
-	
-	@Autowired
+	@MockBean
 	private UserService userService;
 	
+	@MockBean
+	private UserRepository userRepository;
+	
 	@Test
-	@Transactional
 	public void createUser() throws Exception {
 		User user = new User("test3@test.test", "test3", "테스트3");
-		log.debug("User : {}", user);
-		User temp = userService.createUser(user);
-		User actual = userService.getOneUser(temp.getId());
-		log.debug("actual : {}", actual);
-		assertThat(actual, is(temp));
+		when(userService.createUser(user)).thenReturn(user);
+		User createUser = userService.createUser(user);
+		assertThat(createUser.getEmail(), is(user.getEmail()));
+	}
+	
+	@Test
+	public void createMeAndSetAdmin() throws Exception {
+		User user = new User("pakoh200@naver.com", "test", "주인장");
+		when(userService.createUser(user)).thenReturn(user);
+		User adminUser = userService.createUser(user);
+		adminUser.ifMeSetAdmin(user);
+		assertThat(adminUser.getAuthority(), is("ROLE_ADMIN"));
 	}
 	
 	@Test
@@ -40,9 +56,7 @@ public class UserServiceTest {
 	public void findUserByEmail() throws Exception {
 		User user = new User("test3@test.test", "test", "테스트");
 		userService.createUser(user);
-		log.debug("User : {}", user);
 		User findByEmailUser = userService.findUserByEmail("test3@test.test");
-		log.debug("find User : {}", findByEmailUser);
 		assertThat(findByEmailUser, is(user));
 	}
 	
@@ -53,7 +67,6 @@ public class UserServiceTest {
 		User actual = new User("test@test.test", "test1", "테스트1");
 		userService.updateUser(user, actual);
 		User updatedUser = userService.findUserByEmail(user.getEmail());
-		log.debug("updatedUser : {}", updatedUser);
 		assertThat(updatedUser.getPassword(), is(actual.getPassword()));
 		assertThat(updatedUser.getName(), is(actual.getName()));
 	}

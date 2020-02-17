@@ -18,7 +18,7 @@ import com.phcworld.domain.board.Diary;
 import com.phcworld.domain.board.DiaryServiceImpl;
 import com.phcworld.domain.exception.MatchNotUserExceptioin;
 import com.phcworld.domain.user.User;
-import com.phcworld.domain.user.UserService;
+import com.phcworld.service.user.UserService;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest

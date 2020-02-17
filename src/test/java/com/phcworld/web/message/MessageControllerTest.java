@@ -22,7 +22,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import com.phcworld.domain.message.Message;
 import com.phcworld.domain.message.MessageServiceImpl;
 import com.phcworld.domain.user.User;
-import com.phcworld.domain.user.UserService;
+import com.phcworld.service.user.UserService;
 import com.phcworld.web.HttpSessionUtils;
 
 @RunWith(SpringJUnit4ClassRunner.class)

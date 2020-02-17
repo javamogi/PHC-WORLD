@@ -20,7 +20,7 @@ import com.phcworld.domain.exception.UserNotFoundException;
 import com.phcworld.domain.message.Message;
 import com.phcworld.domain.message.MessageServiceImpl;
 import com.phcworld.domain.user.User;
-import com.phcworld.domain.user.UserService;
+import com.phcworld.service.user.UserService;
 import com.phcworld.web.HttpSessionUtils;
 
 @RestController

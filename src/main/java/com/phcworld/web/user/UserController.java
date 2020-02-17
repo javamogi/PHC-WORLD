@@ -30,15 +30,16 @@ import com.phcworld.domain.message.MessageServiceImpl;
 import com.phcworld.domain.timeline.Timeline;
 import com.phcworld.domain.timeline.TimelineServiceImpl;
 import com.phcworld.domain.user.User;
-import com.phcworld.domain.user.UserService;
+import com.phcworld.service.user.UserService;
 import com.phcworld.web.HttpSessionUtils;
 import com.phcworld.web.PageNationsUtil;
 
+import lombok.extern.slf4j.Slf4j;
+
 @Controller
 @RequestMapping("/users")
+@Slf4j
 public class UserController {
-	
-	private static final Logger log = LoggerFactory.getLogger(UserController.class);
 
 	@Autowired
 	private UserService userService;
@@ -55,10 +56,42 @@ public class UserController {
 	@Autowired
 	private EmailService emailService;
 	
+	@PostMapping("")
+	public String create(@Valid User user, BindingResult bindingResult, Model model) {
+		log.debug("User : {}", user);
+		if(bindingResult.hasErrors()) {
+			log.debug("Binding Result has Error!");
+			List<ObjectError> errors = bindingResult.getAllErrors();
+			for (ObjectError error : errors) {
+				log.debug("error : {},{}", error.getCode(), error.getDefaultMessage());
+				model.addAttribute("errorMessage", error.getDefaultMessage());
+			}
+			return "/user/form";
+		}
+		User emailUser = userService.findUserByEmail(user.getEmail());
+		if(existUser(emailUser)) {
+			model.addAttribute("errorMessage", "이미 등록된 이메일입니다.");
+			return "/user/form";
+		}
+		userService.createUser(user);
+		
+		try {
+			emailService.sendEmail(user.getEmail());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return "redirect:/users/loginForm";
+	}
+
+	private boolean existUser(User emailUser) {
+		return emailUser != null;
+	}
+	
 	@GetMapping("/loginForm")
 	public String loginForm(HttpSession session) {
 		User loginUser = HttpSessionUtils.getUserFromSession(session);
-		if(loginUser != null) {
+		if(existUser(loginUser)) {
 			return "redirect:/dashboard";
 		}
 		return "/user/login";
@@ -110,38 +143,10 @@ public class UserController {
 	@GetMapping("/form")
 	public String form(HttpSession session) {
 		User loginUser = HttpSessionUtils.getUserFromSession(session);
-		if(loginUser != null) {
+		if(existUser(loginUser)) {
 			return "redirect:/dashboard";
 		}
 		return "/user/form";
-	}
-	
-	@PostMapping("")
-	public String create(@Valid User user, BindingResult bindingResult, Model model) {
-		log.debug("User : {}", user);
-		if(bindingResult.hasErrors()) {
-			log.debug("Binding Result has Error!");
-			List<ObjectError> errors = bindingResult.getAllErrors();
-			for (ObjectError error : errors) {
-				log.debug("error : {},{}", error.getCode(), error.getDefaultMessage());
-				model.addAttribute("errorMessage", error.getDefaultMessage());
-			}
-			return "/user/form";
-		}
-		User emailUser = userService.findUserByEmail(user.getEmail());
-		if(emailUser != null) {
-			model.addAttribute("errorMessage", "이미 등록된 이메일입니다.");
-			return "/user/form";
-		}
-		userService.createUser(user);
-		
-		try {
-			emailService.sendEmail(user.getEmail());
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		
-		return "redirect:/users/loginForm";
 	}
 	
 	@GetMapping("/{id}/form")

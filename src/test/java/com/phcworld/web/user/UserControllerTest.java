@@ -32,7 +32,7 @@ import com.phcworld.domain.message.MessageServiceImpl;
 import com.phcworld.domain.timeline.Timeline;
 import com.phcworld.domain.timeline.TimelineServiceImpl;
 import com.phcworld.domain.user.User;
-import com.phcworld.domain.user.UserService;
+import com.phcworld.service.user.UserService;
 import com.phcworld.web.HttpSessionUtils;
 
 
@@ -66,6 +66,70 @@ public class UserControllerTest {
 	@Test
 	public void userServiceAutowired() throws Exception {
 		assertNotNull(userService);
+	}
+	
+	@Test
+	public void successCreateUser() throws Exception {
+		this.mvc.perform(post("/users")
+				.param("email", "test@test.test")
+				.param("password", "test")
+				.param("name", "테스트"))
+		.andDo(print())
+		.andExpect(redirectedUrl("/users/loginForm"));
+	}
+	
+	@Test
+	public void isNotEmailValidFailedCreateUser() throws Exception {
+		this.mvc.perform(post("/users")
+				.param("email", "test")
+				.param("password", "test")
+				.param("name", "테스트"))
+		.andDo(print())
+		.andExpect(view().name(containsString("/user/form")))
+		.andExpect(status().isOk())
+		.andExpect(model().attribute("errorMessage", "이메일 형식이 아닙니다."))
+		.andExpect(model().size(2));
+	}
+	
+	@Test
+	public void isNotPasswordValidFailedCreateUser() throws Exception {
+		this.mvc.perform(post("/users")
+				.param("email", "test@test.test")
+				.param("password", "te")
+				.param("name", "테스트"))
+		.andDo(print())
+		.andExpect(view().name(containsString("/user/form")))
+		.andExpect(status().isOk())
+		.andExpect(model().attribute("errorMessage", "4자 이상으로 해야합니다."))
+		.andExpect(model().size(2));
+	}
+		
+	@Test
+	public void isNotNameValidFailedCreateUser() throws Exception {
+		this.mvc.perform(post("/users")
+				.param("email", "test@test.test")
+				.param("password", "test")
+				.param("name", "테스"))
+		.andDo(print())
+		.andExpect(view().name(containsString("/user/form")))
+		.andExpect(status().isOk())
+		.andExpect(model().attribute("errorMessage", "영문 3자 이상 20자 이하 또는 한글 두자이상 6자 이하로 해야합니다."))
+		.andExpect(model().size(2));
+	}
+		
+	@Test
+	public void isOverlapEmailFailedCreateUser() throws Exception {
+		given(this.userService.findUserByEmail("test@test.test"))
+		.willReturn(new User("test@test.test", "test", "테스트"));
+		this.mvc.perform(post("/users")
+				.param("email", "test@test.test")
+				.param("password", "test")
+				.param("name", "테스트"))
+		.andDo(print())
+		.andExpect(view().name(containsString("/user/form")))
+		.andExpect(status().isOk())
+		.andExpect(model().attribute("errorMessage", "이미 등록된 이메일입니다."))
+		.andExpect(model().size(2));
 	}
 	
 	@Test
@@ -142,70 +206,6 @@ public class UserControllerTest {
 		.andExpect(model().size(1));
 	}
 	
-	@Test
-	public void successCreateUser() throws Exception {
-		this.mvc.perform(post("/users")
-				.param("email", "test@test.test")
-				.param("password", "test")
-				.param("name", "테스트"))
-		.andDo(print())
-		.andExpect(redirectedUrl("/users/loginForm"));
-	}
-	
-	@Test
-	public void whenIsNotEmailFailedCreateUser() throws Exception {
-		this.mvc.perform(post("/users")
-				.param("email", "test")
-				.param("password", "test")
-				.param("name", "테스트"))
-		.andDo(print())
-		.andExpect(view().name(containsString("/user/form")))
-		.andExpect(status().isOk())
-		.andExpect(model().attribute("errorMessage", "이메일 형식이 아닙니다."))
-		.andExpect(model().size(2));
-	}
-	
-	@Test
-	public void whenIsNotPasswordFailedCreateUser() throws Exception {
-		this.mvc.perform(post("/users")
-				.param("email", "test@test.test")
-				.param("password", "te")
-				.param("name", "테스트"))
-		.andDo(print())
-		.andExpect(view().name(containsString("/user/form")))
-		.andExpect(status().isOk())
-		.andExpect(model().attribute("errorMessage", "4자 이상으로 해야합니다."))
-		.andExpect(model().size(2));
-	}
-		
-	@Test
-	public void whenIsNotNameFailedCreateUser() throws Exception {
-		this.mvc.perform(post("/users")
-				.param("email", "test@test.test")
-				.param("password", "test")
-				.param("name", "테스"))
-		.andDo(print())
-		.andExpect(view().name(containsString("/user/form")))
-		.andExpect(status().isOk())
-		.andExpect(model().attribute("errorMessage", "영문 3자 이상 20자 이하 또는 한글 두자이상 6자 이하로 해야합니다."))
-		.andExpect(model().size(2));
-	}
-		
-	@Test
-	public void whenIsOverlapEmailFailedCreateUser() throws Exception {
-		given(this.userService.findUserByEmail("test@test.test"))
-		.willReturn(new User("test@test.test", "test", "테스트"));
-		this.mvc.perform(post("/users")
-				.param("email", "test@test.test")
-				.param("password", "test")
-				.param("name", "테스트"))
-		.andDo(print())
-		.andExpect(view().name(containsString("/user/form")))
-		.andExpect(status().isOk())
-		.andExpect(model().attribute("errorMessage", "이미 등록된 이메일입니다."))
-		.andExpect(model().size(2));
-	}
-
 	@Test
 	public void whenSuccessUpdateForm() throws Exception {
 		MockHttpSession mockSession = new MockHttpSession();

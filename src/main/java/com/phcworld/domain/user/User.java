@@ -16,7 +16,18 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.phcworld.web.LocalDateTimeUtils;
 import com.phcworld.web.SecurityUtils;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.experimental.Accessors;
+
 @Entity
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@Accessors(chain = true)
 public class User {
 
 	@Id
@@ -30,7 +41,7 @@ public class User {
 
 	@NotNull
 	// @Size(min = 4, max = 12, message = "4자 이상 12자 이하로 해야합니다.")
-	 @Size(min = 4, message = "4자 이상으로 해야합니다.")
+	@Size(min = 4, message = "4자 이상으로 해야합니다.")
 	@JsonIgnore
 	private String password;
 
@@ -44,57 +55,6 @@ public class User {
 	private LocalDateTime createDate;
 
 	private String profileImage = "blank-profile-picture.png";
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-	
-	public Long getId() {
-		return id;
-	}
-
-	public String getEmail() {
-		return email;
-	}
-
-	public void setEmail(String email) {
-		this.email = email;
-	}
-
-	public String getPassword() {
-		return password;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public void setAuthority(String authority) {
-		this.authority = authority;
-	}
-
-	public void setCreateDate() {
-		this.createDate = LocalDateTime.now();
-	}
-
-	public void setProfileImage(String profileImage) {
-		this.profileImage = profileImage;
-	}
-
-	public String getProfileImage() {
-		return profileImage;
-	}
-
-	public User() {
-	}
 
 	public User(String email, String password, String name) {
 		this.email = email;
@@ -132,10 +92,16 @@ public class User {
 	}
 
 	public boolean matchAuthority() {
-		if(this.authority == null){
+		if (this.authority == null) {
 			return false;
 		}
 		return this.authority.equals("ROLE_ADMIN");
+	}
+
+	public void ifMeSetAdmin(User user) {
+		if (user.getEmail().equals("pakoh200@naver.com")) {
+			user.setAuthority("ROLE_ADMIN");
+		}
 	}
 
 	@Override
@@ -185,12 +151,6 @@ public class User {
 		} else if (!password.equals(other.password))
 			return false;
 		return true;
-	}
-
-	@Override
-	public String toString() {
-		return "User [id=" + id + ", email=" + email + ", name=" + name + ", authority=" + authority + ", createDate="
-				+ createDate + "]";
 	}
 
 }

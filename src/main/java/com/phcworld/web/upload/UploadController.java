@@ -21,7 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.phcworld.domain.image.Image;
 import com.phcworld.domain.image.ImageServiceImpl;
 import com.phcworld.domain.user.User;
-import com.phcworld.domain.user.UserService;
+import com.phcworld.service.user.UserService;
 import com.phcworld.web.HttpSessionUtils;
 
 @RestController
