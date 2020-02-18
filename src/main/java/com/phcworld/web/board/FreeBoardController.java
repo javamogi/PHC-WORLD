@@ -87,7 +87,7 @@ public class FreeBoardController {
 					matchUser = true;
 				}
 			}
-			if (matchUser == false && loginUser.matchAuthority()) {
+			if (matchUser == false && loginUser.matchAdminAuthority()) {
 				matchAuthority = true;
 			}
 		}
@@ -135,7 +135,7 @@ public class FreeBoardController {
 		}
 		User loginUser = HttpSessionUtils.getUserFromSession(session);
 		FreeBoard freeBoard = freeBoardService.getOneFreeBoard(id);
-		if (!loginUser.matchId(freeBoard.getWriter().getId()) && !loginUser.matchAuthority()) {
+		if (!loginUser.matchId(freeBoard.getWriter().getId()) && !loginUser.matchAdminAuthority()) {
 			model.addAttribute("errorMessage", "삭제 권한이 없습니다.");
 			return "/user/login";
 		}

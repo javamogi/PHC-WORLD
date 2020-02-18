@@ -2,6 +2,7 @@ package com.phcworld.repository.user;
 
 import static org.junit.Assert.*;
 
+import java.time.LocalDateTime;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -25,7 +26,14 @@ public class UserRepositoryTest {
 
 	@Test
 	public void createUser() {
-		User user = new User("user@test.test", "user", "user");
+		User user = User.builder()
+				.email("test3@test.test")
+				.password("test3")
+				.name("test3")
+				.profileImage("blank-profile-picture.png")
+				.authority("ROLE_USER")
+				.createDate(LocalDateTime.now())
+				.build();
 		User newUser = userRepository.save(user);
 		log.info("User : {}", newUser);
 		assertNotNull(newUser);
@@ -54,9 +62,7 @@ public class UserRepositoryTest {
 	
 	@Test
 	public void deleteUser() {
-		User user = new User("user@test.test", "user", "user");
-		User newUser = userRepository.save(user);
-		assertNotNull(newUser);
+		createUser();
 		User selectUser = userRepository.findByEmail("user@test.test");
 		userRepository.delete(selectUser);
 		User deletedUser = userRepository.findByEmail("user@test.test");

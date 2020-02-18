@@ -5,8 +5,6 @@ import java.util.List;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
@@ -29,6 +27,7 @@ import com.phcworld.domain.message.Message;
 import com.phcworld.domain.message.MessageServiceImpl;
 import com.phcworld.domain.timeline.Timeline;
 import com.phcworld.domain.timeline.TimelineServiceImpl;
+import com.phcworld.domain.user.LoginRequestUser;
 import com.phcworld.domain.user.User;
 import com.phcworld.service.user.UserService;
 import com.phcworld.web.HttpSessionUtils;
@@ -88,6 +87,15 @@ public class UserController {
 		return emailUser != null;
 	}
 	
+	@GetMapping("/form")
+	public String form(HttpSession session) {
+		User loginUser = HttpSessionUtils.getUserFromSession(session);
+		if(existUser(loginUser)) {
+			return "redirect:/dashboard";
+		}
+		return "/user/form";
+	}
+	
 	@GetMapping("/loginForm")
 	public String loginForm(HttpSession session) {
 		User loginUser = HttpSessionUtils.getUserFromSession(session);
@@ -98,19 +106,19 @@ public class UserController {
 	}
 	
 	@PostMapping("/login")
-	public String login(String email, String password, Model model, HttpSession session) {
-		User user = userService.findUserByEmail(email);
+	public String login(LoginRequestUser requestUser, Model model, HttpSession session) {
+		User user = userService.findUserByEmail(requestUser.getEmail());
 		log.debug("input User : {}", user);
-		if(user == null) {
+		if(!existUser(user)) {
 			model.addAttribute("errorMessage", "존재하지 않는 이메일입니다.");
 			return "/user/login";
 		}
-		if(!user.matchPassword(password)) {
+		if(!user.matchPassword(requestUser.getPassword())) {
 			model.addAttribute("errorMessage", "비밀번호가 틀립니다.");
 			return "/user/login";
 		}
 		
-		EmailAuth emailAuth = emailService.findByEmail(email);
+		EmailAuth emailAuth = emailService.findByEmail(user.getEmail());
 		if(!emailAuth.auth()) {
 			model.addAttribute("errorMessage", "이메일 인증이 안됐습니다. 메일에서 인증하세요.");
 			return "/user/login";
@@ -138,15 +146,6 @@ public class UserController {
 	public String logout(HttpSession session) {
 		session.removeAttribute(HttpSessionUtils.USER_SESSION_KEY);
 		return "redirect:/users/loginForm";
-	}
-	
-	@GetMapping("/form")
-	public String form(HttpSession session) {
-		User loginUser = HttpSessionUtils.getUserFromSession(session);
-		if(existUser(loginUser)) {
-			return "redirect:/dashboard";
-		}
-		return "/user/form";
 	}
 	
 	@GetMapping("/{id}/form")
@@ -189,7 +188,8 @@ public class UserController {
 	}
 	
 	@GetMapping("/{id}/profile")
-	public String profile(@PathVariable Long id, @RequestParam(defaultValue = "1") Integer sendPageNum, @RequestParam(defaultValue = "1") Integer receivePageNum, HttpSession session, Model model) {
+	public String profile(@PathVariable Long id, @RequestParam(defaultValue = "1") Integer sendPageNum, 
+			@RequestParam(defaultValue = "1") Integer receivePageNum, HttpSession session, Model model) {
 		if(!HttpSessionUtils.isLoginUser(session)) {
 			model.addAttribute("errorMessage", "로그인이 필요합니다.");
 			return "/user/login";
@@ -205,26 +205,31 @@ public class UserController {
 		model.addAttribute("show more", temp);
 
 		if(loginUser.matchId(id)) {
-			PageNationsUtil pageNation = new PageNationsUtil();
-			Page<Message> pageReceiveMessages = messageService.findMessageByReceiveMessages(receivePageNum, user);
-			if(pageReceiveMessages != null) {
-				List<Message> receiveMessages = pageReceiveMessages.getContent();
-				pageNation.viewPageNation("receive", receivePageNum, pageReceiveMessages.getTotalPages(), model);
-				model.addAttribute("receiveMessages", receiveMessages);
-			}
-
-			Page<Message> pageSendMessages = messageService.findMessageBySendMessage(sendPageNum, user);
-			if(pageSendMessages != null) {
-				List<Message> sendMessages = pageSendMessages.getContent();
-				pageNation.viewPageNation("send", sendPageNum, pageSendMessages.getTotalPages(), model);
-				model.addAttribute("sendMessages", sendMessages);
-			}
-			model.addAttribute("equalLoginUser", true);
+			viewLoginUserMessage(sendPageNum, receivePageNum, model, user);
 		}
 		
 		model.addAttribute("user", user);
 		model.addAttribute("timeline", timelines);
 		return "/user/profile";
 	}
+
+	private void viewLoginUserMessage(Integer sendPageNum, Integer receivePageNum, Model model, User user) {
+		PageNationsUtil pageNation = new PageNationsUtil();
+		Page<Message> pageReceiveMessages = messageService.findMessageByReceiveMessages(receivePageNum, user);
+		if(pageReceiveMessages != null) {
+			List<Message> receiveMessages = pageReceiveMessages.getContent();
+			pageNation.viewPageNation("receive", receivePageNum, pageReceiveMessages.getTotalPages(), model);
+			model.addAttribute("receiveMessages", receiveMessages);
+		}
+
+		Page<Message> pageSendMessages = messageService.findMessageBySendMessage(sendPageNum, user);
+		if(pageSendMessages != null) {
+			List<Message> sendMessages = pageSendMessages.getContent();
+			pageNation.viewPageNation("send", sendPageNum, pageSendMessages.getTotalPages(), model);
+			model.addAttribute("sendMessages", sendMessages);
+		}
+		model.addAttribute("equalLoginUser", true);
+	}
+
 	
 }

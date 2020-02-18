@@ -12,10 +12,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
+import java.time.LocalDateTime;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -35,13 +35,14 @@ import com.phcworld.domain.user.User;
 import com.phcworld.service.user.UserService;
 import com.phcworld.web.HttpSessionUtils;
 
+import lombok.extern.slf4j.Slf4j;
+
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebMvcTest(UserController.class)
+@Slf4j
 public class UserControllerTest {
-	
-	private static final Logger log = LoggerFactory.getLogger(UserControllerTest.class);
-	
+
 	@Autowired
 	private MockMvc mvc;
 	
@@ -119,8 +120,16 @@ public class UserControllerTest {
 		
 	@Test
 	public void isOverlapEmailFailedCreateUser() throws Exception {
+		User user = User.builder()
+				.email("test3@test.test")
+				.password("test3")
+				.name("test3")
+				.profileImage("blank-profile-picture.png")
+				.authority("ROLE_USER")
+				.createDate(LocalDateTime.now())
+				.build();
 		given(this.userService.findUserByEmail("test@test.test"))
-		.willReturn(new User("test@test.test", "test", "테스트"));
+		.willReturn(user);
 		this.mvc.perform(post("/users")
 				.param("email", "test@test.test")
 				.param("password", "test")
@@ -133,21 +142,28 @@ public class UserControllerTest {
 	}
 	
 	@Test
-	public void whenSuccessLoginForm() throws Exception {
+	public void successLoginForm() throws Exception {
 		this.mvc.perform(get("/users/loginForm"))
 		.andExpect(view().name(containsString("/user/login")))
 		.andExpect(status().isOk());
 	}
 	
 	@Test
-	public void whenSuccessLogout() throws Exception {
+	public void successLogout() throws Exception {
 		this.mvc.perform(get("/users/logout"))
 		.andExpect(redirectedUrl("/users/loginForm"));
 	}
 	
 	@Test
-	public void whenSuccessLoginUser() throws Exception {
-		User user = new User("test@test.test", "test", "테스트");
+	public void successLoginUser() throws Exception {
+		User user = User.builder()
+				.email("test@test.test")
+				.password("test")
+				.name("테스트")
+				.profileImage("blank-profile-picture.png")
+				.authority("ROLE_USER")
+				.createDate(LocalDateTime.now())
+				.build();
 		user.setAuthority("ROLE_ADMIN");
 		given(this.userService.findUserByEmail("test@test.test"))
 		.willReturn(user);
@@ -163,23 +179,39 @@ public class UserControllerTest {
 	}
 	
 	@Test
-	public void whenIsNotFoundEmailLoginUser() throws Exception {
+	public void isNotFoundEmailLoginUser() throws Exception {
+		User user = User.builder()
+				.email("test@test.test")
+				.password("test")
+				.name("테스트")
+				.profileImage("blank-profile-picture.png")
+				.authority("ROLE_USER")
+				.createDate(LocalDateTime.now())
+				.build();
 		given(this.userService.findUserByEmail("test@test.test"))
-		.willReturn(new User("test@test.test", "test", "테스트"));//하나의 유저 데이터 입력
+		.willReturn(user);
 		this.mvc.perform(post("/users/login")
-				.param("email", "test2@test.test") //없는 데이터 
+				.param("email", "test2@test.test")
 				.param("password", "test"))
 		.andDo(print())
 		.andExpect(view().name(containsString("/user/login")))
 		.andExpect(status().isOk())
 		.andExpect(model().attribute("errorMessage", "존재하지 않는 이메일입니다."))
-		.andExpect(model().size(1));
+		.andExpect(model().size(2));
 	}
 		
 	@Test
-	public void whenIsNotMatchPasswordLoginUser() throws Exception {
+	public void isNotMatchPasswordLoginUser() throws Exception {
+		User user = User.builder()
+				.email("test@test.test")
+				.password("test")
+				.name("테스트")
+				.profileImage("blank-profile-picture.png")
+				.authority("ROLE_USER")
+				.createDate(LocalDateTime.now())
+				.build();
 		given(this.userService.findUserByEmail("test@test.test"))
-		.willReturn(new User("test@test.test", "test", "테스트"));
+		.willReturn(user);
 		this.mvc.perform(post("/users/login")
 				.param("email", "test@test.test")
 				.param("password", "test1"))
@@ -187,13 +219,21 @@ public class UserControllerTest {
 		.andExpect(view().name(containsString("/user/login")))
 		.andExpect(status().isOk())
 		.andExpect(model().attribute("errorMessage", "비밀번호가 틀립니다."))
-		.andExpect(model().size(1));
+		.andExpect(model().size(2));
 	}
 	
 	@Test
-	public void whenIsNotEmailAuthLoginUser() throws Exception {
+	public void isNotEmailAuthLoginUser() throws Exception {
+		User user = User.builder()
+				.email("test@test.test")
+				.password("test")
+				.name("테스트")
+				.profileImage("blank-profile-picture.png")
+				.authority("ROLE_USER")
+				.createDate(LocalDateTime.now())
+				.build();
 		given(this.userService.findUserByEmail("test@test.test"))
-		.willReturn(new User("test@test.test", "test", "테스트"));
+		.willReturn(user);
 		given(this.emailService.findByEmail("test@test.test"))
 		.willReturn(new EmailAuth("test@test.test", "1234"));
 		this.mvc.perform(post("/users/login")
@@ -203,13 +243,20 @@ public class UserControllerTest {
 		.andExpect(view().name(containsString("/user/login")))
 		.andExpect(status().isOk())
 		.andExpect(model().attribute("errorMessage", "이메일 인증이 안됐습니다. 메일에서 인증하세요."))
-		.andExpect(model().size(1));
+		.andExpect(model().size(2));
 	}
 	
 	@Test
-	public void whenSuccessUpdateForm() throws Exception {
+	public void successUpdateForm() throws Exception {
 		MockHttpSession mockSession = new MockHttpSession();
-		User user = new User("test3@test.test", "test", "테스트");
+		User user = User.builder()
+				.email("test@test.test")
+				.password("test")
+				.name("테스트")
+				.profileImage("blank-profile-picture.png")
+				.authority("ROLE_USER")
+				.createDate(LocalDateTime.now())
+				.build();
 		user.setId(1L);
 		mockSession.setAttribute(HttpSessionUtils.USER_SESSION_KEY, user);
 		mockSession.setAttribute("messages", null);
@@ -225,7 +272,7 @@ public class UserControllerTest {
 	}
 	
 	@Test
-	public void whenUpdateFormEmptySession() throws Exception {
+	public void isUpdateFormEmptySession() throws Exception {
 		MockHttpSession mockSession = new MockHttpSession();
 		this.mvc.perform(get("/users/{id}/form", 1L)
 				.session(mockSession))
@@ -236,9 +283,16 @@ public class UserControllerTest {
 	}
 	
 	@Test
-	public void whenUpdateFormNotMatchId() throws Exception {
+	public void isUpdateFormNotMatchId() throws Exception {
 		MockHttpSession mockSession = new MockHttpSession();
-		User user = new User("test@test.test", "test", "테스트");
+		User user = User.builder()
+				.email("test@test.test")
+				.password("test")
+				.name("테스트")
+				.profileImage("blank-profile-picture.png")
+				.authority("ROLE_USER")
+				.createDate(LocalDateTime.now())
+				.build();
 		user.setId(1L);
 		mockSession.setAttribute(HttpSessionUtils.USER_SESSION_KEY, user);
 		mockSession.setAttribute("messages", null);
@@ -252,10 +306,17 @@ public class UserControllerTest {
 		.andExpect(model().size(1));
 	}
 	
-	@Test//session 체크
-	public void whenSuccessUpdateUser() throws Exception {
+	@Test
+	public void successUpdateUser() throws Exception {
 		MockHttpSession mockSession = new MockHttpSession();
-		User user = new User("test@test.test", "test", "테스트");
+		User user = User.builder()
+				.email("test@test.test")
+				.password("test")
+				.name("테스트")
+				.profileImage("blank-profile-picture.png")
+				.authority("ROLE_USER")
+				.createDate(LocalDateTime.now())
+				.build();
 		user.setId(1L);
 		mockSession.setAttribute(HttpSessionUtils.USER_SESSION_KEY, user);
 		log.debug("session User : {}", mockSession.getAttribute(HttpSessionUtils.USER_SESSION_KEY));
@@ -269,7 +330,7 @@ public class UserControllerTest {
 	}
 	
 	@Test
-	public void whenUpdateUserEmptySession() throws Exception {
+	public void isUpdateUserEmptySession() throws Exception {
 		MockHttpSession mockSession = new MockHttpSession();
 		this.mvc.perform(put("/users/{id}", 1L)
 				.session(mockSession))
@@ -280,9 +341,16 @@ public class UserControllerTest {
 	}
 	
 	@Test
-	public void whenUpdateUserNotMatchId() throws Exception {
+	public void isUpdateUserNotMatchId() throws Exception {
 		MockHttpSession mockSession = new MockHttpSession();
-		User user = new User("test@test.test", "test", "테스트");
+		User user = User.builder()
+				.email("test@test.test")
+				.password("test")
+				.name("테스트")
+				.profileImage("blank-profile-picture.png")
+				.authority("ROLE_USER")
+				.createDate(LocalDateTime.now())
+				.build();
 		user.setId(1L);
 		mockSession.setAttribute(HttpSessionUtils.USER_SESSION_KEY, user);
 		mockSession.setAttribute("messages", null);
@@ -297,9 +365,16 @@ public class UserControllerTest {
 	}
 	
 	@Test
-	public void whenIsNotPasswordUpdateUser() throws Exception {
+	public void isNotPasswordValidUpdateUser() throws Exception {
 		MockHttpSession mockSession = new MockHttpSession();
-		User user = new User("test@test.test", "test", "테스트");
+		User user = User.builder()
+				.email("test@test.test")
+				.password("test")
+				.name("테스트")
+				.profileImage("blank-profile-picture.png")
+				.authority("ROLE_USER")
+				.createDate(LocalDateTime.now())
+				.build();
 		user.setId(1L);
 		mockSession.setAttribute(HttpSessionUtils.USER_SESSION_KEY, user);
 		this.mvc.perform(put("/users/{id}", 1L)
@@ -311,9 +386,16 @@ public class UserControllerTest {
 	}
 	
 	@Test
-	public void whenIsNotNameUpdateUser() throws Exception {
+	public void isNotNameValidUpdateUser() throws Exception {
 		MockHttpSession mockSession = new MockHttpSession();
-		User user = new User("test@test.test", "test", "테스트");
+		User user = User.builder()
+				.email("test@test.test")
+				.password("test")
+				.name("테스트")
+				.profileImage("blank-profile-picture.png")
+				.authority("ROLE_USER")
+				.createDate(LocalDateTime.now())
+				.build();
 		user.setId(1L);
 		mockSession.setAttribute(HttpSessionUtils.USER_SESSION_KEY, user);
 		this.mvc.perform(put("/users/{id}", 1L)
@@ -325,15 +407,29 @@ public class UserControllerTest {
 	}
 	
 	@Test
-	public void whenNotEqualLoginUserProfile() throws Exception {
+	public void isNotEqualLoginUserProfile() throws Exception {
 		MockHttpSession mockSession = new MockHttpSession();
-		User loginUser = new User("test@test.test", "test", "테스트");
+		User loginUser = User.builder()
+				.email("test@test.test")
+				.password("test")
+				.name("테스트")
+				.profileImage("blank-profile-picture.png")
+				.authority("ROLE_USER")
+				.createDate(LocalDateTime.now())
+				.build();
 		loginUser.setId(1L);
 		mockSession.setAttribute(HttpSessionUtils.USER_SESSION_KEY, loginUser);
 		mockSession.setAttribute("messages", null);
 		mockSession.setAttribute("countMessages", "");
 		mockSession.setAttribute("alerts", null);
-		User user = new User("test2@test.test", "test2", "테스트2");
+		User user = User.builder()
+				.email("test2@test.test")
+				.password("test2")
+				.name("테스트2")
+				.profileImage("blank-profile-picture.png")
+				.authority("ROLE_USER")
+				.createDate(LocalDateTime.now())
+				.build();
 		given(this.userService.findUserById(2L))
 		.willReturn(user);
 		Page<Timeline> timelines = timelineService.findPageTimelineByUser(user);
@@ -351,9 +447,16 @@ public class UserControllerTest {
 	}
 	
 	@Test
-	public void whenEqualLoginUserNotMessageProfile() throws Exception {
+	public void isEqualLoginUserNotMessageProfile() throws Exception {
 		MockHttpSession mockSession = new MockHttpSession();
-		User loginUser = new User("test@test.test", "test", "테스트");
+		User loginUser = User.builder()
+				.email("test@test.test")
+				.password("test")
+				.name("테스트")
+				.profileImage("blank-profile-picture.png")
+				.authority("ROLE_USER")
+				.createDate(LocalDateTime.now())
+				.build();
 		loginUser.setId(1L);
 		mockSession.setAttribute(HttpSessionUtils.USER_SESSION_KEY, loginUser);
 		mockSession.setAttribute("messages", null);

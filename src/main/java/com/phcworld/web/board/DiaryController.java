@@ -94,7 +94,7 @@ public class DiaryController {
 					matchUser = true;
 				}
 			}
-			if (matchUser == false && loginUser.matchAuthority()) {
+			if (matchUser == false && loginUser.matchAdminAuthority()) {
 				matchAuthority = true;
 			}
 		}
@@ -141,7 +141,7 @@ public class DiaryController {
 		}
 		User loginUser = HttpSessionUtils.getUserFromSession(session);
 		Diary diary = diaryService.getOneDiary(id);
-		if (!loginUser.matchId(diary.getWriter().getId()) && !loginUser.matchAuthority()) {
+		if (!loginUser.matchId(diary.getWriter().getId()) && !loginUser.matchAdminAuthority()) {
 			model.addAttribute("errorMessage", "삭제 권한이 없습니다.");
 			return "/user/login";
 		}

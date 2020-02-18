@@ -54,7 +54,7 @@ public class User {
 
 	private LocalDateTime createDate;
 
-	private String profileImage = "blank-profile-picture.png";
+	private String profileImage;
 
 	public User(String email, String password, String name) {
 		this.email = email;
@@ -91,7 +91,7 @@ public class User {
 		return LocalDateTimeUtils.getTime(createDate);
 	}
 
-	public boolean matchAuthority() {
+	public boolean matchAdminAuthority() {
 		if (this.authority == null) {
 			return false;
 		}

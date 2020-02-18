@@ -4,28 +4,22 @@ import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.when;
 
+import java.time.LocalDateTime;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.phcworld.domain.user.User;
 import com.phcworld.repository.user.UserRepository;
 import com.phcworld.service.user.UserService;
 
-import lombok.extern.slf4j.Slf4j;
-
 
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest
-@Slf4j
 public class UserServiceTest {
 	
 	@MockBean
@@ -36,7 +30,14 @@ public class UserServiceTest {
 	
 	@Test
 	public void createUser() throws Exception {
-		User user = new User("test3@test.test", "test3", "테스트3");
+		User user = User.builder()
+				.email("test3@test.test")
+				.password("test3")
+				.name("test3")
+				.profileImage("blank-profile-picture.png")
+				.authority("ROLE_USER")
+				.createDate(LocalDateTime.now())
+				.build();
 		when(userService.createUser(user)).thenReturn(user);
 		User createUser = userService.createUser(user);
 		assertThat(createUser.getEmail(), is(user.getEmail()));
@@ -44,7 +45,14 @@ public class UserServiceTest {
 	
 	@Test
 	public void createMeAndSetAdmin() throws Exception {
-		User user = new User("pakoh200@naver.com", "test", "주인장");
+		User user = User.builder()
+				.email("pakoh200@naver.com")
+				.password("test")
+				.name("주인장")
+				.profileImage("blank-profile-picture.png")
+				.authority("ROLE_USER")
+				.createDate(LocalDateTime.now())
+				.build();
 		when(userService.createUser(user)).thenReturn(user);
 		User adminUser = userService.createUser(user);
 		adminUser.ifMeSetAdmin(user);
@@ -52,32 +60,69 @@ public class UserServiceTest {
 	}
 	
 	@Test
-	@Transactional
 	public void findUserByEmail() throws Exception {
-		User user = new User("test3@test.test", "test", "테스트");
-		userService.createUser(user);
-		User findByEmailUser = userService.findUserByEmail("test3@test.test");
-		assertThat(findByEmailUser, is(user));
+		User user = User.builder()
+				.email("test3@test.test")
+				.password("test3")
+				.name("테스트")
+				.profileImage("blank-profile-picture.png")
+				.authority("ROLE_USER")
+				.createDate(LocalDateTime.now())
+				.build();
+		when(userService.createUser(user)).thenReturn(user);
+		User createUser = userService.createUser(user);
+		when(userService.findUserByEmail("test3@test.test")).thenReturn(createUser);
+		User findUser = userService.findUserByEmail("test3@test.test");
+		assertThat(findUser, is(createUser));
 	}
 	
 	@Test
-	@Transactional
 	public void updateUser() throws Exception {
-		User user = userService.getOneUser(1L);
-		User actual = new User("test@test.test", "test1", "테스트1");
-		userService.updateUser(user, actual);
+		User user = User.builder()
+				.email("test@test.test")
+				.password("test1")
+				.name("테스트1")
+				.profileImage("blank-profile-picture.png")
+				.authority("ROLE_USER")
+				.createDate(LocalDateTime.now())
+				.build();
+		when(userService.createUser(user)).thenReturn(user);
+		User createUser = userService.createUser(user);
+		User updateUser = User.builder()
+				.email("test@test.test")
+				.password("test2")
+				.name("테스트2")
+				.profileImage("blank-profile-picture.png")
+				.authority("ROLE_USER")
+				.createDate(LocalDateTime.now())
+				.build();
+		createUser.update(updateUser);
+		when(userService.findUserByEmail(user.getEmail())).thenReturn(updateUser);
 		User updatedUser = userService.findUserByEmail(user.getEmail());
-		assertThat(updatedUser.getPassword(), is(actual.getPassword()));
-		assertThat(updatedUser.getName(), is(actual.getName()));
+		assertThat(updatedUser, is(createUser));
 	}
 	
 	@Test
-	@Transactional
 	public void updateImage() throws Exception {
-		User user = userService.findUserById(1L);
-		userService.imageUpdate(user, "test.jpg");
-		User actual = userService.findUserById(1L);
-		assertThat("test.jpg", is(actual.getProfileImage()));
+		User user = User.builder()
+				.email("test@test.test")
+				.password("test1")
+				.name("테스트1")
+				.profileImage("blank-profile-picture.png")
+				.authority("ROLE_USER")
+				.createDate(LocalDateTime.now())
+				.build();
+		User updateUser = User.builder()
+				.email("test@test.test")
+				.password("test1")
+				.name("테스트1")
+				.profileImage("test.jpg")
+				.authority("ROLE_USER")
+				.createDate(LocalDateTime.now())
+				.build();
+		when(userService.imageUpdate(user, "test.jpg")).thenReturn(updateUser);
+		User updatedUser = userService.imageUpdate(user, "test.jpg");
+		assertThat("test.jpg", is(updatedUser.getProfileImage()));
 	}
 
 }

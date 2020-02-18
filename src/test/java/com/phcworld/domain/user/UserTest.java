@@ -44,7 +44,10 @@ public class UserTest {
 
 	@Test
 	public void isEmptyEmail() throws Exception {
-		User user = new User(null, "test", "테스트");
+		User user = User.builder()
+				.password("test")
+				.name("테스트")
+				.build();
 		Set<ConstraintViolation<User>> constraintViolations = validator.validate(user);
 		assertThat(constraintViolations.size(), is(1));
 		for (ConstraintViolation<User> constraintViolation : constraintViolations) {
@@ -54,24 +57,45 @@ public class UserTest {
 
 	@Test
 	public void isNotEmail() throws Exception {
-		User user = new User("test", "test", "테스트");
+		User user = User.builder()
+				.email("test")
+				.password("test")
+				.name("테스트")
+				.build();
 		Set<ConstraintViolation<User>> constraintViolations = validator.validate(user);
 		assertThat(constraintViolations.size(), is(1));
 		for (ConstraintViolation<User> constraintViolation : constraintViolations) {
 			log.debug("violation error message : {}", constraintViolation.getMessage());
 		}
 	}
+	
+	@Test
+	public void matchId() throws Exception {
+		User user = User.builder()
+				.id(1L)
+				.build();
+		assertTrue(user.matchId(1L));
+		assertFalse(user.matchId(2L));
+	}
 
 	@Test
 	public void matchPassword() throws Exception {
-		User user = new User("test@test.test", "test", "테스트");
+		User user = User.builder()
+				.email("test@test.test")
+				.password("test")
+				.name("테스트")
+				.build();
 		assertTrue(user.matchPassword("test"));
 		assertFalse(user.matchPassword("pass"));
 	}
 	
 	@Test
 	public void isEmptyPassword() throws Exception {
-		User user = new User("test@test.test", null, "테스트");
+		User user = User.builder()
+				.email("test@test.test")
+				.password(null)
+				.name("테스트")
+				.build();
 		Set<ConstraintViolation<User>> constraintViolations = validator.validate(user);
 		assertThat(constraintViolations.size(), is(1));
 		for (ConstraintViolation<User> constraintViolation : constraintViolations) {
@@ -81,24 +105,25 @@ public class UserTest {
 	
 	@Test
 	public void isNotSizePassword() throws Exception {
-		User shortUser = new User("test@test.tet", "tes", "테스트");
-		Set<ConstraintViolation<User>> constraintViolations = validator.validate(shortUser);
+		User user = User.builder()
+				.email("test@test.test")
+				.password("tes")
+				.name("테스트")
+				.build();
+		Set<ConstraintViolation<User>> constraintViolations = validator.validate(user);
 		assertThat(constraintViolations.size(), is(1));
 		for (ConstraintViolation<User> constraintViolation : constraintViolations) {
 			log.debug("violation error message : {}", constraintViolation.getMessage());
 		}
 	}
 	
-//	@Test
-//	public void matchId() throws Exception {
-//		User user = new User("test@test.test", "test", "테스트");
-//		assertTrue(user.matchId(1L));
-//		assertFalse(user.matchId(2L));
-//	}
-
 	@Test
 	public void isEmptyName() throws Exception {
-		User user = new User("test@test.test", "test", null);
+		User user = User.builder()
+				.email("test@test.test")
+				.password("test")
+				.name(null)
+				.build();
 		Set<ConstraintViolation<User>> constraintViolations = validator.validate(user);
 		assertThat(constraintViolations.size(), is(1));
 		for (ConstraintViolation<User> constraintViolation : constraintViolations) {
@@ -107,15 +132,23 @@ public class UserTest {
 	}
 	@Test
 	public void isNotSizeName() throws Exception {
-		User shortUser = new User("test@test.test", "test", "테");
-		Set<ConstraintViolation<User>> constraintViolations = validator.validate(shortUser);
+		User shortNameUser = User.builder()
+				.email("test@test.test")
+				.password("test")
+				.name("테")
+				.build();
+		Set<ConstraintViolation<User>> constraintViolations = validator.validate(shortNameUser);
 		assertThat(constraintViolations.size(), is(1));
 		for (ConstraintViolation<User> constraintViolation : constraintViolations) {
 			log.debug("violation error message : {}", constraintViolation.getMessage());
 		}
 		
-		User longUser = new User("test@test.test", "test", "테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트");
-		constraintViolations = validator.validate(longUser);
+		User longNameUser = User.builder()
+				.email("test@test.test")
+				.password("test")
+				.name("테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트")
+				.build(); 
+		constraintViolations = validator.validate(longNameUser);
 		assertThat(constraintViolations.size(), is(1));
 		for (ConstraintViolation<User> constraintViolation : constraintViolations) {
 			log.debug("violation error message : {}", constraintViolation.getMessage());
@@ -125,11 +158,37 @@ public class UserTest {
 	
 	@Test
 	public void isNotPasswordPattern() throws Exception {
-		User user = new User("test@test.test", "test", "alert('dgdg')");
+		User user = User.builder()
+				.email("test@test.test")
+				.password("test")
+				.name("alert('dgdg')")
+				.build();
 		Set<ConstraintViolation<User>> constraintViolations = validator.validate(user);
 		assertThat(constraintViolations.size(), is(1));
 		for (ConstraintViolation<User> constraintViolation : constraintViolations) {
 			log.debug("violation error message : {}", constraintViolation.getMessage());
 		}
+	}
+	
+	@Test
+	public void matchAdminAuthority() {
+		User adminUser = User.builder()
+				.authority("ROLE_ADMIN")
+				.build();
+		assertTrue(adminUser.matchAdminAuthority());
+		
+		User user = User.builder()
+				.authority("ROLE_USER")
+				.build();
+		assertFalse(user.matchAdminAuthority());
+	}
+	
+	@Test
+	public void ifMeSetAdmin() {
+		User me = User.builder()
+				.email("pakoh200@naver.com")
+				.build();
+		me.ifMeSetAdmin(me);
+		assertThat(me.getAuthority(), is("ROLE_ADMIN"));
 	}
 }
