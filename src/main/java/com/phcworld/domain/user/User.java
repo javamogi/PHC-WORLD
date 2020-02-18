@@ -56,14 +56,6 @@ public class User {
 
 	private String profileImage;
 
-	public User(String email, String password, String name) {
-		this.email = email;
-		this.password = password;
-		this.name = name;
-		this.authority = "ROLE_USER";
-		this.createDate = LocalDateTime.now();
-	}
-
 	public boolean matchId(Long newId) {
 		if (newId == null) {
 			return false;

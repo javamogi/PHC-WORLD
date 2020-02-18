@@ -10,6 +10,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -49,13 +50,27 @@ public class DiaryControllerTest {
 	@Test
 	public void whenNotMatchLoginUserDiaryList() throws Exception {
 		MockHttpSession mockSession = new MockHttpSession();
-		User user = new User("test3@test.test", "test", "테스트");
+		User user = User.builder()
+				.email("test3@test.test")
+				.password("test3")
+				.name("테스트3")
+				.profileImage("blank-profile-picture.png")
+				.authority("ROLE_USER")
+				.createDate(LocalDateTime.now())
+				.build();
 		user.setId(1L);
 		mockSession.setAttribute(HttpSessionUtils.USER_SESSION_KEY, user);
 		mockSession.setAttribute("messages", null);
 		mockSession.setAttribute("countMessages", "");
 		mockSession.setAttribute("alerts", null);
-		User requestUser = new User("test@test.test", "test", "테스트");
+		User requestUser = User.builder()
+				.email("test@test.test")
+				.password("test")
+				.name("테스트")
+				.profileImage("blank-profile-picture.png")
+				.authority("ROLE_USER")
+				.createDate(LocalDateTime.now())
+				.build();
 		requestUser.setId(2L);
 		given(this.userService.findUserByEmail("test@test.test"))
 		.willReturn(requestUser);
@@ -86,13 +101,27 @@ public class DiaryControllerTest {
 	@Test
 	public void whenEmptyLoginUserDiaryList() throws Exception {
 		MockHttpSession mockSession = new MockHttpSession();
-		User user = new User("test3@test.test", "test", "테스트");
+		User user = User.builder()
+				.email("test3@test.test")
+				.password("test3")
+				.name("테스트3")
+				.profileImage("blank-profile-picture.png")
+				.authority("ROLE_USER")
+				.createDate(LocalDateTime.now())
+				.build();
 		user.setId(1L);
 		mockSession.setAttribute(HttpSessionUtils.USER_SESSION_KEY, user);
 		mockSession.setAttribute("messages", null);
 		mockSession.setAttribute("countMessages", "");
 		mockSession.setAttribute("alerts", null);
-		User requestUser = new User("test@test.test", "test", "테스트");
+		User requestUser = User.builder()
+				.email("test@test.test")
+				.password("test")
+				.name("테스트")
+				.profileImage("blank-profile-picture.png")
+				.authority("ROLE_USER")
+				.createDate(LocalDateTime.now())
+				.build();
 		requestUser.setId(2L);
 		given(this.userService.findUserByEmail("test@test.test"))
 		.willReturn(requestUser);
@@ -123,7 +152,14 @@ public class DiaryControllerTest {
 	@Test
 	public void whenNotMatchLoginUserAndRequestUserDiaryList() throws Exception {
 		MockHttpSession mockSession = new MockHttpSession();
-		User requestUser = new User("test@test.test", "test", "테스트");
+		User requestUser = User.builder()
+				.email("test@test.test")
+				.password("test")
+				.name("테스트")
+				.profileImage("blank-profile-picture.png")
+				.authority("ROLE_USER")
+				.createDate(LocalDateTime.now())
+				.build();
 		requestUser.setId(2L);
 		given(this.userService.findUserByEmail("test@test.test"))
 		.willReturn(requestUser);
@@ -161,7 +197,14 @@ public class DiaryControllerTest {
 	@Test
 	public void successDiaryForm() throws Exception {
 		MockHttpSession mockSession = new MockHttpSession();
-		User user = new User("test3@test.test", "test", "테스트");
+		User user = User.builder()
+				.email("test3@test.test")
+				.password("test3")
+				.name("테스트3")
+				.profileImage("blank-profile-picture.png")
+				.authority("ROLE_USER")
+				.createDate(LocalDateTime.now())
+				.build();
 		user.setId(1L);
 		mockSession.setAttribute(HttpSessionUtils.USER_SESSION_KEY, user);
 		mockSession.setAttribute("messages", null);
@@ -177,7 +220,14 @@ public class DiaryControllerTest {
 	@Test
 	public void createDiary() throws Exception {
 		MockHttpSession mockSession = new MockHttpSession();
-		User user = new User("test3@test.test", "test", "테스트");
+		User user = User.builder()
+				.email("test3@test.test")
+				.password("test3")
+				.name("테스트3")
+				.profileImage("blank-profile-picture.png")
+				.authority("ROLE_USER")
+				.createDate(LocalDateTime.now())
+				.build();
 		user.setId(1L);
 		mockSession.setAttribute(HttpSessionUtils.USER_SESSION_KEY, user);
 		mockSession.setAttribute("messages", null);
@@ -206,7 +256,14 @@ public class DiaryControllerTest {
 	@Test
 	public void detailDairyWhenDiaryWriterEqualLoginUser() throws Exception {
 		MockHttpSession mockSession = new MockHttpSession();
-		User user = new User("test3@test.test", "test", "테스트");
+		User user = User.builder()
+				.email("test3@test.test")
+				.password("test3")
+				.name("테스트3")
+				.profileImage("blank-profile-picture.png")
+				.authority("ROLE_USER")
+				.createDate(LocalDateTime.now())
+				.build();
 		user.setId(1L);
 		mockSession.setAttribute(HttpSessionUtils.USER_SESSION_KEY, user);
 		mockSession.setAttribute("messages", null);
@@ -231,7 +288,14 @@ public class DiaryControllerTest {
 	@Test
 	public void whenNotLoginUserDetailDairy() throws Exception {
 		MockHttpSession mockSession = new MockHttpSession();
-		User user = new User("test3@test.test", "test", "테스트");
+		User user = User.builder()
+				.email("test3@test.test")
+				.password("test3")
+				.name("테스트3")
+				.profileImage("blank-profile-picture.png")
+				.authority("ROLE_USER")
+				.createDate(LocalDateTime.now())
+				.build();
 		user.setId(1L);
 		Diary diary = new Diary(user, "test", "test", "no-image-icon.gif");
 		diary.setId(1L);
@@ -252,13 +316,27 @@ public class DiaryControllerTest {
 	@Test
 	public void detailDairyWhenDiaryWriterNotEqualLoginUser() throws Exception {
 		MockHttpSession mockSession = new MockHttpSession();
-		User user = new User("test3@test.test", "test", "테스트");
+		User user = User.builder()
+				.email("test3@test.test")
+				.password("test3")
+				.name("테스트3")
+				.profileImage("blank-profile-picture.png")
+				.authority("ROLE_USER")
+				.createDate(LocalDateTime.now())
+				.build();
 		user.setId(1L);
 		mockSession.setAttribute(HttpSessionUtils.USER_SESSION_KEY, user);
 		mockSession.setAttribute("messages", null);
 		mockSession.setAttribute("countMessages", "");
 		mockSession.setAttribute("alerts", null);
-		User user2 = new User("test4@test.test", "test4", "테스트4");
+		User user2 = User.builder()
+				.email("test4@test.test")
+				.password("test4")
+				.name("테스트4")
+				.profileImage("blank-profile-picture.png")
+				.authority("ROLE_USER")
+				.createDate(LocalDateTime.now())
+				.build();
 		user.setId(2L);
 		Diary diary = new Diary(user2, "test", "test", "no-image-icon.gif");
 		diary.setId(1L);
@@ -279,14 +357,28 @@ public class DiaryControllerTest {
 	@Test
 	public void detailDairyWhenHasAuthority() throws Exception {
 		MockHttpSession mockSession = new MockHttpSession();
-		User user = new User("test3@test.test", "test", "테스트");
+		User user = User.builder()
+				.email("test3@test.test")
+				.password("test3")
+				.name("테스트3")
+				.profileImage("blank-profile-picture.png")
+				.authority("ROLE_USER")
+				.createDate(LocalDateTime.now())
+				.build();
 		user.setId(1L);
 		user.setAuthority("ROLE_ADMIN");
 		mockSession.setAttribute(HttpSessionUtils.USER_SESSION_KEY, user);
 		mockSession.setAttribute("messages", null);
 		mockSession.setAttribute("countMessages", "");
 		mockSession.setAttribute("alerts", null);
-		User user2 = new User("test4@test.test", "test4", "테스트4");
+		User user2 = User.builder()
+				.email("test4@test.test")
+				.password("test4")
+				.name("테스트4")
+				.profileImage("blank-profile-picture.png")
+				.authority("ROLE_USER")
+				.createDate(LocalDateTime.now())
+				.build();
 		user.setId(2L);
 		Diary diary = new Diary(user2, "test", "test", "no-image-icon.gif");
 		diary.setId(1L);
@@ -307,7 +399,14 @@ public class DiaryControllerTest {
 	@Test
 	public void updateDiaryForm() throws Exception {
 		MockHttpSession mockSession = new MockHttpSession();
-		User user = new User("test3@test.test", "test", "테스트");
+		User user = User.builder()
+				.email("test3@test.test")
+				.password("test3")
+				.name("테스트3")
+				.profileImage("blank-profile-picture.png")
+				.authority("ROLE_USER")
+				.createDate(LocalDateTime.now())
+				.build();
 		user.setId(1L);
 		mockSession.setAttribute(HttpSessionUtils.USER_SESSION_KEY, user);
 		mockSession.setAttribute("messages", null);
@@ -329,7 +428,14 @@ public class DiaryControllerTest {
 	@Test
 	public void updateNotLoginUserDiaryForm() throws Exception {
 		MockHttpSession mockSession = new MockHttpSession();
-		User user = new User("test3@test.test", "test", "테스트");
+		User user = User.builder()
+				.email("test3@test.test")
+				.password("test3")
+				.name("테스트3")
+				.profileImage("blank-profile-picture.png")
+				.authority("ROLE_USER")
+				.createDate(LocalDateTime.now())
+				.build();
 		user.setId(1L);
 		Diary diary = new Diary(user, "test", "test", "no-image-icon.gif");
 		diary.setId(1L);
@@ -345,13 +451,27 @@ public class DiaryControllerTest {
 	@Test
 	public void updateMatchNotUserDiaryForm() throws Exception {
 		MockHttpSession mockSession = new MockHttpSession();
-		User user = new User("test3@test.test", "test", "테스트");
+		User user = User.builder()
+				.email("test3@test.test")
+				.password("test3")
+				.name("테스트3")
+				.profileImage("blank-profile-picture.png")
+				.authority("ROLE_USER")
+				.createDate(LocalDateTime.now())
+				.build();
 		user.setId(1L);
 		mockSession.setAttribute(HttpSessionUtils.USER_SESSION_KEY, user);
 		mockSession.setAttribute("messages", null);
 		mockSession.setAttribute("countMessages", "");
 		mockSession.setAttribute("alerts", null);
-		User user2 = new User("test4@test.test", "test4", "테스트4");
+		User user2 = User.builder()
+				.email("test4@test.test")
+				.password("test4")
+				.name("테스트4")
+				.profileImage("blank-profile-picture.png")
+				.authority("ROLE_USER")
+				.createDate(LocalDateTime.now())
+				.build();
 		user.setId(2L);
 		Diary diary = new Diary(user2, "test", "test", "no-image-icon.gif");
 		diary.setId(1L);
@@ -369,7 +489,14 @@ public class DiaryControllerTest {
 	@Test
 	public void successUpdateDiary() throws Exception {
 		MockHttpSession mockSession = new MockHttpSession();
-		User user = new User("test3@test.test", "test", "테스트");
+		User user = User.builder()
+				.email("test3@test.test")
+				.password("test3")
+				.name("테스트3")
+				.profileImage("blank-profile-picture.png")
+				.authority("ROLE_USER")
+				.createDate(LocalDateTime.now())
+				.build();
 		user.setId(1L);
 		mockSession.setAttribute(HttpSessionUtils.USER_SESSION_KEY, user);
 		mockSession.setAttribute("messages", null);
@@ -393,7 +520,14 @@ public class DiaryControllerTest {
 	@Test
 	public void updateFailedNotLoginUserDiary() throws Exception {
 		MockHttpSession mockSession = new MockHttpSession();
-		User user = new User("test3@test.test", "test", "테스트");
+		User user = User.builder()
+				.email("test3@test.test")
+				.password("test3")
+				.name("테스트3")
+				.profileImage("blank-profile-picture.png")
+				.authority("ROLE_USER")
+				.createDate(LocalDateTime.now())
+				.build();
 		user.setId(1L);
 		this.mvc.perform(put("/diary/{id}", 1L)
 				.param("contents", "updateTest")
@@ -407,13 +541,27 @@ public class DiaryControllerTest {
 	@Test
 	public void updateFailedNotMatchUserDiary() throws Exception {
 		MockHttpSession mockSession = new MockHttpSession();
-		User user = new User("test3@test.test", "test", "테스트");
+		User user = User.builder()
+				.email("test3@test.test")
+				.password("test3")
+				.name("테스트3")
+				.profileImage("blank-profile-picture.png")
+				.authority("ROLE_USER")
+				.createDate(LocalDateTime.now())
+				.build();
 		user.setId(1L);
 		mockSession.setAttribute(HttpSessionUtils.USER_SESSION_KEY, user);
 		mockSession.setAttribute("messages", null);
 		mockSession.setAttribute("countMessages", "");
 		mockSession.setAttribute("alerts", null);
-		User user2 = new User("test4@test.test", "test4", "테스트4");
+		User user2 = User.builder()
+				.email("test4@test.test")
+				.password("test4")
+				.name("테스트4")
+				.profileImage("blank-profile-picture.png")
+				.authority("ROLE_USER")
+				.createDate(LocalDateTime.now())
+				.build();
 		user.setId(2L);
 		Diary diary = new Diary(user2, "test", "test", "no-image-icon.gif");
 		diary.setId(1L);
@@ -433,7 +581,14 @@ public class DiaryControllerTest {
 	@Test
 	public void successDeleteDiary() throws Exception {
 		MockHttpSession mockSession = new MockHttpSession();
-		User user = new User("test3@test.test", "test", "테스트");
+		User user = User.builder()
+				.email("test3@test.test")
+				.password("test3")
+				.name("테스트3")
+				.profileImage("blank-profile-picture.png")
+				.authority("ROLE_USER")
+				.createDate(LocalDateTime.now())
+				.build();
 		user.setId(1L);
 		mockSession.setAttribute(HttpSessionUtils.USER_SESSION_KEY, user);
 		mockSession.setAttribute("messages", null);
@@ -461,13 +616,27 @@ public class DiaryControllerTest {
 	@Test
 	public void deleteFailedNotMatchAuthorityDiary() throws Exception {
 		MockHttpSession mockSession = new MockHttpSession();
-		User user = new User("test3@test.test", "test", "테스트");
+		User user = User.builder()
+				.email("test3@test.test")
+				.password("test3")
+				.name("테스트3")
+				.profileImage("blank-profile-picture.png")
+				.authority("ROLE_USER")
+				.createDate(LocalDateTime.now())
+				.build();
 		user.setId(1L);
 		mockSession.setAttribute(HttpSessionUtils.USER_SESSION_KEY, user);
 		mockSession.setAttribute("messages", null);
 		mockSession.setAttribute("countMessages", "");
 		mockSession.setAttribute("alerts", null);
-		User user2 = new User("test4@test.test", "test4", "테스트4");
+		User user2 = User.builder()
+				.email("test4@test.test")
+				.password("test4")
+				.name("테스트4")
+				.profileImage("blank-profile-picture.png")
+				.authority("ROLE_USER")
+				.createDate(LocalDateTime.now())
+				.build();
 		user.setId(2L);
 		Diary diary = new Diary(user2, "test", "test", "no-image-icon.gif");
 		diary.setId(1L);

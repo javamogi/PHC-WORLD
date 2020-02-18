@@ -2,8 +2,9 @@ package com.phcworld.domain.alert;
 
 import static org.hamcrest.CoreMatchers.hasItems;
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertThat;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.junit.Test;
@@ -49,7 +50,14 @@ public class AlertServiceImplTest {
 	@Test
 	@Transactional
 	public void createAlertAndGetOneAlert() {
-		User writer = new User("test@test.test", "test", "테스트");
+		User writer = User.builder()
+				.email("test@test.test")
+				.password("test")
+				.name("테스트")
+				.profileImage("blank-profile-picture.png")
+				.authority("ROLE_USER")
+				.createDate(LocalDateTime.now())
+				.build();
 		writer.setId(1L);
 		Diary diary = new Diary(writer, "test", "test", "no-image-icon.gif");
 		diaryRepository.save(diary);
@@ -66,7 +74,14 @@ public class AlertServiceImplTest {
 	@Test
 	@Transactional
 	public void findPageRequestAlertByUser() throws Exception {
-		User writer = new User("test@test.test", "test", "테스트");
+		User writer = User.builder()
+				.email("test@test.test")
+				.password("test")
+				.name("테스트")
+				.profileImage("blank-profile-picture.png")
+				.authority("ROLE_USER")
+				.createDate(LocalDateTime.now())
+				.build();
 		writer.setId(1L);
 		
 		Diary diary = new Diary(writer, "test", "test", "no-image-icon.gif");

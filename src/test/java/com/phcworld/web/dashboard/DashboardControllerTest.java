@@ -9,6 +9,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -79,7 +80,14 @@ public class DashboardControllerTest {
 	@Test
 	public void dashboard() throws Exception {
 		MockHttpSession mockSession = new MockHttpSession();
-		User user = new User("test3@test.test", "test", "테스트");
+		User user = User.builder()
+				.email("test3@test.test")
+				.password("test3")
+				.name("테스트3")
+				.profileImage("blank-profile-picture.png")
+				.authority("ROLE_USER")
+				.createDate(LocalDateTime.now())
+				.build();
 		user.setId(1L);
 		mockSession.setAttribute(HttpSessionUtils.USER_SESSION_KEY, user);
 		mockSession.setAttribute("messages", null);
@@ -144,7 +152,14 @@ public class DashboardControllerTest {
 	
 	@Test
 	public void redirectToTimeline() throws Exception {
-		User user = new User("test3@test.test", "test", "테스트");
+		User user = User.builder()
+				.email("test3@test.test")
+				.password("test3")
+				.name("테스트3")
+				.profileImage("blank-profile-picture.png")
+				.authority("ROLE_USER")
+				.createDate(LocalDateTime.now())
+				.build();
 		user.setId(1L);
 		
 		FreeBoard freeBoard = new FreeBoard(user, "test", "", "test");

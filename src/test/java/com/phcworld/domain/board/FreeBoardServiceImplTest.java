@@ -4,6 +4,7 @@ import static org.hamcrest.CoreMatchers.hasItems;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.junit.Test;
@@ -30,7 +31,14 @@ public class FreeBoardServiceImplTest {
 	@Test
 	@Transactional
 	public void createFreeBoard() {
-		User user = new User("test3@test.test", "test3", "테스트3");
+		User user = User.builder()
+				.email("test3@test.test")
+				.password("test3")
+				.name("테스트3")
+				.profileImage("blank-profile-picture.png")
+				.authority("ROLE_USER")
+				.createDate(LocalDateTime.now())
+				.build();
 		user.setId(1L);
 		FreeBoard freeBoard = freeBoardService.createFreeBoard(user, "test", "test", "");
 		FreeBoard actual = freeBoardService.getOneFreeBoard(freeBoard.getId());
@@ -40,7 +48,14 @@ public class FreeBoardServiceImplTest {
 	@Test
 	@Transactional
 	public void updateFreeBoard() throws Exception {
-		User user = new User("test3@test.test", "test3", "테스트3");
+		User user = User.builder()
+				.email("test3@test.test")
+				.password("test3")
+				.name("테스트3")
+				.profileImage("blank-profile-picture.png")
+				.authority("ROLE_USER")
+				.createDate(LocalDateTime.now())
+				.build();
 		user.setId(1L);
 		FreeBoard freeBoard = freeBoardService.createFreeBoard(user, "test", "test", "");
 		FreeBoard freeBoardUpdated = freeBoardService.updateFreeBoard(freeBoard, "testUpdate", "test.jpg");
@@ -51,7 +66,14 @@ public class FreeBoardServiceImplTest {
 	@Test(expected = JpaObjectRetrievalFailureException.class)
 	@Transactional
 	public void deleteFreeBoardById() throws Exception {
-		User user = new User("test3@test.test", "test3", "테스트3");
+		User user = User.builder()
+				.email("test3@test.test")
+				.password("test3")
+				.name("테스트3")
+				.profileImage("blank-profile-picture.png")
+				.authority("ROLE_USER")
+				.createDate(LocalDateTime.now())
+				.build();
 		user.setId(1L);
 		FreeBoard freeBoard = freeBoardService.createFreeBoard(user, "test", "test", "");
 		Long id = freeBoard.getId();
@@ -62,7 +84,14 @@ public class FreeBoardServiceImplTest {
 	@Test
 	@Transactional
 	public void addFreeBoardCount() throws Exception {
-		User user = new User("test3@test.test", "test3", "테스트3");
+		User user = User.builder()
+				.email("test3@test.test")
+				.password("test3")
+				.name("테스트3")
+				.profileImage("blank-profile-picture.png")
+				.authority("ROLE_USER")
+				.createDate(LocalDateTime.now())
+				.build();
 		user.setId(1L);
 		FreeBoard freeBoard = freeBoardService.createFreeBoard(user, "test", "test", "");
 		FreeBoard addedFreeBoardAnswer = freeBoardService.addFreeBoardCount(freeBoard.getId());
@@ -72,7 +101,14 @@ public class FreeBoardServiceImplTest {
 	@Test
 	@Transactional
 	public void addFreeBoardAnswerCount() throws Exception {
-		User user = new User("test3@test.test", "test3", "테스트3");
+		User user = User.builder()
+				.email("test3@test.test")
+				.password("test3")
+				.name("테스트3")
+				.profileImage("blank-profile-picture.png")
+				.authority("ROLE_USER")
+				.createDate(LocalDateTime.now())
+				.build();
 		user.setId(1L);
 		FreeBoard freeBoard = freeBoardService.createFreeBoard(user, "test", "test", "");
 		FreeBoard addedFreeBoardAnswer = freeBoardService.addFreeBoardAnswer(freeBoard.getId());
@@ -82,7 +118,14 @@ public class FreeBoardServiceImplTest {
 	@Test
 	@Transactional
 	public void findFreeBoardListByWriter() throws Exception {
-		User user = new User("test3@test.test", "test3", "테스트3");
+		User user = User.builder()
+				.email("test3@test.test")
+				.password("test3")
+				.name("테스트3")
+				.profileImage("blank-profile-picture.png")
+				.authority("ROLE_USER")
+				.createDate(LocalDateTime.now())
+				.build();
 		user.setId(1L);
 		FreeBoard freeBoard = freeBoardService.createFreeBoard(user, "test", "test", "");
 		FreeBoard freeBoard2 = freeBoardService.createFreeBoard(user, "test2", "test2", "");
@@ -93,11 +136,25 @@ public class FreeBoardServiceImplTest {
 	@Test
 	@Transactional
 	public void findFreeBoardAllList() throws Exception {
-		User user = new User("test3@test.test", "test3", "테스트3");
+		User user = User.builder()
+				.email("test3@test.test")
+				.password("test3")
+				.name("테스트3")
+				.profileImage("blank-profile-picture.png")
+				.authority("ROLE_USER")
+				.createDate(LocalDateTime.now())
+				.build();
 		userService.createUser(user);
 		FreeBoard freeBoard = freeBoardService.createFreeBoard(user, "test", "test", "");
 		FreeBoard freeBoard2 = freeBoardService.createFreeBoard(user, "test2", "test2", "");
-		User user2 = new User("test4@test.test", "test4", "테스트4");
+		User user2 = User.builder()
+				.email("test4@test.test")
+				.password("test4")
+				.name("테스트4")
+				.profileImage("blank-profile-picture.png")
+				.authority("ROLE_USER")
+				.createDate(LocalDateTime.now())
+				.build();
 		userService.createUser(user2);
 		FreeBoard freeBoard3 = freeBoardService.createFreeBoard(user2, "test3", "test3", "");
 		FreeBoard freeBoard4 = freeBoardService.createFreeBoard(user2, "test4", "test4", "");

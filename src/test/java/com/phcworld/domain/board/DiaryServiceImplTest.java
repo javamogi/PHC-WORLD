@@ -4,6 +4,7 @@ import static org.hamcrest.CoreMatchers.hasItems;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.junit.Test;
@@ -34,7 +35,14 @@ public class DiaryServiceImplTest {
 	@Test
 	@Transactional
 	public void createDiary() {
-		User user = new User("test3@test.test", "test3", "테스트3");
+		User user = User.builder()
+				.email("test3@test.test")
+				.password("test3")
+				.name("테스트3")
+				.profileImage("blank-profile-picture.png")
+				.authority("ROLE_USER")
+				.createDate(LocalDateTime.now())
+				.build();
 		user.setId(1L);
 		Diary diary = diaryService.createDiary(user, "test3", "test3", "no-image-icon.gif");
 		Diary actual = diaryService.getOneDiary(diary.getId());
@@ -44,7 +52,14 @@ public class DiaryServiceImplTest {
 	@Test
 	@Transactional
 	public void updateDiary() throws Exception {
-		User user = new User("test3@test.test", "test3", "테스트3");
+		User user = User.builder()
+				.email("test3@test.test")
+				.password("test3")
+				.name("테스트3")
+				.profileImage("blank-profile-picture.png")
+				.authority("ROLE_USER")
+				.createDate(LocalDateTime.now())
+				.build();
 		user.setId(1L);
 		Diary diary = diaryService.createDiary(user, "test3", "test3", "no-image-icon.gif");
 		Diary diaryUpdated = diaryService.updateDiary(diary, "updateDiary", "test.jpg");
@@ -55,7 +70,14 @@ public class DiaryServiceImplTest {
 	@Test(expected = JpaObjectRetrievalFailureException.class)
 	@Transactional
 	public void deleteDiaryById() throws Exception {
-		User user = new User("test3@test.test", "test3", "테스트3");
+		User user = User.builder()
+				.email("test3@test.test")
+				.password("test3")
+				.name("테스트3")
+				.profileImage("blank-profile-picture.png")
+				.authority("ROLE_USER")
+				.createDate(LocalDateTime.now())
+				.build();
 		user.setId(1L);
 		Diary diary = diaryService.createDiary(user, "test3", "test3", "no-image-icon.gif");
 		log.debug("diary : {}", diary);
@@ -67,7 +89,14 @@ public class DiaryServiceImplTest {
 	@Test
 	@Transactional
 	public void addAndDeleteDiaryAnswerCount() throws Exception {
-		User user = new User("test3@test.test", "test3", "테스트3");
+		User user = User.builder()
+				.email("test3@test.test")
+				.password("test3")
+				.name("테스트3")
+				.profileImage("blank-profile-picture.png")
+				.authority("ROLE_USER")
+				.createDate(LocalDateTime.now())
+				.build();
 		user.setId(1L);
 		Diary diary = diaryService.createDiary(user, "test3", "test3", "no-image-icon.gif");
 		Diary diaryAnswerAdded = diaryService.addDiaryAnswer(diary.getId());
@@ -79,7 +108,14 @@ public class DiaryServiceImplTest {
 	@Test
 	@Transactional
 	public void findPageDiaryByWriter() throws Exception {
-		User user = new User("test3@test.test", "test3", "테스트3");
+		User user = User.builder()
+				.email("test3@test.test")
+				.password("test3")
+				.name("테스트3")
+				.profileImage("blank-profile-picture.png")
+				.authority("ROLE_USER")
+				.createDate(LocalDateTime.now())
+				.build();
 		user.setId(1L);
 		Diary diary = diaryService.createDiary(user, "test3", "test3", "no-image-icon.gif");
 		Diary diary2 = diaryService.createDiary(user, "test4", "test4", "no-image-icon.gif");

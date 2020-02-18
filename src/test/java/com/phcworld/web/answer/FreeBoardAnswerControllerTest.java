@@ -6,6 +6,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.time.LocalDateTime;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,7 +41,14 @@ public class FreeBoardAnswerControllerTest {
 	@Test
 	public void createFreeBoardAnswer() throws Exception {
 		MockHttpSession mockSession = new MockHttpSession();
-		User user = new User("test3@test.test", "test", "테스트");
+		User user = User.builder()
+				.email("test3@test.test")
+				.password("test3")
+				.name("테스트3")
+				.profileImage("blank-profile-picture.png")
+				.authority("ROLE_USER")
+				.createDate(LocalDateTime.now())
+				.build();
 		user.setId(1L);
 		mockSession.setAttribute(HttpSessionUtils.USER_SESSION_KEY, user);
 		FreeBoard freeBoard = new FreeBoard(user, "test", "", "test"); 
@@ -74,7 +83,14 @@ public class FreeBoardAnswerControllerTest {
 	@Test
 	public void deleteSuccessFreeBoardAnswer() throws Exception {
 		MockHttpSession mockSession = new MockHttpSession();
-		User user = new User("test3@test.test", "test", "테스트");
+		User user = User.builder()
+				.email("test3@test.test")
+				.password("test3")
+				.name("테스트3")
+				.profileImage("blank-profile-picture.png")
+				.authority("ROLE_USER")
+				.createDate(LocalDateTime.now())
+				.build();
 		user.setId(1L);
 		mockSession.setAttribute(HttpSessionUtils.USER_SESSION_KEY, user);
 		FreeBoard freeBoard = new FreeBoard(user, "test", "", "test"); 
@@ -100,9 +116,23 @@ public class FreeBoardAnswerControllerTest {
 	@Test
 	public void deleteFailedFreeBoardAnswerWhenNotMatchUserUser() throws Exception {
 		MockHttpSession mockSession = new MockHttpSession();
-		User user = new User("test3@test.test", "test", "테스트");
+		User user = User.builder()
+				.email("test3@test.test")
+				.password("test3")
+				.name("테스트3")
+				.profileImage("blank-profile-picture.png")
+				.authority("ROLE_USER")
+				.createDate(LocalDateTime.now())
+				.build();
 		user.setId(1L);
-		User user2 = new User("test4@test.test", "test4", "테스트4");
+		User user2 = User.builder()
+				.email("test3@test.test")
+				.password("test3")
+				.name("테스트3")
+				.profileImage("blank-profile-picture.png")
+				.authority("ROLE_USER")
+				.createDate(LocalDateTime.now())
+				.build();
 		user.setId(2L);
 		mockSession.setAttribute(HttpSessionUtils.USER_SESSION_KEY, user);
 		FreeBoard freeBoard = new FreeBoard(user, "test", "", "test"); 

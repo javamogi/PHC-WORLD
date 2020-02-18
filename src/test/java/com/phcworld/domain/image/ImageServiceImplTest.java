@@ -3,6 +3,8 @@ package com.phcworld.domain.image;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.*;
 
+import java.time.LocalDateTime;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +25,14 @@ public class ImageServiceImplTest {
 	@Test
 	@Transactional
 	public void createImage() {
-		User user = new User("test3@test.test", "test3", "테스트3");
+		User user = User.builder()
+				.email("test3@test.test")
+				.password("test3")
+				.name("테스트3")
+				.profileImage("blank-profile-picture.png")
+				.authority("ROLE_USER")
+				.createDate(LocalDateTime.now())
+				.build();
 		user.setId(1L);
 		Image image = imageService.createImage(user, "haha.jpg", "1234.jpg", 100L);
 		Image actual = imageService.getOneImage(image.getId());
@@ -33,7 +42,14 @@ public class ImageServiceImplTest {
 	@Test
 	@Transactional
 	public void findImageByRandFileName() throws Exception {
-		User user = new User("test3@test.test", "test3", "테스트3");
+		User user = User.builder()
+				.email("test3@test.test")
+				.password("test3")
+				.name("테스트3")
+				.profileImage("blank-profile-picture.png")
+				.authority("ROLE_USER")
+				.createDate(LocalDateTime.now())
+				.build();
 		user.setId(1L);
 		Image image = imageService.createImage(user, "haha.jpg", "1234.jpg", 100L);
 		Image actual = imageService.findImageByRandFileName("1234.jpg");
@@ -43,7 +59,14 @@ public class ImageServiceImplTest {
 	@Test(expected = JpaObjectRetrievalFailureException.class)
 	@Transactional
 	public void deleteImageById() throws Exception {
-		User user = new User("test3@test.test", "test3", "테스트3");
+		User user = User.builder()
+				.email("test3@test.test")
+				.password("test3")
+				.name("테스트3")
+				.profileImage("blank-profile-picture.png")
+				.authority("ROLE_USER")
+				.createDate(LocalDateTime.now())
+				.build();
 		user.setId(1L);
 		Image image = imageService.createImage(user, "haha.jpg", "1234.jpg", 100L);
 		Long id = image.getId();

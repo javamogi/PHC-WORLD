@@ -4,6 +4,7 @@ import static org.hamcrest.CoreMatchers.hasItems;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.junit.Test;
@@ -51,7 +52,14 @@ public class TimelineServiceImplTest {
 	@Test
 	@Transactional
 	public void createTimeline() {
-		User user = new User("test3@test.test", "test3", "테스트3");
+		User user = User.builder()
+				.email("test3@test.test")
+				.password("test3")
+				.name("테스트3")
+				.profileImage("blank-profile-picture.png")
+				.authority("ROLE_USER")
+				.createDate(LocalDateTime.now())
+				.build();
 		user.setId(1L);
 		Diary diary = diaryService.createDiary(user, "test3", "test3", "no-image-icon.gif");
 		Timeline diaryTimeline = new Timeline("diary", "edit", diary, user, diary.getCreateDate());
@@ -87,7 +95,14 @@ public class TimelineServiceImplTest {
 	@Test
 	@Transactional
 	public void findPageTimelineByUser() throws Exception {
-		User user = new User("test3@test.test", "test3", "테스트3");
+		User user = User.builder()
+				.email("test3@test.test")
+				.password("test3")
+				.name("테스트3")
+				.profileImage("blank-profile-picture.png")
+				.authority("ROLE_USER")
+				.createDate(LocalDateTime.now())
+				.build();
 		user.setId(1L);
 		Diary diary = diaryService.createDiary(user, "test3", "test3", "no-image-icon.gif");
 		Timeline diaryTimeline = timelineService.getOneTimeline(diary.getTimeline().getId());
@@ -115,7 +130,14 @@ public class TimelineServiceImplTest {
 	@Test
 	@Transactional
 	public void findTimelineList() throws Exception {
-		User user = new User("test3@test.test", "test3", "테스트3");
+		User user = User.builder()
+				.email("test3@test.test")
+				.password("test3")
+				.name("테스트3")
+				.profileImage("blank-profile-picture.png")
+				.authority("ROLE_USER")
+				.createDate(LocalDateTime.now())
+				.build();
 		user.setId(1L);
 		Diary diary = diaryService.createDiary(user, "test3", "test3", "no-image-icon.gif");
 		Timeline diaryTimeline = timelineService.getOneTimeline(diary.getTimeline().getId());

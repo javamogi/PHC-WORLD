@@ -9,6 +9,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,7 +39,14 @@ public class FreeBoardControllerTest {
 
 	@Test
 	public void freeBoardList() throws Exception{
-		User user = new User("test3@test.test", "test3", "테스트3");
+		User user = User.builder()
+				.email("test3@test.test")
+				.password("test3")
+				.name("테스트3")
+				.profileImage("blank-profile-picture.png")
+				.authority("ROLE_USER")
+				.createDate(LocalDateTime.now())
+				.build();
 		user.setId(1L);
 		FreeBoard freeBoard = new FreeBoard(user, "test", "", "test");
 		freeBoard.setId(1L);
@@ -67,7 +75,14 @@ public class FreeBoardControllerTest {
 	@Test
 	public void freeBoardForm() throws Exception {
 		MockHttpSession mockSession = new MockHttpSession();
-		User user = new User("test3@test.test", "test", "테스트");
+		User user = User.builder()
+				.email("test3@test.test")
+				.password("test3")
+				.name("테스트3")
+				.profileImage("blank-profile-picture.png")
+				.authority("ROLE_USER")
+				.createDate(LocalDateTime.now())
+				.build();
 		user.setId(1L);
 		mockSession.setAttribute(HttpSessionUtils.USER_SESSION_KEY, user);
 		mockSession.setAttribute("messages", null);
@@ -82,7 +97,14 @@ public class FreeBoardControllerTest {
 	@Test
 	public void createFreeBoard() throws Exception {
 		MockHttpSession mockSession = new MockHttpSession();
-		User user = new User("test3@test.test", "test", "테스트");
+		User user = User.builder()
+				.email("test3@test.test")
+				.password("test3")
+				.name("테스트3")
+				.profileImage("blank-profile-picture.png")
+				.authority("ROLE_USER")
+				.createDate(LocalDateTime.now())
+				.build();
 		user.setId(1L);
 		mockSession.setAttribute(HttpSessionUtils.USER_SESSION_KEY, user);
 		mockSession.setAttribute("messages", null);
@@ -111,7 +133,14 @@ public class FreeBoardControllerTest {
 	@Test
 	public void detailFreeBoardWhenFreeBoardWriterEqualLoginUser() throws Exception {
 		MockHttpSession mockSession = new MockHttpSession();
-		User user = new User("test3@test.test", "test", "테스트");
+		User user = User.builder()
+				.email("test3@test.test")
+				.password("test3")
+				.name("테스트3")
+				.profileImage("blank-profile-picture.png")
+				.authority("ROLE_USER")
+				.createDate(LocalDateTime.now())
+				.build();
 		user.setId(1L);
 		mockSession.setAttribute(HttpSessionUtils.USER_SESSION_KEY, user);
 		mockSession.setAttribute("messages", null);
@@ -136,7 +165,14 @@ public class FreeBoardControllerTest {
 	@Test
 	public void whenNotLoginUserDetailFreeBoard() throws Exception {
 		MockHttpSession mockSession = new MockHttpSession();
-		User user = new User("test3@test.test", "test", "테스트");
+		User user = User.builder()
+				.email("test3@test.test")
+				.password("test3")
+				.name("테스트3")
+				.profileImage("blank-profile-picture.png")
+				.authority("ROLE_USER")
+				.createDate(LocalDateTime.now())
+				.build();
 		user.setId(1L);
 		FreeBoard freeBoard = new FreeBoard(user, "test", "", "test");
 		freeBoard.setId(1L);
@@ -157,13 +193,27 @@ public class FreeBoardControllerTest {
 	@Test
 	public void detailFreeBoardWhenFreeBoardWriterNotEqualLoginUser() throws Exception {
 		MockHttpSession mockSession = new MockHttpSession();
-		User user = new User("test3@test.test", "test", "테스트");
+		User user = User.builder()
+				.email("test3@test.test")
+				.password("test3")
+				.name("테스트3")
+				.profileImage("blank-profile-picture.png")
+				.authority("ROLE_USER")
+				.createDate(LocalDateTime.now())
+				.build();
 		user.setId(1L);
 		mockSession.setAttribute(HttpSessionUtils.USER_SESSION_KEY, user);
 		mockSession.setAttribute("messages", null);
 		mockSession.setAttribute("countMessages", "");
 		mockSession.setAttribute("alerts", null);
-		User user2 = new User("test4@test.test", "test4", "테스트4");
+		User user2 = User.builder()
+				.email("test4@test.test")
+				.password("test4")
+				.name("테스트4")
+				.profileImage("blank-profile-picture.png")
+				.authority("ROLE_USER")
+				.createDate(LocalDateTime.now())
+				.build();
 		user.setId(2L);
 		FreeBoard freeBoard = new FreeBoard(user2, "test", "", "test");
 		freeBoard.setId(1L);
@@ -184,14 +234,28 @@ public class FreeBoardControllerTest {
 	@Test
 	public void detailFreBoardWhenHasAuthority() throws Exception {
 		MockHttpSession mockSession = new MockHttpSession();
-		User user = new User("test3@test.test", "test", "테스트");
+		User user = User.builder()
+				.email("test3@test.test")
+				.password("test3")
+				.name("테스트3")
+				.profileImage("blank-profile-picture.png")
+				.authority("ROLE_USER")
+				.createDate(LocalDateTime.now())
+				.build();
 		user.setId(1L);
 		user.setAuthority("ROLE_ADMIN");
 		mockSession.setAttribute(HttpSessionUtils.USER_SESSION_KEY, user);
 		mockSession.setAttribute("messages", null);
 		mockSession.setAttribute("countMessages", "");
 		mockSession.setAttribute("alerts", null);
-		User user2 = new User("test4@test.test", "test4", "테스트4");
+		User user2 = User.builder()
+				.email("test4@test.test")
+				.password("test4")
+				.name("테스트4")
+				.profileImage("blank-profile-picture.png")
+				.authority("ROLE_USER")
+				.createDate(LocalDateTime.now())
+				.build();
 		user.setId(2L);
 		FreeBoard freeBoard = new FreeBoard(user2, "test", "", "test");
 		freeBoard.setId(1L);
@@ -212,7 +276,14 @@ public class FreeBoardControllerTest {
 	@Test
 	public void updateFreeBoardForm() throws Exception {
 		MockHttpSession mockSession = new MockHttpSession();
-		User user = new User("test3@test.test", "test", "테스트");
+		User user = User.builder()
+				.email("test3@test.test")
+				.password("test3")
+				.name("테스트3")
+				.profileImage("blank-profile-picture.png")
+				.authority("ROLE_USER")
+				.createDate(LocalDateTime.now())
+				.build();
 		user.setId(1L);
 		mockSession.setAttribute(HttpSessionUtils.USER_SESSION_KEY, user);
 		mockSession.setAttribute("messages", null);
@@ -234,7 +305,14 @@ public class FreeBoardControllerTest {
 	@Test
 	public void updateNotLoginUserFreeBoardForm() throws Exception {
 		MockHttpSession mockSession = new MockHttpSession();
-		User user = new User("test3@test.test", "test", "테스트");
+		User user = User.builder()
+				.email("test3@test.test")
+				.password("test3")
+				.name("테스트3")
+				.profileImage("blank-profile-picture.png")
+				.authority("ROLE_USER")
+				.createDate(LocalDateTime.now())
+				.build();
 		user.setId(1L);
 		FreeBoard freeBoard = new FreeBoard(user, "test", "", "test");
 		freeBoard.setId(1L);
@@ -250,13 +328,27 @@ public class FreeBoardControllerTest {
 	@Test
 	public void updateMatchNotUserFreeBoardForm() throws Exception {
 		MockHttpSession mockSession = new MockHttpSession();
-		User user = new User("test3@test.test", "test", "테스트");
+		User user = User.builder()
+				.email("test3@test.test")
+				.password("test3")
+				.name("테스트3")
+				.profileImage("blank-profile-picture.png")
+				.authority("ROLE_USER")
+				.createDate(LocalDateTime.now())
+				.build();
 		user.setId(1L);
 		mockSession.setAttribute(HttpSessionUtils.USER_SESSION_KEY, user);
 		mockSession.setAttribute("messages", null);
 		mockSession.setAttribute("countMessages", "");
 		mockSession.setAttribute("alerts", null);
-		User user2 = new User("test4@test.test", "test4", "테스트4");
+		User user2 = User.builder()
+				.email("test4@test.test")
+				.password("test4")
+				.name("테스트4")
+				.profileImage("blank-profile-picture.png")
+				.authority("ROLE_USER")
+				.createDate(LocalDateTime.now())
+				.build();
 		user.setId(2L);
 		FreeBoard freeBoard = new FreeBoard(user2, "test", "", "test");
 		freeBoard.setId(1L);
@@ -274,7 +366,14 @@ public class FreeBoardControllerTest {
 	@Test
 	public void successUpdateFreeBoard() throws Exception {
 		MockHttpSession mockSession = new MockHttpSession();
-		User user = new User("test3@test.test", "test", "테스트");
+		User user = User.builder()
+				.email("test3@test.test")
+				.password("test3")
+				.name("테스트3")
+				.profileImage("blank-profile-picture.png")
+				.authority("ROLE_USER")
+				.createDate(LocalDateTime.now())
+				.build();
 		user.setId(1L);
 		mockSession.setAttribute(HttpSessionUtils.USER_SESSION_KEY, user);
 		mockSession.setAttribute("messages", null);
@@ -298,7 +397,14 @@ public class FreeBoardControllerTest {
 	@Test
 	public void updateFailedNotLoginUserFreeBoard() throws Exception {
 		MockHttpSession mockSession = new MockHttpSession();
-		User user = new User("test3@test.test", "test", "테스트");
+		User user = User.builder()
+				.email("test3@test.test")
+				.password("test3")
+				.name("테스트3")
+				.profileImage("blank-profile-picture.png")
+				.authority("ROLE_USER")
+				.createDate(LocalDateTime.now())
+				.build();
 		user.setId(1L);
 		this.mvc.perform(put("/freeboard/{id}", 1L)
 				.param("contents", "updateTest")
@@ -312,13 +418,27 @@ public class FreeBoardControllerTest {
 	@Test
 	public void updateFailedNotMatchUserFreeBoard() throws Exception {
 		MockHttpSession mockSession = new MockHttpSession();
-		User user = new User("test3@test.test", "test", "테스트");
+		User user = User.builder()
+				.email("test3@test.test")
+				.password("test3")
+				.name("테스트3")
+				.profileImage("blank-profile-picture.png")
+				.authority("ROLE_USER")
+				.createDate(LocalDateTime.now())
+				.build();
 		user.setId(1L);
 		mockSession.setAttribute(HttpSessionUtils.USER_SESSION_KEY, user);
 		mockSession.setAttribute("messages", null);
 		mockSession.setAttribute("countMessages", "");
 		mockSession.setAttribute("alerts", null);
-		User user2 = new User("test4@test.test", "test4", "테스트4");
+		User user2 = User.builder()
+				.email("test4@test.test")
+				.password("test4")
+				.name("테스트4")
+				.profileImage("blank-profile-picture.png")
+				.authority("ROLE_USER")
+				.createDate(LocalDateTime.now())
+				.build();
 		user.setId(2L);
 		FreeBoard freeBoard = new FreeBoard(user2, "test", "", "test");
 		freeBoard.setId(1L);
@@ -338,7 +458,14 @@ public class FreeBoardControllerTest {
 	@Test
 	public void successDeleteFreeBoard() throws Exception {
 		MockHttpSession mockSession = new MockHttpSession();
-		User user = new User("test3@test.test", "test", "테스트");
+		User user = User.builder()
+				.email("test3@test.test")
+				.password("test3")
+				.name("테스트3")
+				.profileImage("blank-profile-picture.png")
+				.authority("ROLE_USER")
+				.createDate(LocalDateTime.now())
+				.build();
 		user.setId(1L);
 		mockSession.setAttribute(HttpSessionUtils.USER_SESSION_KEY, user);
 		mockSession.setAttribute("messages", null);
@@ -366,13 +493,27 @@ public class FreeBoardControllerTest {
 	@Test
 	public void deleteFailedNotMatchAuthorityFreeBoard() throws Exception {
 		MockHttpSession mockSession = new MockHttpSession();
-		User user = new User("test3@test.test", "test", "테스트");
+		User user = User.builder()
+				.email("test3@test.test")
+				.password("test3")
+				.name("테스트3")
+				.profileImage("blank-profile-picture.png")
+				.authority("ROLE_USER")
+				.createDate(LocalDateTime.now())
+				.build();
 		user.setId(1L);
 		mockSession.setAttribute(HttpSessionUtils.USER_SESSION_KEY, user);
 		mockSession.setAttribute("messages", null);
 		mockSession.setAttribute("countMessages", "");
 		mockSession.setAttribute("alerts", null);
-		User user2 = new User("test4@test.test", "test4", "테스트4");
+		User user2 = User.builder()
+				.email("test4@test.test")
+				.password("test4")
+				.name("테스트4")
+				.profileImage("blank-profile-picture.png")
+				.authority("ROLE_USER")
+				.createDate(LocalDateTime.now())
+				.build();
 		user.setId(2L);
 		FreeBoard freeBoard = new FreeBoard(user2, "test", "", "test");
 		freeBoard.setId(1L);

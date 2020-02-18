@@ -6,6 +6,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.time.LocalDateTime;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +40,14 @@ public class UploadControllerTest {
 	@Test
 	public void uploadImage() throws Exception {
 		MockHttpSession mockSession = new MockHttpSession();
-		User user = new User("test3@test.test", "test", "테스트");
+		User user = User.builder()
+				.email("test3@test.test")
+				.password("test3")
+				.name("테스트3")
+				.profileImage("blank-profile-picture.png")
+				.authority("ROLE_USER")
+				.createDate(LocalDateTime.now())
+				.build();
 		user.setId(1L);
 		mockSession.setAttribute(HttpSessionUtils.USER_SESSION_KEY, user);
 		mockSession.setAttribute("messages", null);
@@ -65,7 +74,14 @@ public class UploadControllerTest {
 	
 	@Test
 	public void findImage() throws Exception {
-		User user = new User("test@test.test", "test", "테스트");
+		User user = User.builder()
+				.email("test3@test.test")
+				.password("test3")
+				.name("테스트3")
+				.profileImage("blank-profile-picture.png")
+				.authority("ROLE_USER")
+				.createDate(LocalDateTime.now())
+				.build();
 		Image image = new Image(user, "test.jpg", "123.jpg", 113L);
 		image.setId(1L);
 		given(this.imageService.findImageByRandFileName("123.jpg"))
@@ -82,7 +98,14 @@ public class UploadControllerTest {
 	@Test
 	public void uploadProfileImage() throws Exception {
 		MockHttpSession mockSession = new MockHttpSession();
-		User user = new User("test3@test.test", "test", "테스트");
+		User user = User.builder()
+				.email("test3@test.test")
+				.password("test3")
+				.name("테스트3")
+				.profileImage("blank-profile-picture.png")
+				.authority("ROLE_USER")
+				.createDate(LocalDateTime.now())
+				.build();
 		user.setId(1L);
 		mockSession.setAttribute(HttpSessionUtils.USER_SESSION_KEY, user);
 		mockSession.setAttribute("messages", null);

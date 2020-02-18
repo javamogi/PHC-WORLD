@@ -4,6 +4,7 @@ import static org.hamcrest.CoreMatchers.hasItems;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.junit.Test;
@@ -26,9 +27,23 @@ public class MessageServiceImplTest {
 	@Test
 	@Transactional
 	public void createMessage() {
-		User user = new User("test3@test.test", "test3", "테스트3");
+		User user = User.builder()
+				.email("test3@test.test")
+				.password("test3")
+				.name("테스트3")
+				.profileImage("blank-profile-picture.png")
+				.authority("ROLE_USER")
+				.createDate(LocalDateTime.now())
+				.build();
 		user.setId(1L);
-		User receiveUser = new User("test4@test.test", "test4", "테스트4");
+		User receiveUser = User.builder()
+				.email("test4@test.test")
+				.password("test4")
+				.name("테스트4")
+				.profileImage("blank-profile-picture.png")
+				.authority("ROLE_USER")
+				.createDate(LocalDateTime.now())
+				.build();
 		user.setId(2L);
 		Message message = messageService.createMessage(user, receiveUser, "test");
 		Message actual = messageService.getOneMessage(message.getId());
@@ -38,9 +53,23 @@ public class MessageServiceImplTest {
 	@Test
 	@Transactional
 	public void confirmMessage() throws Exception {
-		User user = new User("test3@test.test", "test3", "테스트3");
+		User user = User.builder()
+				.email("test3@test.test")
+				.password("test3")
+				.name("테스트3")
+				.profileImage("blank-profile-picture.png")
+				.authority("ROLE_USER")
+				.createDate(LocalDateTime.now())
+				.build();
 		user.setId(1L);
-		User receiveUser = new User("test4@test.test", "test4", "테스트4");
+		User receiveUser = User.builder()
+				.email("test4@test.test")
+				.password("test4")
+				.name("테스트4")
+				.profileImage("blank-profile-picture.png")
+				.authority("ROLE_USER")
+				.createDate(LocalDateTime.now())
+				.build();
 		receiveUser.setId(2L);
 		Message message = messageService.createMessage(user, receiveUser, "test");
 		Message actual = messageService.confirmMessage(message.getId(), receiveUser);
@@ -51,9 +80,23 @@ public class MessageServiceImplTest {
 	@Test
 	@Transactional
 	public void findMessageAllByToUserAndConfirm() throws Exception {
-		User user = new User("test3@test.test", "test3", "테스트3");
+		User user = User.builder()
+				.email("test3@test.test")
+				.password("test3")
+				.name("테스트3")
+				.profileImage("blank-profile-picture.png")
+				.authority("ROLE_USER")
+				.createDate(LocalDateTime.now())
+				.build();
 		user.setId(1L);
-		User receiveUser = new User("test4@test.test", "test4", "테스트4");
+		User receiveUser = User.builder()
+				.email("test4@test.test")
+				.password("test4")
+				.name("테스트4")
+				.profileImage("blank-profile-picture.png")
+				.authority("ROLE_USER")
+				.createDate(LocalDateTime.now())
+				.build();
 		receiveUser.setId(2L);
 		Message message = messageService.createMessage(user, receiveUser, "test");
 		Message message2 = messageService.createMessage(user, receiveUser, "test2");
@@ -64,9 +107,23 @@ public class MessageServiceImplTest {
 	@Test
 	@Transactional
 	public void findMessageByRequestPageToUserAndConfirm() throws Exception {
-		User user = new User("test3@test.test", "test3", "테스트3");
+		User user = User.builder()
+				.email("test3@test.test")
+				.password("test3")
+				.name("테스트3")
+				.profileImage("blank-profile-picture.png")
+				.authority("ROLE_USER")
+				.createDate(LocalDateTime.now())
+				.build();
 		user.setId(1L);
-		User receiveUser = new User("test4@test.test", "test4", "테스트4");
+		User receiveUser = User.builder()
+				.email("test4@test.test")
+				.password("test4")
+				.name("테스트4")
+				.profileImage("blank-profile-picture.png")
+				.authority("ROLE_USER")
+				.createDate(LocalDateTime.now())
+				.build();
 		receiveUser.setId(2L);
 		Message message = messageService.createMessage(user, receiveUser, "test");
 		Message message2 = messageService.createMessage(user, receiveUser, "test2");
@@ -77,9 +134,23 @@ public class MessageServiceImplTest {
 	@Test
 	@Transactional
 	public void findMessageByReceiveMessages() throws Exception {
-		User user = new User("test3@test.test", "test3", "테스트3");
+		User user = User.builder()
+				.email("test3@test.test")
+				.password("test3")
+				.name("테스트3")
+				.profileImage("blank-profile-picture.png")
+				.authority("ROLE_USER")
+				.createDate(LocalDateTime.now())
+				.build();
 		user.setId(1L);
-		User receiveUser = new User("test4@test.test", "test4", "테스트4");
+		User receiveUser = User.builder()
+				.email("test4@test.test")
+				.password("test4")
+				.name("테스트4")
+				.profileImage("blank-profile-picture.png")
+				.authority("ROLE_USER")
+				.createDate(LocalDateTime.now())
+				.build();
 		receiveUser.setId(2L);
 		Message message = messageService.createMessage(user, receiveUser, "test");
 		Message message2 = messageService.createMessage(user, receiveUser, "test2");
@@ -91,9 +162,23 @@ public class MessageServiceImplTest {
 	@Test
 	@Transactional
 	public void findMessageBySendMessage() throws Exception {
-		User user = new User("test3@test.test", "test3", "테스트3");
+		User user = User.builder()
+				.email("test3@test.test")
+				.password("test3")
+				.name("테스트3")
+				.profileImage("blank-profile-picture.png")
+				.authority("ROLE_USER")
+				.createDate(LocalDateTime.now())
+				.build();
 		user.setId(1L);
-		User receiveUser = new User("test4@test.test", "test4", "테스트4");
+		User receiveUser = User.builder()
+				.email("test4@test.test")
+				.password("test4")
+				.name("테스트4")
+				.profileImage("blank-profile-picture.png")
+				.authority("ROLE_USER")
+				.createDate(LocalDateTime.now())
+				.build();
 		receiveUser.setId(2L);
 		Message message = messageService.createMessage(user, receiveUser, "test");
 		Message message2 = messageService.createMessage(user, receiveUser, "test2");

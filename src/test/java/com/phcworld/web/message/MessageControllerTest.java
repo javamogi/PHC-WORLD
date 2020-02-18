@@ -6,6 +6,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -49,7 +50,14 @@ public class MessageControllerTest {
 	@Test
 	public void whenEmptyReceiveUser() throws Exception {
 		MockHttpSession mockSession = new MockHttpSession();
-		User user = new User("test@test.test", "test", "테스트");
+		User user = User.builder()
+				.email("test3@test.test")
+				.password("test3")
+				.name("테스트3")
+				.profileImage("blank-profile-picture.png")
+				.authority("ROLE_USER")
+				.createDate(LocalDateTime.now())
+				.build();
 		user.setId(1L);
 		mockSession.setAttribute(HttpSessionUtils.USER_SESSION_KEY, user);
 		given(this.userService.findUserByEmail("test2@test.test"))
@@ -64,7 +72,14 @@ public class MessageControllerTest {
 	@Test
 	public void whenEqualReceiveUser() throws Exception {
 		MockHttpSession mockSession = new MockHttpSession();
-		User user = new User("test@test.test", "test", "테스트");
+		User user = User.builder()
+				.email("test3@test.test")
+				.password("test3")
+				.name("테스트3")
+				.profileImage("blank-profile-picture.png")
+				.authority("ROLE_USER")
+				.createDate(LocalDateTime.now())
+				.build();
 		user.setId(1L);
 		mockSession.setAttribute(HttpSessionUtils.USER_SESSION_KEY, user);
 		given(this.userService.findUserByEmail("test@test.test"))
@@ -79,9 +94,23 @@ public class MessageControllerTest {
 	@Test
 	public void sendMessage() throws Exception {
 		MockHttpSession mockSession = new MockHttpSession();
-		User user = new User("test3@test.test", "test", "테스트");
+		User user = User.builder()
+				.email("test3@test.test")
+				.password("test3")
+				.name("테스트3")
+				.profileImage("blank-profile-picture.png")
+				.authority("ROLE_USER")
+				.createDate(LocalDateTime.now())
+				.build();
 		user.setId(1L);
-		User receiveUser = new User("test4@test.test", "test4", "테스트4");
+		User receiveUser = User.builder()
+				.email("test4@test.test")
+				.password("test4")
+				.name("테스트4")
+				.profileImage("blank-profile-picture.png")
+				.authority("ROLE_USER")
+				.createDate(LocalDateTime.now())
+				.build();
 		user.setId(2L);
 		mockSession.setAttribute(HttpSessionUtils.USER_SESSION_KEY, user);
 		given(this.userService.findUserByEmail("test4@test.test"))
@@ -110,9 +139,23 @@ public class MessageControllerTest {
 	@Test
 	public void confirmMessage() throws Exception {
 		MockHttpSession mockSession = new MockHttpSession();
-		User user = new User("test3@test.test", "test", "테스트");
+		User user = User.builder()
+				.email("test3@test.test")
+				.password("test3")
+				.name("테스트3")
+				.profileImage("blank-profile-picture.png")
+				.authority("ROLE_USER")
+				.createDate(LocalDateTime.now())
+				.build();
 		user.setId(1L);
-		User receiveUser = new User("test4@test.test", "test4", "테스트4");
+		User receiveUser = User.builder()
+				.email("test4@test.test")
+				.password("test4")
+				.name("테스트4")
+				.profileImage("blank-profile-picture.png")
+				.authority("ROLE_USER")
+				.createDate(LocalDateTime.now())
+				.build();
 		mockSession.setAttribute(HttpSessionUtils.USER_SESSION_KEY, user);
 		Message message = new Message(user, receiveUser, "test"); 
 		message.setId(1L);
@@ -142,9 +185,23 @@ public class MessageControllerTest {
 	@Test
 	public void getToUserInfo() throws Exception {
 		MockHttpSession mockSession = new MockHttpSession();
-		User user = new User("test3@test.test", "test", "테스트");
+		User user = User.builder()
+				.email("test3@test.test")
+				.password("test3")
+				.name("테스트3")
+				.profileImage("blank-profile-picture.png")
+				.authority("ROLE_USER")
+				.createDate(LocalDateTime.now())
+				.build();
 		user.setId(1L);
-		User receiveUser = new User("test4@test.test", "test4", "테스트4");
+		User receiveUser = User.builder()
+				.email("test4@test.test")
+				.password("test4")
+				.name("테스트4")
+				.profileImage("blank-profile-picture.png")
+				.authority("ROLE_USER")
+				.createDate(LocalDateTime.now())
+				.build();
 		mockSession.setAttribute(HttpSessionUtils.USER_SESSION_KEY, user);
 		Message message = new Message(user, receiveUser, "test"); 
 		message.setId(1L);
