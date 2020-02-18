@@ -5,11 +5,7 @@ import java.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.ui.Model;
 
-import com.phcworld.domain.email.EmailAuth;
-import com.phcworld.domain.email.EmailService;
-import com.phcworld.domain.user.LoginRequestUser;
 import com.phcworld.domain.user.User;
 import com.phcworld.repository.user.UserRepository;
 import com.phcworld.web.SecurityUtils;
@@ -20,9 +16,6 @@ public class UserService {
 
 	@Autowired
 	private UserRepository userRepository;
-	
-	@Autowired
-	private EmailService emailService;
 
 	public User createUser(User user) {
 		String password = SecurityUtils.getEncSHA256(user.getPassword());
