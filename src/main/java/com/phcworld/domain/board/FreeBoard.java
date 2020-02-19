@@ -16,6 +16,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.phcworld.domain.answer.FreeBoardAnswer;
 import com.phcworld.domain.timeline.Timeline;
@@ -70,6 +71,7 @@ public class FreeBoard {
 	@OneToOne(cascade = CascadeType.REMOVE)
 	@JoinColumn(foreignKey = @ForeignKey(name = "fk_freeBoard_timeline"))
 	// @PrimaryKeyJoinColumn
+	@JsonIgnore
 	private Timeline timeline;
 
 	public String getCountOfAnswer() {
