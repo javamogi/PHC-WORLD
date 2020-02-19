@@ -72,16 +72,6 @@ public class FreeBoard {
 	// @PrimaryKeyJoinColumn
 	private Timeline timeline;
 
-//	public FreeBoard(User writer, String title, String icon, String contents) {
-//		this.writer = writer;
-//		this.title = title;
-//		this.contents = contents;
-//		this.icon = icon;
-//		this.createDate = LocalDateTime.now();
-//		this.count = 0;
-//		this.countOfAnswer = 0;
-//	}
-
 	public String getCountOfAnswer() {
 		if (this.countOfAnswer == 0) {
 			return "";
