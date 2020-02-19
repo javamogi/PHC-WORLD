@@ -13,6 +13,8 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.http.HttpSession;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,9 +38,9 @@ public class FreeBoardControllerTest {
 	
 	@MockBean
 	private FreeBoardServiceImpl freeBoardService;
-
+	
 	@Test
-	public void freeBoardList() throws Exception{
+	public void getAllList() throws Exception{
 		User user = User.builder()
 				.id(1L)
 				.email("test3@test.test")
@@ -84,14 +86,14 @@ public class FreeBoardControllerTest {
 	}
 	
 	@Test
-	public void matchNotLoginUserFreeBoardForm() throws Exception {
+	public void matchNotLoginUserCreateForm() throws Exception {
 		this.mvc.perform(get("/freeboard/form"))
 		.andExpect(view().name(containsString("/user/login")))
 		.andExpect(status().isOk());
 	}
 	
 	@Test
-	public void freeBoardForm() throws Exception {
+	public void successCreateForm() throws Exception {
 		MockHttpSession mockSession = new MockHttpSession();
 		User user = User.builder()
 				.id(1L)
@@ -113,7 +115,7 @@ public class FreeBoardControllerTest {
 	}
 	
 	@Test
-	public void createFreeBoard() throws Exception {
+	public void create() throws Exception {
 		MockHttpSession mockSession = new MockHttpSession();
 		User user = User.builder()
 				.id(1L)
@@ -137,7 +139,7 @@ public class FreeBoardControllerTest {
 	}
 	
 	@Test
-	public void createFailedNotLoginUserFreeBoard() throws Exception {
+	public void createEmptyLoginUser() throws Exception {
 		MockHttpSession mockSession = new MockHttpSession();
 		this.mvc.perform(post("/freeboard")
 				.param("title", "test")
@@ -149,7 +151,7 @@ public class FreeBoardControllerTest {
 	}
 	
 	@Test
-	public void detailFreeBoardWhenFreeBoardWriterEqualLoginUser() throws Exception {
+	public void readWhenWriterEqualLoginUser() throws Exception {
 		MockHttpSession mockSession = new MockHttpSession();
 		User user = User.builder()
 				.id(1L)
@@ -189,7 +191,7 @@ public class FreeBoardControllerTest {
 	}
 	
 	@Test
-	public void whenNotLoginUserDetailFreeBoard() throws Exception {
+	public void readWhenNotMatchLoginUserAndWriter() throws Exception {
 		MockHttpSession mockSession = new MockHttpSession();
 		User user = User.builder()
 				.id(1L)
@@ -225,7 +227,7 @@ public class FreeBoardControllerTest {
 	}
 	
 	@Test
-	public void detailFreeBoardWhenFreeBoardWriterNotEqualLoginUser() throws Exception {
+	public void readWhenWriterNotEqualLoginUser() throws Exception {
 		MockHttpSession mockSession = new MockHttpSession();
 		User user = User.builder()
 				.id(1L)
@@ -275,7 +277,7 @@ public class FreeBoardControllerTest {
 	}
 	
 	@Test
-	public void detailFreBoardWhenHasAuthority() throws Exception {
+	public void readWhenHasAdminAuthority() throws Exception {
 		MockHttpSession mockSession = new MockHttpSession();
 		User user = User.builder()
 				.id(1L)
@@ -325,7 +327,7 @@ public class FreeBoardControllerTest {
 	}
 	
 	@Test
-	public void updateFreeBoardForm() throws Exception {
+	public void successUpdateForm() throws Exception {
 		MockHttpSession mockSession = new MockHttpSession();
 		User user = User.builder()
 				.id(1L)
@@ -362,7 +364,7 @@ public class FreeBoardControllerTest {
 	}
 	
 	@Test
-	public void updateNotLoginUserFreeBoardForm() throws Exception {
+	public void updateWhenRequestEmptyLoginUser() throws Exception {
 		MockHttpSession mockSession = new MockHttpSession();
 		User user = User.builder()
 				.id(1L)
@@ -393,7 +395,7 @@ public class FreeBoardControllerTest {
 	}
 	
 	@Test
-	public void updateMatchNotUserFreeBoardForm() throws Exception {
+	public void updateWhenMatchNotLoginUserAndWriter() throws Exception {
 		MockHttpSession mockSession = new MockHttpSession();
 		User user = User.builder()
 				.id(1L)
@@ -477,7 +479,7 @@ public class FreeBoardControllerTest {
 	}
 	
 	@Test
-	public void updateFailedNotLoginUserFreeBoard() throws Exception {
+	public void updateWhenEmptyLoginUser() throws Exception {
 		MockHttpSession mockSession = new MockHttpSession();
 		this.mvc.perform(put("/freeboard/{id}", 1L)
 				.param("contents", "updateTest")
@@ -489,7 +491,7 @@ public class FreeBoardControllerTest {
 	}
 	
 	@Test
-	public void updateFailedNotMatchUserFreeBoard() throws Exception {
+	public void updateWhenNotMatchUserAndWriter() throws Exception {
 		MockHttpSession mockSession = new MockHttpSession();
 		User user = User.builder()
 				.id(1L)
@@ -538,7 +540,7 @@ public class FreeBoardControllerTest {
 	}
 	
 	@Test
-	public void successDeleteFreeBoard() throws Exception {
+	public void successDelete() throws Exception {
 		MockHttpSession mockSession = new MockHttpSession();
 		User user = User.builder()
 				.id(1L)
@@ -572,7 +574,7 @@ public class FreeBoardControllerTest {
 	}
 	
 	@Test
-	public void deleteFailedNotLoginUserFreeBoard() throws Exception {
+	public void deleteWhenEmptyLoginUser() throws Exception {
 		MockHttpSession mockSession = new MockHttpSession();
 		this.mvc.perform(delete("/freeboard/{id}/delete", 1L)
 				.session(mockSession))
@@ -582,7 +584,7 @@ public class FreeBoardControllerTest {
 	}
 	
 	@Test
-	public void deleteFailedNotMatchAuthorityFreeBoard() throws Exception {
+	public void deleteWhenNotMatchAuthority() throws Exception {
 		MockHttpSession mockSession = new MockHttpSession();
 		User user = User.builder()
 				.id(1L)

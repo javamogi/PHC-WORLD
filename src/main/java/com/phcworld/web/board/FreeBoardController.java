@@ -75,7 +75,7 @@ public class FreeBoardController {
 	}
 
 	@GetMapping("/{id}/detail")
-	public String detail(@PathVariable Long id, HttpSession session, Model model) {
+	public String read(@PathVariable Long id, HttpSession session, Model model) {
 		boolean isLoginUser = false;
 		boolean matchLoginUserAndWriter = false;
 		boolean matchAuthority = false;
