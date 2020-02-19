@@ -1,18 +1,22 @@
 package com.phcworld.domain.user;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.phcworld.domain.timeline.Timeline;
 import com.phcworld.web.LocalDateTimeUtils;
 import com.phcworld.web.SecurityUtils;
 
@@ -20,6 +24,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import lombok.experimental.Accessors;
 
 @Entity
@@ -28,6 +33,7 @@ import lombok.experimental.Accessors;
 @AllArgsConstructor
 @Builder
 @Accessors(chain = true)
+@ToString(exclude = "password")
 public class User {
 
 	@Id
@@ -55,6 +61,9 @@ public class User {
 	private LocalDateTime createDate;
 
 	private String profileImage;
+	
+//	@OneToMany(fetch = FetchType.LAZY, mappedBy = "timeline")
+//	private List<Timeline> timelineList;
 
 	public boolean matchId(Long newId) {
 		if (newId == null) {
@@ -94,55 +103,6 @@ public class User {
 		if (user.getEmail().equals("pakoh200@naver.com")) {
 			user.setAuthority("ROLE_ADMIN");
 		}
-	}
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((authority == null) ? 0 : authority.hashCode());
-		result = prime * result + ((email == null) ? 0 : email.hashCode());
-		result = prime * result + ((id == null) ? 0 : id.hashCode());
-		result = prime * result + ((name == null) ? 0 : name.hashCode());
-		result = prime * result + ((password == null) ? 0 : password.hashCode());
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		User other = (User) obj;
-		if (authority == null) {
-			if (other.authority != null)
-				return false;
-		} else if (!authority.equals(other.authority))
-			return false;
-		if (email == null) {
-			if (other.email != null)
-				return false;
-		} else if (!email.equals(other.email))
-			return false;
-		if (id == null) {
-			if (other.id != null)
-				return false;
-		} else if (!id.equals(other.id))
-			return false;
-		if (name == null) {
-			if (other.name != null)
-				return false;
-		} else if (!name.equals(other.name))
-			return false;
-		if (password == null) {
-			if (other.password != null)
-				return false;
-		} else if (!password.equals(other.password))
-			return false;
-		return true;
 	}
 
 }

@@ -1,6 +1,7 @@
 package com.phcworld.domain.user;
 
 import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
@@ -39,11 +40,17 @@ public class UserTest {
 				.name("lombok")
 				.authority("ROLE_USER")
 				.build();
-		log.debug("User : {}", user);
+		User test = User.builder()
+				.email("lombok@test.test")
+				.password("lombokpss")
+				.name("lombok")
+				.authority("ROLE_USER")
+				.build();
+		assertThat(user, is(test));
 	}
 
 	@Test
-	public void isEmptyEmail() throws Exception {
+	public void createWhenIsEmptyEmail() throws Exception {
 		User user = User.builder()
 				.password("test")
 				.name("테스트")
@@ -56,7 +63,7 @@ public class UserTest {
 	}
 
 	@Test
-	public void isNotEmail() throws Exception {
+	public void createWhenIsNotEmail() throws Exception {
 		User user = User.builder()
 				.email("test")
 				.password("test")
@@ -90,7 +97,7 @@ public class UserTest {
 	}
 	
 	@Test
-	public void isEmptyPassword() throws Exception {
+	public void createWhenIsEmptyPassword() throws Exception {
 		User user = User.builder()
 				.email("test@test.test")
 				.password(null)
@@ -104,7 +111,7 @@ public class UserTest {
 	}
 	
 	@Test
-	public void isNotSizePassword() throws Exception {
+	public void createWhenIsNotSizePassword() throws Exception {
 		User user = User.builder()
 				.email("test@test.test")
 				.password("tes")
@@ -118,7 +125,7 @@ public class UserTest {
 	}
 	
 	@Test
-	public void isEmptyName() throws Exception {
+	public void createWhenIsEmptyName() throws Exception {
 		User user = User.builder()
 				.email("test@test.test")
 				.password("test")
@@ -131,7 +138,7 @@ public class UserTest {
 		}
 	}
 	@Test
-	public void isNotSizeName() throws Exception {
+	public void createWhenIsNotSizeName() throws Exception {
 		User shortNameUser = User.builder()
 				.email("test@test.test")
 				.password("test")
@@ -157,7 +164,7 @@ public class UserTest {
 	}
 	
 	@Test
-	public void isNotPasswordPattern() throws Exception {
+	public void createWhenIsNotPasswordPattern() throws Exception {
 		User user = User.builder()
 				.email("test@test.test")
 				.password("test")

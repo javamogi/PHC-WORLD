@@ -14,10 +14,10 @@ import org.springframework.stereotype.Service;
 import com.phcworld.domain.alert.Alert;
 import com.phcworld.domain.alert.AlertRepository;
 import com.phcworld.domain.board.Diary;
-import com.phcworld.domain.board.DiaryRepository;
 import com.phcworld.domain.timeline.Timeline;
 import com.phcworld.domain.timeline.TimelineRepository;
 import com.phcworld.domain.user.User;
+import com.phcworld.repository.board.DiaryRepository;
 
 @Service
 public class GoodServiceImpl implements GoodService {

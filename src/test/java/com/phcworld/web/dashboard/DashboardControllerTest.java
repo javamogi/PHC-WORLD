@@ -31,13 +31,13 @@ import com.phcworld.domain.answer.DiaryAnswerServiceImpl;
 import com.phcworld.domain.answer.FreeBoardAnswer;
 import com.phcworld.domain.answer.FreeBoardAnswerServiceImpl;
 import com.phcworld.domain.board.Diary;
-import com.phcworld.domain.board.DiaryServiceImpl;
 import com.phcworld.domain.board.FreeBoard;
-import com.phcworld.domain.board.FreeBoardServiceImpl;
 import com.phcworld.domain.good.Good;
 import com.phcworld.domain.timeline.Timeline;
 import com.phcworld.domain.timeline.TimelineServiceImpl;
 import com.phcworld.domain.user.User;
+import com.phcworld.service.board.DiaryServiceImpl;
+import com.phcworld.service.board.FreeBoardServiceImpl;
 import com.phcworld.web.HttpSessionUtils;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -94,8 +94,16 @@ public class DashboardControllerTest {
 		mockSession.setAttribute("countMessages", "");
 		mockSession.setAttribute("alerts", null);
 		
-		FreeBoard freeBoard = new FreeBoard(user, "test", "", "test");
-		freeBoard.setId(1L);
+		FreeBoard freeBoard = FreeBoard.builder()
+				.id(1L)
+				.writer(user)
+				.title("title")
+				.contents("content")
+				.icon("")
+				.createDate(LocalDateTime.now())
+				.count(0)
+				.countOfAnswer(0)
+				.build();
 		List<FreeBoard> freeBoardList = new ArrayList<>();
 		freeBoardList.add(freeBoard);
 		given(this.freeBoardService.findFreeBoardListByWriter(user))
@@ -162,8 +170,16 @@ public class DashboardControllerTest {
 				.build();
 		user.setId(1L);
 		
-		FreeBoard freeBoard = new FreeBoard(user, "test", "", "test");
-		freeBoard.setId(1L);
+		FreeBoard freeBoard = FreeBoard.builder()
+				.id(1L)
+				.writer(user)
+				.title("title")
+				.contents("content")
+				.icon("")
+				.createDate(LocalDateTime.now())
+				.count(0)
+				.countOfAnswer(0)
+				.build();
 		
 		FreeBoardAnswer freeBoardAnswer = new FreeBoardAnswer(user, freeBoard, "test");
 		freeBoardAnswer.setId(1L);

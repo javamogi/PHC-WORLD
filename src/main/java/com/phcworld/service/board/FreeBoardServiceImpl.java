@@ -1,14 +1,17 @@
-package com.phcworld.domain.board;
+package com.phcworld.service.board;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.phcworld.domain.board.FreeBoard;
 import com.phcworld.domain.timeline.Timeline;
 import com.phcworld.domain.timeline.TimelineRepository;
 import com.phcworld.domain.user.User;
+import com.phcworld.repository.board.FreeBoardRepository;
 
 @Service
 @Transactional
@@ -26,7 +29,15 @@ public class FreeBoardServiceImpl implements FreeBoardService {
 
 	@Override
 	public FreeBoard createFreeBoard(User user, String title, String contents, String icon) {
-		FreeBoard freeBoard = new FreeBoard(user, title, icon, contents);
+		FreeBoard freeBoard = FreeBoard.builder()
+				.writer(user)
+				.title(title)
+				.contents(contents)
+				.icon(icon)
+				.createDate(LocalDateTime.now())
+				.count(0)
+				.countOfAnswer(0)
+				.build();
 		freeBoardRepository.save(freeBoard);
 		
 		Timeline timeline = new Timeline("free board", "list-alt", freeBoard, user, freeBoard.getCreateDate());
@@ -55,8 +66,8 @@ public class FreeBoardServiceImpl implements FreeBoardService {
 	}
 
 	@Override
-	public void deleteFreeBoardById(Long id) {
-		freeBoardRepository.deleteById(id);
+	public void deleteFreeBoard(FreeBoard freeBoard) {
+		freeBoardRepository.delete(freeBoard);
 	}
 	
 	@Override

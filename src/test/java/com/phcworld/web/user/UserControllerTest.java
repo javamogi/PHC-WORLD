@@ -80,7 +80,7 @@ public class UserControllerTest {
 	}
 	
 	@Test
-	public void isNotEmailValidFailedCreateUser() throws Exception {
+	public void createWhenIsNotEmailValid() throws Exception {
 		this.mvc.perform(post("/users")
 				.param("email", "test")
 				.param("password", "test")
@@ -93,7 +93,7 @@ public class UserControllerTest {
 	}
 	
 	@Test
-	public void isNotPasswordValidFailedCreateUser() throws Exception {
+	public void createWhenIsNotPasswordValid() throws Exception {
 		this.mvc.perform(post("/users")
 				.param("email", "test@test.test")
 				.param("password", "te")
@@ -106,7 +106,7 @@ public class UserControllerTest {
 	}
 		
 	@Test
-	public void isNotNameValidFailedCreateUser() throws Exception {
+	public void createWhenIsNotNameValid() throws Exception {
 		this.mvc.perform(post("/users")
 				.param("email", "test@test.test")
 				.param("password", "test")
@@ -119,7 +119,7 @@ public class UserControllerTest {
 	}
 		
 	@Test
-	public void isOverlapEmailFailedCreateUser() throws Exception {
+	public void createWhenIsOverlapEmail() throws Exception {
 		User user = User.builder()
 				.email("test3@test.test")
 				.password("test3")
@@ -179,7 +179,7 @@ public class UserControllerTest {
 	}
 	
 	@Test
-	public void isNotFoundEmailLoginUser() throws Exception {
+	public void loginWhenIsNotFoundEmailLoginUser() throws Exception {
 		User user = User.builder()
 				.email("test@test.test")
 				.password("test")
@@ -201,7 +201,7 @@ public class UserControllerTest {
 	}
 		
 	@Test
-	public void isNotMatchPasswordLoginUser() throws Exception {
+	public void loginWhenIsNotMatchPasswordLoginUser() throws Exception {
 		User user = User.builder()
 				.email("test@test.test")
 				.password("test")
@@ -223,7 +223,7 @@ public class UserControllerTest {
 	}
 	
 	@Test
-	public void isNotEmailAuthLoginUser() throws Exception {
+	public void loginWhenIsNotEmailAuthLoginUser() throws Exception {
 		User user = User.builder()
 				.email("test@test.test")
 				.password("test")
@@ -272,7 +272,7 @@ public class UserControllerTest {
 	}
 	
 	@Test
-	public void isUpdateFormEmptySession() throws Exception {
+	public void requestUpdateFormWhenIsEmptySession() throws Exception {
 		MockHttpSession mockSession = new MockHttpSession();
 		this.mvc.perform(get("/users/{id}/form", 1L)
 				.session(mockSession))
@@ -283,7 +283,7 @@ public class UserControllerTest {
 	}
 	
 	@Test
-	public void isUpdateFormNotMatchId() throws Exception {
+	public void requestUpdateFormWhenIsNotMatchId() throws Exception {
 		MockHttpSession mockSession = new MockHttpSession();
 		User user = User.builder()
 				.email("test@test.test")
@@ -330,7 +330,7 @@ public class UserControllerTest {
 	}
 	
 	@Test
-	public void isUpdateUserEmptySession() throws Exception {
+	public void updateUserWhenIsUpdateUserEmptySession() throws Exception {
 		MockHttpSession mockSession = new MockHttpSession();
 		this.mvc.perform(put("/users/{id}", 1L)
 				.session(mockSession))
@@ -341,7 +341,7 @@ public class UserControllerTest {
 	}
 	
 	@Test
-	public void isUpdateUserNotMatchId() throws Exception {
+	public void updateUserWhenIsUpdateUserNotMatchId() throws Exception {
 		MockHttpSession mockSession = new MockHttpSession();
 		User user = User.builder()
 				.email("test@test.test")
@@ -365,7 +365,7 @@ public class UserControllerTest {
 	}
 	
 	@Test
-	public void isNotPasswordValidUpdateUser() throws Exception {
+	public void updateUserWhenIsNotPasswordValidUpdateUser() throws Exception {
 		MockHttpSession mockSession = new MockHttpSession();
 		User user = User.builder()
 				.email("test@test.test")
@@ -386,7 +386,7 @@ public class UserControllerTest {
 	}
 	
 	@Test
-	public void isNotNameValidUpdateUser() throws Exception {
+	public void updateUserWhenIsNotNameValidUpdateUser() throws Exception {
 		MockHttpSession mockSession = new MockHttpSession();
 		User user = User.builder()
 				.email("test@test.test")
@@ -407,7 +407,7 @@ public class UserControllerTest {
 	}
 	
 	@Test
-	public void isNotEqualLoginUserProfile() throws Exception {
+	public void requestProfileWhenIsNotEqualLoginUserProfile() throws Exception {
 		MockHttpSession mockSession = new MockHttpSession();
 		User loginUser = User.builder()
 				.email("test@test.test")
@@ -447,7 +447,7 @@ public class UserControllerTest {
 	}
 	
 	@Test
-	public void isEqualLoginUserNotMessageProfile() throws Exception {
+	public void requestProfileWhenIsEqualLoginUserNotMessageProfile() throws Exception {
 		MockHttpSession mockSession = new MockHttpSession();
 		User loginUser = User.builder()
 				.email("test@test.test")

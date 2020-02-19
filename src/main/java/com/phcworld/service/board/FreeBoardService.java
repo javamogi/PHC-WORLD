@@ -1,7 +1,8 @@
-package com.phcworld.domain.board;
+package com.phcworld.service.board;
 
 import java.util.List;
 
+import com.phcworld.domain.board.FreeBoard;
 import com.phcworld.domain.user.User;
 
 public interface FreeBoardService {
@@ -16,7 +17,7 @@ public interface FreeBoardService {
 	
 	FreeBoard updateFreeBoard(FreeBoard freeBoard, String contents, String icon);
 	
-	void deleteFreeBoardById(Long id);
+	void deleteFreeBoard(FreeBoard freeBoard);
 	
 	FreeBoard addFreeBoardAnswer(Long id);
 	

@@ -27,15 +27,14 @@ public class UserRepositoryTest {
 	@Test
 	public void createUser() {
 		User user = User.builder()
-				.email("test3@test.test")
-				.password("test3")
-				.name("test3")
+				.email("user@test.test")
+				.password("user")
+				.name("user")
 				.profileImage("blank-profile-picture.png")
 				.authority("ROLE_USER")
 				.createDate(LocalDateTime.now())
 				.build();
 		User newUser = userRepository.save(user);
-		log.info("User : {}", newUser);
 		assertNotNull(newUser);
 	}
 	
@@ -50,6 +49,7 @@ public class UserRepositoryTest {
 	public void updateUser() {
 		createUser();
 		User user = userRepository.findByEmail("user@test.test");
+		log.info("User : {}", user);
 		User updateUser = User.builder()
 				.password("user1")
 				.name("user1")

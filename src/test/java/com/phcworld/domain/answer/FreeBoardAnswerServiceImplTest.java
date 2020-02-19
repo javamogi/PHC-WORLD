@@ -16,9 +16,9 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.phcworld.domain.board.FreeBoard;
-import com.phcworld.domain.board.FreeBoardServiceImpl;
 import com.phcworld.domain.exception.MatchNotUserExceptioin;
 import com.phcworld.domain.user.User;
+import com.phcworld.service.board.FreeBoardServiceImpl;
 import com.phcworld.service.user.UserService;
 
 @RunWith(SpringJUnit4ClassRunner.class)

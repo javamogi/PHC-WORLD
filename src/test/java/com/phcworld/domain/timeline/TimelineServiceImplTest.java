@@ -20,12 +20,12 @@ import com.phcworld.domain.answer.DiaryAnswerServiceImpl;
 import com.phcworld.domain.answer.FreeBoardAnswer;
 import com.phcworld.domain.answer.FreeBoardAnswerServiceImpl;
 import com.phcworld.domain.board.Diary;
-import com.phcworld.domain.board.DiaryServiceImpl;
 import com.phcworld.domain.board.FreeBoard;
-import com.phcworld.domain.board.FreeBoardServiceImpl;
 import com.phcworld.domain.good.Good;
 import com.phcworld.domain.good.GoodRepository;
 import com.phcworld.domain.user.User;
+import com.phcworld.service.board.DiaryServiceImpl;
+import com.phcworld.service.board.FreeBoardServiceImpl;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest

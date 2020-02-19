@@ -1,4 +1,4 @@
-package com.phcworld.domain.board;
+package com.phcworld.service.board;
 
 
 import java.util.List;
@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 
+import com.phcworld.domain.board.Diary;
 import com.phcworld.domain.user.User;
 
 public interface DiaryService {

@@ -21,10 +21,10 @@ import com.phcworld.domain.answer.DiaryAnswerRepository;
 import com.phcworld.domain.answer.FreeBoardAnswer;
 import com.phcworld.domain.answer.FreeBoardAnswerRepository;
 import com.phcworld.domain.board.Diary;
-import com.phcworld.domain.board.DiaryRepository;
 import com.phcworld.domain.board.FreeBoard;
-import com.phcworld.domain.board.FreeBoardRepository;
 import com.phcworld.domain.user.User;
+import com.phcworld.repository.board.DiaryRepository;
+import com.phcworld.repository.board.FreeBoardRepository;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest
@@ -92,7 +92,14 @@ public class AlertServiceImplTest {
 		Alert diaryAnswerAlert = new Alert("Diary", diaryAnswer, diary.getWriter(), diaryAnswer.getCreateDate());
 		alertService.createAlert(diaryAnswerAlert);
 		
-		FreeBoard freeBoard = new FreeBoard(writer, "test", "", "test");
+		FreeBoard freeBoard = FreeBoard.builder()
+				.title("title")
+				.contents("content")
+				.icon("")
+				.createDate(LocalDateTime.now())
+				.count(0)
+				.countOfAnswer(0)
+				.build();
 		freeBoardRepository.save(freeBoard);
 		FreeBoardAnswer freeBoardAnswer = new FreeBoardAnswer(writer, freeBoard, "test");
 		freeBoardAnswerRepository.save(freeBoardAnswer);

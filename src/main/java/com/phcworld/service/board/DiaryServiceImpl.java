@@ -1,4 +1,4 @@
-package com.phcworld.domain.board;
+package com.phcworld.service.board;
 
 import java.util.List;
 
@@ -8,9 +8,11 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.phcworld.domain.board.Diary;
 import com.phcworld.domain.timeline.Timeline;
 import com.phcworld.domain.timeline.TimelineRepository;
 import com.phcworld.domain.user.User;
+import com.phcworld.repository.board.DiaryRepository;
 
 @Service
 @Transactional

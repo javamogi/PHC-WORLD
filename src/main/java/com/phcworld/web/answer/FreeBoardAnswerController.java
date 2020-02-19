@@ -15,10 +15,10 @@ import org.springframework.web.bind.annotation.RestController;
 import com.phcworld.domain.answer.FreeBoardAnswer;
 import com.phcworld.domain.answer.FreeBoardAnswerServiceImpl;
 import com.phcworld.domain.board.FreeBoard;
-import com.phcworld.domain.board.FreeBoardServiceImpl;
 import com.phcworld.domain.exception.LoginNotUserException;
 import com.phcworld.domain.exception.MatchNotUserExceptioin;
 import com.phcworld.domain.user.User;
+import com.phcworld.service.board.FreeBoardServiceImpl;
 import com.phcworld.web.HttpSessionUtils;
 
 @RestController

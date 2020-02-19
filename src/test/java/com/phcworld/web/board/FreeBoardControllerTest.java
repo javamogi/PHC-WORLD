@@ -23,8 +23,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.phcworld.domain.board.FreeBoard;
-import com.phcworld.domain.board.FreeBoardServiceImpl;
 import com.phcworld.domain.user.User;
+import com.phcworld.service.board.FreeBoardServiceImpl;
 import com.phcworld.web.HttpSessionUtils;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -40,6 +40,7 @@ public class FreeBoardControllerTest {
 	@Test
 	public void freeBoardList() throws Exception{
 		User user = User.builder()
+				.id(1L)
 				.email("test3@test.test")
 				.password("test3")
 				.name("테스트3")
@@ -47,14 +48,31 @@ public class FreeBoardControllerTest {
 				.authority("ROLE_USER")
 				.createDate(LocalDateTime.now())
 				.build();
-		user.setId(1L);
-		FreeBoard freeBoard = new FreeBoard(user, "test", "", "test");
-		freeBoard.setId(1L);
-		FreeBoard freeBoard2 = new FreeBoard(user, "test2", "", "test2");
-		freeBoard2.setId(2L);
+		FreeBoard board = FreeBoard.builder()
+				.id(1L)
+				.writer(user)
+				.title("title")
+				.contents("content")
+				.icon("")
+				.badge("new")
+				.createDate(LocalDateTime.now())
+				.count(0)
+				.countOfAnswer(0)
+				.build();
+		FreeBoard board2 = FreeBoard.builder()
+				.id(2L)
+				.writer(user)
+				.title("title2")
+				.contents("content2")
+				.icon("")
+				.badge("new")
+				.createDate(LocalDateTime.now())
+				.count(0)
+				.countOfAnswer(0)
+				.build();
 		List<FreeBoard> list = new ArrayList<FreeBoard>();
-		list.add(freeBoard);
-		list.add(freeBoard2);
+		list.add(board);
+		list.add(board2);
 		given(this.freeBoardService.findFreeBoardAllList())
 		.willReturn(list);
 		this.mvc.perform(get("/freeboard/list"))
@@ -66,7 +84,7 @@ public class FreeBoardControllerTest {
 	}
 	
 	@Test
-	public void whenNotLoginUserFreeBoardForm() throws Exception {
+	public void matchNotLoginUserFreeBoardForm() throws Exception {
 		this.mvc.perform(get("/freeboard/form"))
 		.andExpect(view().name(containsString("/user/login")))
 		.andExpect(status().isOk());
@@ -76,6 +94,7 @@ public class FreeBoardControllerTest {
 	public void freeBoardForm() throws Exception {
 		MockHttpSession mockSession = new MockHttpSession();
 		User user = User.builder()
+				.id(1L)
 				.email("test3@test.test")
 				.password("test3")
 				.name("테스트3")
@@ -83,7 +102,6 @@ public class FreeBoardControllerTest {
 				.authority("ROLE_USER")
 				.createDate(LocalDateTime.now())
 				.build();
-		user.setId(1L);
 		mockSession.setAttribute(HttpSessionUtils.USER_SESSION_KEY, user);
 		mockSession.setAttribute("messages", null);
 		mockSession.setAttribute("countMessages", "");
@@ -98,6 +116,7 @@ public class FreeBoardControllerTest {
 	public void createFreeBoard() throws Exception {
 		MockHttpSession mockSession = new MockHttpSession();
 		User user = User.builder()
+				.id(1L)
 				.email("test3@test.test")
 				.password("test3")
 				.name("테스트3")
@@ -105,7 +124,6 @@ public class FreeBoardControllerTest {
 				.authority("ROLE_USER")
 				.createDate(LocalDateTime.now())
 				.build();
-		user.setId(1L);
 		mockSession.setAttribute(HttpSessionUtils.USER_SESSION_KEY, user);
 		mockSession.setAttribute("messages", null);
 		mockSession.setAttribute("countMessages", "");
@@ -134,6 +152,7 @@ public class FreeBoardControllerTest {
 	public void detailFreeBoardWhenFreeBoardWriterEqualLoginUser() throws Exception {
 		MockHttpSession mockSession = new MockHttpSession();
 		User user = User.builder()
+				.id(1L)
 				.email("test3@test.test")
 				.password("test3")
 				.name("테스트3")
@@ -141,13 +160,20 @@ public class FreeBoardControllerTest {
 				.authority("ROLE_USER")
 				.createDate(LocalDateTime.now())
 				.build();
-		user.setId(1L);
 		mockSession.setAttribute(HttpSessionUtils.USER_SESSION_KEY, user);
 		mockSession.setAttribute("messages", null);
 		mockSession.setAttribute("countMessages", "");
 		mockSession.setAttribute("alerts", null);
-		FreeBoard freeBoard = new FreeBoard(user, "test", "", "test");
-		freeBoard.setId(1L);
+		FreeBoard freeBoard = FreeBoard.builder()
+				.id(1L)
+				.writer(user)
+				.title("title")
+				.contents("content")
+				.icon("")
+				.createDate(LocalDateTime.now())
+				.count(0)
+				.countOfAnswer(0)
+				.build();
 		given(this.freeBoardService.addFreeBoardCount(1L))
 		.willReturn(freeBoard);
 		this.mvc.perform(get("/freeboard/{id}/detail", 1L)
@@ -166,6 +192,7 @@ public class FreeBoardControllerTest {
 	public void whenNotLoginUserDetailFreeBoard() throws Exception {
 		MockHttpSession mockSession = new MockHttpSession();
 		User user = User.builder()
+				.id(1L)
 				.email("test3@test.test")
 				.password("test3")
 				.name("테스트3")
@@ -173,9 +200,16 @@ public class FreeBoardControllerTest {
 				.authority("ROLE_USER")
 				.createDate(LocalDateTime.now())
 				.build();
-		user.setId(1L);
-		FreeBoard freeBoard = new FreeBoard(user, "test", "", "test");
-		freeBoard.setId(1L);
+		FreeBoard freeBoard = FreeBoard.builder()
+				.id(1L)
+				.writer(user)
+				.title("title")
+				.contents("content")
+				.icon("")
+				.createDate(LocalDateTime.now())
+				.count(0)
+				.countOfAnswer(0)
+				.build();
 		given(this.freeBoardService.addFreeBoardCount(1L))
 		.willReturn(freeBoard);
 		this.mvc.perform(get("/freeboard/{id}/detail", 1L)
@@ -194,6 +228,7 @@ public class FreeBoardControllerTest {
 	public void detailFreeBoardWhenFreeBoardWriterNotEqualLoginUser() throws Exception {
 		MockHttpSession mockSession = new MockHttpSession();
 		User user = User.builder()
+				.id(1L)
 				.email("test3@test.test")
 				.password("test3")
 				.name("테스트3")
@@ -201,12 +236,12 @@ public class FreeBoardControllerTest {
 				.authority("ROLE_USER")
 				.createDate(LocalDateTime.now())
 				.build();
-		user.setId(1L);
 		mockSession.setAttribute(HttpSessionUtils.USER_SESSION_KEY, user);
 		mockSession.setAttribute("messages", null);
 		mockSession.setAttribute("countMessages", "");
 		mockSession.setAttribute("alerts", null);
 		User user2 = User.builder()
+				.id(2L)
 				.email("test4@test.test")
 				.password("test4")
 				.name("테스트4")
@@ -214,17 +249,25 @@ public class FreeBoardControllerTest {
 				.authority("ROLE_USER")
 				.createDate(LocalDateTime.now())
 				.build();
-		user.setId(2L);
-		FreeBoard freeBoard = new FreeBoard(user2, "test", "", "test");
-		freeBoard.setId(1L);
+		FreeBoard board = FreeBoard.builder()
+				.id(1L)
+				.writer(user2)
+				.title("title")
+				.contents("content")
+				.icon("")
+				.badge("new")
+				.createDate(LocalDateTime.now())
+				.count(0)
+				.countOfAnswer(0)
+				.build();
 		given(this.freeBoardService.addFreeBoardCount(1L))
-		.willReturn(freeBoard);
+		.willReturn(board);
 		this.mvc.perform(get("/freeboard/{id}/detail", 1L)
 				.session(mockSession))
 		.andDo(print())
 		.andExpect(view().name(containsString("/board/freeboard/detail_freeboard")))
 		.andExpect(status().isOk())
-		.andExpect(model().attribute("freeBoard", freeBoard))
+		.andExpect(model().attribute("freeBoard", board))
 		.andExpect(model().attribute("user", true))
 		.andExpect(model().attribute("matchUser", false))
 		.andExpect(model().attribute("matchAuthority", false))
@@ -235,20 +278,20 @@ public class FreeBoardControllerTest {
 	public void detailFreBoardWhenHasAuthority() throws Exception {
 		MockHttpSession mockSession = new MockHttpSession();
 		User user = User.builder()
+				.id(1L)
 				.email("test3@test.test")
 				.password("test3")
 				.name("테스트3")
 				.profileImage("blank-profile-picture.png")
-				.authority("ROLE_USER")
+				.authority("ROLE_ADMIN")
 				.createDate(LocalDateTime.now())
 				.build();
-		user.setId(1L);
-		user.setAuthority("ROLE_ADMIN");
 		mockSession.setAttribute(HttpSessionUtils.USER_SESSION_KEY, user);
 		mockSession.setAttribute("messages", null);
 		mockSession.setAttribute("countMessages", "");
 		mockSession.setAttribute("alerts", null);
 		User user2 = User.builder()
+				.id(2L)
 				.email("test4@test.test")
 				.password("test4")
 				.name("테스트4")
@@ -256,17 +299,25 @@ public class FreeBoardControllerTest {
 				.authority("ROLE_USER")
 				.createDate(LocalDateTime.now())
 				.build();
-		user.setId(2L);
-		FreeBoard freeBoard = new FreeBoard(user2, "test", "", "test");
-		freeBoard.setId(1L);
+		FreeBoard board = FreeBoard.builder()
+				.id(1L)
+				.writer(user2)
+				.title("title")
+				.contents("content")
+				.icon("")
+				.badge("new")
+				.createDate(LocalDateTime.now())
+				.count(0)
+				.countOfAnswer(0)
+				.build();
 		given(this.freeBoardService.addFreeBoardCount(1L))
-		.willReturn(freeBoard);
+		.willReturn(board);
 		this.mvc.perform(get("/freeboard/{id}/detail", 1L)
 				.session(mockSession))
 		.andDo(print())
 		.andExpect(view().name(containsString("/board/freeboard/detail_freeboard")))
 		.andExpect(status().isOk())
-		.andExpect(model().attribute("freeBoard", freeBoard))
+		.andExpect(model().attribute("freeBoard", board))
 		.andExpect(model().attribute("user", true))
 		.andExpect(model().attribute("matchUser", false))
 		.andExpect(model().attribute("matchAuthority", true))
@@ -277,6 +328,7 @@ public class FreeBoardControllerTest {
 	public void updateFreeBoardForm() throws Exception {
 		MockHttpSession mockSession = new MockHttpSession();
 		User user = User.builder()
+				.id(1L)
 				.email("test3@test.test")
 				.password("test3")
 				.name("테스트3")
@@ -284,13 +336,20 @@ public class FreeBoardControllerTest {
 				.authority("ROLE_USER")
 				.createDate(LocalDateTime.now())
 				.build();
-		user.setId(1L);
 		mockSession.setAttribute(HttpSessionUtils.USER_SESSION_KEY, user);
 		mockSession.setAttribute("messages", null);
 		mockSession.setAttribute("countMessages", "");
 		mockSession.setAttribute("alerts", null);
-		FreeBoard freeBoard = new FreeBoard(user, "test", "", "test");
-		freeBoard.setId(1L);
+		FreeBoard freeBoard = FreeBoard.builder()
+				.id(1L)
+				.writer(user)
+				.title("title")
+				.contents("content")
+				.icon("")
+				.createDate(LocalDateTime.now())
+				.count(0)
+				.countOfAnswer(0)
+				.build();
 		given(this.freeBoardService.getOneFreeBoard(1L))
 		.willReturn(freeBoard);
 		this.mvc.perform(get("/freeboard/{id}/form", 1L)
@@ -306,6 +365,7 @@ public class FreeBoardControllerTest {
 	public void updateNotLoginUserFreeBoardForm() throws Exception {
 		MockHttpSession mockSession = new MockHttpSession();
 		User user = User.builder()
+				.id(1L)
 				.email("test3@test.test")
 				.password("test3")
 				.name("테스트3")
@@ -313,9 +373,16 @@ public class FreeBoardControllerTest {
 				.authority("ROLE_USER")
 				.createDate(LocalDateTime.now())
 				.build();
-		user.setId(1L);
-		FreeBoard freeBoard = new FreeBoard(user, "test", "", "test");
-		freeBoard.setId(1L);
+		FreeBoard freeBoard = FreeBoard.builder()
+				.id(1L)
+				.writer(user)
+				.title("title")
+				.contents("content")
+				.icon("")
+				.createDate(LocalDateTime.now())
+				.count(0)
+				.countOfAnswer(0)
+				.build();
 		given(this.freeBoardService.getOneFreeBoard(1L))
 		.willReturn(freeBoard);
 		this.mvc.perform(get("/freeboard/{id}/form", 1L)
@@ -329,6 +396,7 @@ public class FreeBoardControllerTest {
 	public void updateMatchNotUserFreeBoardForm() throws Exception {
 		MockHttpSession mockSession = new MockHttpSession();
 		User user = User.builder()
+				.id(1L)
 				.email("test3@test.test")
 				.password("test3")
 				.name("테스트3")
@@ -336,12 +404,12 @@ public class FreeBoardControllerTest {
 				.authority("ROLE_USER")
 				.createDate(LocalDateTime.now())
 				.build();
-		user.setId(1L);
 		mockSession.setAttribute(HttpSessionUtils.USER_SESSION_KEY, user);
 		mockSession.setAttribute("messages", null);
 		mockSession.setAttribute("countMessages", "");
 		mockSession.setAttribute("alerts", null);
 		User user2 = User.builder()
+				.id(2L)
 				.email("test4@test.test")
 				.password("test4")
 				.name("테스트4")
@@ -349,11 +417,19 @@ public class FreeBoardControllerTest {
 				.authority("ROLE_USER")
 				.createDate(LocalDateTime.now())
 				.build();
-		user.setId(2L);
-		FreeBoard freeBoard = new FreeBoard(user2, "test", "", "test");
-		freeBoard.setId(1L);
+		FreeBoard board = FreeBoard.builder()
+				.id(1L)
+				.writer(user2)
+				.title("title")
+				.contents("content")
+				.icon("")
+				.badge("new")
+				.createDate(LocalDateTime.now())
+				.count(0)
+				.countOfAnswer(0)
+				.build();
 		given(this.freeBoardService.getOneFreeBoard(1L))
-		.willReturn(freeBoard);
+		.willReturn(board);
 		this.mvc.perform(get("/freeboard/{id}/form", 1L)
 				.session(mockSession))
 		.andDo(print())
@@ -367,6 +443,7 @@ public class FreeBoardControllerTest {
 	public void successUpdateFreeBoard() throws Exception {
 		MockHttpSession mockSession = new MockHttpSession();
 		User user = User.builder()
+				.id(1L)
 				.email("test3@test.test")
 				.password("test3")
 				.name("테스트3")
@@ -374,19 +451,24 @@ public class FreeBoardControllerTest {
 				.authority("ROLE_USER")
 				.createDate(LocalDateTime.now())
 				.build();
-		user.setId(1L);
 		mockSession.setAttribute(HttpSessionUtils.USER_SESSION_KEY, user);
 		mockSession.setAttribute("messages", null);
 		mockSession.setAttribute("countMessages", "");
 		mockSession.setAttribute("alerts", null);
-		FreeBoard freeBoard = new FreeBoard(user, "test", "", "test");
-		freeBoard.setId(1L);
+		FreeBoard board = FreeBoard.builder()
+				.id(1L)
+				.writer(user)
+				.title("title")
+				.contents("content")
+				.icon("")
+				.badge("new")
+				.createDate(LocalDateTime.now())
+				.count(0)
+				.countOfAnswer(0)
+				.build();
 		given(this.freeBoardService.getOneFreeBoard(1L))
-		.willReturn(freeBoard);
-		FreeBoard updatedFreeBoard = new FreeBoard(user, "test", "", "updateTest");
-		freeBoard.setId(1L);
-		given(this.freeBoardService.updateFreeBoard(updatedFreeBoard, "updateTest", "test.jpg"))
-		.willReturn(updatedFreeBoard);
+		.willReturn(board);
+		board.update("update test", "");
 		this.mvc.perform(put("/freeboard/{id}", 1L)
 				.param("contents", "updateTest")
 				.param("icon", "test.jpg")
@@ -397,15 +479,6 @@ public class FreeBoardControllerTest {
 	@Test
 	public void updateFailedNotLoginUserFreeBoard() throws Exception {
 		MockHttpSession mockSession = new MockHttpSession();
-		User user = User.builder()
-				.email("test3@test.test")
-				.password("test3")
-				.name("테스트3")
-				.profileImage("blank-profile-picture.png")
-				.authority("ROLE_USER")
-				.createDate(LocalDateTime.now())
-				.build();
-		user.setId(1L);
 		this.mvc.perform(put("/freeboard/{id}", 1L)
 				.param("contents", "updateTest")
 				.param("icon", "test.jpg")
@@ -419,6 +492,7 @@ public class FreeBoardControllerTest {
 	public void updateFailedNotMatchUserFreeBoard() throws Exception {
 		MockHttpSession mockSession = new MockHttpSession();
 		User user = User.builder()
+				.id(1L)
 				.email("test3@test.test")
 				.password("test3")
 				.name("테스트3")
@@ -426,12 +500,12 @@ public class FreeBoardControllerTest {
 				.authority("ROLE_USER")
 				.createDate(LocalDateTime.now())
 				.build();
-		user.setId(1L);
 		mockSession.setAttribute(HttpSessionUtils.USER_SESSION_KEY, user);
 		mockSession.setAttribute("messages", null);
 		mockSession.setAttribute("countMessages", "");
 		mockSession.setAttribute("alerts", null);
 		User user2 = User.builder()
+				.id(2L)
 				.email("test4@test.test")
 				.password("test4")
 				.name("테스트4")
@@ -439,11 +513,19 @@ public class FreeBoardControllerTest {
 				.authority("ROLE_USER")
 				.createDate(LocalDateTime.now())
 				.build();
-		user.setId(2L);
-		FreeBoard freeBoard = new FreeBoard(user2, "test", "", "test");
-		freeBoard.setId(1L);
+		FreeBoard board = FreeBoard.builder()
+				.id(1L)
+				.writer(user2)
+				.title("title")
+				.contents("content")
+				.icon("")
+				.badge("new")
+				.createDate(LocalDateTime.now())
+				.count(0)
+				.countOfAnswer(0)
+				.build();
 		given(this.freeBoardService.getOneFreeBoard(1L))
-		.willReturn(freeBoard);
+		.willReturn(board);
 		this.mvc.perform(put("/freeboard/{id}", 1L)
 				.param("contents", "updateTest")
 				.param("icon", "test.jpg")
@@ -459,6 +541,7 @@ public class FreeBoardControllerTest {
 	public void successDeleteFreeBoard() throws Exception {
 		MockHttpSession mockSession = new MockHttpSession();
 		User user = User.builder()
+				.id(1L)
 				.email("test3@test.test")
 				.password("test3")
 				.name("테스트3")
@@ -466,15 +549,23 @@ public class FreeBoardControllerTest {
 				.authority("ROLE_USER")
 				.createDate(LocalDateTime.now())
 				.build();
-		user.setId(1L);
 		mockSession.setAttribute(HttpSessionUtils.USER_SESSION_KEY, user);
 		mockSession.setAttribute("messages", null);
 		mockSession.setAttribute("countMessages", "");
 		mockSession.setAttribute("alerts", null);
-		FreeBoard freeBoard = new FreeBoard(user, "test", "", "test");
-		freeBoard.setId(1L);
+		FreeBoard board = FreeBoard.builder()
+				.id(1L)
+				.writer(user)
+				.title("title")
+				.contents("content")
+				.icon("")
+				.badge("new")
+				.createDate(LocalDateTime.now())
+				.count(0)
+				.countOfAnswer(0)
+				.build();
 		given(this.freeBoardService.getOneFreeBoard(1L))
-		.willReturn(freeBoard);
+		.willReturn(board);
 		this.mvc.perform(delete("/freeboard/{id}/delete", 1L)
 				.session(mockSession))
 		.andExpect(redirectedUrl("/freeboard/list"));
@@ -494,6 +585,7 @@ public class FreeBoardControllerTest {
 	public void deleteFailedNotMatchAuthorityFreeBoard() throws Exception {
 		MockHttpSession mockSession = new MockHttpSession();
 		User user = User.builder()
+				.id(1L)
 				.email("test3@test.test")
 				.password("test3")
 				.name("테스트3")
@@ -501,12 +593,12 @@ public class FreeBoardControllerTest {
 				.authority("ROLE_USER")
 				.createDate(LocalDateTime.now())
 				.build();
-		user.setId(1L);
 		mockSession.setAttribute(HttpSessionUtils.USER_SESSION_KEY, user);
 		mockSession.setAttribute("messages", null);
 		mockSession.setAttribute("countMessages", "");
 		mockSession.setAttribute("alerts", null);
 		User user2 = User.builder()
+				.id(2L)
 				.email("test4@test.test")
 				.password("test4")
 				.name("테스트4")
@@ -514,11 +606,19 @@ public class FreeBoardControllerTest {
 				.authority("ROLE_USER")
 				.createDate(LocalDateTime.now())
 				.build();
-		user.setId(2L);
-		FreeBoard freeBoard = new FreeBoard(user2, "test", "", "test");
-		freeBoard.setId(1L);
+		FreeBoard board = FreeBoard.builder()
+				.id(1L)
+				.writer(user2)
+				.title("title")
+				.contents("content")
+				.icon("")
+				.badge("new")
+				.createDate(LocalDateTime.now())
+				.count(0)
+				.countOfAnswer(0)
+				.build();
 		given(this.freeBoardService.getOneFreeBoard(1L))
-		.willReturn(freeBoard);
+		.willReturn(board);
 		this.mvc.perform(delete("/freeboard/{id}/delete", 1L)
 				.session(mockSession))
 		.andDo(print())

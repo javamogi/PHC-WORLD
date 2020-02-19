@@ -76,8 +76,15 @@ public class HomeControllerTest {
 		.andDo(print())
 		.andExpect(redirectedUrl("/diary/" + 1L + "/detail"));
 
-		FreeBoard freeBoard = new FreeBoard(user, "test", "test", "");
-		freeBoard.setId(1L);
+		FreeBoard freeBoard = FreeBoard.builder()
+				.id(1L)
+				.title("title")
+				.contents("content")
+				.icon("")
+				.createDate(LocalDateTime.now())
+				.count(0)
+				.countOfAnswer(0)
+				.build();
 		FreeBoardAnswer freeBoardAnswer = new FreeBoardAnswer(user, freeBoard, "test");
 		freeBoardAnswer.setId(1L);
 		

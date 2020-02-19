@@ -15,10 +15,10 @@ import org.springframework.web.bind.annotation.RestController;
 import com.phcworld.domain.answer.DiaryAnswer;
 import com.phcworld.domain.answer.DiaryAnswerServiceImpl;
 import com.phcworld.domain.board.Diary;
-import com.phcworld.domain.board.DiaryServiceImpl;
 import com.phcworld.domain.exception.LoginNotUserException;
 import com.phcworld.domain.exception.MatchNotUserExceptioin;
 import com.phcworld.domain.user.User;
+import com.phcworld.service.board.DiaryServiceImpl;
 import com.phcworld.web.HttpSessionUtils;
 
 @RestController

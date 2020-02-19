@@ -21,8 +21,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import com.phcworld.domain.answer.FreeBoardAnswer;
 import com.phcworld.domain.answer.FreeBoardAnswerServiceImpl;
 import com.phcworld.domain.board.FreeBoard;
-import com.phcworld.domain.board.FreeBoardServiceImpl;
 import com.phcworld.domain.user.User;
+import com.phcworld.service.board.FreeBoardServiceImpl;
 import com.phcworld.web.HttpSessionUtils;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -51,8 +51,15 @@ public class FreeBoardAnswerControllerTest {
 				.build();
 		user.setId(1L);
 		mockSession.setAttribute(HttpSessionUtils.USER_SESSION_KEY, user);
-		FreeBoard freeBoard = new FreeBoard(user, "test", "", "test"); 
-		freeBoard.setId(1L);
+		FreeBoard freeBoard = FreeBoard.builder()
+				.id(1L)
+				.title("title")
+				.contents("content")
+				.icon("")
+				.createDate(LocalDateTime.now())
+				.count(0)
+				.countOfAnswer(0)
+				.build();
 		given(this.freeBoardService.addFreeBoardAnswer(freeBoard.getId()))
 		.willReturn(freeBoard);
 		FreeBoardAnswer freeBoardAnswer = new FreeBoardAnswer(user, freeBoard, "test"); 
@@ -93,8 +100,15 @@ public class FreeBoardAnswerControllerTest {
 				.build();
 		user.setId(1L);
 		mockSession.setAttribute(HttpSessionUtils.USER_SESSION_KEY, user);
-		FreeBoard freeBoard = new FreeBoard(user, "test", "", "test"); 
-		freeBoard.setId(1L);
+		FreeBoard freeBoard = FreeBoard.builder()
+				.id(1L)
+				.title("title")
+				.contents("content")
+				.icon("")
+				.createDate(LocalDateTime.now())
+				.count(0)
+				.countOfAnswer(0)
+				.build();
 		FreeBoardAnswer freeBoardAnswer = new FreeBoardAnswer(user, freeBoard, "test"); 
 		freeBoardAnswer.setId(1L);
 		given(this.freeBoardAnswerService.deleteFreeBoardAnswer(freeBoardAnswer.getId(), user, freeBoard.getId()))
@@ -135,8 +149,15 @@ public class FreeBoardAnswerControllerTest {
 				.build();
 		user.setId(2L);
 		mockSession.setAttribute(HttpSessionUtils.USER_SESSION_KEY, user);
-		FreeBoard freeBoard = new FreeBoard(user, "test", "", "test"); 
-		freeBoard.setId(1L);
+		FreeBoard freeBoard = FreeBoard.builder()
+				.id(1L)
+				.title("title")
+				.contents("content")
+				.icon("")
+				.createDate(LocalDateTime.now())
+				.count(0)
+				.countOfAnswer(0)
+				.build();
 		FreeBoardAnswer freeBoardAnswer = new FreeBoardAnswer(user2, freeBoard, "test"); 
 		freeBoardAnswer.setId(1L);
 		given(this.freeBoardAnswerService.deleteFreeBoardAnswer(freeBoardAnswer.getId(), user, freeBoard.getId()))

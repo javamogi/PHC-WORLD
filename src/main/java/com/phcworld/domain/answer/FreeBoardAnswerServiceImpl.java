@@ -11,11 +11,11 @@ import org.springframework.transaction.annotation.Transactional;
 import com.phcworld.domain.alert.Alert;
 import com.phcworld.domain.alert.AlertRepository;
 import com.phcworld.domain.board.FreeBoard;
-import com.phcworld.domain.board.FreeBoardRepository;
 import com.phcworld.domain.exception.MatchNotUserExceptioin;
 import com.phcworld.domain.timeline.Timeline;
 import com.phcworld.domain.timeline.TimelineRepository;
 import com.phcworld.domain.user.User;
+import com.phcworld.repository.board.FreeBoardRepository;
 
 @Service
 @Transactional

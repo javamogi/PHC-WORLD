@@ -13,7 +13,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.phcworld.domain.user.User;
-import com.phcworld.repository.user.UserRepository;
 import com.phcworld.service.user.UserService;
 
 
@@ -24,9 +23,6 @@ public class UserServiceTest {
 	
 	@MockBean
 	private UserService userService;
-	
-	@MockBean
-	private UserRepository userRepository;
 	
 	@Test
 	public void createUser() throws Exception {

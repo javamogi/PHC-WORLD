@@ -19,8 +19,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.phcworld.domain.board.FreeBoard;
-import com.phcworld.domain.board.FreeBoardServiceImpl;
 import com.phcworld.domain.user.User;
+import com.phcworld.service.board.FreeBoardServiceImpl;
 import com.phcworld.web.HttpSessionUtils;
 
 @Controller
@@ -36,17 +36,21 @@ public class FreeBoardController {
 	public String freeBoardList(Model model) {
 		List<FreeBoard> list = freeBoardService.findFreeBoardAllList();
 		for (int i = 0; i < list.size(); i++) {
-			long minutesGap = Duration.between(list.get(i).getCreateDate(), LocalDateTime.now()).toMinutes();
-			FreeBoard freeBoard = list.get(i);
-			if (minutesGap / 60 < 24) {
-				freeBoard.setBadge("New");
-			} else {
-				freeBoard.setBadge("");
-			}
+			checkWithinHourOfDay(list.get(i));
 		}
-
 		model.addAttribute("freeboards", list);
 		return "/board/freeboard/freeboard";
+	}
+
+	private void checkWithinHourOfDay(FreeBoard board) {
+		long createDateMinutesAndNowGap = Duration.between(board.getCreateDate(), LocalDateTime.now()).toMinutes();
+		int hourOfDay = 24;
+		int minutesOfHour = 60;
+		if (createDateMinutesAndNowGap / minutesOfHour < hourOfDay) {
+			board.setBadge("New");
+		} else {
+			board.setBadge("");
+		}
 	}
 
 	@GetMapping("/form")
@@ -72,27 +76,29 @@ public class FreeBoardController {
 
 	@GetMapping("/{id}/detail")
 	public String detail(@PathVariable Long id, HttpSession session, Model model) {
-		boolean booleanUser = false;
-		boolean matchUser = false;
+		boolean isLoginUser = false;
+		boolean matchLoginUserAndWriter = false;
 		boolean matchAuthority = false;
 		User loginUser = HttpSessionUtils.getUserFromSession(session);
 
 		FreeBoard freeBoard = freeBoardService.addFreeBoardCount(id);
 
-		model.addAttribute("freeBoard", freeBoard);
+		// checkAdminAndWiter
 		if (loginUser != null) {
-			booleanUser = true;
+			isLoginUser = true;
 			if (freeBoard != null) {
 				if (freeBoard.matchUser(loginUser)) {
-					matchUser = true;
+					matchLoginUserAndWriter = true;
 				}
 			}
-			if (matchUser == false && loginUser.matchAdminAuthority()) {
+			if (matchLoginUserAndWriter == false && loginUser.matchAdminAuthority()) {
 				matchAuthority = true;
 			}
 		}
-		model.addAttribute("user", booleanUser);
-		model.addAttribute("matchUser", matchUser);
+		
+		model.addAttribute("freeBoard", freeBoard);
+		model.addAttribute("user", isLoginUser);
+		model.addAttribute("matchUser", matchLoginUserAndWriter);
 		model.addAttribute("matchAuthority", matchAuthority);
 		return "/board/freeboard/detail_freeboard";
 	}
@@ -139,7 +145,7 @@ public class FreeBoardController {
 			model.addAttribute("errorMessage", "삭제 권한이 없습니다.");
 			return "/user/login";
 		}
-		freeBoardService.deleteFreeBoardById(id);
+		freeBoardService.deleteFreeBoard(freeBoard);
 		return "redirect:/freeboard/list";
 	}
 

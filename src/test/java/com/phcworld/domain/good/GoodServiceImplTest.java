@@ -13,8 +13,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.phcworld.domain.board.Diary;
-import com.phcworld.domain.board.DiaryServiceImpl;
 import com.phcworld.domain.user.User;
+import com.phcworld.service.board.DiaryServiceImpl;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest
