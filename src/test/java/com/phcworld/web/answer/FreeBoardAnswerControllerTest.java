@@ -19,9 +19,9 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.phcworld.domain.answer.FreeBoardAnswer;
-import com.phcworld.domain.answer.FreeBoardAnswerServiceImpl;
 import com.phcworld.domain.board.FreeBoard;
 import com.phcworld.domain.user.User;
+import com.phcworld.service.answer.FreeBoardAnswerServiceImpl;
 import com.phcworld.service.board.FreeBoardServiceImpl;
 import com.phcworld.web.HttpSessionUtils;
 
@@ -42,6 +42,7 @@ public class FreeBoardAnswerControllerTest {
 	public void createFreeBoardAnswer() throws Exception {
 		MockHttpSession mockSession = new MockHttpSession();
 		User user = User.builder()
+				.id(1L)
 				.email("test3@test.test")
 				.password("test3")
 				.name("테스트3")
@@ -49,7 +50,6 @@ public class FreeBoardAnswerControllerTest {
 				.authority("ROLE_USER")
 				.createDate(LocalDateTime.now())
 				.build();
-		user.setId(1L);
 		mockSession.setAttribute(HttpSessionUtils.USER_SESSION_KEY, user);
 		FreeBoard freeBoard = FreeBoard.builder()
 				.id(1L)
@@ -62,9 +62,14 @@ public class FreeBoardAnswerControllerTest {
 				.build();
 		given(this.freeBoardService.addFreeBoardAnswer(freeBoard.getId()))
 		.willReturn(freeBoard);
-		FreeBoardAnswer freeBoardAnswer = new FreeBoardAnswer(user, freeBoard, "test"); 
-		freeBoardAnswer.setId(1L);
-		given(this.freeBoardAnswerService.createFreeBoardAnswer(user, freeBoard, "test"))
+		FreeBoardAnswer freeBoardAnswer = FreeBoardAnswer.builder()
+				.id(1L)
+				.writer(user)
+				.freeBoard(freeBoard)
+				.contents("test")
+				.createDate(LocalDateTime.now())
+				.build();
+		given(this.freeBoardAnswerService.createFreeBoardAnswer(user, freeBoard.getId(), "test"))
 		.willReturn(freeBoardAnswer);
 		this.mvc.perform(post("/freeboard/{freeboardId}/answer", 1L)
 				.contentType(MediaType.APPLICATION_JSON)
@@ -91,6 +96,7 @@ public class FreeBoardAnswerControllerTest {
 	public void deleteSuccessFreeBoardAnswer() throws Exception {
 		MockHttpSession mockSession = new MockHttpSession();
 		User user = User.builder()
+				.id(1L)
 				.email("test3@test.test")
 				.password("test3")
 				.name("테스트3")
@@ -98,7 +104,6 @@ public class FreeBoardAnswerControllerTest {
 				.authority("ROLE_USER")
 				.createDate(LocalDateTime.now())
 				.build();
-		user.setId(1L);
 		mockSession.setAttribute(HttpSessionUtils.USER_SESSION_KEY, user);
 		FreeBoard freeBoard = FreeBoard.builder()
 				.id(1L)
@@ -109,9 +114,14 @@ public class FreeBoardAnswerControllerTest {
 				.count(0)
 				.countOfAnswer(0)
 				.build();
-		FreeBoardAnswer freeBoardAnswer = new FreeBoardAnswer(user, freeBoard, "test"); 
-		freeBoardAnswer.setId(1L);
-		given(this.freeBoardAnswerService.deleteFreeBoardAnswer(freeBoardAnswer.getId(), user, freeBoard.getId()))
+		FreeBoardAnswer freeBoardAnswer = FreeBoardAnswer.builder()
+				.id(1L)
+				.writer(user)
+				.freeBoard(freeBoard)
+				.contents("test")
+				.createDate(LocalDateTime.now())
+				.build();
+		given(this.freeBoardAnswerService.deleteFreeBoardAnswer(freeBoardAnswer.getId(), user))
 		.willReturn("{\"success\":\"" + "[]" +"\"}");
 		this.mvc.perform(delete("/freeboard/{freeboardId}/answer/{id}", 1L, 1L)
 				.session(mockSession))
@@ -131,6 +141,7 @@ public class FreeBoardAnswerControllerTest {
 	public void deleteFailedFreeBoardAnswerWhenNotMatchUserUser() throws Exception {
 		MockHttpSession mockSession = new MockHttpSession();
 		User user = User.builder()
+				.id(1L)
 				.email("test3@test.test")
 				.password("test3")
 				.name("테스트3")
@@ -138,19 +149,19 @@ public class FreeBoardAnswerControllerTest {
 				.authority("ROLE_USER")
 				.createDate(LocalDateTime.now())
 				.build();
-		user.setId(1L);
 		User user2 = User.builder()
-				.email("test3@test.test")
-				.password("test3")
-				.name("테스트3")
+				.id(2L)
+				.email("test4@test.test")
+				.password("test4")
+				.name("테스트4")
 				.profileImage("blank-profile-picture.png")
 				.authority("ROLE_USER")
 				.createDate(LocalDateTime.now())
 				.build();
-		user.setId(2L);
 		mockSession.setAttribute(HttpSessionUtils.USER_SESSION_KEY, user);
 		FreeBoard freeBoard = FreeBoard.builder()
 				.id(1L)
+				.writer(user)
 				.title("title")
 				.contents("content")
 				.icon("")
@@ -158,10 +169,15 @@ public class FreeBoardAnswerControllerTest {
 				.count(0)
 				.countOfAnswer(0)
 				.build();
-		FreeBoardAnswer freeBoardAnswer = new FreeBoardAnswer(user2, freeBoard, "test"); 
-		freeBoardAnswer.setId(1L);
-		given(this.freeBoardAnswerService.deleteFreeBoardAnswer(freeBoardAnswer.getId(), user, freeBoard.getId()))
-		.willReturn("{\"error\":\"" + "본인이 작성한 글만 삭제 가능합니다." +"\"}");
+		FreeBoardAnswer freeBoardAnswer = FreeBoardAnswer.builder()
+				.id(1L)
+				.writer(user2)
+				.freeBoard(freeBoard)
+				.contents("test")
+				.createDate(LocalDateTime.now())
+				.build();
+		given(this.freeBoardAnswerService.deleteFreeBoardAnswer(freeBoardAnswer.getId(), user))
+		.willReturn("{\"error\":\"본인이 작성한 글만 삭제 가능합니다.\"}");
 		this.mvc.perform(delete("/freeboard/{freeboardId}/answer/{id}", 1L, 1L)
 				.session(mockSession))
 		.andExpect(jsonPath("$.error").value("본인이 작성한 글만 삭제 가능합니다."));

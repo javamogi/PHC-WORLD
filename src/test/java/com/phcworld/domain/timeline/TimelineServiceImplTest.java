@@ -16,14 +16,14 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.phcworld.domain.answer.DiaryAnswer;
-import com.phcworld.domain.answer.DiaryAnswerServiceImpl;
 import com.phcworld.domain.answer.FreeBoardAnswer;
-import com.phcworld.domain.answer.FreeBoardAnswerServiceImpl;
 import com.phcworld.domain.board.Diary;
 import com.phcworld.domain.board.FreeBoard;
 import com.phcworld.domain.good.Good;
 import com.phcworld.domain.good.GoodRepository;
 import com.phcworld.domain.user.User;
+import com.phcworld.service.answer.DiaryAnswerServiceImpl;
+import com.phcworld.service.answer.FreeBoardAnswerServiceImpl;
 import com.phcworld.service.board.DiaryServiceImpl;
 import com.phcworld.service.board.FreeBoardServiceImpl;
 
@@ -79,7 +79,7 @@ public class TimelineServiceImplTest {
 		actual = timelineService.getOneTimeline(createdFreeBoard.getId());
 		assertThat(actual, is(createdFreeBoard));
 		
-		FreeBoardAnswer freeBoardAnswer = freeBoardAnswerService.createFreeBoardAnswer(user, freeBoard, "test");
+		FreeBoardAnswer freeBoardAnswer = freeBoardAnswerService.createFreeBoardAnswer(user, freeBoard.getId(), "test");
 		Timeline freeBoardAnswerTimeline = new Timeline("FreeBoard Answer", "comment", freeBoard, freeBoardAnswer, user, freeBoardAnswer.getCreateDate());
 		Timeline createdFreeBoardAnswer = timelineService.createTimeline(freeBoardAnswerTimeline);
 		actual = timelineService.getOneTimeline(createdFreeBoardAnswer.getId());
@@ -113,7 +113,7 @@ public class TimelineServiceImplTest {
 		FreeBoard freeBoard = freeBoardService.createFreeBoard(user, "test", "test", "");
 		Timeline freeBoardTimeline = timelineService.getOneTimeline(freeBoard.getTimeline().getId());
 		
-		FreeBoardAnswer freeBoardAnswer = freeBoardAnswerService.createFreeBoardAnswer(user, freeBoard, "test");
+		FreeBoardAnswer freeBoardAnswer = freeBoardAnswerService.createFreeBoardAnswer(user, freeBoard.getId(), "test");
 		Timeline freeBoardAnswerTimeline = timelineService.getOneTimeline(freeBoardAnswer.getTimeline().getId());
 		
 		Good good = new Good(diary, user);
@@ -148,7 +148,7 @@ public class TimelineServiceImplTest {
 		FreeBoard freeBoard = freeBoardService.createFreeBoard(user, "test", "test", "");
 		Timeline freeBoardTimeline = timelineService.getOneTimeline(freeBoard.getTimeline().getId());
 		
-		FreeBoardAnswer freeBoardAnswer = freeBoardAnswerService.createFreeBoardAnswer(user, freeBoard, "test");
+		FreeBoardAnswer freeBoardAnswer = freeBoardAnswerService.createFreeBoardAnswer(user, freeBoard.getId(), "test");
 		Timeline freeBoardAnswerTimeline = timelineService.getOneTimeline(freeBoardAnswer.getTimeline().getId());
 		
 		Good good = new Good(diary, user);

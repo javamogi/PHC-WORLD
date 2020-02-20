@@ -27,15 +27,15 @@ import org.springframework.test.web.servlet.MockMvc;
 import com.phcworld.domain.alert.Alert;
 import com.phcworld.domain.alert.AlertServiceImpl;
 import com.phcworld.domain.answer.DiaryAnswer;
-import com.phcworld.domain.answer.DiaryAnswerServiceImpl;
 import com.phcworld.domain.answer.FreeBoardAnswer;
-import com.phcworld.domain.answer.FreeBoardAnswerServiceImpl;
 import com.phcworld.domain.board.Diary;
 import com.phcworld.domain.board.FreeBoard;
 import com.phcworld.domain.good.Good;
 import com.phcworld.domain.timeline.Timeline;
 import com.phcworld.domain.timeline.TimelineServiceImpl;
 import com.phcworld.domain.user.User;
+import com.phcworld.service.answer.DiaryAnswerServiceImpl;
+import com.phcworld.service.answer.FreeBoardAnswerServiceImpl;
 import com.phcworld.service.board.DiaryServiceImpl;
 import com.phcworld.service.board.FreeBoardServiceImpl;
 import com.phcworld.web.HttpSessionUtils;
@@ -109,8 +109,13 @@ public class DashboardControllerTest {
 		given(this.freeBoardService.findFreeBoardListByWriter(user))
 		.willReturn(freeBoardList);
 		
-		FreeBoardAnswer freeBoardAnswer = new FreeBoardAnswer(user, freeBoard, "test");
-		freeBoardAnswer.setId(1L);
+		FreeBoardAnswer freeBoardAnswer = FreeBoardAnswer.builder()
+				.id(1L)
+				.writer(user)
+				.freeBoard(freeBoard)
+				.contents("test")
+				.createDate(LocalDateTime.now())
+				.build();
 		List<FreeBoardAnswer> freeBoardAnswerList = new ArrayList<>();
 		freeBoardAnswerList.add(freeBoardAnswer);
 		given(this.freeBoardAnswerService.findFreeBoardAnswerListByWriter(user))
@@ -181,8 +186,13 @@ public class DashboardControllerTest {
 				.countOfAnswer(0)
 				.build();
 		
-		FreeBoardAnswer freeBoardAnswer = new FreeBoardAnswer(user, freeBoard, "test");
-		freeBoardAnswer.setId(1L);
+		FreeBoardAnswer freeBoardAnswer = FreeBoardAnswer.builder()
+				.id(1L)
+				.writer(user)
+				.freeBoard(freeBoard)
+				.contents("test")
+				.createDate(LocalDateTime.now())
+				.build();
 		
 		Diary diary = new Diary(user, "test", "test", "");
 		diary.setId(1L);

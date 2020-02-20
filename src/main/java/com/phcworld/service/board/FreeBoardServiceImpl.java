@@ -81,5 +81,16 @@ public class FreeBoardServiceImpl implements FreeBoardService {
 	public List<FreeBoard> findFreeBoardListByWriter(User loginUser) {
 		return freeBoardRepository.findByWriter(loginUser);
 	}
+	
+	public FreeBoard deleteAnswer() {
+		
+		return null;
+	}
+
+	public FreeBoard deleteAnswer(Long id) {
+		FreeBoard freeBoard = freeBoardRepository.getOne(id);
+		freeBoard.deleteAnswer();
+		return freeBoardRepository.save(freeBoard);
+	}
 
 }

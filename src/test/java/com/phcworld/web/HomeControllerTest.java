@@ -85,8 +85,14 @@ public class HomeControllerTest {
 				.count(0)
 				.countOfAnswer(0)
 				.build();
-		FreeBoardAnswer freeBoardAnswer = new FreeBoardAnswer(user, freeBoard, "test");
-		freeBoardAnswer.setId(1L);
+		
+		FreeBoardAnswer freeBoardAnswer = FreeBoardAnswer.builder()
+				.id(1L)
+				.writer(user)
+				.freeBoard(freeBoard)
+				.contents("test")
+				.createDate(LocalDateTime.now())
+				.build();
 		
 		given(this.alertService.getOneAlert(2L))
 		.willReturn(new Alert("FreeBoard", freeBoardAnswer, freeBoard.getWriter(), freeBoardAnswer.getCreateDate()));

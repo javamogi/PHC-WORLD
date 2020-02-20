@@ -33,7 +33,7 @@ public class FreeBoardController {
 	private FreeBoardServiceImpl freeBoardService;
 
 	@GetMapping("/list")
-	public String freeBoardList(Model model) {
+	public String viewFreeBoardAllList(Model model) {
 		List<FreeBoard> list = freeBoardService.findFreeBoardAllList();
 		for (int i = 0; i < list.size(); i++) {
 			checkWithinHourOfDay(list.get(i));

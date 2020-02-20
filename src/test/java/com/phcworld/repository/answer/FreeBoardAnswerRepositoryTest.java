@@ -1,4 +1,4 @@
-package com.phcworld.repository.board;
+package com.phcworld.repository.answer;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertFalse;
@@ -16,9 +16,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.phcworld.domain.answer.FreeBoardAnswer;
 import com.phcworld.domain.board.FreeBoard;
 import com.phcworld.domain.user.User;
-import com.phcworld.repository.user.UserRepository;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -26,11 +26,11 @@ import lombok.extern.slf4j.Slf4j;
 @SpringBootTest
 @Transactional
 @Slf4j
-public class FreeBoardRepositoryTest {
+public class FreeBoardAnswerRepositoryTest {
 	
 	@Autowired
-	private FreeBoardRepository freeBoardRepository;
-	
+	private FreeBoardAnswerRepository freeBoardAnswerRepository;
+
 	@Test
 	public void create() {
 		User user = User.builder()
@@ -40,6 +40,7 @@ public class FreeBoardRepositoryTest {
 				.name("user")
 				.build();
 		FreeBoard freeBoard = FreeBoard.builder()
+				.id(1L)
 				.writer(user)
 				.title("title")
 				.contents("content")
@@ -48,9 +49,15 @@ public class FreeBoardRepositoryTest {
 				.count(0)
 				.countOfAnswer(0)
 				.build();
-		log.info("freeBoard : {}", freeBoard);
-		FreeBoard newFreeBoard =  freeBoardRepository.save(freeBoard);
-		assertNotNull(newFreeBoard);
+		FreeBoardAnswer answer = FreeBoardAnswer.builder()
+				.writer(user)
+				.freeBoard(freeBoard)
+				.contents("content")
+				.createDate(LocalDateTime.now())
+				.build();
+		
+		FreeBoardAnswer newAnswer = freeBoardAnswerRepository.save(answer);
+		assertNotNull(newAnswer);
 	}
 	
 	@Test
@@ -62,6 +69,7 @@ public class FreeBoardRepositoryTest {
 				.name("user")
 				.build();
 		FreeBoard freeBoard = FreeBoard.builder()
+				.id(1L)
 				.writer(user)
 				.title("title")
 				.contents("content")
@@ -70,12 +78,18 @@ public class FreeBoardRepositoryTest {
 				.count(0)
 				.countOfAnswer(0)
 				.build();
-		freeBoardRepository.save(freeBoard);
-		List<FreeBoard> freeBoardList = freeBoardRepository.findByWriter(user);
-		freeBoardList.stream().forEach(board -> {
-			log.info("freeBoard title : {}", board.getTitle());
+		FreeBoardAnswer freeBoardAnswer = FreeBoardAnswer.builder()
+				.writer(user)
+				.freeBoard(freeBoard)
+				.contents("content")
+				.createDate(LocalDateTime.now())
+				.build();
+		freeBoardAnswerRepository.save(freeBoardAnswer);
+		List<FreeBoardAnswer> freeBoardAnswerList = freeBoardAnswerRepository.findByWriter(user);
+		freeBoardAnswerList.stream().forEach(answer -> {
+			log.info("freeBoardAnswer contents : {}", answer.getContents());
 		});
-		assertNotNull(freeBoardList);
+		assertNotNull(freeBoardAnswerList);
 	}
 	
 	@Test
@@ -87,6 +101,7 @@ public class FreeBoardRepositoryTest {
 				.name("user")
 				.build();
 		FreeBoard freeBoard = FreeBoard.builder()
+				.id(1L)
 				.writer(user)
 				.title("title")
 				.contents("content")
@@ -95,11 +110,17 @@ public class FreeBoardRepositoryTest {
 				.count(0)
 				.countOfAnswer(0)
 				.build();
-		FreeBoard newBoard = freeBoardRepository.save(freeBoard);
-		FreeBoard regitBoard = freeBoardRepository.getOne(newBoard.getId());
-		regitBoard.update("modify content", "");
-		FreeBoard updatedBoard = freeBoardRepository.save(regitBoard);
-		assertThat("modify content", is(updatedBoard.getContents()));
+		FreeBoardAnswer answer = FreeBoardAnswer.builder()
+				.writer(user)
+				.freeBoard(freeBoard)
+				.contents("content")
+				.createDate(LocalDateTime.now())
+				.build();
+		FreeBoardAnswer newAnswer = freeBoardAnswerRepository.save(answer);
+		FreeBoardAnswer registAnswer = freeBoardAnswerRepository.getOne(newAnswer.getId());
+		registAnswer.update("update content");
+		FreeBoardAnswer updatedAnswer = freeBoardAnswerRepository.save(registAnswer);
+		assertThat("update content", is(updatedAnswer.getContents()));
 	}
 	
 	@Test
@@ -111,6 +132,7 @@ public class FreeBoardRepositoryTest {
 				.name("user")
 				.build();
 		FreeBoard freeBoard = FreeBoard.builder()
+				.id(1L)
 				.writer(user)
 				.title("title")
 				.contents("content")
@@ -119,11 +141,17 @@ public class FreeBoardRepositoryTest {
 				.count(0)
 				.countOfAnswer(0)
 				.build();
-		FreeBoard newBoard = freeBoardRepository.save(freeBoard);
-		assertNotNull(newBoard);
-		freeBoardRepository.delete(newBoard);
-		Optional<FreeBoard> findBoard = freeBoardRepository.findById(newBoard.getId());
-		assertFalse(findBoard.isPresent());
+		FreeBoardAnswer answer = FreeBoardAnswer.builder()
+				.writer(user)
+				.freeBoard(freeBoard)
+				.contents("content")
+				.createDate(LocalDateTime.now())
+				.build();
+		FreeBoardAnswer newAnswer = freeBoardAnswerRepository.save(answer);
+		assertNotNull(newAnswer);
+		freeBoardAnswerRepository.delete(newAnswer);
+		Optional<FreeBoardAnswer>findAnswer = freeBoardAnswerRepository.findById(newAnswer.getId());
+		assertFalse(findAnswer.isPresent());
 	}
 
 }

@@ -17,12 +17,12 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.phcworld.domain.answer.DiaryAnswer;
-import com.phcworld.domain.answer.DiaryAnswerRepository;
 import com.phcworld.domain.answer.FreeBoardAnswer;
-import com.phcworld.domain.answer.FreeBoardAnswerRepository;
 import com.phcworld.domain.board.Diary;
 import com.phcworld.domain.board.FreeBoard;
 import com.phcworld.domain.user.User;
+import com.phcworld.repository.answer.DiaryAnswerRepository;
+import com.phcworld.repository.answer.FreeBoardAnswerRepository;
 import com.phcworld.repository.board.DiaryRepository;
 import com.phcworld.repository.board.FreeBoardRepository;
 
@@ -101,7 +101,12 @@ public class AlertServiceImplTest {
 				.countOfAnswer(0)
 				.build();
 		freeBoardRepository.save(freeBoard);
-		FreeBoardAnswer freeBoardAnswer = new FreeBoardAnswer(writer, freeBoard, "test");
+		FreeBoardAnswer freeBoardAnswer = FreeBoardAnswer.builder()
+				.writer(writer)
+				.freeBoard(freeBoard)
+				.contents("test")
+				.createDate(LocalDateTime.now())
+				.build();
 		freeBoardAnswerRepository.save(freeBoardAnswer);
 		
 		Alert freeBoardAnswerAlert = new Alert("Free Board", freeBoardAnswer, writer, freeBoardAnswer.getCreateDate());

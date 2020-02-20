@@ -1,6 +1,7 @@
 package com.phcworld.domain.answer;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -23,7 +24,20 @@ import com.phcworld.domain.timeline.Timeline;
 import com.phcworld.domain.user.User;
 import com.phcworld.web.LocalDateTimeUtils;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
+import lombok.experimental.Accessors;
+
 @Entity
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@Accessors(chain = true)
+@ToString(exclude = {"timeline"})
 public class FreeBoardAnswer {
 
 	@Id
@@ -48,61 +62,16 @@ public class FreeBoardAnswer {
 	@OneToOne(cascade = CascadeType.REMOVE)
 	@JoinColumn(foreignKey = @ForeignKey(name = "fk_freeBoard_Answer_timeline"))
 //	@PrimaryKeyJoinColumn
+	@JsonIgnore
 	private Timeline timeline;
 
 	@OneToOne(cascade = CascadeType.REMOVE)
 //	 @JoinColumn(foreignKey = @ForeignKey(name = "fk_journal_answer_alert"))
 	@PrimaryKeyJoinColumn
+	@JsonIgnore
 	private Alert alert;
 
 	private LocalDateTime createDate;
-
-	public FreeBoardAnswer() {
-	}
-
-	public FreeBoardAnswer(User writer, FreeBoard freeBoard, String contents) {
-		this.writer = writer;
-		this.freeBoard = freeBoard;
-		this.contents = contents;
-		this.createDate = LocalDateTime.now();
-	}
-	
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public Long getId() {
-		return id;
-	}
-
-	public User getWriter() {
-		return writer;
-	}
-
-	public FreeBoard getFreeBoard() {
-		return freeBoard;
-	}
-
-	public String getContents() {
-		return contents;
-	}
-
-	public void setTimeline(Timeline timeline) {
-		this.timeline = timeline;
-	}
-	
-	@JsonIgnore
-	public Timeline getTimeline() {
-		return timeline;
-	}
-	
-	public void setAlert(Alert alert) {
-		this.alert = alert;
-	}
-
-	public LocalDateTime getCreateDate() {
-		return createDate;
-	}
 
 	public String getFormattedCreateDate() {
 		return LocalDateTimeUtils.getTime(createDate);
@@ -112,10 +81,8 @@ public class FreeBoardAnswer {
 		return this.writer.equals(loginUser);
 	}
 
-	@Override
-	public String toString() {
-		return "FreeBoardAnswer [writer=" + writer + ", freeBoard=" + freeBoard + ", contents=" + contents
-				+ ", createDate=" + createDate + "]";
+	public void update(String contents) {
+		this.contents = contents;
 	}
 
 }
