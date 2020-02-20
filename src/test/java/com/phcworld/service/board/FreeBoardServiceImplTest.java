@@ -3,6 +3,9 @@ package com.phcworld.service.board;
 import static org.hamcrest.CoreMatchers.hasItems;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.time.LocalDateTime;
@@ -118,6 +121,32 @@ public class FreeBoardServiceImplTest {
 		when(freeBoardService.getOneFreeBoard(freeBoard.getId())).thenReturn(updatedfreeBoard);
 		FreeBoard actual = freeBoardService.getOneFreeBoard(freeBoard.getId());
 		assertThat(actual, is(updatedfreeBoard));
+	}
+	
+	@Test
+	public void deleteFreeBoard() {
+		User user = User.builder()
+				.id(1L)
+				.email("test3@test.test")
+				.password("test3")
+				.name("테스트3")
+				.profileImage("blank-profile-picture.png")
+				.authority("ROLE_USER")
+				.createDate(LocalDateTime.now())
+				.build();
+		FreeBoard board = FreeBoard.builder()
+				.id(1L)
+				.writer(user)
+				.title("title")
+				.contents("content")
+				.icon("")
+				.badge("new")
+				.createDate(LocalDateTime.now())
+				.count(0)
+				.countOfAnswer(0)
+				.build();
+		freeBoardService.deleteAnswer(board.getId());
+		verify(freeBoardService, times(1)).deleteAnswer(board.getId());
 	}
 	
 	@Test
@@ -264,6 +293,34 @@ public class FreeBoardServiceImplTest {
 		when(freeBoardService.findFreeBoardAllList()).thenReturn(freeBoardList);
 		List<FreeBoard> findAllfreeBoardList =  freeBoardService.findFreeBoardAllList();
 		assertThat(findAllfreeBoardList, hasItems(board, board2));
+	}
+	
+	@Test
+	public void deleteAnswer() {
+		User user = User.builder()
+				.id(1L)
+				.email("test3@test.test")
+				.password("test3")
+				.name("테스트3")
+				.profileImage("blank-profile-picture.png")
+				.authority("ROLE_USER")
+				.createDate(LocalDateTime.now())
+				.build();
+		FreeBoard board = FreeBoard.builder()
+				.id(1L)
+				.writer(user)
+				.title("title")
+				.contents("content")
+				.icon("")
+				.badge("new")
+				.createDate(LocalDateTime.now())
+				.count(0)
+				.countOfAnswer(1)
+				.build();
+		board.deleteAnswer();		
+		when(freeBoardService.deleteAnswer(board.getId())).thenReturn(board);
+		FreeBoard deletedFreeBoardAnswer = freeBoardService.deleteAnswer(board.getId());
+		assertThat("", is(deletedFreeBoardAnswer.getCountOfAnswer()));
 	}
 
 }
