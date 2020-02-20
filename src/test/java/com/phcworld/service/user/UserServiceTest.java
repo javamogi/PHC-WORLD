@@ -80,7 +80,6 @@ public class UserServiceTest {
 				.name("테스트1")
 				.profileImage("blank-profile-picture.png")
 				.authority("ROLE_USER")
-				.createDate(LocalDateTime.now())
 				.build();
 		when(userService.createUser(user)).thenReturn(user);
 		User createUser = userService.createUser(user);
@@ -90,11 +89,10 @@ public class UserServiceTest {
 				.name("테스트2")
 				.profileImage("blank-profile-picture.png")
 				.authority("ROLE_USER")
-				.createDate(LocalDateTime.now())
 				.build();
 		createUser.update(updateUser);
-		when(userService.findUserByEmail(user.getEmail())).thenReturn(updateUser);
-		User updatedUser = userService.findUserByEmail(user.getEmail());
+		when(userService.updateUser(createUser, updateUser)).thenReturn(updateUser);
+		User updatedUser = userService.updateUser(createUser, updateUser);
 		assertThat(updatedUser, is(createUser));
 	}
 	

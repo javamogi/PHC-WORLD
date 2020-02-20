@@ -36,9 +36,9 @@ public class UserService {
 		return userRepository.getOne(id);
 	}
 	
-	public void updateUser(User loginUser, User newUser) {
+	public User updateUser(User loginUser, User newUser) {
 		loginUser.update(newUser);
-		userRepository.save(loginUser);
+		return userRepository.save(loginUser);
 	}
 
 	public User imageUpdate(User loginUser, String profileImage) {
