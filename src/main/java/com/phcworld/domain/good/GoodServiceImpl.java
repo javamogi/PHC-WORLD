@@ -46,7 +46,7 @@ public class GoodServiceImpl implements GoodService {
 		if(goodList.size() > 0) {
 			for(int i = 0; i < goodList.size(); i++) {
 				if(goodList.get(i).getDiary().matchId(diaryId)) {
-					diary.minusGood();
+					diary.declineGood();
 					goodRepository.deleteById(goodList.get(i).getId());
 					return Integer.toString(diary.getCountOfGood());
 				}

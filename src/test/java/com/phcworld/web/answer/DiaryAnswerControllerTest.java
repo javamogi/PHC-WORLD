@@ -43,6 +43,7 @@ public class DiaryAnswerControllerTest {
 	public void createDiaryAnswer() throws Exception {
 		MockHttpSession mockSession = new MockHttpSession();
 		User user = User.builder()
+				.id(1L)
 				.email("test3@test.test")
 				.password("test3")
 				.name("테스트3")
@@ -50,10 +51,17 @@ public class DiaryAnswerControllerTest {
 				.authority("ROLE_USER")
 				.createDate(LocalDateTime.now())
 				.build();
-		user.setId(1L);
 		mockSession.setAttribute(HttpSessionUtils.USER_SESSION_KEY, user);
-		Diary diary = new Diary(user, "test3", "test3", "no-image-icon.gif");
-		diary.setId(1L);
+		Diary diary = Diary.builder()
+				.id(1L)
+				.writer(user)
+				.title("test3")
+				.contents("test3")
+				.thumbnail("no-image-icon.gif")
+				.countOfGood(0)
+				.countOfAnswer(0)
+				.createDate(LocalDateTime.now())
+				.build();
 		given(this.diaryService.addDiaryAnswer(diary.getId()))
 		.willReturn(diary);
 		DiaryAnswer diaryAnswer = new DiaryAnswer(user, diary, "test");
@@ -85,6 +93,7 @@ public class DiaryAnswerControllerTest {
 	public void deleteSuccessDiaryAnswer() throws Exception {
 		MockHttpSession mockSession = new MockHttpSession();
 		User user = User.builder()
+				.id(1L)
 				.email("test3@test.test")
 				.password("test3")
 				.name("테스트3")
@@ -92,10 +101,17 @@ public class DiaryAnswerControllerTest {
 				.authority("ROLE_USER")
 				.createDate(LocalDateTime.now())
 				.build();
-		user.setId(1L);
 		mockSession.setAttribute(HttpSessionUtils.USER_SESSION_KEY, user);
-		Diary diary = new Diary(user, "test3", "test3", "no-image-icon.gif");
-		diary.setId(1L);
+		Diary diary = Diary.builder()
+				.id(1L)
+				.writer(user)
+				.title("title")
+				.contents("content")
+				.thumbnail("no-image-icon.gif")
+				.countOfGood(0)
+				.countOfAnswer(0)
+				.createDate(LocalDateTime.now())
+				.build();
 		DiaryAnswer diaryAnswer = new DiaryAnswer(user, diary, "test");
 		diaryAnswer.setId(1L);
 		given(this.diaryAnswerService.deleteDiaryAnswer(diaryAnswer.getId(), user, diary.getId()))
@@ -118,6 +134,7 @@ public class DiaryAnswerControllerTest {
 	public void deleteFailedDiaryAnswerWhenNotMatchUserUser() throws Exception {
 		MockHttpSession mockSession = new MockHttpSession();
 		User user = User.builder()
+				.id(1L)
 				.email("test3@test.test")
 				.password("test3")
 				.name("테스트3")
@@ -125,8 +142,8 @@ public class DiaryAnswerControllerTest {
 				.authority("ROLE_USER")
 				.createDate(LocalDateTime.now())
 				.build();
-		user.setId(1L);
 		User user2 = User.builder()
+				.id(2L)
 				.email("test4@test.test")
 				.password("test4")
 				.name("테스트4")
@@ -134,10 +151,17 @@ public class DiaryAnswerControllerTest {
 				.authority("ROLE_USER")
 				.createDate(LocalDateTime.now())
 				.build();
-		user.setId(2L);
 		mockSession.setAttribute(HttpSessionUtils.USER_SESSION_KEY, user);
-		Diary diary = new Diary(user, "test3", "test3", "no-image-icon.gif");
-		diary.setId(1L);
+		Diary diary = Diary.builder()
+				.id(1L)
+				.writer(user)
+				.title("test3")
+				.contents("test3")
+				.thumbnail("no-image-icon.gif")
+				.countOfGood(0)
+				.countOfAnswer(0)
+				.createDate(LocalDateTime.now())
+				.build();
 		DiaryAnswer diaryAnswer = new DiaryAnswer(user2, diary, "test");
 		diaryAnswer.setId(1L);
 		given(this.diaryAnswerService.deleteDiaryAnswer(diaryAnswer.getId(), user, diary.getId()))

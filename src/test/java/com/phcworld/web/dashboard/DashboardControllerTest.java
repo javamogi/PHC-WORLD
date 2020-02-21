@@ -121,8 +121,17 @@ public class DashboardControllerTest {
 		given(this.freeBoardAnswerService.findFreeBoardAnswerListByWriter(user))
 		.willReturn(freeBoardAnswerList);
 		
-		Diary diary = new Diary(user, "test", "test", "");
-		diary.setId(1L);
+		Diary diary = Diary.builder()
+				.id(1L)
+				.writer(user)
+				.title("test")
+				.contents("test")
+				.thumbnail("")
+				.countOfGood(0)
+				.countOfAnswer(0)
+				.createDate(LocalDateTime.now())
+				.build();
+		
 		List<Diary> diaryList = new ArrayList<>();
 		diaryList.add(diary);
 		given(this.diaryService.findDiaryListByWriter(user))
@@ -194,8 +203,16 @@ public class DashboardControllerTest {
 				.createDate(LocalDateTime.now())
 				.build();
 		
-		Diary diary = new Diary(user, "test", "test", "");
-		diary.setId(1L);
+		Diary diary = Diary.builder()
+				.id(1L)
+				.writer(user)
+				.title("test")
+				.contents("test")
+				.thumbnail("")
+				.countOfGood(0)
+				.countOfAnswer(0)
+				.createDate(LocalDateTime.now())
+				.build();
 		
 		DiaryAnswer diaryAnswer = new DiaryAnswer(user, diary, "test");
 		diaryAnswer.setId(1L);

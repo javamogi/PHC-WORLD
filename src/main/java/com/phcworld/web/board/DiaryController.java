@@ -37,16 +37,15 @@ public class DiaryController {
 	private DiaryServiceImpl diaryService;
 
 	@GetMapping("/list/{email}")
-	public String dairy(@PathVariable String email, @RequestParam(defaultValue = "1") Integer pageNum, Model model,
-			HttpSession session) {
+	public String getDairyList(@PathVariable String email, @RequestParam(defaultValue = "1") Integer pageNum, 
+			Model model, HttpSession session) {
 		User loginUser = HttpSessionUtils.getUserFromSession(session);
 		User requestUser = userService.findUserByEmail(email);
 
-		PageRequest pageRequest = PageRequest.of(pageNum - 1, 6, new Sort(Direction.DESC, "id"));
-		Page<Diary> diaryPage = diaryService.findPageDiaryByWriter(loginUser, pageRequest, requestUser);
+		Page<Diary> diaryPage = diaryService.findPageDiary(loginUser, pageNum, requestUser);
 
-		PageNationsUtil pageNation = new PageNationsUtil();
 		if (diaryPage != null) {
+			PageNationsUtil pageNation = new PageNationsUtil();
 			pageNation.viewPageNation("", pageNum, diaryPage.getTotalPages(), model);
 			List<Diary> diaries = diaryPage.getContent();
 			model.addAttribute("diaries", diaries);
@@ -80,32 +79,32 @@ public class DiaryController {
 	}
 
 	@GetMapping("/{id}/detail")
-	public String detail(@PathVariable Long id, HttpSession session, Model model) {
-		boolean booleanUser = false;
-		boolean matchUser = false;
+	public String read(@PathVariable Long id, HttpSession session, Model model) {
+		boolean isLoginUser = false;
+		boolean matchLoginUserAndWriter = false;
 		boolean matchAuthority = false;
 		User loginUser = HttpSessionUtils.getUserFromSession(session);
 		Diary diary = diaryService.getOneDiary(id);
-		model.addAttribute("diary", diary);
 		if (loginUser != null) {
-			booleanUser = true;
+			isLoginUser = true;
 			if (diary != null) {
 				if (diary.matchUser(loginUser)) {
-					matchUser = true;
+					matchLoginUserAndWriter = true;
 				}
 			}
-			if (matchUser == false && loginUser.matchAdminAuthority()) {
+			if (matchLoginUserAndWriter == false && loginUser.matchAdminAuthority()) {
 				matchAuthority = true;
 			}
 		}
-		model.addAttribute("user", booleanUser);
-		model.addAttribute("matchUser", matchUser);
+		model.addAttribute("diary", diary);
+		model.addAttribute("user", isLoginUser);
+		model.addAttribute("matchUser", matchLoginUserAndWriter);
 		model.addAttribute("matchAuthority", matchAuthority);
 		return "/board/diary/detail_diary";
 	}
 
 	@GetMapping("/{id}/form")
-	public String update(@PathVariable Long id, Model model, HttpSession session) {
+	public String updateForm(@PathVariable Long id, Model model, HttpSession session) {
 		if (!HttpSessionUtils.isLoginUser(session)) {
 			return "/user/login";
 		}
@@ -120,7 +119,7 @@ public class DiaryController {
 	}
 
 	@PutMapping("/{id}")
-	public String modify(@PathVariable Long id, String contents, String thumbnail, HttpSession session, Model model) {
+	public String update(@PathVariable Long id, String contents, String thumbnail, HttpSession session, Model model) {
 		if (!HttpSessionUtils.isLoginUser(session)) {
 			return "/user/login";
 		}

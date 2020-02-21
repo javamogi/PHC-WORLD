@@ -3,17 +3,23 @@ package com.phcworld.service.board;
 import static org.hamcrest.CoreMatchers.hasItems;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mock;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
@@ -22,39 +28,24 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.phcworld.domain.board.Diary;
+import com.phcworld.domain.board.FreeBoard;
 import com.phcworld.domain.user.User;
 import com.phcworld.service.board.DiaryServiceImpl;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest
+@Transactional
 public class DiaryServiceImplTest {
 	
 	private static final Logger log = LoggerFactory.getLogger(DiaryServiceImplTest.class);
 	
-	@Autowired
+	@Mock
 	private DiaryServiceImpl diaryService;
-
-	@Test
-	@Transactional
-	public void createDiary() {
-		User user = User.builder()
-				.email("test3@test.test")
-				.password("test3")
-				.name("테스트3")
-				.profileImage("blank-profile-picture.png")
-				.authority("ROLE_USER")
-				.createDate(LocalDateTime.now())
-				.build();
-		user.setId(1L);
-		Diary diary = diaryService.createDiary(user, "test3", "test3", "no-image-icon.gif");
-		Diary actual = diaryService.getOneDiary(diary.getId());
-		assertThat(actual, is(diary));
-	}
 	
 	@Test
-	@Transactional
-	public void updateDiary() throws Exception {
+	public void findPageDiary() throws Exception {
 		User user = User.builder()
+				.id(1L)
 				.email("test3@test.test")
 				.password("test3")
 				.name("테스트3")
@@ -62,69 +53,280 @@ public class DiaryServiceImplTest {
 				.authority("ROLE_USER")
 				.createDate(LocalDateTime.now())
 				.build();
-		user.setId(1L);
-		Diary diary = diaryService.createDiary(user, "test3", "test3", "no-image-icon.gif");
-		Diary diaryUpdated = diaryService.updateDiary(diary, "updateDiary", "test.jpg");
-		Diary actual = diaryService.getOneDiary(diary.getId());
-		assertThat(actual, is(diaryUpdated));
-	}
-	
-	@Test(expected = JpaObjectRetrievalFailureException.class)
-	@Transactional
-	public void deleteDiaryById() throws Exception {
-		User user = User.builder()
-				.email("test3@test.test")
-				.password("test3")
-				.name("테스트3")
-				.profileImage("blank-profile-picture.png")
-				.authority("ROLE_USER")
+		Diary diary = Diary.builder()
+				.writer(user)
+				.title("title")
+				.contents("content")
+				.thumbnail("no-image-icon.gif")
+				.countOfGood(0)
+				.countOfAnswer(0)
 				.createDate(LocalDateTime.now())
 				.build();
-		user.setId(1L);
-		Diary diary = diaryService.createDiary(user, "test3", "test3", "no-image-icon.gif");
-		log.debug("diary : {}", diary);
-		Long id = diary.getId();
-		diaryService.deleteDiaryById(id);
-		diaryService.getOneDiary(id);
-	}
-	
-	@Test
-	@Transactional
-	public void addAndDeleteDiaryAnswerCount() throws Exception {
-		User user = User.builder()
-				.email("test3@test.test")
-				.password("test3")
-				.name("테스트3")
-				.profileImage("blank-profile-picture.png")
-				.authority("ROLE_USER")
+		Diary diary2 = Diary.builder()
+				.writer(user)
+				.title("title2")
+				.contents("content2")
+				.thumbnail("no-image-icon.gif")
+				.countOfGood(0)
+				.countOfAnswer(0)
 				.createDate(LocalDateTime.now())
 				.build();
-		user.setId(1L);
-		Diary diary = diaryService.createDiary(user, "test3", "test3", "no-image-icon.gif");
-		Diary diaryAnswerAdded = diaryService.addDiaryAnswer(diary.getId());
-		assertThat("[1]", is(diaryAnswerAdded.getCountOfAnswer()));
-		Diary diaryAnswerDeleted = diaryService.deleteDiaryAnswer(diary.getId());
-		assertThat("", is(diaryAnswerDeleted.getCountOfAnswer()));
-	}
-	
-	@Test
-	@Transactional
-	public void findPageDiaryByWriter() throws Exception {
-		User user = User.builder()
-				.email("test3@test.test")
-				.password("test3")
-				.name("테스트3")
-				.profileImage("blank-profile-picture.png")
-				.authority("ROLE_USER")
-				.createDate(LocalDateTime.now())
-				.build();
-		user.setId(1L);
-		Diary diary = diaryService.createDiary(user, "test3", "test3", "no-image-icon.gif");
-		Diary diary2 = diaryService.createDiary(user, "test4", "test4", "no-image-icon.gif");
-		PageRequest pageRequest = PageRequest.of(0, 6, new Sort(Direction.DESC, "id"));
-		Page<Diary> pageDiary = diaryService.findPageDiaryByWriter(user, pageRequest, user);
+		List<Diary> list = new ArrayList<Diary>();
+		list.add(diary);
+		list.add(diary2);
+		Page<Diary> page = new PageImpl<Diary>(list);
+		when(diaryService.findPageDiary(user, 0, user)).thenReturn(page);
+		Page<Diary> pageDiary = diaryService.findPageDiary(user, 0, user);
 		List<Diary> diaryList = pageDiary.getContent();
 		assertThat(diaryList, hasItems(diary, diary2));
 	}
-
+	
+	@Test
+	public void createDiary() {
+		User user = User.builder()
+				.id(1L)
+				.email("test3@test.test")
+				.password("test3")
+				.name("테스트3")
+				.profileImage("blank-profile-picture.png")
+				.authority("ROLE_USER")
+				.createDate(LocalDateTime.now())
+				.build();
+		Diary diary = Diary.builder()
+				.writer(user)
+				.title("title")
+				.contents("content")
+				.thumbnail("no-image-icon.gif")
+				.countOfGood(0)
+				.countOfAnswer(0)
+				.createDate(LocalDateTime.now())
+				.build();
+		when(diaryService.createDiary(user, "title", "content", "no-image-icon.gif"))
+		.thenReturn(diary);
+		Diary createdDiary = diaryService.createDiary(user, "title", "content", "no-image-icon.gif");
+		assertThat("title", is(createdDiary.getTitle()));
+		assertThat("content", is(createdDiary.getContents()));
+	}
+	
+//	getOneDiary
+	@Test
+	public void getOneDiary() {
+		User user = User.builder()
+				.id(1L)
+				.email("test3@test.test")
+				.password("test3")
+				.name("테스트3")
+				.profileImage("blank-profile-picture.png")
+				.authority("ROLE_USER")
+				.createDate(LocalDateTime.now())
+				.build();
+		Diary diary = Diary.builder()
+				.id(1L)
+				.writer(user)
+				.title("title")
+				.contents("content")
+				.thumbnail("no-image-icon.gif")
+				.countOfGood(0)
+				.countOfAnswer(0)
+				.createDate(LocalDateTime.now())
+				.build();
+		when(diaryService.getOneDiary(1L)).thenReturn(diary);
+		Diary oneDiary = diaryService.getOneDiary(1L);
+		assertThat(diary, is(oneDiary));
+	}
+	
+	@Test
+	public void updateDiary() throws Exception {
+		User user = User.builder()
+				.id(1L)
+				.email("test3@test.test")
+				.password("test3")
+				.name("테스트3")
+				.profileImage("blank-profile-picture.png")
+				.authority("ROLE_USER")
+				.createDate(LocalDateTime.now())
+				.build();
+		Diary diary = Diary.builder()
+				.writer(user)
+				.title("title")
+				.contents("content")
+				.thumbnail("no-image-icon.gif")
+				.countOfGood(0)
+				.countOfAnswer(0)
+				.createDate(LocalDateTime.now())
+				.build();
+		diary.update("updateDiary", "test.jpg");
+		when(diaryService.updateDiary(diary, "updateDiary", "test.jpg"))
+		.thenReturn(diary);
+		Diary updatedDiary = diaryService.updateDiary(diary, "updateDiary", "test.jpg");
+		assertThat("updateDiary", is(updatedDiary.getContents()));
+		assertThat("test.jpg", is(updatedDiary.getThumbnail()));
+	}
+	
+	@Test
+	public void deleteDiaryById() throws Exception {
+		User user = User.builder()
+				.id(1L)
+				.email("test3@test.test")
+				.password("test3")
+				.name("테스트3")
+				.profileImage("blank-profile-picture.png")
+				.authority("ROLE_USER")
+				.createDate(LocalDateTime.now())
+				.build();
+		Diary diary = Diary.builder()
+				.id(1L)
+				.writer(user)
+				.title("title")
+				.contents("content")
+				.thumbnail("no-image-icon.gif")
+				.countOfGood(0)
+				.countOfAnswer(0)
+				.createDate(LocalDateTime.now())
+				.build();
+		diaryService.deleteDiaryById(diary.getId());
+		verify(diaryService, times(1)).deleteDiaryById(diary.getId());
+	}
+	
+	@Test
+	public void addDiaryAnswerCount() throws Exception {
+		User user = User.builder()
+				.id(1L)
+				.email("test3@test.test")
+				.password("test3")
+				.name("테스트3")
+				.profileImage("blank-profile-picture.png")
+				.authority("ROLE_USER")
+				.createDate(LocalDateTime.now())
+				.build();
+		Diary diary = Diary.builder()
+				.id(1L)
+				.writer(user)
+				.title("title")
+				.contents("content")
+				.thumbnail("no-image-icon.gif")
+				.countOfGood(0)
+				.countOfAnswer(0)
+				.createDate(LocalDateTime.now())
+				.build();
+		diary.addAnswer();
+		when(diaryService.addDiaryAnswer(diary.getId()))
+		.thenReturn(diary);
+		Diary addedAnswerDiary = diaryService.addDiaryAnswer(diary.getId());
+		assertThat("[1]", is(addedAnswerDiary.getCountOfAnswer()));
+	}
+	
+	@Test
+	public void deleteDiaryAnswerCount() {
+		User user = User.builder()
+				.id(1L)
+				.email("test3@test.test")
+				.password("test3")
+				.name("테스트3")
+				.profileImage("blank-profile-picture.png")
+				.authority("ROLE_USER")
+				.createDate(LocalDateTime.now())
+				.build();
+		Diary diary = Diary.builder()
+				.id(1L)
+				.writer(user)
+				.title("title")
+				.contents("content")
+				.thumbnail("no-image-icon.gif")
+				.countOfGood(0)
+				.countOfAnswer(1)
+				.createDate(LocalDateTime.now())
+				.build();
+		diary.deleteAnswer();
+		when(diaryService.deleteDiaryAnswer(diary.getId()))
+		.thenReturn(diary);
+		Diary deletedAnswerDiary = diaryService.deleteDiaryAnswer(diary.getId());
+		assertThat("", is(deletedAnswerDiary.getCountOfAnswer()));
+	}
+	
+	@Test
+	public void addDiaryGood() throws Exception {
+		User user = User.builder()
+				.id(1L)
+				.email("test3@test.test")
+				.password("test3")
+				.name("테스트3")
+				.profileImage("blank-profile-picture.png")
+				.authority("ROLE_USER")
+				.createDate(LocalDateTime.now())
+				.build();
+		Diary diary = Diary.builder()
+				.id(1L)
+				.writer(user)
+				.title("title")
+				.contents("content")
+				.thumbnail("no-image-icon.gif")
+				.countOfGood(0)
+				.countOfAnswer(0)
+				.createDate(LocalDateTime.now())
+				.build();
+		diary.addGood();
+		when(diaryService.addDiaryAnswer(diary.getId()))
+		.thenReturn(diary);
+		Diary addedAnswerDiary = diaryService.addDiaryAnswer(diary.getId());
+		assertThat("[1]", is(addedAnswerDiary.getCountOfAnswer()));
+	}
+	
+	@Test
+	public void declineDiaryGood() throws Exception {
+		User user = User.builder()
+				.id(1L)
+				.email("test3@test.test")
+				.password("test3")
+				.name("테스트3")
+				.profileImage("blank-profile-picture.png")
+				.authority("ROLE_USER")
+				.createDate(LocalDateTime.now())
+				.build();
+		Diary diary = Diary.builder()
+				.id(1L)
+				.writer(user)
+				.title("title")
+				.contents("content")
+				.thumbnail("no-image-icon.gif")
+				.countOfGood(1)
+				.countOfAnswer(0)
+				.createDate(LocalDateTime.now())
+				.build();
+		diary.declineGood();
+		when(diaryService.declineDiaryGood(diary.getId()))
+		.thenReturn(diary);
+		Diary addedAnswerDiary = diaryService.declineDiaryGood(diary.getId());
+		assertThat("", is(addedAnswerDiary.getCountOfAnswer()));
+	}
+	
+	@Test
+	public void findDiaryListByWriter() {
+		User user = User.builder()
+				.id(1L)
+				.email("test3@test.test")
+				.password("test3")
+				.name("테스트3")
+				.profileImage("blank-profile-picture.png")
+				.authority("ROLE_USER")
+				.createDate(LocalDateTime.now())
+				.build();
+		Diary diary = Diary.builder()
+				.id(1L)
+				.writer(user)
+				.title("title")
+				.contents("content")
+				.thumbnail("no-image-icon.gif")
+				.countOfGood(0)
+				.countOfAnswer(0)
+				.createDate(LocalDateTime.now())
+				.build();
+		List<Diary> list = new ArrayList<Diary>();
+		list.add(diary);
+		when(diaryService.findDiaryListByWriter(user))
+		.thenReturn(list);
+		List<Diary> diaryList = diaryService.findDiaryListByWriter(user);
+		assertThat(diaryList, hasItems(diary));
+	}
+	
 }

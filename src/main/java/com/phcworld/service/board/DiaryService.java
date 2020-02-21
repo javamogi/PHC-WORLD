@@ -10,7 +10,7 @@ import com.phcworld.domain.board.Diary;
 import com.phcworld.domain.user.User;
 
 public interface DiaryService {
-	Page<Diary> findPageDiaryByWriter(User loginUser, PageRequest pageRequest, User requestUser);
+	Page<Diary> findPageDiary(User loginUser, Integer pageNum, User requestUser);
 	
 	Diary createDiary(User user, String title, String contents, String thumbnail);
 	

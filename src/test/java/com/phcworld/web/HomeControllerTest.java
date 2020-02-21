@@ -55,6 +55,7 @@ public class HomeControllerTest {
 	@Test
 	public void redirectToAlert() throws Exception {
 		User user = User.builder()
+				.id(1L)
 				.email("test3@test.test")
 				.password("test3")
 				.name("테스트3")
@@ -62,8 +63,15 @@ public class HomeControllerTest {
 				.authority("ROLE_USER")
 				.createDate(LocalDateTime.now())
 				.build();
-		user.setId(1L);
-		Diary diary = new Diary(user, "test3", "test3", "no-image-icon.gif");
+		Diary diary = Diary.builder()
+				.writer(user)
+				.title("test3")
+				.contents("test3")
+				.thumbnail("no-image-icon.gif")
+				.countOfGood(0)
+				.countOfAnswer(0)
+				.createDate(LocalDateTime.now())
+				.build();
 		diary.setId(1L);
 		DiaryAnswer diaryAnswer = new DiaryAnswer(user, diary, "test");
 		diaryAnswer.setId(1L); //pk값을 참조하기 때문에 pk값이 필요하다

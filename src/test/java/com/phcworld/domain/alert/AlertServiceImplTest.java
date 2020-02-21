@@ -59,7 +59,15 @@ public class AlertServiceImplTest {
 				.createDate(LocalDateTime.now())
 				.build();
 		writer.setId(1L);
-		Diary diary = new Diary(writer, "test", "test", "no-image-icon.gif");
+		Diary diary = Diary.builder()
+				.writer(writer)
+				.title("test")
+				.contents("test")
+				.thumbnail("no-image-icon.gif")
+				.countOfGood(0)
+				.countOfAnswer(0)
+				.createDate(LocalDateTime.now())
+				.build();
 		diaryRepository.save(diary);
 		DiaryAnswer diaryAnswer = new DiaryAnswer(writer, diary, "diaryAnswer");
 		diaryAnswerRepository.save(diaryAnswer);
@@ -84,7 +92,15 @@ public class AlertServiceImplTest {
 				.build();
 		writer.setId(1L);
 		
-		Diary diary = new Diary(writer, "test", "test", "no-image-icon.gif");
+		Diary diary = Diary.builder()
+				.writer(writer)
+				.title("test")
+				.contents("test")
+				.thumbnail("no-image-icon.gif")
+				.countOfGood(0)
+				.countOfAnswer(0)
+				.createDate(LocalDateTime.now())
+				.build();
 		diaryRepository.save(diary);
 		DiaryAnswer diaryAnswer = new DiaryAnswer(writer, diary, "diaryAnswer");
 		diaryAnswerRepository.save(diaryAnswer);

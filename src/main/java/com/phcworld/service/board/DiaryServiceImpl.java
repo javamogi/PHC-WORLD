@@ -1,10 +1,13 @@
 package com.phcworld.service.board;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,16 +28,29 @@ public class DiaryServiceImpl implements DiaryService {
 	private TimelineRepository timelineRepository;
 	
 	@Override
-	public Page<Diary> findPageDiaryByWriter(User loginUser, PageRequest pageRequest, User requestUser) {
-		if(loginUser == null || !requestUser.matchId(loginUser.getId())) {
+	public Page<Diary> findPageDiary(User loginUser, Integer pageNum, User requestUser) {
+		PageRequest pageRequest = PageRequest.of(pageNum - 1, 6, new Sort(Direction.DESC, "id"));
+		if(isWriter(loginUser, requestUser)) {
 			return diaryRepository.findByWriter(requestUser, pageRequest);
 		}
 		return diaryRepository.findByWriter(loginUser, pageRequest);
 	}
 
+	private boolean isWriter(User loginUser, User requestUser) {
+		return loginUser == null || !requestUser.matchId(loginUser.getId());
+	}
+
 	@Override
 	public Diary createDiary(User user, String title, String contents, String thumbnail) {
-		Diary diary = new Diary(user, title, contents, thumbnail);
+		Diary diary = Diary.builder()
+				.writer(user)
+				.title(title)
+				.contents(contents)
+				.thumbnail(thumbnail)
+				.countOfGood(0)
+				.countOfAnswer(0)
+				.createDate(LocalDateTime.now())
+				.build();
 		diaryRepository.save(diary);
 
 		Timeline timeline = new Timeline("diary", "edit", diary, user, diary.getCreateDate());
@@ -77,6 +93,18 @@ public class DiaryServiceImpl implements DiaryService {
 	@Override
 	public List<Diary> findDiaryListByWriter(User loginUser) {
 		return diaryRepository.findByWriter(loginUser);
+	}
+	
+	public Diary addDiaryGood(Long id) {
+		Diary diary = diaryRepository.getOne(id);
+		diary.addGood();
+		return diaryRepository.save(diary);
+	}
+	
+	public Diary declineDiaryGood(Long id) {
+		Diary diary = diaryRepository.getOne(id);
+		diary.declineGood();
+		return diaryRepository.save(diary);
 	}
 
 }

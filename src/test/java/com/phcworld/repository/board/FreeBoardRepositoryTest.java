@@ -1,5 +1,6 @@
 package com.phcworld.repository.board;
 
+import static org.hamcrest.CoreMatchers.hasItems;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -75,7 +76,7 @@ public class FreeBoardRepositoryTest {
 		freeBoardList.stream().forEach(board -> {
 			log.info("freeBoard title : {}", board.getTitle());
 		});
-		assertNotNull(freeBoardList);
+		assertThat(freeBoardList, hasItems(freeBoard));
 	}
 	
 	@Test

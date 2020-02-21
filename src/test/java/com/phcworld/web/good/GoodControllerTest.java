@@ -51,8 +51,16 @@ public class GoodControllerTest {
 				.build();
 		user.setId(1L);
 		mockSession.setAttribute(HttpSessionUtils.USER_SESSION_KEY, user);
-		Diary diary = new Diary(user, "test3", "test3", "no-image-icon.gif");
-		diary.setId(1L);
+		Diary diary = Diary.builder()
+				.id(1L)
+				.writer(user)
+				.title("test3")
+				.contents("test3")
+				.thumbnail("no-image-icon.gif")
+				.countOfGood(0)
+				.countOfAnswer(0)
+				.createDate(LocalDateTime.now())
+				.build();
 		given(this.goodService.upGood(diary.getId(), user))
 		.willReturn("1");
 		this.mvc.perform(get("/good/{diaryId}", 1L)
