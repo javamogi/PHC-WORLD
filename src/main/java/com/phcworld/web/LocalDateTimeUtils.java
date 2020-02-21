@@ -6,7 +6,7 @@ import java.time.format.DateTimeFormatter;
 
 public class LocalDateTimeUtils {
 	
-	public static final int MIN = 60;
+	public static final int MINUTES = 60;
 	public static final int HOUR = 24;
 
 	public static String getTime(LocalDateTime inputDate) {
@@ -16,16 +16,16 @@ public class LocalDateTimeUtils {
 		if(LocalDateTime.now().getYear() - inputDate.getYear() > 0) {
 			return inputDate.format(DateTimeFormatter.ofPattern("yyyy.MM.dd"));
 		}
-		long minutesGap = Duration.between(inputDate, LocalDateTime.now()).toMinutes();
+		long inputDateAndNowDifferenceMinutes = Duration.between(inputDate, LocalDateTime.now()).toMinutes();
 		
-		if (minutesGap / MIN < HOUR) {
-			if (minutesGap / MIN < 1) {
-				if (minutesGap == 0) {
+		if (inputDateAndNowDifferenceMinutes / MINUTES < HOUR) {
+			if (inputDateAndNowDifferenceMinutes / MINUTES < 1) {
+				if (inputDateAndNowDifferenceMinutes == 0) {
 					return "방금전";
 				}
-				return minutesGap + "분 전";
+				return inputDateAndNowDifferenceMinutes + "분 전";
 			}
-			return (minutesGap / MIN) + "시간 전";
+			return (inputDateAndNowDifferenceMinutes / MINUTES) + "시간 전";
 		}
 		
 		/*long duration = Duration.between(inputDate, LocalDateTime.now()).toDays();

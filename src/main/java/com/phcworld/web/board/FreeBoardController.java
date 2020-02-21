@@ -43,10 +43,10 @@ public class FreeBoardController {
 	}
 
 	private void checkWithinHourOfDay(FreeBoard board) {
-		long createDateMinutesAndNowGap = Duration.between(board.getCreateDate(), LocalDateTime.now()).toMinutes();
+		long createdDateAndNowDifferenceMinutes = Duration.between(board.getCreateDate(), LocalDateTime.now()).toMinutes();
 		int hourOfDay = 24;
 		int minutesOfHour = 60;
-		if (createDateMinutesAndNowGap / minutesOfHour < hourOfDay) {
+		if (createdDateAndNowDifferenceMinutes / minutesOfHour < hourOfDay) {
 			board.setBadge("New");
 		} else {
 			board.setBadge("");
