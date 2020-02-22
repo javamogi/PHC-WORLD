@@ -64,6 +64,7 @@ public class HomeControllerTest {
 				.createDate(LocalDateTime.now())
 				.build();
 		Diary diary = Diary.builder()
+				.id(1L)
 				.writer(user)
 				.title("test3")
 				.contents("test3")
@@ -72,9 +73,12 @@ public class HomeControllerTest {
 				.countOfAnswer(0)
 				.createDate(LocalDateTime.now())
 				.build();
-		diary.setId(1L);
-		DiaryAnswer diaryAnswer = new DiaryAnswer(user, diary, "test");
-		diaryAnswer.setId(1L); //pk값을 참조하기 때문에 pk값이 필요하다
+		DiaryAnswer diaryAnswer = DiaryAnswer.builder()
+				.id(1L)
+				.writer(user)
+				.diary(diary)
+				.contents("test")
+				.build();
 		
 		given(this.alertService.getOneAlert(1L))
 		.willReturn(new Alert("Diary", diaryAnswer, diary.getWriter(), diaryAnswer.getCreateDate()));

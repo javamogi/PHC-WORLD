@@ -23,7 +23,20 @@ import com.phcworld.domain.timeline.Timeline;
 import com.phcworld.domain.user.User;
 import com.phcworld.web.LocalDateTimeUtils;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
+import lombok.experimental.Accessors;
+
 @Entity
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@Accessors(chain = true)
+@ToString(exclude = {"timeline", "alert"})
 public class DiaryAnswer {
 
 	@Id
@@ -47,62 +60,17 @@ public class DiaryAnswer {
 
 	@OneToOne(cascade = CascadeType.REMOVE)
 	@JoinColumn(foreignKey = @ForeignKey(name = "fk_diary_answer_timeline"))
+	@JsonIgnore
 	private Timeline timeline;
 
 	// @OneToOne(cascade = CascadeType.REMOVE)
 	@OneToOne(cascade = CascadeType.ALL)
 	// @JoinColumn(foreignKey = @ForeignKey(name = "fk_diary_answer_alert"))
 	@PrimaryKeyJoinColumn
+	@JsonIgnore
 	private Alert alert;
 
 	private LocalDateTime createDate;
-
-	public DiaryAnswer() {
-	}
-
-	public DiaryAnswer(User writer, Diary diary, String contents) {
-		this.writer = writer;
-		this.diary = diary;
-		this.contents = contents;
-		this.createDate = LocalDateTime.now();
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public Long getId() {
-		return id;
-	}
-
-	public User getWriter() {
-		return writer;
-	}
-
-	public Diary getDiary() {
-		return diary;
-	}
-
-	public String getContents() {
-		return contents;
-	}
-
-	public void setTimeline(Timeline timeline) {
-		this.timeline = timeline;
-	}
-	
-	@JsonIgnore
-	public Timeline getTimeline() {
-		return timeline;
-	}
-
-	public void setAlert(Alert alert) {
-		this.alert = alert;
-	}
-
-	public LocalDateTime getCreateDate() {
-		return createDate;
-	}
 
 	public String getFormattedCreateDate() {
 		return LocalDateTimeUtils.getTime(createDate);
@@ -110,12 +78,6 @@ public class DiaryAnswer {
 
 	public boolean isSameWriter(User loginUser) {
 		return this.writer.equals(loginUser);
-	}
-
-	@Override
-	public String toString() {
-		return "DiaryAnswer [id=" + id + ", writer=" + writer + ", diary=" + diary + ", contents=" + contents
-				+ ", createDate=" + createDate + "]";
 	}
 
 }

@@ -19,7 +19,6 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.phcworld.domain.answer.DiaryAnswer;
-import com.phcworld.domain.answer.FreeBoardAnswer;
 import com.phcworld.domain.good.Good;
 import com.phcworld.domain.timeline.Timeline;
 import com.phcworld.domain.user.User;

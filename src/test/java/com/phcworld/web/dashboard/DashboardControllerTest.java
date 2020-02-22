@@ -81,6 +81,7 @@ public class DashboardControllerTest {
 	public void dashboard() throws Exception {
 		MockHttpSession mockSession = new MockHttpSession();
 		User user = User.builder()
+				.id(1L)
 				.email("test3@test.test")
 				.password("test3")
 				.name("테스트3")
@@ -88,7 +89,6 @@ public class DashboardControllerTest {
 				.authority("ROLE_USER")
 				.createDate(LocalDateTime.now())
 				.build();
-		user.setId(1L);
 		mockSession.setAttribute(HttpSessionUtils.USER_SESSION_KEY, user);
 		mockSession.setAttribute("messages", null);
 		mockSession.setAttribute("countMessages", "");
@@ -137,8 +137,12 @@ public class DashboardControllerTest {
 		given(this.diaryService.findDiaryListByWriter(user))
 		.willReturn(diaryList);
 		
-		DiaryAnswer diaryAnswer = new DiaryAnswer(user, diary, "test");
-		diaryAnswer.setId(1L);
+		DiaryAnswer diaryAnswer = DiaryAnswer.builder()
+				.id(1L)
+				.writer(user)
+				.diary(diary)
+				.contents("test")
+				.build();
 		List<DiaryAnswer> diaryAnswerList = new ArrayList<>();
 		diaryAnswerList.add(diaryAnswer);
 		given(this.diaryAnswerService.findDiaryAnswerListByWriter(user))
@@ -214,8 +218,12 @@ public class DashboardControllerTest {
 				.createDate(LocalDateTime.now())
 				.build();
 		
-		DiaryAnswer diaryAnswer = new DiaryAnswer(user, diary, "test");
-		diaryAnswer.setId(1L);
+		DiaryAnswer diaryAnswer = DiaryAnswer.builder()
+				.id(1L)
+				.writer(user)
+				.diary(diary)
+				.contents("test")
+				.build();
 		
 		Timeline timeline = new Timeline("FreeBoard", "", freeBoard, user, freeBoard.getCreateDate());
 		timeline.setId(1L);

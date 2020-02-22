@@ -32,7 +32,7 @@ public class FreeBoardController {
 	@Autowired
 	private FreeBoardServiceImpl freeBoardService;
 
-	@GetMapping("/list")
+	@GetMapping("/list") // 게시글이 100000개 이상일 경우를 생각해야함
 	public String viewFreeBoardAllList(Model model) {
 		List<FreeBoard> list = freeBoardService.findFreeBoardAllList();
 		for (int i = 0; i < list.size(); i++) {

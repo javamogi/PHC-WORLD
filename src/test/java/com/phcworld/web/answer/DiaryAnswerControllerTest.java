@@ -1,6 +1,7 @@
 package com.phcworld.web.answer;
 
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -62,12 +63,16 @@ public class DiaryAnswerControllerTest {
 				.countOfAnswer(0)
 				.createDate(LocalDateTime.now())
 				.build();
-		given(this.diaryService.addDiaryAnswer(diary.getId()))
-		.willReturn(diary);
-		DiaryAnswer diaryAnswer = new DiaryAnswer(user, diary, "test");
-		diaryAnswer.setId(1L);
-		given(this.diaryAnswerService.createDiaryAnswer(user, diary, "test"))
-		.willReturn(diaryAnswer);
+		when(this.diaryService.addDiaryAnswer(diary.getId()))
+		.thenReturn(diary);
+		DiaryAnswer diaryAnswer = DiaryAnswer.builder()
+				.id(1L)
+				.writer(user)
+				.diary(diary)
+				.contents("test")
+				.build();
+		when(this.diaryAnswerService.createDiaryAnswer(user, diary, "test"))
+		.thenReturn(diaryAnswer);
 		this.mvc.perform(post("/diary/{diaryId}/answer", 1L)
 				.contentType(MediaType.APPLICATION_JSON)
 				.param("contents", "test")
@@ -81,7 +86,7 @@ public class DiaryAnswerControllerTest {
 	}
 	
 	@Test
-	public void createFailedDiaryAnswerWhenNotLoginUser() throws Exception {
+	public void createEmptyLoginUser() throws Exception {
 		MockHttpSession mockSession = new MockHttpSession();
 		this.mvc.perform(post("/diary/{diaryId}/answer", 1L)
 				.param("contents", "test")
@@ -112,8 +117,12 @@ public class DiaryAnswerControllerTest {
 				.countOfAnswer(0)
 				.createDate(LocalDateTime.now())
 				.build();
-		DiaryAnswer diaryAnswer = new DiaryAnswer(user, diary, "test");
-		diaryAnswer.setId(1L);
+		DiaryAnswer diaryAnswer = DiaryAnswer.builder()
+				.id(1L)
+				.writer(user)
+				.diary(diary)
+				.contents("test")
+				.build();
 		given(this.diaryAnswerService.deleteDiaryAnswer(diaryAnswer.getId(), user, diary.getId()))
 		.willReturn("{\"success\":\"" + "[]" +"\"}");
 		this.mvc.perform(delete("/diary/{diaryId}/answer/{id}", 1L, 1L)
@@ -123,7 +132,7 @@ public class DiaryAnswerControllerTest {
 	}
 	
 	@Test
-	public void deleteFailedDiaryAnswerWhenNotLoginUser() throws Exception {
+	public void deleteEmptyLoginUser() throws Exception {
 		MockHttpSession mockSession = new MockHttpSession();
 		this.mvc.perform(delete("/diary/{diaryId}/answer/{id}", 1L, 1L)
 				.session(mockSession))
@@ -131,7 +140,7 @@ public class DiaryAnswerControllerTest {
 	}
 	
 	@Test
-	public void deleteFailedDiaryAnswerWhenNotMatchUserUser() throws Exception {
+	public void deleteWhenNotMatchWriter() throws Exception {
 		MockHttpSession mockSession = new MockHttpSession();
 		User user = User.builder()
 				.id(1L)
@@ -162,8 +171,12 @@ public class DiaryAnswerControllerTest {
 				.countOfAnswer(0)
 				.createDate(LocalDateTime.now())
 				.build();
-		DiaryAnswer diaryAnswer = new DiaryAnswer(user2, diary, "test");
-		diaryAnswer.setId(1L);
+		DiaryAnswer diaryAnswer = DiaryAnswer.builder()
+				.id(1L)
+				.writer(user2)
+				.diary(diary)
+				.contents("test")
+				.build();
 		given(this.diaryAnswerService.deleteDiaryAnswer(diaryAnswer.getId(), user, diary.getId()))
 		.willReturn("{\"error\":\"" + "본인이 작성한 글만 삭제 가능합니다." +"\"}");
 		this.mvc.perform(delete("/diary/{diaryId}/answer/{id}", 1L, 1L)

@@ -69,7 +69,11 @@ public class AlertServiceImplTest {
 				.createDate(LocalDateTime.now())
 				.build();
 		diaryRepository.save(diary);
-		DiaryAnswer diaryAnswer = new DiaryAnswer(writer, diary, "diaryAnswer");
+		DiaryAnswer diaryAnswer = DiaryAnswer.builder()
+				.writer(writer)
+				.diary(diary)
+				.contents("diaryAnswer")
+				.build();
 		diaryAnswerRepository.save(diaryAnswer);
 		Alert alert = new Alert("Diary", diaryAnswer, diary.getWriter(), diaryAnswer.getCreateDate());
 		log.debug("alert : {}", alert);
@@ -102,7 +106,11 @@ public class AlertServiceImplTest {
 				.createDate(LocalDateTime.now())
 				.build();
 		diaryRepository.save(diary);
-		DiaryAnswer diaryAnswer = new DiaryAnswer(writer, diary, "diaryAnswer");
+		DiaryAnswer diaryAnswer = DiaryAnswer.builder()
+				.writer(writer)
+				.diary(diary)
+				.contents("diaryAnswer")
+				.build();
 		diaryAnswerRepository.save(diaryAnswer);
 		
 		Alert diaryAnswerAlert = new Alert("Diary", diaryAnswer, diary.getWriter(), diaryAnswer.getCreateDate());

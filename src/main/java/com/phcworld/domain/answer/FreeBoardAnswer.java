@@ -1,7 +1,6 @@
 package com.phcworld.domain.answer;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;

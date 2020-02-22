@@ -13,6 +13,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.phcworld.domain.alert.Alert;
 import com.phcworld.domain.board.Diary;
@@ -29,6 +30,7 @@ public class Good {
 	
 	@ManyToOne
 	@JoinColumn(foreignKey = @ForeignKey(name = "fk_good_diary"))
+	@JsonIgnore
 	private Diary diary;
 	
 	@ManyToOne
@@ -38,11 +40,13 @@ public class Good {
 	
 	@OneToOne(cascade = CascadeType.REMOVE)
 	@JoinColumn(foreignKey = @ForeignKey(name = "fk_good_timeline"))
+	@JsonIgnore
 	private Timeline timeline;
 	
 	@OneToOne(cascade = CascadeType.REMOVE)
 //	@JoinColumn(foreignKey = @ForeignKey(name = "fk_good_alert"))
 	@PrimaryKeyJoinColumn
+	@JsonIgnore
 	private Alert alert;
 
 	private LocalDateTime saveDate;

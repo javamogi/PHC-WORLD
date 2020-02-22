@@ -35,7 +35,11 @@ public class DiaryAnswerServiceImpl implements DiaryAnswerService {
 	
 	@Override
 	public DiaryAnswer createDiaryAnswer(User user, Diary diary, String contents) {
-		DiaryAnswer diaryAnswer = new DiaryAnswer(user, diary, contents.replace("\r\n", "<br>"));
+		DiaryAnswer diaryAnswer = DiaryAnswer.builder()
+				.writer(user)
+				.diary(diary)
+				.contents(contents.replace("\r\n", "<br>"))
+				.build();
 		diaryAnswerRepository.save(diaryAnswer);
 		
 		Timeline timeline = new Timeline("Diary Answer", "comment", diary, diaryAnswer, user, diaryAnswer.getCreateDate());
