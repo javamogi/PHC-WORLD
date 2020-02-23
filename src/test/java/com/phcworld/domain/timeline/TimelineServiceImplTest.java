@@ -19,8 +19,6 @@ import com.phcworld.domain.answer.DiaryAnswer;
 import com.phcworld.domain.answer.FreeBoardAnswer;
 import com.phcworld.domain.board.Diary;
 import com.phcworld.domain.board.FreeBoard;
-import com.phcworld.domain.good.Good;
-import com.phcworld.domain.good.GoodRepository;
 import com.phcworld.domain.user.User;
 import com.phcworld.service.answer.DiaryAnswerServiceImpl;
 import com.phcworld.service.answer.FreeBoardAnswerServiceImpl;
@@ -46,9 +44,6 @@ public class TimelineServiceImplTest {
 	@Autowired
 	private FreeBoardAnswerServiceImpl freeBoardAnswerService;
 	
-	@Autowired
-	private GoodRepository goodRepository;
-
 	@Test
 	@Transactional
 	public void createTimeline() {
@@ -85,11 +80,10 @@ public class TimelineServiceImplTest {
 		actual = timelineService.getOneTimeline(createdFreeBoardAnswer.getId());
 		assertThat(actual, is(createdFreeBoardAnswer));
 		
-		Good good = new Good(diary, user);
-		Timeline goodTimeline = new Timeline("good", "thumbs-up", diary, good, user, good.getSaveDate());
-		Timeline createdGoodTimeline = timelineService.createTimeline(goodTimeline);
-		actual = timelineService.getOneTimeline(createdGoodTimeline.getId());
-		assertThat(actual, is(createdGoodTimeline));
+//		Timeline goodTimeline = new Timeline("good", "thumbs-up", diary, good, user, good.getSaveDate());
+//		Timeline createdGoodTimeline = timelineService.createTimeline(goodTimeline);
+//		actual = timelineService.getOneTimeline(createdGoodTimeline.getId());
+//		assertThat(actual, is(createdGoodTimeline));
 	}
 
 	@Test
@@ -116,15 +110,13 @@ public class TimelineServiceImplTest {
 		FreeBoardAnswer freeBoardAnswer = freeBoardAnswerService.createFreeBoardAnswer(user, freeBoard.getId(), "test");
 		Timeline freeBoardAnswerTimeline = timelineService.getOneTimeline(freeBoardAnswer.getTimeline().getId());
 		
-		Good good = new Good(diary, user);
-		goodRepository.save(good);
-		Timeline goodTimeline = new Timeline("good", "thumbs-up", diary, good, user, good.getSaveDate());
-		Timeline createdGoodTimeline = timelineService.createTimeline(goodTimeline);
+//		Timeline goodTimeline = new Timeline("good", "thumbs-up", diary, good, user, good.getSaveDate());
+//		Timeline createdGoodTimeline = timelineService.createTimeline(goodTimeline);
 		
 		Page<Timeline> timelinePage = timelineService.findPageTimelineByUser(user);
 		List<Timeline> timelineList = timelinePage.getContent();
 		
-		assertThat(timelineList, hasItems(diaryTimeline, diaryAnswerTimline, freeBoardTimeline, freeBoardAnswerTimeline, createdGoodTimeline));
+//		assertThat(timelineList, hasItems(diaryTimeline, diaryAnswerTimline, freeBoardTimeline, freeBoardAnswerTimeline, createdGoodTimeline));
 	}
 	
 	@Test
@@ -151,12 +143,10 @@ public class TimelineServiceImplTest {
 		FreeBoardAnswer freeBoardAnswer = freeBoardAnswerService.createFreeBoardAnswer(user, freeBoard.getId(), "test");
 		Timeline freeBoardAnswerTimeline = timelineService.getOneTimeline(freeBoardAnswer.getTimeline().getId());
 		
-		Good good = new Good(diary, user);
-		goodRepository.save(good);
-		Timeline goodTimeline = new Timeline("good", "thumbs-up", diary, good, user, good.getSaveDate());
-		Timeline createdGoodTimeline = timelineService.createTimeline(goodTimeline);
+//		Timeline goodTimeline = new Timeline("good", "thumbs-up", diary, good, user, good.getSaveDate());
+//		Timeline createdGoodTimeline = timelineService.createTimeline(goodTimeline);
 		
 		List<Timeline> timelineList = timelineService.findTimelineList(0, user);
-		assertThat(timelineList, hasItems(diaryTimeline, diaryAnswerTimline, freeBoardTimeline, freeBoardAnswerTimeline, createdGoodTimeline));
+//		assertThat(timelineList, hasItems(diaryTimeline, diaryAnswerTimline, freeBoardTimeline, freeBoardAnswerTimeline, createdGoodTimeline));
 	}
 }

@@ -64,7 +64,6 @@ public class AlertServiceImplTest {
 				.title("test")
 				.contents("test")
 				.thumbnail("no-image-icon.gif")
-				.countOfGood(0)
 				.countOfAnswer(0)
 				.createDate(LocalDateTime.now())
 				.build();
@@ -101,7 +100,6 @@ public class AlertServiceImplTest {
 				.title("test")
 				.contents("test")
 				.thumbnail("no-image-icon.gif")
-				.countOfGood(0)
 				.countOfAnswer(0)
 				.createDate(LocalDateTime.now())
 				.build();
@@ -136,7 +134,7 @@ public class AlertServiceImplTest {
 		Alert freeBoardAnswerAlert = new Alert("Free Board", freeBoardAnswer, writer, freeBoardAnswer.getCreateDate());
 		alertService.createAlert(freeBoardAnswerAlert);
 		
-		List<Alert> alertList = alertService.findPageRequestAlertByUser(writer);
+		List<Alert> alertList = alertService.findPageRequestAlertByPostUser(writer);
 		assertThat(alertList, hasItems(diaryAnswerAlert, freeBoardAnswerAlert));
 	}
 

@@ -2,6 +2,7 @@ package com.phcworld.service.board;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -11,6 +12,8 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.phcworld.domain.alert.Alert;
+import com.phcworld.domain.alert.AlertRepository;
 import com.phcworld.domain.board.Diary;
 import com.phcworld.domain.timeline.Timeline;
 import com.phcworld.domain.timeline.TimelineRepository;
@@ -26,6 +29,9 @@ public class DiaryServiceImpl implements DiaryService {
 	
 	@Autowired
 	private TimelineRepository timelineRepository;
+	
+	@Autowired
+	private AlertRepository alertRepository;
 	
 	@Override
 	public Page<Diary> findPageDiary(User loginUser, Integer pageNum, User requestUser) {
@@ -47,7 +53,6 @@ public class DiaryServiceImpl implements DiaryService {
 				.title(title)
 				.contents(contents)
 				.thumbnail(thumbnail)
-				.countOfGood(0)
 				.countOfAnswer(0)
 				.createDate(LocalDateTime.now())
 				.build();
@@ -95,16 +100,25 @@ public class DiaryServiceImpl implements DiaryService {
 		return diaryRepository.findByWriter(loginUser);
 	}
 	
-	public Diary addDiaryGood(Long id) {
-		Diary diary = diaryRepository.getOne(id);
-		diary.addGood();
-		return diaryRepository.save(diary);
+	public String updateGood(Long diaryId, User loginUser) {
+		Diary diary = diaryRepository.getOne(diaryId);
+		Set<User> set = diary.getGoodPushedUser();
+		if(set.contains(loginUser)) {
+			set.remove(loginUser);
+		} else {
+			set.add(loginUser);
+		}
+		
+		Diary updatedGoodCount = diaryRepository.save(diary);
+		
+		Timeline timeline = new Timeline("good", "thumbs-up", diary, loginUser, LocalDateTime.now());
+		timelineRepository.save(timeline);
+		
+		if(!diary.matchUser(loginUser)) {
+			Alert alert = new Alert("Diary", diary, diary.getWriter(), loginUser, LocalDateTime.now());
+			alertRepository.save(alert);
+		}
+		
+		return "{\"success\":\"" + Integer.toString(updatedGoodCount.getGoodPushedUser().size()) +"\"}";
 	}
-	
-	public Diary declineDiaryGood(Long id) {
-		Diary diary = diaryRepository.getOne(id);
-		diary.declineGood();
-		return diaryRepository.save(diary);
-	}
-
 }

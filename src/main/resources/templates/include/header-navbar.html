@@ -74,17 +74,17 @@
                         </li>
                         <li class="divider"></li>
                         {{/diaryAnswer}}
-                        {{#good}}
+                        {{#diary}}
                         <li>
                             <a href="/alert/{{id}}">
                                 <div>
-                                    {{good.user.name}}님이 {{type}} 게시물에 좋아요를 눌렀습니다.
+                                    	{{registerUser.name}}님이 게시물에 좋아요를 눌렀습니다.
                                     <span class="pull-right text-muted small">{{getFormattedSaveDate}}</span>
                                 </div>
                             </a>
                         </li>
                         <li class="divider"></li>
-                        {{/good}}
+                        {{/diary}}
                     {{/alerts}}      
                     {{^alerts}}
                     <li> 알림이 없습니다. </li>

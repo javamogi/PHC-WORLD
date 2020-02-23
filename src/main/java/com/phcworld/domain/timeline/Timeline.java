@@ -16,11 +16,15 @@ import com.phcworld.domain.answer.DiaryAnswer;
 import com.phcworld.domain.answer.FreeBoardAnswer;
 import com.phcworld.domain.board.Diary;
 import com.phcworld.domain.board.FreeBoard;
-import com.phcworld.domain.good.Good;
 import com.phcworld.domain.user.User;
 import com.phcworld.web.LocalDateTimeUtils;
 
+import lombok.Builder;
+import lombok.Data;
+
 @Entity
+//@Data
+//@Builder
 public class Timeline {
 
 	@Id
@@ -46,10 +50,6 @@ public class Timeline {
 	@OneToOne
 	@JoinColumn(foreignKey = @ForeignKey(name = "fk_timeline_diary_answer"))
 	private DiaryAnswer diaryAnswer;
-
-	@OneToOne
-	@JoinColumn(foreignKey = @ForeignKey(name = "fk_timeline_good"))
-	private Good good;
 
 	@ManyToOne
 	@JoinColumn(foreignKey = @ForeignKey(name = "fk_timeline_user"))
@@ -96,15 +96,6 @@ public class Timeline {
 		this.saveDate = LocalDateTime.now();
 	}
 
-	public Timeline(String type, String icon, Diary diary, Good good, User user, LocalDateTime saveDate) {
-		this.type = type;
-		this.icon = icon;
-		this.diary = diary;
-		this.good = good;
-		this.user = user;
-		this.saveDate = LocalDateTime.now();
-	}
-	
 	public void setId(Long id) {
 		this.id = id;
 	}
@@ -135,10 +126,6 @@ public class Timeline {
 
 	public DiaryAnswer getDiaryAnswer() {
 		return diaryAnswer;
-	}
-
-	public Good getGood() {
-		return good;
 	}
 
 	public User getUser() {

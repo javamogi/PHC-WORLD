@@ -39,6 +39,7 @@ public class DiaryAnswerController {
 		}
 		User loginUser = HttpSessionUtils.getUserFromSession(session);
 		Diary diary = diaryService.addDiaryAnswer(diaryId);
+//		Diary diary = diaryService.getOneDiary(diaryId);
 		
 		return diaryAnswerService.createDiaryAnswer(loginUser, diary, contents);
 	}

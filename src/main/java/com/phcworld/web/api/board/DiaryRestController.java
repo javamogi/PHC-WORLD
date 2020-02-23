@@ -1,32 +1,32 @@
-package com.phcworld.web.good;
+package com.phcworld.web.api.board;
 
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.phcworld.domain.exception.LoginNotUserException;
-import com.phcworld.domain.good.GoodServiceImpl;
 import com.phcworld.domain.user.User;
+import com.phcworld.service.board.DiaryServiceImpl;
 import com.phcworld.web.HttpSessionUtils;
 
 @RestController
-@RequestMapping("/good/{diaryId}")
-public class GoodController {
+@RequestMapping("/api/diary")
+public class DiaryRestController {
 	
 	@Autowired
-	private GoodServiceImpl goodService;
-	
-	@GetMapping("")
-	public String upToGood(@PathVariable Long diaryId, HttpSession session) throws LoginNotUserException {
+	private DiaryServiceImpl diaryService;
+
+	@PutMapping("/{diaryId}/good")
+	public String updateGoodCount(@PathVariable Long diaryId, HttpSession session) throws LoginNotUserException {
 		if(!HttpSessionUtils.isLoginUser(session)) {
 			throw new LoginNotUserException("로그인을 해야합니다.");
 		}
 		User loginUser = HttpSessionUtils.getUserFromSession(session);
 		
-		return "{\"success\":\"" + goodService.upGood(diaryId, loginUser) +"\"}";
+		return diaryService.updateGood(diaryId, loginUser);
 	}
 }

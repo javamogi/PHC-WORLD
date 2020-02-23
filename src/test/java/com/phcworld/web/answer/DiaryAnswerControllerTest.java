@@ -59,7 +59,6 @@ public class DiaryAnswerControllerTest {
 				.title("test3")
 				.contents("test3")
 				.thumbnail("no-image-icon.gif")
-				.countOfGood(0)
 				.countOfAnswer(0)
 				.createDate(LocalDateTime.now())
 				.build();
@@ -113,7 +112,6 @@ public class DiaryAnswerControllerTest {
 				.title("title")
 				.contents("content")
 				.thumbnail("no-image-icon.gif")
-				.countOfGood(0)
 				.countOfAnswer(0)
 				.createDate(LocalDateTime.now())
 				.build();
@@ -124,7 +122,7 @@ public class DiaryAnswerControllerTest {
 				.contents("test")
 				.build();
 		given(this.diaryAnswerService.deleteDiaryAnswer(diaryAnswer.getId(), user, diary.getId()))
-		.willReturn("{\"success\":\"" + "[]" +"\"}");
+		.willReturn("{\"success\":\"[]\"}");
 		this.mvc.perform(delete("/diary/{diaryId}/answer/{id}", 1L, 1L)
 				.session(mockSession))
 		.andExpect(status().isOk())
@@ -167,7 +165,6 @@ public class DiaryAnswerControllerTest {
 				.title("test3")
 				.contents("test3")
 				.thumbnail("no-image-icon.gif")
-				.countOfGood(0)
 				.countOfAnswer(0)
 				.createDate(LocalDateTime.now())
 				.build();

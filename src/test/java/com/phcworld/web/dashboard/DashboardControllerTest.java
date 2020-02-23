@@ -30,7 +30,6 @@ import com.phcworld.domain.answer.DiaryAnswer;
 import com.phcworld.domain.answer.FreeBoardAnswer;
 import com.phcworld.domain.board.Diary;
 import com.phcworld.domain.board.FreeBoard;
-import com.phcworld.domain.good.Good;
 import com.phcworld.domain.timeline.Timeline;
 import com.phcworld.domain.timeline.TimelineServiceImpl;
 import com.phcworld.domain.user.User;
@@ -127,7 +126,6 @@ public class DashboardControllerTest {
 				.title("test")
 				.contents("test")
 				.thumbnail("")
-				.countOfGood(0)
 				.countOfAnswer(0)
 				.createDate(LocalDateTime.now())
 				.build();
@@ -152,7 +150,7 @@ public class DashboardControllerTest {
 		alert.setId(1L);
 		List<Alert> alertList = new ArrayList<>();
 		alertList.add(alert);
-		given(this.alertService.findPageRequestAlertByUser(user))
+		given(this.alertService.findPageRequestAlertByPostUser(user))
 		.willReturn(alertList);
 		
 		Timeline timeline = new Timeline("FreeBoard", "", freeBoard, user, freeBoard.getCreateDate());
@@ -213,7 +211,6 @@ public class DashboardControllerTest {
 				.title("test")
 				.contents("test")
 				.thumbnail("")
-				.countOfGood(0)
 				.countOfAnswer(0)
 				.createDate(LocalDateTime.now())
 				.build();
@@ -257,15 +254,14 @@ public class DashboardControllerTest {
 		this.mvc.perform(get("/dashboard/timeline/{id}", 4L))
 		.andExpect(redirectedUrl("/diary/" + timeline4.getDiary().getId() + "/detail"));
 		
-		Good good = new Good(diary, user);
 				
-		Timeline timeline5 = new Timeline("Good", "", diary, good, user, good.getSaveDate());
-		timeline4.setId(5L);
-		given(this.timelineService.getOneTimeline(5L))
-		.willReturn(timeline5);
-		
-		this.mvc.perform(get("/dashboard/timeline/{id}", 5L))
-		.andExpect(redirectedUrl("/diary/" + timeline5.getDiary().getId() + "/detail"));
+//		Timeline timeline5 = new Timeline("Good", "", diary, good, user, good.getSaveDate());
+//		timeline4.setId(5L);
+//		given(this.timelineService.getOneTimeline(5L))
+//		.willReturn(timeline5);
+//		
+//		this.mvc.perform(get("/dashboard/timeline/{id}", 5L))
+//		.andExpect(redirectedUrl("/diary/" + timeline5.getDiary().getId() + "/detail"));
 	}
 
 }

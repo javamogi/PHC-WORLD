@@ -9,7 +9,9 @@ import static org.mockito.Mockito.when;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -27,6 +29,7 @@ import org.springframework.orm.jpa.JpaObjectRetrievalFailureException;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.phcworld.domain.answer.DiaryAnswer;
 import com.phcworld.domain.board.Diary;
 import com.phcworld.domain.board.FreeBoard;
 import com.phcworld.domain.user.User;
@@ -58,7 +61,6 @@ public class DiaryServiceImplTest {
 				.title("title")
 				.contents("content")
 				.thumbnail("no-image-icon.gif")
-				.countOfGood(0)
 				.countOfAnswer(0)
 				.createDate(LocalDateTime.now())
 				.build();
@@ -67,7 +69,6 @@ public class DiaryServiceImplTest {
 				.title("title2")
 				.contents("content2")
 				.thumbnail("no-image-icon.gif")
-				.countOfGood(0)
 				.countOfAnswer(0)
 				.createDate(LocalDateTime.now())
 				.build();
@@ -97,7 +98,6 @@ public class DiaryServiceImplTest {
 				.title("title")
 				.contents("content")
 				.thumbnail("no-image-icon.gif")
-				.countOfGood(0)
 				.countOfAnswer(0)
 				.createDate(LocalDateTime.now())
 				.build();
@@ -108,7 +108,6 @@ public class DiaryServiceImplTest {
 		assertThat("content", is(createdDiary.getContents()));
 	}
 	
-//	getOneDiary
 	@Test
 	public void getOneDiary() {
 		User user = User.builder()
@@ -126,7 +125,6 @@ public class DiaryServiceImplTest {
 				.title("title")
 				.contents("content")
 				.thumbnail("no-image-icon.gif")
-				.countOfGood(0)
 				.countOfAnswer(0)
 				.createDate(LocalDateTime.now())
 				.build();
@@ -151,7 +149,6 @@ public class DiaryServiceImplTest {
 				.title("title")
 				.contents("content")
 				.thumbnail("no-image-icon.gif")
-				.countOfGood(0)
 				.countOfAnswer(0)
 				.createDate(LocalDateTime.now())
 				.build();
@@ -180,7 +177,6 @@ public class DiaryServiceImplTest {
 				.title("title")
 				.contents("content")
 				.thumbnail("no-image-icon.gif")
-				.countOfGood(0)
 				.countOfAnswer(0)
 				.createDate(LocalDateTime.now())
 				.build();
@@ -205,11 +201,19 @@ public class DiaryServiceImplTest {
 				.title("title")
 				.contents("content")
 				.thumbnail("no-image-icon.gif")
-				.countOfGood(0)
-				.countOfAnswer(0)
+//				.countOfAnswer(0)
 				.createDate(LocalDateTime.now())
 				.build();
-		diary.addAnswer();
+		DiaryAnswer answer = DiaryAnswer.builder()
+				.writer(user)
+				.diary(diary)
+				.contents("content")
+				.createDate(LocalDateTime.now())
+				.build();
+		List<DiaryAnswer> list = new ArrayList<DiaryAnswer>();
+		list.add(answer);
+		diary.setDiaryAnswers(list);
+		
 		when(diaryService.addDiaryAnswer(diary.getId()))
 		.thenReturn(diary);
 		Diary addedAnswerDiary = diaryService.addDiaryAnswer(diary.getId());
@@ -233,7 +237,6 @@ public class DiaryServiceImplTest {
 				.title("title")
 				.contents("content")
 				.thumbnail("no-image-icon.gif")
-				.countOfGood(0)
 				.countOfAnswer(1)
 				.createDate(LocalDateTime.now())
 				.build();
@@ -245,7 +248,7 @@ public class DiaryServiceImplTest {
 	}
 	
 	@Test
-	public void addDiaryGood() throws Exception {
+	public void addGoodWhenPushGoodButton() throws Exception {
 		User user = User.builder()
 				.id(1L)
 				.email("test3@test.test")
@@ -261,19 +264,20 @@ public class DiaryServiceImplTest {
 				.title("title")
 				.contents("content")
 				.thumbnail("no-image-icon.gif")
-				.countOfGood(0)
 				.countOfAnswer(0)
 				.createDate(LocalDateTime.now())
 				.build();
-		diary.addGood();
-		when(diaryService.addDiaryAnswer(diary.getId()))
-		.thenReturn(diary);
-		Diary addedAnswerDiary = diaryService.addDiaryAnswer(diary.getId());
-		assertThat("[1]", is(addedAnswerDiary.getCountOfAnswer()));
+		Set<User> set = new HashSet<User>();
+		set.add(user);
+		diary.setGoodPushedUser(set);
+		when(diaryService.updateGood(diary.getId(), user))
+		.thenReturn("{\"success\":\"" + Integer.toString(diary.getGoodPushedUser().size()) +"\"}");
+		String str = diaryService.updateGood(diary.getId(), user);
+		assertThat("{\"success\":\"1\"}", is(str));
 	}
 	
 	@Test
-	public void declineDiaryGood() throws Exception {
+	public void declineGoodWhenPushGoodButton() throws Exception {
 		User user = User.builder()
 				.id(1L)
 				.email("test3@test.test")
@@ -283,21 +287,23 @@ public class DiaryServiceImplTest {
 				.authority("ROLE_USER")
 				.createDate(LocalDateTime.now())
 				.build();
+		Set<User> set = new HashSet<User>();
+		set.add(user);
 		Diary diary = Diary.builder()
 				.id(1L)
 				.writer(user)
 				.title("title")
 				.contents("content")
 				.thumbnail("no-image-icon.gif")
-				.countOfGood(1)
 				.countOfAnswer(0)
 				.createDate(LocalDateTime.now())
+				.goodPushedUser(set)
 				.build();
-		diary.declineGood();
-		when(diaryService.declineDiaryGood(diary.getId()))
-		.thenReturn(diary);
-		Diary addedAnswerDiary = diaryService.declineDiaryGood(diary.getId());
-		assertThat("", is(addedAnswerDiary.getCountOfAnswer()));
+		diary.getGoodPushedUser().remove(user);
+		when(diaryService.updateGood(diary.getId(), user))
+		.thenReturn("{\"success\":\"" + Integer.toString(diary.getGoodPushedUser().size()) +"\"}");
+		String str = diaryService.updateGood(diary.getId(), user);
+		assertThat("{\"success\":\"0\"}", is(str));
 	}
 	
 	@Test
@@ -317,7 +323,6 @@ public class DiaryServiceImplTest {
 				.title("title")
 				.contents("content")
 				.thumbnail("no-image-icon.gif")
-				.countOfGood(0)
 				.countOfAnswer(0)
 				.createDate(LocalDateTime.now())
 				.build();

@@ -26,8 +26,11 @@ import com.phcworld.service.board.DiaryServiceImpl;
 import com.phcworld.service.board.FreeBoardServiceImpl;
 import com.phcworld.web.HttpSessionUtils;
 
+import lombok.extern.slf4j.Slf4j;
+
 @Controller
 @RequestMapping("/dashboard")
+@Slf4j
 public class DashboardController {
 	
 	@Autowired
@@ -62,7 +65,7 @@ public class DashboardController {
 		List<Diary> diaries = diaryService.findDiaryListByWriter(loginUser);
 		List<DiaryAnswer> diaryAnswer = diaryAnswerService.findDiaryAnswerListByWriter(loginUser);
 		
-		List<Alert> alerts = alertService.findPageRequestAlertByUser(loginUser);
+		List<Alert> alerts = alertService.findPageRequestAlertByPostUser(loginUser);
 		
 		List<Timeline> timelines = timelineService.findPageTimelineByUser(loginUser).getContent();
 
@@ -79,6 +82,7 @@ public class DashboardController {
 	@GetMapping("/timeline/{id}")
 	public String redirectToTimeline(@PathVariable Long id) {
 		Timeline timeline = timelineService.getOneTimeline(id);
+		log.info("timeline : {}", timeline);
 		if(timeline.getFreeBoard() == null) {
 			return "redirect:/diary/"+ timeline.getDiary().getId() + "/detail";
 		}

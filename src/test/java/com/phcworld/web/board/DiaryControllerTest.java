@@ -6,6 +6,7 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -26,6 +27,7 @@ import org.springframework.mock.web.MockHttpSession;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
+import com.phcworld.domain.answer.DiaryAnswer;
 import com.phcworld.domain.board.Diary;
 import com.phcworld.domain.user.User;
 import com.phcworld.service.board.DiaryServiceImpl;
@@ -79,7 +81,6 @@ public class DiaryControllerTest {
 				.title("test")
 				.contents("test")
 				.thumbnail("no-image-icon.gif")
-				.countOfGood(0)
 				.countOfAnswer(0)
 				.createDate(LocalDateTime.now())
 				.build();
@@ -89,7 +90,6 @@ public class DiaryControllerTest {
 				.title("test2")
 				.contents("test2")
 				.thumbnail("no-image-icon.gif")
-				.countOfGood(0)
 				.countOfAnswer(0)
 				.createDate(LocalDateTime.now())
 				.build();
@@ -204,7 +204,6 @@ public class DiaryControllerTest {
 				.title("test")
 				.contents("test")
 				.thumbnail("no-image-icon.gif")
-				.countOfGood(0)
 				.countOfAnswer(0)
 				.createDate(LocalDateTime.now())
 				.build();
@@ -240,7 +239,6 @@ public class DiaryControllerTest {
 				.title("test")
 				.contents("test")
 				.thumbnail("no-image-icon.gif")
-				.countOfGood(0)
 				.countOfAnswer(0)
 				.createDate(LocalDateTime.now())
 				.build();
@@ -289,7 +287,6 @@ public class DiaryControllerTest {
 				.title("test")
 				.contents("test")
 				.thumbnail("no-image-icon.gif")
-				.countOfGood(0)
 				.countOfAnswer(0)
 				.createDate(LocalDateTime.now())
 				.build();
@@ -339,7 +336,6 @@ public class DiaryControllerTest {
 				.title("test")
 				.contents("test")
 				.thumbnail("no-image-icon.gif")
-				.countOfGood(0)
 				.countOfAnswer(0)
 				.createDate(LocalDateTime.now())
 				.build();
@@ -379,7 +375,6 @@ public class DiaryControllerTest {
 				.title("test")
 				.contents("test")
 				.thumbnail("no-image-icon.gif")
-				.countOfGood(0)
 				.countOfAnswer(0)
 				.createDate(LocalDateTime.now())
 				.build();
@@ -412,7 +407,6 @@ public class DiaryControllerTest {
 				.title("test")
 				.contents("test")
 				.thumbnail("no-image-icon.gif")
-				.countOfGood(0)
 				.countOfAnswer(0)
 				.createDate(LocalDateTime.now())
 				.build();
@@ -456,7 +450,6 @@ public class DiaryControllerTest {
 				.title("test")
 				.contents("test")
 				.thumbnail("no-image-icon.gif")
-				.countOfGood(0)
 				.countOfAnswer(0)
 				.createDate(LocalDateTime.now())
 				.build();
@@ -494,7 +487,6 @@ public class DiaryControllerTest {
 				.title("test")
 				.contents("test")
 				.thumbnail("no-image-icon.gif")
-				.countOfGood(0)
 				.countOfAnswer(0)
 				.createDate(LocalDateTime.now())
 				.build();
@@ -506,7 +498,6 @@ public class DiaryControllerTest {
 				.title("test")
 				.contents("updateTest")
 				.thumbnail("no-image-icon.gif")
-				.countOfGood(0)
 				.countOfAnswer(0)
 				.createDate(LocalDateTime.now())
 				.build();
@@ -562,7 +553,6 @@ public class DiaryControllerTest {
 				.title("test")
 				.contents("test")
 				.thumbnail("no-image-icon.gif")
-				.countOfGood(0)
 				.countOfAnswer(0)
 				.createDate(LocalDateTime.now())
 				.build();
@@ -601,7 +591,6 @@ public class DiaryControllerTest {
 				.title("test")
 				.contents("test")
 				.thumbnail("no-image-icon.gif")
-				.countOfGood(0)
 				.countOfAnswer(0)
 				.createDate(LocalDateTime.now())
 				.build();
@@ -653,7 +642,6 @@ public class DiaryControllerTest {
 				.title("test")
 				.contents("test")
 				.thumbnail("no-image-icon.gif")
-				.countOfGood(0)
 				.countOfAnswer(0)
 				.createDate(LocalDateTime.now())
 				.build();
@@ -667,4 +655,5 @@ public class DiaryControllerTest {
 		.andExpect(model().attribute("errorMessage", "삭제 권한이 없습니다."))
 		.andExpect(model().size(1));
 	}
+	
 }

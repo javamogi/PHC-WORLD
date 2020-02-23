@@ -26,8 +26,8 @@ public class HomeController {
 		if(alert.getDiaryAnswer() != null) {
 			return "redirect:/diary/"+ alert.getDiaryAnswer().getDiary().getId() + "/detail";
 		}
-		if(alert.getGood() != null) {
-			return "redirect:/diary/"+ alert.getGood().getDiary().getId() + "/detail";
+		if(alert.getDiary() != null) {
+			return "redirect:/diary/"+ alert.getDiary().getId() + "/detail";
 		}
 		return "redirect:/freeboard/"+ alert.getFreeBoardAnswer().getFreeBoard().getId() + "/detail";
 	}

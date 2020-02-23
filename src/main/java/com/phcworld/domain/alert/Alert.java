@@ -9,12 +9,13 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
 
 import com.phcworld.domain.answer.DiaryAnswer;
 import com.phcworld.domain.answer.FreeBoardAnswer;
-import com.phcworld.domain.good.Good;
+import com.phcworld.domain.board.Diary;
 import com.phcworld.domain.user.User;
 import com.phcworld.web.LocalDateTimeUtils;
 
@@ -31,7 +32,7 @@ public class Alert {
 	@OneToOne
 	// @JoinColumn(foreignKey = @ForeignKey(name = "fk_alert_good"))
 	@PrimaryKeyJoinColumn
-	private Good good;
+	private Diary diary;
 
 	@OneToOne
 	// @JoinColumn(foreignKey = @ForeignKey(name = "fk_alert_diary_answer"))
@@ -42,37 +43,38 @@ public class Alert {
 	@PrimaryKeyJoinColumn
 	private FreeBoardAnswer freeBoardAnswer;
 
-	// @ManyToOne
-	// @JoinColumn(foreignKey = @ForeignKey(name = "fk_alert_user"))
-	// private User user;
-
-	@ManyToOne
+	@OneToOne
 	@JoinColumn(foreignKey = @ForeignKey(name = "fk_alert_writer"))
-	private User writer;
+	private User postWriter;
+	
+	@OneToOne
+	@JoinColumn(foreignKey = @ForeignKey(name = "fk_alert_user"))
+	private User registerUser;
 
 	private LocalDateTime saveDate;
 
 	public Alert() {
 	}
 
-	public Alert(String type, Good good, User writer, LocalDateTime saveDate) {
+	public Alert(String type, Diary diary, User postWriter, User registerUser, LocalDateTime saveDate) {
 		this.type = type;
-		this.good = good;
-		this.writer = writer;
+		this.diary = diary;
+		this.postWriter = postWriter;
+		this.registerUser = registerUser;
 		this.saveDate = saveDate;
 	}
 
 	public Alert(String type, DiaryAnswer diaryAnswer, User writer, LocalDateTime saveDate) {
 		this.type = type;
 		this.diaryAnswer = diaryAnswer;
-		this.writer = writer;
+		this.postWriter = writer;
 		this.saveDate = saveDate;
 	}
 
 	public Alert(String type, FreeBoardAnswer freeBoardAnswer, User writer, LocalDateTime saveDate) {
 		this.type = type;
 		this.freeBoardAnswer = freeBoardAnswer;
-		this.writer = writer;
+		this.postWriter = writer;
 		this.saveDate = saveDate;
 	}
 	
@@ -84,8 +86,8 @@ public class Alert {
 		return id;
 	}
 	
-	public Good getGood() {
-		return good;
+	public Diary getDiary() {
+		return diary;
 	}
 
 	public DiaryAnswer getDiaryAnswer() {
@@ -97,7 +99,7 @@ public class Alert {
 	}
 
 	public User getWriter() {
-		return writer;
+		return postWriter;
 	}
 
 	public String getFormattedSaveDate() {
@@ -110,10 +112,9 @@ public class Alert {
 		int result = 1;
 		result = prime * result + ((diaryAnswer == null) ? 0 : diaryAnswer.hashCode());
 		result = prime * result + ((freeBoardAnswer == null) ? 0 : freeBoardAnswer.hashCode());
-		result = prime * result + ((good == null) ? 0 : good.hashCode());
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		result = prime * result + ((type == null) ? 0 : type.hashCode());
-		result = prime * result + ((writer == null) ? 0 : writer.hashCode());
+		result = prime * result + ((postWriter == null) ? 0 : postWriter.hashCode());
 		return result;
 	}
 
@@ -136,11 +137,6 @@ public class Alert {
 				return false;
 		} else if (!freeBoardAnswer.equals(other.freeBoardAnswer))
 			return false;
-		if (good == null) {
-			if (other.good != null)
-				return false;
-		} else if (!good.equals(other.good))
-			return false;
 		if (id == null) {
 			if (other.id != null)
 				return false;
@@ -151,18 +147,18 @@ public class Alert {
 				return false;
 		} else if (!type.equals(other.type))
 			return false;
-		if (writer == null) {
-			if (other.writer != null)
+		if (postWriter == null) {
+			if (other.postWriter != null)
 				return false;
-		} else if (!writer.equals(other.writer))
+		} else if (!postWriter.equals(other.postWriter))
 			return false;
 		return true;
 	}
 
 	@Override
 	public String toString() {
-		return "Alert [id=" + id + ", type=" + type + ", good=" + good + ", diaryAnswer=" + diaryAnswer
-				+ ", freeBoardAnswer=" + freeBoardAnswer + ", writer=" + writer + ", saveDate=" + saveDate + "]";
+		return "Alert [id=" + id + ", type=" + type + ", diaryAnswer=" + diaryAnswer
+				+ ", freeBoardAnswer=" + freeBoardAnswer + ", writer=" + postWriter + ", saveDate=" + saveDate + "]";
 	}
 
 }

@@ -2,6 +2,7 @@ package com.phcworld.domain.board;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -19,7 +20,6 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.phcworld.domain.answer.DiaryAnswer;
-import com.phcworld.domain.good.Good;
 import com.phcworld.domain.timeline.Timeline;
 import com.phcworld.domain.user.User;
 import com.phcworld.web.LocalDateTimeUtils;
@@ -56,8 +56,6 @@ public class Diary {
 
 	private String thumbnail;
 
-	private Integer countOfGood;
-
 	private Integer countOfAnswer;
 
 	@OneToMany(mappedBy = "diary", cascade = CascadeType.REMOVE)
@@ -69,9 +67,9 @@ public class Diary {
 	@JoinColumn(foreignKey = @ForeignKey(name = "fk_diary_timeline"))
 	@JsonIgnore
 	private Timeline timeline;
-
-	@OneToMany(mappedBy = "diary", cascade = CascadeType.REMOVE)
-	private List<Good> goods;
+	
+	@OneToMany
+	private Set<User> goodPushedUser;
 
 	private LocalDateTime createDate;
 
@@ -79,6 +77,12 @@ public class Diary {
 		return LocalDateTimeUtils.getTime(createDate);
 	}
 
+//	public String getCountOfAnswer() {
+//		if (this.diaryAnswers.size() == 0) {
+//			return "";
+//		}
+//		return "[" + diaryAnswers.size() + "]";
+//	}
 	public String getCountOfAnswer() {
 		if (this.countOfAnswer == 0) {
 			return "";
@@ -106,19 +110,11 @@ public class Diary {
 		this.countOfAnswer -= 1;
 	}
 
-	public void addGood() {
-		this.countOfGood += 1;
-	}
-
-	public void declineGood() {
-		this.countOfGood -= 1;
-	}
-
 	public boolean matchId(Long diaryId) {
 		if (diaryId == null) {
 			return false;
 		}
 		return this.id.equals(diaryId);
 	}
-
+	
 }

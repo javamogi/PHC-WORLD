@@ -78,13 +78,13 @@ $(document).ready(function(){
 //		console.log("url : " + url);
 		
 		$.ajax({
-			type : 'get',
+			type : 'put',
 			url : url,
 			dataType : 'json',
-			error : function(){
+			error : function(xhr, status, error){
 				alert("좋아요실패");
 			},
-			success : function(data){
+			success : function(data, status){
 //				console.log(data);
 				$("#countOfGood").text(" " + data.success);
 			}

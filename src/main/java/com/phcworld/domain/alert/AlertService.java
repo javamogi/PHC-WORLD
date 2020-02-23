@@ -10,6 +10,6 @@ public interface AlertService {
 	
 	Alert getOneAlert(Long id);
 	
-	List<Alert> findPageRequestAlertByUser(User loginUser);
+	List<Alert> findPageRequestAlertByPostUser(User loginUser);
 	
 }

@@ -136,7 +136,7 @@ public class UserController {
 		session.setAttribute("messages", messages);
 		session.setAttribute("countMessages", countOfMessages);
 		
-		List<Alert> alerts = alertService.findPageRequestAlertByUser(user);
+		List<Alert> alerts = alertService.findPageRequestAlertByPostUser(user);
 		session.setAttribute("alerts", alerts);
 		
 		return "redirect:/dashboard";
