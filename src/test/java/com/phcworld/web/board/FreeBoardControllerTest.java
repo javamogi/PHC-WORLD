@@ -2,6 +2,7 @@ package com.phcworld.web.board;
 
 import static org.hamcrest.Matchers.containsString;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -60,7 +61,6 @@ public class FreeBoardControllerTest {
 				.badge("new")
 				.createDate(LocalDateTime.now())
 				.count(0)
-				.countOfAnswer(0)
 				.build();
 		FreeBoard board2 = FreeBoard.builder()
 				.id(2L)
@@ -71,13 +71,12 @@ public class FreeBoardControllerTest {
 				.badge("new")
 				.createDate(LocalDateTime.now())
 				.count(0)
-				.countOfAnswer(0)
 				.build();
 		List<FreeBoard> list = new ArrayList<FreeBoard>();
 		list.add(board);
 		list.add(board2);
-		given(this.freeBoardService.findFreeBoardAllList())
-		.willReturn(list);
+		when(this.freeBoardService.findFreeBoardAllList())
+		.thenReturn(list);
 		this.mvc.perform(get("/freeboard/list"))
 		.andDo(print())
 		.andExpect(view().name(containsString("/board/freeboard/freeboard")))
@@ -175,10 +174,9 @@ public class FreeBoardControllerTest {
 				.icon("")
 				.createDate(LocalDateTime.now())
 				.count(0)
-				.countOfAnswer(0)
 				.build();
-		given(this.freeBoardService.addFreeBoardCount(1L))
-		.willReturn(freeBoard);
+		when(this.freeBoardService.addFreeBoardCount(1L))
+		.thenReturn(freeBoard);
 		this.mvc.perform(get("/freeboard/{id}/detail", 1L)
 				.session(mockSession))
 		.andDo(print())
@@ -211,10 +209,9 @@ public class FreeBoardControllerTest {
 				.icon("")
 				.createDate(LocalDateTime.now())
 				.count(0)
-				.countOfAnswer(0)
 				.build();
-		given(this.freeBoardService.addFreeBoardCount(1L))
-		.willReturn(freeBoard);
+		when(this.freeBoardService.addFreeBoardCount(1L))
+		.thenReturn(freeBoard);
 		this.mvc.perform(get("/freeboard/{id}/detail", 1L)
 				.session(mockSession))
 		.andDo(print())
@@ -261,10 +258,9 @@ public class FreeBoardControllerTest {
 				.badge("new")
 				.createDate(LocalDateTime.now())
 				.count(0)
-				.countOfAnswer(0)
 				.build();
-		given(this.freeBoardService.addFreeBoardCount(1L))
-		.willReturn(board);
+		when(this.freeBoardService.addFreeBoardCount(1L))
+		.thenReturn(board);
 		this.mvc.perform(get("/freeboard/{id}/detail", 1L)
 				.session(mockSession))
 		.andDo(print())
@@ -311,10 +307,9 @@ public class FreeBoardControllerTest {
 				.badge("new")
 				.createDate(LocalDateTime.now())
 				.count(0)
-				.countOfAnswer(0)
 				.build();
-		given(this.freeBoardService.addFreeBoardCount(1L))
-		.willReturn(board);
+		when(this.freeBoardService.addFreeBoardCount(1L))
+		.thenReturn(board);
 		this.mvc.perform(get("/freeboard/{id}/detail", 1L)
 				.session(mockSession))
 		.andDo(print())
@@ -351,10 +346,9 @@ public class FreeBoardControllerTest {
 				.icon("")
 				.createDate(LocalDateTime.now())
 				.count(0)
-				.countOfAnswer(0)
 				.build();
-		given(this.freeBoardService.getOneFreeBoard(1L))
-		.willReturn(freeBoard);
+		when(this.freeBoardService.getOneFreeBoard(1L))
+		.thenReturn(freeBoard);
 		this.mvc.perform(get("/freeboard/{id}/form", 1L)
 				.session(mockSession))
 		.andDo(print())
@@ -384,10 +378,9 @@ public class FreeBoardControllerTest {
 				.icon("")
 				.createDate(LocalDateTime.now())
 				.count(0)
-				.countOfAnswer(0)
 				.build();
-		given(this.freeBoardService.getOneFreeBoard(1L))
-		.willReturn(freeBoard);
+		when(this.freeBoardService.getOneFreeBoard(1L))
+		.thenReturn(freeBoard);
 		this.mvc.perform(get("/freeboard/{id}/form", 1L)
 				.session(mockSession))
 		.andDo(print())
@@ -429,10 +422,9 @@ public class FreeBoardControllerTest {
 				.badge("new")
 				.createDate(LocalDateTime.now())
 				.count(0)
-				.countOfAnswer(0)
 				.build();
-		given(this.freeBoardService.getOneFreeBoard(1L))
-		.willReturn(board);
+		when(this.freeBoardService.getOneFreeBoard(1L))
+		.thenReturn(board);
 		this.mvc.perform(get("/freeboard/{id}/form", 1L)
 				.session(mockSession))
 		.andDo(print())
@@ -467,10 +459,9 @@ public class FreeBoardControllerTest {
 				.badge("new")
 				.createDate(LocalDateTime.now())
 				.count(0)
-				.countOfAnswer(0)
 				.build();
-		given(this.freeBoardService.getOneFreeBoard(1L))
-		.willReturn(board);
+		when(this.freeBoardService.getOneFreeBoard(1L))
+		.thenReturn(board);
 		board.update("update test", "");
 		this.mvc.perform(put("/freeboard/{id}", 1L)
 				.param("contents", "updateTest")
@@ -525,10 +516,9 @@ public class FreeBoardControllerTest {
 				.badge("new")
 				.createDate(LocalDateTime.now())
 				.count(0)
-				.countOfAnswer(0)
 				.build();
-		given(this.freeBoardService.getOneFreeBoard(1L))
-		.willReturn(board);
+		when(this.freeBoardService.getOneFreeBoard(1L))
+		.thenReturn(board);
 		this.mvc.perform(put("/freeboard/{id}", 1L)
 				.param("contents", "updateTest")
 				.param("icon", "test.jpg")
@@ -565,10 +555,9 @@ public class FreeBoardControllerTest {
 				.badge("new")
 				.createDate(LocalDateTime.now())
 				.count(0)
-				.countOfAnswer(0)
 				.build();
-		given(this.freeBoardService.getOneFreeBoard(1L))
-		.willReturn(board);
+		when(this.freeBoardService.getOneFreeBoard(1L))
+		.thenReturn(board);
 		this.mvc.perform(delete("/freeboard/{id}/delete", 1L)
 				.session(mockSession))
 		.andExpect(redirectedUrl("/freeboard/list"));
@@ -618,10 +607,9 @@ public class FreeBoardControllerTest {
 				.badge("new")
 				.createDate(LocalDateTime.now())
 				.count(0)
-				.countOfAnswer(0)
 				.build();
-		given(this.freeBoardService.getOneFreeBoard(1L))
-		.willReturn(board);
+		when(this.freeBoardService.getOneFreeBoard(1L))
+		.thenReturn(board);
 		this.mvc.perform(delete("/freeboard/{id}/delete", 1L)
 				.session(mockSession))
 		.andDo(print())

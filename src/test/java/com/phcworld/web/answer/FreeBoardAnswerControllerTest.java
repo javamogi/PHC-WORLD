@@ -1,12 +1,15 @@
 package com.phcworld.web.answer;
 
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -58,10 +61,7 @@ public class FreeBoardAnswerControllerTest {
 				.icon("")
 				.createDate(LocalDateTime.now())
 				.count(0)
-				.countOfAnswer(0)
 				.build();
-		given(this.freeBoardService.addFreeBoardAnswer(freeBoard.getId()))
-		.willReturn(freeBoard);
 		FreeBoardAnswer freeBoardAnswer = FreeBoardAnswer.builder()
 				.id(1L)
 				.writer(user)
@@ -69,8 +69,14 @@ public class FreeBoardAnswerControllerTest {
 				.contents("test")
 				.createDate(LocalDateTime.now())
 				.build();
-		given(this.freeBoardAnswerService.createFreeBoardAnswer(user, freeBoard.getId(), "test"))
-		.willReturn(freeBoardAnswer);
+		List<FreeBoardAnswer> list = new ArrayList<FreeBoardAnswer>();
+		list.add(freeBoardAnswer);
+		freeBoard.setFreeBoardAnswers(list);
+		
+		when(freeBoardService.getOneFreeBoard(freeBoard.getId()))
+		.thenReturn(freeBoard);
+		when(this.freeBoardAnswerService.createFreeBoardAnswer(user, freeBoard.getId(), "test"))
+		.thenReturn(freeBoardAnswer);
 		this.mvc.perform(post("/freeboard/{freeboardId}/answer", 1L)
 				.contentType(MediaType.APPLICATION_JSON)
 				.param("contents", "test")
@@ -112,7 +118,6 @@ public class FreeBoardAnswerControllerTest {
 				.icon("")
 				.createDate(LocalDateTime.now())
 				.count(0)
-				.countOfAnswer(0)
 				.build();
 		FreeBoardAnswer freeBoardAnswer = FreeBoardAnswer.builder()
 				.id(1L)
@@ -121,8 +126,8 @@ public class FreeBoardAnswerControllerTest {
 				.contents("test")
 				.createDate(LocalDateTime.now())
 				.build();
-		given(this.freeBoardAnswerService.deleteFreeBoardAnswer(freeBoardAnswer.getId(), user))
-		.willReturn("{\"success\":\"" + "[]" +"\"}");
+		when(this.freeBoardAnswerService.deleteFreeBoardAnswer(freeBoardAnswer.getId(), user))
+		.thenReturn("{\"success\":\"[]\"}");
 		this.mvc.perform(delete("/freeboard/{freeboardId}/answer/{id}", 1L, 1L)
 				.session(mockSession))
 		.andExpect(status().isOk())
@@ -167,7 +172,6 @@ public class FreeBoardAnswerControllerTest {
 				.icon("")
 				.createDate(LocalDateTime.now())
 				.count(0)
-				.countOfAnswer(0)
 				.build();
 		FreeBoardAnswer freeBoardAnswer = FreeBoardAnswer.builder()
 				.id(1L)
@@ -176,8 +180,8 @@ public class FreeBoardAnswerControllerTest {
 				.contents("test")
 				.createDate(LocalDateTime.now())
 				.build();
-		given(this.freeBoardAnswerService.deleteFreeBoardAnswer(freeBoardAnswer.getId(), user))
-		.willReturn("{\"error\":\"본인이 작성한 글만 삭제 가능합니다.\"}");
+		when(this.freeBoardAnswerService.deleteFreeBoardAnswer(freeBoardAnswer.getId(), user))
+		.thenReturn("{\"error\":\"본인이 작성한 글만 삭제 가능합니다.\"}");
 		this.mvc.perform(delete("/freeboard/{freeboardId}/answer/{id}", 1L, 1L)
 				.session(mockSession))
 		.andExpect(jsonPath("$.error").value("본인이 작성한 글만 삭제 가능합니다."));

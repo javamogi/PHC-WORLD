@@ -44,7 +44,6 @@ public class DiaryRepositoryTest {
 				.title("title")
 				.contents("content")
 				.thumbnail("no-image-icon.gif")
-				.countOfAnswer(0)
 				.createDate(LocalDateTime.now())
 				.build();
 		Diary newDiary = diaryRepository.save(diary);
@@ -64,7 +63,6 @@ public class DiaryRepositoryTest {
 				.title("title")
 				.contents("content")
 				.thumbnail("no-image-icon.gif")
-				.countOfAnswer(0)
 				.createDate(LocalDateTime.now())
 				.build();
 		diaryRepository.save(diary);
@@ -87,7 +85,6 @@ public class DiaryRepositoryTest {
 				.title("title")
 				.contents("content")
 				.thumbnail("no-image-icon.gif")
-				.countOfAnswer(0)
 				.createDate(LocalDateTime.now())
 				.build();
 		diary.update("update content", "test.jpg");
@@ -109,7 +106,6 @@ public class DiaryRepositoryTest {
 				.title("title")
 				.contents("content")
 				.thumbnail("no-image-icon.gif")
-				.countOfAnswer(0)
 				.createDate(LocalDateTime.now())
 				.build();
 		Diary newDiary = diaryRepository.save(diary);

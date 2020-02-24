@@ -99,13 +99,13 @@ public class TimelineServiceImplTest {
 				.build();
 		user.setId(1L);
 		Diary diary = diaryService.createDiary(user, "test3", "test3", "no-image-icon.gif");
-		Timeline diaryTimeline = timelineService.getOneTimeline(diary.getTimeline().getId());
+//		Timeline diaryTimeline = timelineService.getOneTimeline(diary.getTimeline().getId());
 		
 		DiaryAnswer diaryAnswer = diaryAnswerService.createDiaryAnswer(user, diary, "test");
 		Timeline diaryAnswerTimline = timelineService.getOneTimeline(diaryAnswer.getTimeline().getId());
 		
 		FreeBoard freeBoard = freeBoardService.createFreeBoard(user, "test", "test", "");
-		Timeline freeBoardTimeline = timelineService.getOneTimeline(freeBoard.getTimeline().getId());
+//		Timeline freeBoardTimeline = timelineService.getOneTimeline(freeBoard.getTimeline().getId());
 		
 		FreeBoardAnswer freeBoardAnswer = freeBoardAnswerService.createFreeBoardAnswer(user, freeBoard.getId(), "test");
 		Timeline freeBoardAnswerTimeline = timelineService.getOneTimeline(freeBoardAnswer.getTimeline().getId());
@@ -132,13 +132,13 @@ public class TimelineServiceImplTest {
 				.build();
 		user.setId(1L);
 		Diary diary = diaryService.createDiary(user, "test3", "test3", "no-image-icon.gif");
-		Timeline diaryTimeline = timelineService.getOneTimeline(diary.getTimeline().getId());
+//		Timeline diaryTimeline = timelineService.getOneTimeline(diary.getTimeline().getId());
 		
 		DiaryAnswer diaryAnswer = diaryAnswerService.createDiaryAnswer(user, diary, "test");
 		Timeline diaryAnswerTimline = timelineService.getOneTimeline(diaryAnswer.getTimeline().getId());
 		
 		FreeBoard freeBoard = freeBoardService.createFreeBoard(user, "test", "test", "");
-		Timeline freeBoardTimeline = timelineService.getOneTimeline(freeBoard.getTimeline().getId());
+//		Timeline freeBoardTimeline = timelineService.getOneTimeline(freeBoard.getTimeline().getId());
 		
 		FreeBoardAnswer freeBoardAnswer = freeBoardAnswerService.createFreeBoardAnswer(user, freeBoard.getId(), "test");
 		Timeline freeBoardAnswerTimeline = timelineService.getOneTimeline(freeBoardAnswer.getTimeline().getId());

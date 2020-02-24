@@ -47,7 +47,6 @@ public class FreeBoardAnswerRepositoryTest {
 				.icon("")
 				.createDate(LocalDateTime.now())
 				.count(0)
-				.countOfAnswer(0)
 				.build();
 		FreeBoardAnswer answer = FreeBoardAnswer.builder()
 				.writer(user)
@@ -76,7 +75,6 @@ public class FreeBoardAnswerRepositoryTest {
 				.icon("")
 				.createDate(LocalDateTime.now())
 				.count(0)
-				.countOfAnswer(0)
 				.build();
 		FreeBoardAnswer freeBoardAnswer = FreeBoardAnswer.builder()
 				.writer(user)
@@ -108,7 +106,6 @@ public class FreeBoardAnswerRepositoryTest {
 				.icon("")
 				.createDate(LocalDateTime.now())
 				.count(0)
-				.countOfAnswer(0)
 				.build();
 		FreeBoardAnswer answer = FreeBoardAnswer.builder()
 				.writer(user)
@@ -139,7 +136,6 @@ public class FreeBoardAnswerRepositoryTest {
 				.icon("")
 				.createDate(LocalDateTime.now())
 				.count(0)
-				.countOfAnswer(0)
 				.build();
 		FreeBoardAnswer answer = FreeBoardAnswer.builder()
 				.writer(user)

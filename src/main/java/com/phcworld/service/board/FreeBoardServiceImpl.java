@@ -36,14 +36,13 @@ public class FreeBoardServiceImpl implements FreeBoardService {
 				.icon(icon)
 				.createDate(LocalDateTime.now())
 				.count(0)
-				.countOfAnswer(0)
 				.build();
 		freeBoardRepository.save(freeBoard);
 		
 		Timeline timeline = new Timeline("free board", "list-alt", freeBoard, user, freeBoard.getCreateDate());
 		timelineRepository.save(timeline);
 		
-		freeBoard.setTimeline(timeline);
+//		freeBoard.setTimeline(timeline);
 		return freeBoardRepository.save(freeBoard);
 	}
 
@@ -67,14 +66,9 @@ public class FreeBoardServiceImpl implements FreeBoardService {
 
 	@Override
 	public void deleteFreeBoard(FreeBoard freeBoard) {
+		Timeline timeline = timelineRepository.findByFreeBoard(freeBoard);
+		timelineRepository.delete(timeline);
 		freeBoardRepository.delete(freeBoard);
-	}
-	
-	@Override
-	public FreeBoard addFreeBoardAnswer(Long freeboardId) {
-		FreeBoard freeBoard = freeBoardRepository.getOne(freeboardId);
-		freeBoard.addAnswer();
-		return freeBoardRepository.save(freeBoard);
 	}
 	
 	@Override
@@ -82,10 +76,4 @@ public class FreeBoardServiceImpl implements FreeBoardService {
 		return freeBoardRepository.findByWriter(loginUser);
 	}
 	
-	public FreeBoard deleteAnswer(Long id) {
-		FreeBoard freeBoard = freeBoardRepository.getOne(id);
-		freeBoard.deleteAnswer();
-		return freeBoardRepository.save(freeBoard);
-	}
-
 }

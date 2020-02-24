@@ -19,7 +19,5 @@ public interface FreeBoardService {
 	
 	void deleteFreeBoard(FreeBoard freeBoard);
 	
-	FreeBoard addFreeBoardAnswer(Long id);
-	
 	List<FreeBoard> findFreeBoardListByWriter(User loginUser);
 }

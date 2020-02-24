@@ -62,8 +62,7 @@ public class DiaryAnswerServiceImpl implements DiaryAnswerService {
 		}
 		diaryAnswerRepository.deleteById(id);
 		Diary diary = diaryRepository.getOne(diaryId);
-		diary.deleteAnswer();
-		diary = diaryRepository.save(diary);
+		diary.getDiaryAnswers().remove(diaryAnswer);
 		return "{\"success\":\"" + diary.getCountOfAnswer() +"\"}";
 	}
 	

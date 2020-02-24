@@ -53,7 +53,6 @@ public class DiaryServiceImpl implements DiaryService {
 				.title(title)
 				.contents(contents)
 				.thumbnail(thumbnail)
-				.countOfAnswer(0)
 				.createDate(LocalDateTime.now())
 				.build();
 		diaryRepository.save(diary);
@@ -61,7 +60,7 @@ public class DiaryServiceImpl implements DiaryService {
 		Timeline timeline = new Timeline("diary", "edit", diary, user, diary.getCreateDate());
 		timelineRepository.save(timeline);
 
-		diary.setTimeline(timeline);
+//		diary.setTimeline(timeline);
 		return diaryRepository.save(diary);
 	}
 
@@ -79,20 +78,6 @@ public class DiaryServiceImpl implements DiaryService {
 	@Override
 	public void deleteDiaryById(Long id) {
 		diaryRepository.deleteById(id);
-	}
-	
-	@Override
-	public Diary addDiaryAnswer(Long id) {
-		Diary diary = diaryRepository.getOne(id);
-		diary.addAnswer();
-		return diaryRepository.save(diary);
-	}
-	
-	@Override
-	public Diary deleteDiaryAnswer(Long id) {
-		Diary diary = diaryRepository.getOne(id);
-		diary.deleteAnswer();
-		return diaryRepository.save(diary);
 	}
 	
 	@Override
@@ -119,6 +104,6 @@ public class DiaryServiceImpl implements DiaryService {
 			alertRepository.save(alert);
 		}
 		
-		return "{\"success\":\"" + Integer.toString(updatedGoodCount.getGoodPushedUser().size()) +"\"}";
+		return "{\"success\":\"" + Integer.toString(updatedGoodCount.getCountOfGood()) +"\"}";
 	}
 }

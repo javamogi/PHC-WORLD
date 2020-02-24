@@ -48,7 +48,6 @@ public class DiaryAnswerServiceImplTest {
 				.title("title")
 				.contents("content")
 				.thumbnail("no-image-icon.gif")
-				.countOfAnswer(0)
 				.createDate(LocalDateTime.now())
 				.build();
 		DiaryAnswer answer = DiaryAnswer.builder()
@@ -57,7 +56,9 @@ public class DiaryAnswerServiceImplTest {
 				.contents("diary answer content")
 				.createDate(LocalDateTime.now())
 				.build();
-		answer.getDiary().addAnswer();
+		List<DiaryAnswer> list = new ArrayList<DiaryAnswer>();
+		list.add(answer);
+		diary.setDiaryAnswers(list);
 		when(diaryAnswerService.createDiaryAnswer(writer, diary, "diary answer content"))
 		.thenReturn(answer);
 		DiaryAnswer diaryAnswer = diaryAnswerService.createDiaryAnswer(writer, diary, "diary answer content");
@@ -91,7 +92,6 @@ public class DiaryAnswerServiceImplTest {
 				.title("title")
 				.contents("content")
 				.thumbnail("no-image-icon.gif")
-				.countOfAnswer(0)
 				.createDate(LocalDateTime.now())
 				.build();
 		DiaryAnswer answer = DiaryAnswer.builder()
@@ -126,7 +126,6 @@ public class DiaryAnswerServiceImplTest {
 				.title("title")
 				.contents("content")
 				.thumbnail("no-image-icon.gif")
-				.countOfAnswer(0)
 				.createDate(LocalDateTime.now())
 				.build();
 		DiaryAnswer answer = DiaryAnswer.builder()
@@ -135,11 +134,14 @@ public class DiaryAnswerServiceImplTest {
 				.contents("diary answer content")
 				.createDate(LocalDateTime.now())
 				.build();
-		answer.getDiary().addAnswer();
+		List<DiaryAnswer> list = new ArrayList<DiaryAnswer>();
+		list.add(answer);
+		diary.setDiaryAnswers(list);
+		
 		when(diaryAnswerService.createDiaryAnswer(writer, diary, "diary answer content"))
 		.thenReturn(answer);
 		DiaryAnswer diaryAnswer = diaryAnswerService.createDiaryAnswer(writer, diary, "diary answer content");
-		diaryAnswer.getDiary().deleteAnswer();
+		diaryAnswer.getDiary().getDiaryAnswers().remove(diaryAnswer);
 		when(diaryAnswerService.deleteDiaryAnswer(diaryAnswer.getId(), writer, diary.getId()))
 		.thenReturn("{\"success\":\"" + diaryAnswer.getDiary().getCountOfAnswer() +"\"}");
 		String successStr = diaryAnswerService.deleteDiaryAnswer(diaryAnswer.getId(), writer, diary.getId());
@@ -163,7 +165,6 @@ public class DiaryAnswerServiceImplTest {
 				.title("title")
 				.contents("content")
 				.thumbnail("no-image-icon.gif")
-				.countOfAnswer(0)
 				.createDate(LocalDateTime.now())
 				.build();
 		DiaryAnswer answer = DiaryAnswer.builder()
@@ -204,7 +205,6 @@ public class DiaryAnswerServiceImplTest {
 				.title("title")
 				.contents("content")
 				.thumbnail("no-image-icon.gif")
-				.countOfAnswer(0)
 				.createDate(LocalDateTime.now())
 				.build();
 		DiaryAnswer answer = DiaryAnswer.builder()

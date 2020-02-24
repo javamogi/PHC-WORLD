@@ -56,8 +56,6 @@ public class Diary {
 
 	private String thumbnail;
 
-	private Integer countOfAnswer;
-
 	@OneToMany(mappedBy = "diary", cascade = CascadeType.REMOVE)
 	// @JsonManagedReference
 	@JsonBackReference
@@ -76,18 +74,16 @@ public class Diary {
 	public String getFormattedCreateDate() {
 		return LocalDateTimeUtils.getTime(createDate);
 	}
-
-//	public String getCountOfAnswer() {
-//		if (this.diaryAnswers.size() == 0) {
-//			return "";
-//		}
-//		return "[" + diaryAnswers.size() + "]";
-//	}
+	
 	public String getCountOfAnswer() {
-		if (this.countOfAnswer == 0) {
+		if (this.diaryAnswers.size() == 0) {
 			return "";
 		}
-		return "[" + countOfAnswer + "]";
+		return "[" + diaryAnswers.size() + "]";
+	}
+	
+	public Integer getCountOfGood() {
+		return goodPushedUser.size();
 	}
 
 	public boolean matchUser(User loginUser) {
@@ -100,14 +96,6 @@ public class Diary {
 	public void update(String newContents, String newThumbnail) {
 		this.contents = newContents;
 		this.thumbnail = newThumbnail;
-	}
-
-	public void addAnswer() {
-		this.countOfAnswer += 1;
-	}
-
-	public void deleteAnswer() {
-		this.countOfAnswer -= 1;
 	}
 
 	public boolean matchId(Long diaryId) {

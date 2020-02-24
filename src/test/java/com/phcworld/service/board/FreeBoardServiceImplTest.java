@@ -19,6 +19,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.phcworld.domain.answer.FreeBoardAnswer;
 import com.phcworld.domain.board.FreeBoard;
 import com.phcworld.domain.user.User;
 
@@ -50,7 +51,6 @@ public class FreeBoardServiceImplTest {
 				.badge("new")
 				.createDate(LocalDateTime.now())
 				.count(0)
-				.countOfAnswer(0)
 				.build();
 		when(freeBoardService.createFreeBoard(user, "title", "content", "")).thenReturn(board);
 		FreeBoard freeBoard = freeBoardService.createFreeBoard(user, "title", "content", "");
@@ -78,7 +78,6 @@ public class FreeBoardServiceImplTest {
 				.badge("new")
 				.createDate(LocalDateTime.now())
 				.count(0)
-				.countOfAnswer(0)
 				.build();
 		when(freeBoardService.createFreeBoard(user, "title", "content", "")).thenReturn(board);
 		FreeBoard freeBoard = freeBoardService.createFreeBoard(user, "title", "content", "");
@@ -109,7 +108,6 @@ public class FreeBoardServiceImplTest {
 				.badge("new")
 				.createDate(LocalDateTime.now())
 				.count(0)
-				.countOfAnswer(0)
 				.build();
 		when(freeBoardService.createFreeBoard(user, "title", "content", "")).thenReturn(board);
 		FreeBoard freeBoard = freeBoardService.createFreeBoard(user, "title", "content", "");
@@ -143,10 +141,9 @@ public class FreeBoardServiceImplTest {
 				.badge("new")
 				.createDate(LocalDateTime.now())
 				.count(0)
-				.countOfAnswer(0)
 				.build();
-		freeBoardService.deleteAnswer(board.getId());
-		verify(freeBoardService, times(1)).deleteAnswer(board.getId());
+		freeBoardService.deleteFreeBoard(board);
+		verify(freeBoardService, times(1)).deleteFreeBoard(board);
 	}
 	
 	@Test
@@ -169,40 +166,11 @@ public class FreeBoardServiceImplTest {
 				.badge("new")
 				.createDate(LocalDateTime.now())
 				.count(0)
-				.countOfAnswer(0)
 				.build();
 		board.addCount();
 		when(freeBoardService.addFreeBoardCount(board.getId())).thenReturn(board);
 		FreeBoard addedFreeBoardAnswer = freeBoardService.addFreeBoardCount(board.getId());
 		assertThat(1, is(addedFreeBoardAnswer.getCount()));
-	}
-	
-	@Test
-	public void addFreeBoardAnswerCount() throws Exception {
-		User user = User.builder()
-				.id(1L)
-				.email("test3@test.test")
-				.password("test3")
-				.name("테스트3")
-				.profileImage("blank-profile-picture.png")
-				.authority("ROLE_USER")
-				.createDate(LocalDateTime.now())
-				.build();
-		FreeBoard board = FreeBoard.builder()
-				.id(1L)
-				.writer(user)
-				.title("title")
-				.contents("content")
-				.icon("")
-				.badge("new")
-				.createDate(LocalDateTime.now())
-				.count(0)
-				.countOfAnswer(0)
-				.build();
-		board.addAnswer();
-		when(freeBoardService.addFreeBoardAnswer(board.getId())).thenReturn(board);
-		FreeBoard addedFreeBoardAnswer = freeBoardService.addFreeBoardAnswer(board.getId());
-		assertThat("[1]", is(addedFreeBoardAnswer.getCountOfAnswer()));
 	}
 	
 	@Test
@@ -225,7 +193,6 @@ public class FreeBoardServiceImplTest {
 				.badge("new")
 				.createDate(LocalDateTime.now())
 				.count(0)
-				.countOfAnswer(0)
 				.build();
 		FreeBoard board2 = FreeBoard.builder()
 				.id(2L)
@@ -236,7 +203,6 @@ public class FreeBoardServiceImplTest {
 				.badge("new")
 				.createDate(LocalDateTime.now())
 				.count(0)
-				.countOfAnswer(0)
 				.build();
 		List<FreeBoard> freeBoardList = new ArrayList<FreeBoard>();
 		freeBoardList.add(board);
@@ -266,7 +232,6 @@ public class FreeBoardServiceImplTest {
 				.badge("new")
 				.createDate(LocalDateTime.now())
 				.count(0)
-				.countOfAnswer(0)
 				.build();
 		User user2 = User.builder()
 				.email("test4@test.test")
@@ -285,7 +250,6 @@ public class FreeBoardServiceImplTest {
 				.badge("new")
 				.createDate(LocalDateTime.now())
 				.count(0)
-				.countOfAnswer(0)
 				.build();
 		List<FreeBoard> freeBoardList = new ArrayList<FreeBoard>();
 		freeBoardList.add(board);
@@ -295,32 +259,4 @@ public class FreeBoardServiceImplTest {
 		assertThat(findAllfreeBoardList, hasItems(board, board2));
 	}
 	
-	@Test
-	public void deleteAnswer() {
-		User user = User.builder()
-				.id(1L)
-				.email("test3@test.test")
-				.password("test3")
-				.name("테스트3")
-				.profileImage("blank-profile-picture.png")
-				.authority("ROLE_USER")
-				.createDate(LocalDateTime.now())
-				.build();
-		FreeBoard board = FreeBoard.builder()
-				.id(1L)
-				.writer(user)
-				.title("title")
-				.contents("content")
-				.icon("")
-				.badge("new")
-				.createDate(LocalDateTime.now())
-				.count(0)
-				.countOfAnswer(1)
-				.build();
-		board.deleteAnswer();		
-		when(freeBoardService.deleteAnswer(board.getId())).thenReturn(board);
-		FreeBoard deletedFreeBoardAnswer = freeBoardService.deleteAnswer(board.getId());
-		assertThat("", is(deletedFreeBoardAnswer.getCountOfAnswer()));
-	}
-
 }

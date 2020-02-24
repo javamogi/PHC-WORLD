@@ -101,7 +101,6 @@ public class DashboardControllerTest {
 				.icon("")
 				.createDate(LocalDateTime.now())
 				.count(0)
-				.countOfAnswer(0)
 				.build();
 		List<FreeBoard> freeBoardList = new ArrayList<>();
 		freeBoardList.add(freeBoard);
@@ -126,7 +125,6 @@ public class DashboardControllerTest {
 				.title("test")
 				.contents("test")
 				.thumbnail("")
-				.countOfAnswer(0)
 				.createDate(LocalDateTime.now())
 				.build();
 		
@@ -194,7 +192,6 @@ public class DashboardControllerTest {
 				.icon("")
 				.createDate(LocalDateTime.now())
 				.count(0)
-				.countOfAnswer(0)
 				.build();
 		
 		FreeBoardAnswer freeBoardAnswer = FreeBoardAnswer.builder()
@@ -211,7 +208,6 @@ public class DashboardControllerTest {
 				.title("test")
 				.contents("test")
 				.thumbnail("")
-				.countOfAnswer(0)
 				.createDate(LocalDateTime.now())
 				.build();
 		

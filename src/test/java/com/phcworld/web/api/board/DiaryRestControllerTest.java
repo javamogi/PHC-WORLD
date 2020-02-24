@@ -61,14 +61,13 @@ public class DiaryRestControllerTest {
 				.title("title")
 				.contents("content")
 				.thumbnail("no-image-icon.gif")
-				.countOfAnswer(0)
 				.createDate(LocalDateTime.now())
 				.build();
 		Set<User> set = new HashSet<User>();
 		set.add(user);
 		diary.setGoodPushedUser(set);
 		when(diaryService.updateGood(diary.getId(), user))
-		.thenReturn("{\"success\":\""+Integer.toString(diary.getGoodPushedUser().size())+"\"}");
+		.thenReturn("{\"success\":\""+Integer.toString(diary.getCountOfGood())+"\"}");
 		this.mvc.perform(put("/api/diary/{diaryId}/good", 1L)
 				.session(mockSession))
 		.andExpect(status().isOk())

@@ -64,7 +64,6 @@ public class AlertServiceImplTest {
 				.title("test")
 				.contents("test")
 				.thumbnail("no-image-icon.gif")
-				.countOfAnswer(0)
 				.createDate(LocalDateTime.now())
 				.build();
 		diaryRepository.save(diary);
@@ -100,7 +99,6 @@ public class AlertServiceImplTest {
 				.title("test")
 				.contents("test")
 				.thumbnail("no-image-icon.gif")
-				.countOfAnswer(0)
 				.createDate(LocalDateTime.now())
 				.build();
 		diaryRepository.save(diary);
@@ -120,7 +118,6 @@ public class AlertServiceImplTest {
 				.icon("")
 				.createDate(LocalDateTime.now())
 				.count(0)
-				.countOfAnswer(0)
 				.build();
 		freeBoardRepository.save(freeBoard);
 		FreeBoardAnswer freeBoardAnswer = FreeBoardAnswer.builder()

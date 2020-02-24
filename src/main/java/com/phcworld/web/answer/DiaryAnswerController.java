@@ -38,8 +38,7 @@ public class DiaryAnswerController {
 			throw new LoginNotUserException("로그인을 해야합니다.");
 		}
 		User loginUser = HttpSessionUtils.getUserFromSession(session);
-		Diary diary = diaryService.addDiaryAnswer(diaryId);
-//		Diary diary = diaryService.getOneDiary(diaryId);
+		Diary diary = diaryService.getOneDiary(diaryId);
 		
 		return diaryAnswerService.createDiaryAnswer(loginUser, diary, contents);
 	}

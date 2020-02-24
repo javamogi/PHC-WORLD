@@ -68,7 +68,6 @@ public class HomeControllerTest {
 				.title("test3")
 				.contents("test3")
 				.thumbnail("no-image-icon.gif")
-				.countOfAnswer(0)
 				.createDate(LocalDateTime.now())
 				.build();
 		DiaryAnswer diaryAnswer = DiaryAnswer.builder()
@@ -93,7 +92,6 @@ public class HomeControllerTest {
 				.icon("")
 				.createDate(LocalDateTime.now())
 				.count(0)
-				.countOfAnswer(0)
 				.build();
 		
 		FreeBoardAnswer freeBoardAnswer = FreeBoardAnswer.builder()

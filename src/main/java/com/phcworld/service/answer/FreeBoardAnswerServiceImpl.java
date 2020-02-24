@@ -40,7 +40,7 @@ public class FreeBoardAnswerServiceImpl implements FreeBoardAnswerService {
 	
 	@Override
 	public FreeBoardAnswer createFreeBoardAnswer(User loginUser, Long freeboardId, String contents) {
-		FreeBoard freeBoard = freeBoardService.addFreeBoardAnswer(freeboardId);
+		FreeBoard freeBoard = freeBoardService.getOneFreeBoard(freeboardId);
 		FreeBoardAnswer freeBoardAnswer = FreeBoardAnswer.builder()
 				.writer(loginUser)
 				.freeBoard(freeBoard)
@@ -71,8 +71,9 @@ public class FreeBoardAnswerServiceImpl implements FreeBoardAnswerService {
 		}
 		freeBoardAnswerRepository.deleteById(id);
 		
-		FreeBoard freeBoard = freeBoardService.deleteAnswer(freeBoardAnswer.getFreeBoard().getId());
-		log.debug("countOfAnswer : {}", freeBoard.getCountOfAnswer());
+		FreeBoard freeBoard = freeBoardService.getOneFreeBoard(freeBoardAnswer.getFreeBoard().getId());
+		freeBoard.getFreeBoardAnswers().remove(freeBoardAnswer);
+		log.info("countOfAnswer : {}", freeBoard.getCountOfAnswer());
 		return "{\"success\":\"" + freeBoard.getCountOfAnswer() +"\"}";
 	}
 	

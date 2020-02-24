@@ -8,6 +8,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -59,18 +61,21 @@ public class DiaryAnswerControllerTest {
 				.title("test3")
 				.contents("test3")
 				.thumbnail("no-image-icon.gif")
-				.countOfAnswer(0)
 				.createDate(LocalDateTime.now())
 				.build();
-		when(this.diaryService.addDiaryAnswer(diary.getId()))
-		.thenReturn(diary);
 		DiaryAnswer diaryAnswer = DiaryAnswer.builder()
 				.id(1L)
 				.writer(user)
 				.diary(diary)
 				.contents("test")
 				.build();
-		when(this.diaryAnswerService.createDiaryAnswer(user, diary, "test"))
+		List<DiaryAnswer> list = new ArrayList<DiaryAnswer>();
+		list.add(diaryAnswer);
+		diary.setDiaryAnswers(list);
+		when(diaryService.getOneDiary(diary.getId()))
+		.thenReturn(diary);
+		Diary oneDiary = diaryService.getOneDiary(diary.getId());
+		when(this.diaryAnswerService.createDiaryAnswer(user, oneDiary, "test"))
 		.thenReturn(diaryAnswer);
 		this.mvc.perform(post("/diary/{diaryId}/answer", 1L)
 				.contentType(MediaType.APPLICATION_JSON)
@@ -112,7 +117,6 @@ public class DiaryAnswerControllerTest {
 				.title("title")
 				.contents("content")
 				.thumbnail("no-image-icon.gif")
-				.countOfAnswer(0)
 				.createDate(LocalDateTime.now())
 				.build();
 		DiaryAnswer diaryAnswer = DiaryAnswer.builder()
@@ -165,7 +169,6 @@ public class DiaryAnswerControllerTest {
 				.title("test3")
 				.contents("test3")
 				.thumbnail("no-image-icon.gif")
-				.countOfAnswer(0)
 				.createDate(LocalDateTime.now())
 				.build();
 		DiaryAnswer diaryAnswer = DiaryAnswer.builder()

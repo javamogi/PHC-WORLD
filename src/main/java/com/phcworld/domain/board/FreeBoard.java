@@ -61,24 +61,22 @@ public class FreeBoard {
 
 	private Integer count;
 
-	private Integer countOfAnswer;
-
 	@OneToMany(mappedBy = "freeBoard", cascade = CascadeType.REMOVE)
 	// @JsonManagedReference
 	@JsonBackReference
 	private List<FreeBoardAnswer> freeBoardAnswers;
 
-	@OneToOne(cascade = CascadeType.REMOVE)
-	@JoinColumn(foreignKey = @ForeignKey(name = "fk_freeBoard_timeline"))
-	// @PrimaryKeyJoinColumn
-	@JsonIgnore
-	private Timeline timeline;
+//	@OneToOne(mappedBy = "freeBoard", cascade = CascadeType.REMOVE)
+//	@JoinColumn(foreignKey = @ForeignKey(name = "fk_freeBoard_timeline"))
+//	// @PrimaryKeyJoinColumn
+//	@JsonIgnore
+//	private Timeline timeline;
 
 	public String getCountOfAnswer() {
-		if (this.countOfAnswer == 0) {
+		if (this.freeBoardAnswers.size() == 0) {
 			return "";
 		}
-		return "[" + countOfAnswer + "]";
+		return "[" + freeBoardAnswers.size() + "]";
 	}
 
 	public void addCount() {
@@ -92,14 +90,6 @@ public class FreeBoard {
 	public void update(String newContents, String newIcon) {
 		this.contents = newContents;
 		this.icon = newIcon;
-	}
-
-	public void addAnswer() {
-		this.countOfAnswer += 1;
-	}
-
-	public void deleteAnswer() {
-		this.countOfAnswer -= 1;
 	}
 
 	public boolean matchUser(User loginUser) {

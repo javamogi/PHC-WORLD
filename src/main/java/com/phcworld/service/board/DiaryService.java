@@ -20,9 +20,5 @@ public interface DiaryService {
 	
 	void deleteDiaryById(Long id);
 	
-	Diary addDiaryAnswer(Long id);
-	
-	Diary deleteDiaryAnswer(Long id);
-	
 	List<Diary> findDiaryListByWriter(User loginUser);
 }

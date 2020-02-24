@@ -61,7 +61,6 @@ public class DiaryServiceImplTest {
 				.title("title")
 				.contents("content")
 				.thumbnail("no-image-icon.gif")
-				.countOfAnswer(0)
 				.createDate(LocalDateTime.now())
 				.build();
 		Diary diary2 = Diary.builder()
@@ -69,7 +68,6 @@ public class DiaryServiceImplTest {
 				.title("title2")
 				.contents("content2")
 				.thumbnail("no-image-icon.gif")
-				.countOfAnswer(0)
 				.createDate(LocalDateTime.now())
 				.build();
 		List<Diary> list = new ArrayList<Diary>();
@@ -98,7 +96,6 @@ public class DiaryServiceImplTest {
 				.title("title")
 				.contents("content")
 				.thumbnail("no-image-icon.gif")
-				.countOfAnswer(0)
 				.createDate(LocalDateTime.now())
 				.build();
 		when(diaryService.createDiary(user, "title", "content", "no-image-icon.gif"))
@@ -125,7 +122,6 @@ public class DiaryServiceImplTest {
 				.title("title")
 				.contents("content")
 				.thumbnail("no-image-icon.gif")
-				.countOfAnswer(0)
 				.createDate(LocalDateTime.now())
 				.build();
 		when(diaryService.getOneDiary(1L)).thenReturn(diary);
@@ -149,7 +145,6 @@ public class DiaryServiceImplTest {
 				.title("title")
 				.contents("content")
 				.thumbnail("no-image-icon.gif")
-				.countOfAnswer(0)
 				.createDate(LocalDateTime.now())
 				.build();
 		diary.update("updateDiary", "test.jpg");
@@ -177,74 +172,10 @@ public class DiaryServiceImplTest {
 				.title("title")
 				.contents("content")
 				.thumbnail("no-image-icon.gif")
-				.countOfAnswer(0)
 				.createDate(LocalDateTime.now())
 				.build();
 		diaryService.deleteDiaryById(diary.getId());
 		verify(diaryService, times(1)).deleteDiaryById(diary.getId());
-	}
-	
-	@Test
-	public void addDiaryAnswerCount() throws Exception {
-		User user = User.builder()
-				.id(1L)
-				.email("test3@test.test")
-				.password("test3")
-				.name("테스트3")
-				.profileImage("blank-profile-picture.png")
-				.authority("ROLE_USER")
-				.createDate(LocalDateTime.now())
-				.build();
-		Diary diary = Diary.builder()
-				.id(1L)
-				.writer(user)
-				.title("title")
-				.contents("content")
-				.thumbnail("no-image-icon.gif")
-//				.countOfAnswer(0)
-				.createDate(LocalDateTime.now())
-				.build();
-		DiaryAnswer answer = DiaryAnswer.builder()
-				.writer(user)
-				.diary(diary)
-				.contents("content")
-				.createDate(LocalDateTime.now())
-				.build();
-		List<DiaryAnswer> list = new ArrayList<DiaryAnswer>();
-		list.add(answer);
-		diary.setDiaryAnswers(list);
-		
-		when(diaryService.addDiaryAnswer(diary.getId()))
-		.thenReturn(diary);
-		Diary addedAnswerDiary = diaryService.addDiaryAnswer(diary.getId());
-		assertThat("[1]", is(addedAnswerDiary.getCountOfAnswer()));
-	}
-	
-	@Test
-	public void deleteDiaryAnswerCount() {
-		User user = User.builder()
-				.id(1L)
-				.email("test3@test.test")
-				.password("test3")
-				.name("테스트3")
-				.profileImage("blank-profile-picture.png")
-				.authority("ROLE_USER")
-				.createDate(LocalDateTime.now())
-				.build();
-		Diary diary = Diary.builder()
-				.id(1L)
-				.writer(user)
-				.title("title")
-				.contents("content")
-				.thumbnail("no-image-icon.gif")
-				.countOfAnswer(1)
-				.createDate(LocalDateTime.now())
-				.build();
-		diary.deleteAnswer();
-		when(diaryService.deleteDiaryAnswer(diary.getId()))
-		.thenReturn(diary);
-		Diary deletedAnswerDiary = diaryService.deleteDiaryAnswer(diary.getId());
-		assertThat("", is(deletedAnswerDiary.getCountOfAnswer()));
 	}
 	
 	@Test
@@ -264,14 +195,13 @@ public class DiaryServiceImplTest {
 				.title("title")
 				.contents("content")
 				.thumbnail("no-image-icon.gif")
-				.countOfAnswer(0)
 				.createDate(LocalDateTime.now())
 				.build();
 		Set<User> set = new HashSet<User>();
 		set.add(user);
 		diary.setGoodPushedUser(set);
 		when(diaryService.updateGood(diary.getId(), user))
-		.thenReturn("{\"success\":\"" + Integer.toString(diary.getGoodPushedUser().size()) +"\"}");
+		.thenReturn("{\"success\":\"" + Integer.toString(diary.getCountOfGood()) +"\"}");
 		String str = diaryService.updateGood(diary.getId(), user);
 		assertThat("{\"success\":\"1\"}", is(str));
 	}
@@ -295,13 +225,12 @@ public class DiaryServiceImplTest {
 				.title("title")
 				.contents("content")
 				.thumbnail("no-image-icon.gif")
-				.countOfAnswer(0)
 				.createDate(LocalDateTime.now())
 				.goodPushedUser(set)
 				.build();
 		diary.getGoodPushedUser().remove(user);
 		when(diaryService.updateGood(diary.getId(), user))
-		.thenReturn("{\"success\":\"" + Integer.toString(diary.getGoodPushedUser().size()) +"\"}");
+		.thenReturn("{\"success\":\"" + Integer.toString(diary.getCountOfGood()) +"\"}");
 		String str = diaryService.updateGood(diary.getId(), user);
 		assertThat("{\"success\":\"0\"}", is(str));
 	}
@@ -323,7 +252,6 @@ public class DiaryServiceImplTest {
 				.title("title")
 				.contents("content")
 				.thumbnail("no-image-icon.gif")
-				.countOfAnswer(0)
 				.createDate(LocalDateTime.now())
 				.build();
 		List<Diary> list = new ArrayList<Diary>();

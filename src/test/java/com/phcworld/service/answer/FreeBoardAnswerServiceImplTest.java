@@ -49,7 +49,6 @@ public class FreeBoardAnswerServiceImplTest {
 				.icon("")
 				.createDate(LocalDateTime.now())
 				.count(0)
-				.countOfAnswer(0)
 				.build();
 		FreeBoardAnswer answer = FreeBoardAnswer.builder()
 				.writer(writer)
@@ -57,7 +56,10 @@ public class FreeBoardAnswerServiceImplTest {
 				.contents("content")
 				.createDate(LocalDateTime.now())
 				.build();
-		freeBoard.addAnswer();
+		List<FreeBoardAnswer> list = new ArrayList<FreeBoardAnswer>();
+		list.add(answer);
+		freeBoard.setFreeBoardAnswers(list);
+		
 		when(freeBoardAnswerService.createFreeBoardAnswer(writer, freeBoard.getId(), "content")).thenReturn(answer);
 		FreeBoardAnswer freeBoardAnswer = 
 				freeBoardAnswerService.createFreeBoardAnswer(writer, freeBoard.getId(), "content");
@@ -84,7 +86,6 @@ public class FreeBoardAnswerServiceImplTest {
 				.icon("")
 				.createDate(LocalDateTime.now())
 				.count(0)
-				.countOfAnswer(0)
 				.build();
 		FreeBoardAnswer answer = FreeBoardAnswer.builder()
 				.writer(writer)
@@ -92,11 +93,15 @@ public class FreeBoardAnswerServiceImplTest {
 				.contents("content")
 				.createDate(LocalDateTime.now())
 				.build();
-		answer.getFreeBoard().addAnswer();
+		List<FreeBoardAnswer> list = new ArrayList<FreeBoardAnswer>();
+		list.add(answer);
+		freeBoard.setFreeBoardAnswers(list);
+		
 		when(freeBoardAnswerService.createFreeBoardAnswer(writer, freeBoard.getId(), "content")).thenReturn(answer);
 		FreeBoardAnswer freeBoardAnswer = 
 				freeBoardAnswerService.createFreeBoardAnswer(writer, freeBoard.getId(), "content");
-		freeBoardAnswer.getFreeBoard().deleteAnswer();
+		
+		freeBoardAnswer.getFreeBoard().getFreeBoardAnswers().remove(answer);
 		when(freeBoardAnswerService.deleteFreeBoardAnswer(freeBoardAnswer.getId(), writer))
 		.thenReturn("{\"success\":\"" + freeBoardAnswer.getFreeBoard().getCountOfAnswer() +"\"}");
 		String successStr = freeBoardAnswerService.deleteFreeBoardAnswer(freeBoardAnswer.getId(), writer);
@@ -132,7 +137,6 @@ public class FreeBoardAnswerServiceImplTest {
 				.icon("")
 				.createDate(LocalDateTime.now())
 				.count(0)
-				.countOfAnswer(0)
 				.build();
 		FreeBoardAnswer answer = FreeBoardAnswer.builder()
 				.id(1L)
@@ -169,7 +173,6 @@ public class FreeBoardAnswerServiceImplTest {
 				.icon("")
 				.createDate(LocalDateTime.now())
 				.count(0)
-				.countOfAnswer(0)
 				.build();
 		FreeBoardAnswer answer = FreeBoardAnswer.builder()
 				.id(1L)
