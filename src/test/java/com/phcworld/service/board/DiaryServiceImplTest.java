@@ -16,22 +16,13 @@ import java.util.Set;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.domain.Sort.Direction;
-import org.springframework.orm.jpa.JpaObjectRetrievalFailureException;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.phcworld.domain.answer.DiaryAnswer;
 import com.phcworld.domain.board.Diary;
-import com.phcworld.domain.board.FreeBoard;
 import com.phcworld.domain.user.User;
 import com.phcworld.service.board.DiaryServiceImpl;
 
@@ -39,8 +30,6 @@ import com.phcworld.service.board.DiaryServiceImpl;
 @SpringBootTest
 @Transactional
 public class DiaryServiceImplTest {
-	
-	private static final Logger log = LoggerFactory.getLogger(DiaryServiceImplTest.class);
 	
 	@Mock
 	private DiaryServiceImpl diaryService;
@@ -156,7 +145,7 @@ public class DiaryServiceImplTest {
 	}
 	
 	@Test
-	public void deleteDiaryById() throws Exception {
+	public void deleteDiary() throws Exception {
 		User user = User.builder()
 				.id(1L)
 				.email("test3@test.test")
@@ -174,8 +163,8 @@ public class DiaryServiceImplTest {
 				.thumbnail("no-image-icon.gif")
 				.createDate(LocalDateTime.now())
 				.build();
-		diaryService.deleteDiaryById(diary.getId());
-		verify(diaryService, times(1)).deleteDiaryById(diary.getId());
+		diaryService.deleteDiary(diary);
+		verify(diaryService, times(1)).deleteDiary(diary);
 	}
 	
 	@Test

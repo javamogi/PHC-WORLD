@@ -9,9 +9,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.phcworld.domain.board.FreeBoard;
 import com.phcworld.domain.timeline.Timeline;
-import com.phcworld.domain.timeline.TimelineRepository;
 import com.phcworld.domain.user.User;
 import com.phcworld.repository.board.FreeBoardRepository;
+import com.phcworld.repository.timeline.TimelineRepository;
 
 @Service
 @Transactional
@@ -39,7 +39,14 @@ public class FreeBoardServiceImpl implements FreeBoardService {
 				.build();
 		freeBoardRepository.save(freeBoard);
 		
-		Timeline timeline = new Timeline("free board", "list-alt", freeBoard, user, freeBoard.getCreateDate());
+//		Timeline timeline = new Timeline("free board", "list-alt", freeBoard, user, freeBoard.getCreateDate());
+		Timeline timeline = Timeline.builder()
+				.type("free board")
+				.icon("list-alt")
+				.freeBoard(freeBoard)
+				.user(user)
+				.saveDate(freeBoard.getCreateDate())
+				.build();
 		timelineRepository.save(timeline);
 		
 //		freeBoard.setTimeline(timeline);

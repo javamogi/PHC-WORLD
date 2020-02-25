@@ -12,10 +12,10 @@ import com.phcworld.domain.answer.DiaryAnswer;
 import com.phcworld.domain.board.Diary;
 import com.phcworld.domain.exception.MatchNotUserExceptioin;
 import com.phcworld.domain.timeline.Timeline;
-import com.phcworld.domain.timeline.TimelineRepository;
 import com.phcworld.domain.user.User;
 import com.phcworld.repository.answer.DiaryAnswerRepository;
 import com.phcworld.repository.board.DiaryRepository;
+import com.phcworld.repository.timeline.TimelineRepository;
 
 @Service
 @Transactional
@@ -42,10 +42,14 @@ public class DiaryAnswerServiceImpl implements DiaryAnswerService {
 				.build();
 		diaryAnswerRepository.save(diaryAnswer);
 		
-		Timeline timeline = new Timeline("Diary Answer", "comment", diary, diaryAnswer, user, diaryAnswer.getCreateDate());
+		Timeline timeline = Timeline.builder()
+				.type("diary answer")
+				.icon("comment")
+				.diaryAnswer(diaryAnswer)
+				.user(user)
+				.saveDate(diaryAnswer.getCreateDate())
+				.build();
 		timelineRepository.save(timeline);
-		
-		diaryAnswer.setTimeline(timeline);
 		
 		Alert alert = new Alert("Diary", diaryAnswer, diary.getWriter(), diaryAnswer.getCreateDate());
 		alertRepository.save(alert);
@@ -60,6 +64,8 @@ public class DiaryAnswerServiceImpl implements DiaryAnswerService {
 		if(!diaryAnswer.isSameWriter(loginUser)) {
 			throw new MatchNotUserExceptioin("본인이 작성한 글만 삭제 가능합니다.");
 		}
+		Timeline timeline = timelineRepository.findByDiaryAnswer(diaryAnswer);
+		timelineRepository.delete(timeline);
 		diaryAnswerRepository.deleteById(id);
 		Diary diary = diaryRepository.getOne(diaryId);
 		diary.getDiaryAnswers().remove(diaryAnswer);

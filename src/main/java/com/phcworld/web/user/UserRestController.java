@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.phcworld.domain.timeline.Timeline;
-import com.phcworld.domain.timeline.TimelineServiceImpl;
 import com.phcworld.domain.user.User;
+import com.phcworld.service.timeline.TimelineServiceImpl;
 import com.phcworld.service.user.UserService;
 
 @RestController

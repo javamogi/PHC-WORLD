@@ -18,12 +18,12 @@ import com.phcworld.domain.answer.FreeBoardAnswer;
 import com.phcworld.domain.board.Diary;
 import com.phcworld.domain.board.FreeBoard;
 import com.phcworld.domain.timeline.Timeline;
-import com.phcworld.domain.timeline.TimelineServiceImpl;
 import com.phcworld.domain.user.User;
 import com.phcworld.service.answer.DiaryAnswerServiceImpl;
 import com.phcworld.service.answer.FreeBoardAnswerServiceImpl;
 import com.phcworld.service.board.DiaryServiceImpl;
 import com.phcworld.service.board.FreeBoardServiceImpl;
+import com.phcworld.service.timeline.TimelineServiceImpl;
 import com.phcworld.web.HttpSessionUtils;
 
 import lombok.extern.slf4j.Slf4j;
@@ -83,10 +83,19 @@ public class DashboardController {
 	public String redirectToTimeline(@PathVariable Long id) {
 		Timeline timeline = timelineService.getOneTimeline(id);
 		log.info("timeline : {}", timeline);
-		if(timeline.getFreeBoard() == null) {
+		if(timeline.getType().equals("diary")) {
 			return "redirect:/diary/"+ timeline.getDiary().getId() + "/detail";
 		}
-		return "redirect:/freeboard/"+ timeline.getFreeBoard().getId() + "/detail";
+		if(timeline.getType().equals("diary answer")) {
+			return "redirect:/diary/"+ timeline.getDiaryAnswer().getDiary().getId() + "/detail";
+		}
+		if(timeline.getType().equals("free board")) {
+			return "redirect:/freeboard/" + timeline.getFreeBoard().getId() + "/detail";
+		}
+		if(timeline.getType().equals("good")) {
+			return "redirect:/diary/"+ timeline.getDiary().getId() + "/detail";
+		}
+		return "redirect:/freeboard/" + timeline.getFreeBoardAnswer().getFreeBoard().getId() + "/detail";
 	}
 	
 }

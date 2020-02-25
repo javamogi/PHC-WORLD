@@ -13,13 +13,10 @@ import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.phcworld.domain.answer.FreeBoardAnswer;
-import com.phcworld.domain.timeline.Timeline;
 import com.phcworld.domain.user.User;
 import com.phcworld.web.LocalDateTimeUtils;
 
@@ -27,7 +24,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 import lombok.experimental.Accessors;
 
 @Entity
@@ -36,7 +32,6 @@ import lombok.experimental.Accessors;
 @AllArgsConstructor
 @Builder
 @Accessors(chain = true)
-@ToString(exclude = {"timeline"})
 public class FreeBoard {
 
 	@Id
@@ -65,12 +60,6 @@ public class FreeBoard {
 	// @JsonManagedReference
 	@JsonBackReference
 	private List<FreeBoardAnswer> freeBoardAnswers;
-
-//	@OneToOne(mappedBy = "freeBoard", cascade = CascadeType.REMOVE)
-//	@JoinColumn(foreignKey = @ForeignKey(name = "fk_freeBoard_timeline"))
-//	// @PrimaryKeyJoinColumn
-//	@JsonIgnore
-//	private Timeline timeline;
 
 	public String getCountOfAnswer() {
 		if (this.freeBoardAnswers.size() == 0) {

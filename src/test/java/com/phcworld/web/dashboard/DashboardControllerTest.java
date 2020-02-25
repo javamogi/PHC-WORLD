@@ -31,12 +31,12 @@ import com.phcworld.domain.answer.FreeBoardAnswer;
 import com.phcworld.domain.board.Diary;
 import com.phcworld.domain.board.FreeBoard;
 import com.phcworld.domain.timeline.Timeline;
-import com.phcworld.domain.timeline.TimelineServiceImpl;
 import com.phcworld.domain.user.User;
 import com.phcworld.service.answer.DiaryAnswerServiceImpl;
 import com.phcworld.service.answer.FreeBoardAnswerServiceImpl;
 import com.phcworld.service.board.DiaryServiceImpl;
 import com.phcworld.service.board.FreeBoardServiceImpl;
+import com.phcworld.service.timeline.TimelineServiceImpl;
 import com.phcworld.web.HttpSessionUtils;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -151,8 +151,16 @@ public class DashboardControllerTest {
 		given(this.alertService.findPageRequestAlertByPostUser(user))
 		.willReturn(alertList);
 		
-		Timeline timeline = new Timeline("FreeBoard", "", freeBoard, user, freeBoard.getCreateDate());
-		timeline.setId(1L);
+//		Timeline timeline = new Timeline("FreeBoard", "", freeBoard, user, freeBoard.getCreateDate());
+//		timeline.setId(1L);
+		Timeline timeline = Timeline.builder()
+				.id(1L)
+				.type("FreeBoard")
+				.icon("")
+				.freeBoard(freeBoard)
+				.user(user)
+				.saveDate(freeBoard.getCreateDate())
+				.build();
 		List<Timeline> timelineList = new ArrayList<>();
 		timelineList.add(timeline);
 		Page<Timeline> pageTimeline = new PageImpl<Timeline>(timelineList);
@@ -218,32 +226,63 @@ public class DashboardControllerTest {
 				.contents("test")
 				.build();
 		
-		Timeline timeline = new Timeline("FreeBoard", "", freeBoard, user, freeBoard.getCreateDate());
-		timeline.setId(1L);
+//		Timeline timeline = new Timeline("FreeBoard", "", freeBoard, user, freeBoard.getCreateDate());
+//		timeline.setId(1L);
+		Timeline timeline = Timeline.builder()
+				.type("FreeBoard")
+				.icon("")
+				.freeBoard(freeBoard)
+				.user(user)
+				.saveDate(freeBoard.getCreateDate())
+				.build();
 		given(this.timelineService.getOneTimeline(1L))
 		.willReturn(timeline);
 		
 		this.mvc.perform(get("/dashboard/timeline/{id}", 1L))
 		.andExpect(redirectedUrl("/freeboard/" + timeline.getFreeBoard().getId() + "/detail"));
 		
-		Timeline timeline2 = new Timeline("FreeBoard Answer", "", freeBoard, freeBoardAnswer, user, freeBoardAnswer.getCreateDate());
-		timeline2.setId(2L);
+//		Timeline timeline2 = new Timeline("FreeBoard Answer", "", freeBoard, freeBoardAnswer, user, freeBoardAnswer.getCreateDate());
+//		timeline2.setId(2L);
+		Timeline timeline2 = Timeline.builder()
+				.id(2L)
+				.type("FreeBoard Answer")
+				.icon("")
+				.freeBoardAnswer(freeBoardAnswer)
+				.user(user)
+				.saveDate(freeBoardAnswer.getCreateDate())
+				.build();
+				
 		given(this.timelineService.getOneTimeline(2L))
 		.willReturn(timeline2);
 		
 		this.mvc.perform(get("/dashboard/timeline/{id}", 2L))
 		.andExpect(redirectedUrl("/freeboard/" + timeline2.getFreeBoard().getId() + "/detail"));
 		
-		Timeline timeline3 = new Timeline("Diary", "", diary, user, diary.getCreateDate());
-		timeline3.setId(3L);
+//		Timeline timeline3 = new Timeline("Diary", "", diary, user, diary.getCreateDate());
+//		timeline3.setId(3L);
+		Timeline timeline3 = Timeline.builder()
+				.id(3L)
+				.type("Diary")
+				.icon("")
+				.diary(diary)
+				.user(user)
+				.saveDate(diary.getCreateDate())
+				.build();
 		given(this.timelineService.getOneTimeline(3L))
 		.willReturn(timeline3);
 		
 		this.mvc.perform(get("/dashboard/timeline/{id}", 3L))
 		.andExpect(redirectedUrl("/diary/" + timeline3.getDiary().getId() + "/detail"));
 
-		Timeline timeline4 = new Timeline("Diary Answer", "", diary, diaryAnswer, user, diaryAnswer.getCreateDate());
-		timeline4.setId(4L);
+//		Timeline timeline4 = new Timeline("Diary Answer", "", diary, diaryAnswer, user, diaryAnswer.getCreateDate());
+//		timeline4.setId(4L);
+		Timeline timeline4 = Timeline.builder()
+				.type("Diary Answer")
+				.icon("")
+				.diaryAnswer(diaryAnswer)
+				.user(user)
+				.saveDate(diaryAnswer.getCreateDate())
+				.build();
 		given(this.timelineService.getOneTimeline(4L))
 		.willReturn(timeline4);
 		

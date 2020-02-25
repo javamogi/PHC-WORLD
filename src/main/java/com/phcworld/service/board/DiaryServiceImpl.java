@@ -16,9 +16,9 @@ import com.phcworld.domain.alert.Alert;
 import com.phcworld.domain.alert.AlertRepository;
 import com.phcworld.domain.board.Diary;
 import com.phcworld.domain.timeline.Timeline;
-import com.phcworld.domain.timeline.TimelineRepository;
 import com.phcworld.domain.user.User;
 import com.phcworld.repository.board.DiaryRepository;
+import com.phcworld.repository.timeline.TimelineRepository;
 
 @Service
 @Transactional
@@ -57,7 +57,14 @@ public class DiaryServiceImpl implements DiaryService {
 				.build();
 		diaryRepository.save(diary);
 
-		Timeline timeline = new Timeline("diary", "edit", diary, user, diary.getCreateDate());
+//		Timeline timeline = new Timeline("diary", "edit", diary, user, diary.getCreateDate());
+		Timeline timeline = Timeline.builder()
+				.type("diary")
+				.icon("edit")
+				.diary(diary)
+				.user(user)
+				.saveDate(diary.getCreateDate())
+				.build();
 		timelineRepository.save(timeline);
 
 //		diary.setTimeline(timeline);
@@ -76,8 +83,10 @@ public class DiaryServiceImpl implements DiaryService {
 	}
 
 	@Override
-	public void deleteDiaryById(Long id) {
-		diaryRepository.deleteById(id);
+	public void deleteDiary(Diary diary) {
+		Timeline timeline = timelineRepository.findByDiary(diary);
+		timelineRepository.delete(timeline);
+		diaryRepository.delete(diary);
 	}
 	
 	@Override
@@ -96,7 +105,14 @@ public class DiaryServiceImpl implements DiaryService {
 		
 		Diary updatedGoodCount = diaryRepository.save(diary);
 		
-		Timeline timeline = new Timeline("good", "thumbs-up", diary, loginUser, LocalDateTime.now());
+//		Timeline timeline = new Timeline("good", "thumbs-up", diary, loginUser, LocalDateTime.now());
+		Timeline timeline = Timeline.builder()
+				.type("good")
+				.icon("thumbs-up")
+				.diary(diary)
+				.user(loginUser)
+				.saveDate(LocalDateTime.now())
+				.build();
 		timelineRepository.save(timeline);
 		
 		if(!diary.matchUser(loginUser)) {

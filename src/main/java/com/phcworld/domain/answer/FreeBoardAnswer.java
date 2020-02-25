@@ -19,7 +19,6 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.phcworld.domain.alert.Alert;
 import com.phcworld.domain.board.FreeBoard;
-import com.phcworld.domain.timeline.Timeline;
 import com.phcworld.domain.user.User;
 import com.phcworld.web.LocalDateTimeUtils;
 
@@ -27,7 +26,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 import lombok.experimental.Accessors;
 
 @Entity
@@ -36,7 +34,6 @@ import lombok.experimental.Accessors;
 @AllArgsConstructor
 @Builder
 @Accessors(chain = true)
-@ToString(exclude = {"timeline"})
 public class FreeBoardAnswer {
 
 	@Id
@@ -57,12 +54,6 @@ public class FreeBoardAnswer {
 
 	@Lob
 	private String contents;
-
-	@OneToOne(cascade = CascadeType.REMOVE)
-	@JoinColumn(foreignKey = @ForeignKey(name = "fk_freeBoard_Answer_timeline"))
-//	@PrimaryKeyJoinColumn
-	@JsonIgnore
-	private Timeline timeline;
 
 	@OneToOne(cascade = CascadeType.REMOVE)
 //	 @JoinColumn(foreignKey = @ForeignKey(name = "fk_journal_answer_alert"))

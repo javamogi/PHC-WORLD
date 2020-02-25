@@ -15,9 +15,9 @@ import com.phcworld.domain.answer.FreeBoardAnswer;
 import com.phcworld.domain.board.FreeBoard;
 import com.phcworld.domain.exception.MatchNotUserExceptioin;
 import com.phcworld.domain.timeline.Timeline;
-import com.phcworld.domain.timeline.TimelineRepository;
 import com.phcworld.domain.user.User;
 import com.phcworld.repository.answer.FreeBoardAnswerRepository;
+import com.phcworld.repository.timeline.TimelineRepository;
 import com.phcworld.service.board.FreeBoardServiceImpl;
 
 @Service
@@ -49,10 +49,15 @@ public class FreeBoardAnswerServiceImpl implements FreeBoardAnswerService {
 				.build();
 		freeBoardAnswerRepository.save(freeBoardAnswer);
 		
-		Timeline timeline = new Timeline("FreeBoard Answer", "comment", freeBoard, freeBoardAnswer, loginUser, freeBoardAnswer.getCreateDate());
+		Timeline timeline = Timeline.builder()
+				.type("freeBoard answer")
+				.icon("comment")
+				.freeBoardAnswer(freeBoardAnswer)
+				.user(loginUser)
+				.saveDate(freeBoardAnswer.getCreateDate())
+				.build();
 		timelineRepository.save(timeline);
 		
-		freeBoardAnswer.setTimeline(timeline);
 		
 		if(!freeBoard.matchUser(loginUser)) {
 			Alert alert = new Alert("FreeBoard", freeBoardAnswer, freeBoard.getWriter(), freeBoardAnswer.getCreateDate());
@@ -69,6 +74,8 @@ public class FreeBoardAnswerServiceImpl implements FreeBoardAnswerService {
 		if(!freeBoardAnswer.isSameWriter(loginUser)) {
 			throw new MatchNotUserExceptioin("본인이 작성한 글만 삭제 가능합니다.");
 		}
+		Timeline timeline = timelineRepository.findByFreeBoardAnswer(freeBoardAnswer);
+		timelineRepository.delete(timeline);
 		freeBoardAnswerRepository.deleteById(id);
 		
 		FreeBoard freeBoard = freeBoardService.getOneFreeBoard(freeBoardAnswer.getFreeBoard().getId());

@@ -141,7 +141,7 @@ public class DiaryController {
 			model.addAttribute("errorMessage", "삭제 권한이 없습니다.");
 			return "/user/login";
 		}
-		diaryService.deleteDiaryById(id);
+		diaryService.deleteDiary(diary);
 		return "redirect:/diary/list/" + loginUser.getEmail();
 	}
 }
