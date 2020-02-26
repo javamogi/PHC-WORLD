@@ -5,8 +5,10 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.*;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -29,6 +31,7 @@ import com.phcworld.repository.answer.DiaryAnswerRepository;
 import com.phcworld.repository.answer.FreeBoardAnswerRepository;
 import com.phcworld.repository.board.DiaryRepository;
 import com.phcworld.repository.board.FreeBoardRepository;
+import com.phcworld.repository.user.UserRepository;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest
@@ -49,6 +52,9 @@ public class TimelineRepositoryTest {
 	
 	@Autowired
 	private FreeBoardAnswerRepository freeBoardAnswerRepository;
+	
+	@Autowired
+	private UserRepository userRepository;
 
 	@Test
 	public void createDiaryTimeline() {
@@ -324,6 +330,102 @@ public class TimelineRepositoryTest {
 		Timeline createdFreeBoardAnswerTimeline = timelineRepository.save(freeBoardAnswerTimeline);
 		Timeline readTimeline = timelineRepository.findByFreeBoardAnswer(createdFreeBoardAnswer);
 		assertThat(createdFreeBoardAnswerTimeline, is(readTimeline));
+	}
+	
+	@Test
+	public void createGoodDiary() {
+		User user = User.builder()
+				.id(1L)
+				.email("test3@test.test")
+				.password("test3")
+				.name("테스트3")
+				.profileImage("blank-profile-picture.png")
+				.authority("ROLE_USER")
+				.createDate(LocalDateTime.now())
+				.build();
+		Set<User> set = new HashSet<User>();
+		set.add(user);
+		Diary diary = Diary.builder()
+				.writer(user)
+				.title("test3")
+				.contents("test3")
+				.thumbnail("no-image-icon.gif")
+				.goodPushedUser(set)
+				.createDate(LocalDateTime.now())
+				.build();
+		Diary createdDiary = diaryRepository.save(diary);
+		Timeline diaryTimeline = Timeline.builder()
+				.type("good")
+				.icon("thumbs-up")
+				.diary(createdDiary)
+				.user(user)
+				.saveDate(diary.getCreateDate())
+				.build();
+		Timeline createdTimeline = timelineRepository.save(diaryTimeline);
+		Timeline readTimeline = timelineRepository.findByDiaryAndUser(createdDiary, user);
+		assertThat(createdTimeline, is(readTimeline));
+	}
+	
+	@Test
+	public void readDiaryAndUser() {
+		User user = User.builder()
+				.id(1L)
+				.email("test3@test.test")
+				.password("test3")
+				.name("테스트3")
+				.profileImage("blank-profile-picture.png")
+				.authority("ROLE_USER")
+				.createDate(LocalDateTime.now())
+				.build();
+		User user2 = User.builder()
+				.id(2L)
+				.email("test4@test.test")
+				.password("test4")
+				.name("테스트4")
+				.profileImage("blank-profile-picture.png")
+				.authority("ROLE_USER")
+				.createDate(LocalDateTime.now())
+				.build();
+		User user3 = User.builder()
+				.id(3L)
+				.email("test5@test.test")
+				.password("test5")
+				.name("테스트5")
+				.profileImage("blank-profile-picture.png")
+				.authority("ROLE_USER")
+				.createDate(LocalDateTime.now())
+				.build();
+		userRepository.save(user3);
+		Set<User> set = new HashSet<User>();
+		set.add(user2);
+		set.add(user3);
+		Diary diary = Diary.builder()
+				.writer(user)
+				.title("test3")
+				.contents("test3")
+				.thumbnail("no-image-icon.gif")
+				.goodPushedUser(set)
+				.createDate(LocalDateTime.now())
+				.build();
+		Diary createdDiary = diaryRepository.save(diary);
+		Timeline diaryTimeline = Timeline.builder()
+				.type("good")
+				.icon("thumbs-up")
+				.diary(createdDiary)
+				.user(user2)
+				.saveDate(diary.getCreateDate())
+				.build();
+		Timeline createdTimeline = timelineRepository.save(diaryTimeline);
+		Timeline diaryTimeline2 = Timeline.builder()
+				.type("good")
+				.icon("thumbs-up")
+				.diary(createdDiary)
+				.user(user3)
+				.saveDate(diary.getCreateDate())
+				.build();
+		timelineRepository.save(diaryTimeline2);
+		Timeline readTimeline = timelineRepository.findByDiaryAndUser(createdDiary, user2);
+		assertThat(createdTimeline, is(readTimeline));
 	}
 	
 	@Test

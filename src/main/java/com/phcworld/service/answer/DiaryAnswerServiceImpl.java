@@ -1,5 +1,6 @@
 package com.phcworld.service.answer;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,15 +8,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.phcworld.domain.alert.Alert;
-import com.phcworld.domain.alert.AlertRepository;
 import com.phcworld.domain.answer.DiaryAnswer;
 import com.phcworld.domain.board.Diary;
 import com.phcworld.domain.exception.MatchNotUserExceptioin;
-import com.phcworld.domain.timeline.Timeline;
 import com.phcworld.domain.user.User;
+import com.phcworld.repository.alert.AlertRepository;
 import com.phcworld.repository.answer.DiaryAnswerRepository;
 import com.phcworld.repository.board.DiaryRepository;
-import com.phcworld.repository.timeline.TimelineRepository;
+import com.phcworld.service.timeline.TimelineServiceImpl;
 
 @Service
 @Transactional
@@ -28,10 +28,10 @@ public class DiaryAnswerServiceImpl implements DiaryAnswerService {
 	private DiaryAnswerRepository diaryAnswerRepository;
 	
 	@Autowired
-	private TimelineRepository timelineRepository;
+	private AlertRepository alertRepository;
 	
 	@Autowired
-	private AlertRepository alertRepository;
+	private TimelineServiceImpl timelineService;
 	
 	@Override
 	public DiaryAnswer createDiaryAnswer(User user, Diary diary, String contents) {
@@ -39,23 +39,24 @@ public class DiaryAnswerServiceImpl implements DiaryAnswerService {
 				.writer(user)
 				.diary(diary)
 				.contents(contents.replace("\r\n", "<br>"))
+				.createDate(LocalDateTime.now())
 				.build();
-		diaryAnswerRepository.save(diaryAnswer);
 		
-		Timeline timeline = Timeline.builder()
-				.type("diary answer")
-				.icon("comment")
-				.diaryAnswer(diaryAnswer)
-				.user(user)
-				.saveDate(diaryAnswer.getCreateDate())
-				.build();
-		timelineRepository.save(timeline);
+		DiaryAnswer createdDiaryAnswer = diaryAnswerRepository.save(diaryAnswer);
+		timelineService.createTimeline(createdDiaryAnswer);
 		
-		Alert alert = new Alert("Diary", diaryAnswer, diary.getWriter(), diaryAnswer.getCreateDate());
-		alertRepository.save(alert);
+		if(!diary.matchUser(user)) {
+//			Alert alert = new Alert("Diary", diaryAnswer, diary.getWriter(), diaryAnswer.getCreateDate());
+			Alert alert = Alert.builder()
+					.type("Diary")
+					.diaryAnswer(diaryAnswer)
+					.postWriter(diary.getWriter())
+					.createDate(LocalDateTime.now())
+					.build();
+			alertRepository.save(alert);
+		}
 		
-		diaryAnswer.setAlert(alert);
-		return diaryAnswerRepository.save(diaryAnswer);
+		return createdDiaryAnswer;
 	}
 	
 	@Override
@@ -64,8 +65,11 @@ public class DiaryAnswerServiceImpl implements DiaryAnswerService {
 		if(!diaryAnswer.isSameWriter(loginUser)) {
 			throw new MatchNotUserExceptioin("본인이 작성한 글만 삭제 가능합니다.");
 		}
-		Timeline timeline = timelineRepository.findByDiaryAnswer(diaryAnswer);
-		timelineRepository.delete(timeline);
+		
+		timelineService.deleteTimeline(diaryAnswer);
+		Alert alert = alertRepository.findByDiaryAnswer(diaryAnswer);
+		alertRepository.delete(alert);
+		
 		diaryAnswerRepository.deleteById(id);
 		Diary diary = diaryRepository.getOne(diaryId);
 		diary.getDiaryAnswers().remove(diaryAnswer);

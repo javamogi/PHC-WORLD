@@ -57,7 +57,7 @@
                             <a href="/alert/{{id}}">
                                 <div>
                                     {{freeBoardAnswer.writer.name}}님이 {{type}} 게시물에 댓글을 달았습니다.
-                                    <span class="pull-right text-muted small">{{getFormattedSaveDate}}</span>
+                                    <span class="pull-right text-muted small">{{formattedCreateDate}}</span>
                                 </div>
                             </a>
                         </li>
@@ -68,7 +68,7 @@
                             <a href="/alert/{{id}}">
                                 <div>
                                     {{diaryAnswer.writer.name}}님이 {{type}} 게시물에 댓글을 달았습니다.
-                                    <span class="pull-right text-muted small">{{getFormattedSaveDate}}</span>
+                                    <span class="pull-right text-muted small">{{formattedCreateDate}}</span>
                                 </div>
                             </a>
                         </li>
@@ -79,7 +79,7 @@
                             <a href="/alert/{{id}}">
                                 <div>
                                     	{{registerUser.name}}님이 게시물에 좋아요를 눌렀습니다.
-                                    <span class="pull-right text-muted small">{{getFormattedSaveDate}}</span>
+                                    <span class="pull-right text-muted small">{{formattedCreateDate}}</span>
                                 </div>
                             </a>
                         </li>
@@ -89,13 +89,13 @@
                     {{^alerts}}
                     <li> 알림이 없습니다. </li>
                     <li class="divider"></li>
-                    {{/alerts}}              
+                    {{/alerts}}       
                     <li>
                             <a class="text-center" href="#">
                                 <strong>See All Alerts</strong>
                                 <i class="fa fa-angle-right"></i>
                             </a>
-                        </li>
+                        </li>       
                      </ul>
                     <!-- /.dropdown-alerts -->
                 </li>

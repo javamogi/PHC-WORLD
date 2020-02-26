@@ -8,10 +8,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.phcworld.domain.board.FreeBoard;
-import com.phcworld.domain.timeline.Timeline;
 import com.phcworld.domain.user.User;
 import com.phcworld.repository.board.FreeBoardRepository;
-import com.phcworld.repository.timeline.TimelineRepository;
+import com.phcworld.service.timeline.TimelineServiceImpl;
 
 @Service
 @Transactional
@@ -20,7 +19,7 @@ public class FreeBoardServiceImpl implements FreeBoardService {
 	private FreeBoardRepository freeBoardRepository;
 	
 	@Autowired
-	private TimelineRepository timelineRepository;
+	private TimelineServiceImpl timelineService;
 
 	@Override
 	public List<FreeBoard> findFreeBoardAllList() {
@@ -37,20 +36,11 @@ public class FreeBoardServiceImpl implements FreeBoardService {
 				.createDate(LocalDateTime.now())
 				.count(0)
 				.build();
-		freeBoardRepository.save(freeBoard);
+		FreeBoard createdFreeBoard = freeBoardRepository.save(freeBoard);
 		
-//		Timeline timeline = new Timeline("free board", "list-alt", freeBoard, user, freeBoard.getCreateDate());
-		Timeline timeline = Timeline.builder()
-				.type("free board")
-				.icon("list-alt")
-				.freeBoard(freeBoard)
-				.user(user)
-				.saveDate(freeBoard.getCreateDate())
-				.build();
-		timelineRepository.save(timeline);
+		timelineService.createTimeline(createdFreeBoard);
 		
-//		freeBoard.setTimeline(timeline);
-		return freeBoardRepository.save(freeBoard);
+		return createdFreeBoard;
 	}
 
 	@Override
@@ -73,8 +63,7 @@ public class FreeBoardServiceImpl implements FreeBoardService {
 
 	@Override
 	public void deleteFreeBoard(FreeBoard freeBoard) {
-		Timeline timeline = timelineRepository.findByFreeBoard(freeBoard);
-		timelineRepository.delete(timeline);
+		timelineService.deleteTimeline(freeBoard);
 		freeBoardRepository.delete(freeBoard);
 	}
 	

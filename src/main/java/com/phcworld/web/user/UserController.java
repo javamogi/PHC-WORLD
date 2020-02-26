@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.phcworld.domain.alert.Alert;
-import com.phcworld.domain.alert.AlertServiceImpl;
 import com.phcworld.domain.email.EmailAuth;
 import com.phcworld.domain.email.EmailService;
 import com.phcworld.domain.message.Message;
@@ -28,6 +27,7 @@ import com.phcworld.domain.message.MessageServiceImpl;
 import com.phcworld.domain.timeline.Timeline;
 import com.phcworld.domain.user.LoginRequestUser;
 import com.phcworld.domain.user.User;
+import com.phcworld.service.alert.AlertServiceImpl;
 import com.phcworld.service.timeline.TimelineServiceImpl;
 import com.phcworld.service.user.UserService;
 import com.phcworld.web.HttpSessionUtils;
@@ -197,10 +197,14 @@ public class UserController {
 		User loginUser = HttpSessionUtils.getUserFromSession(session);
 		User user = userService.findUserById(id);
 		
-		Page<Timeline> timelines = timelineService.findPageTimelineByUser(user);
+//		Page<Timeline> timelines = timelineService.findPageTimelineByUser(user);
+		List<Timeline> timelines = timelineService.findTimelineList(0, user);
 		boolean temp = false;
-		if(timelines != null) {
-			temp = timelines.hasNext();
+//		if(timelines != null) {
+//			temp = timelines.hasNext();
+//		}
+		if(timelines.size() > 0) {
+			temp = true;
 		}
 		model.addAttribute("show more", temp);
 

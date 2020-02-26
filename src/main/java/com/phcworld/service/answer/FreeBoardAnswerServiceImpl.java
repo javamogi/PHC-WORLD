@@ -10,15 +10,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.phcworld.domain.alert.Alert;
-import com.phcworld.domain.alert.AlertRepository;
 import com.phcworld.domain.answer.FreeBoardAnswer;
 import com.phcworld.domain.board.FreeBoard;
 import com.phcworld.domain.exception.MatchNotUserExceptioin;
-import com.phcworld.domain.timeline.Timeline;
 import com.phcworld.domain.user.User;
+import com.phcworld.repository.alert.AlertRepository;
 import com.phcworld.repository.answer.FreeBoardAnswerRepository;
-import com.phcworld.repository.timeline.TimelineRepository;
-import com.phcworld.service.board.FreeBoardServiceImpl;
+import com.phcworld.repository.board.FreeBoardRepository;
+import com.phcworld.service.timeline.TimelineServiceImpl;
 
 @Service
 @Transactional
@@ -30,42 +29,39 @@ public class FreeBoardAnswerServiceImpl implements FreeBoardAnswerService {
 	private FreeBoardAnswerRepository freeBoardAnswerRepository;
 	
 	@Autowired
-	private TimelineRepository timelineRepository;
-	
-	@Autowired
 	private AlertRepository alertRepository;
 	
 	@Autowired
-	private FreeBoardServiceImpl freeBoardService;
+	private FreeBoardRepository freeBoardRepository;
+	
+	@Autowired
+	private TimelineServiceImpl timelineService;
 	
 	@Override
 	public FreeBoardAnswer createFreeBoardAnswer(User loginUser, Long freeboardId, String contents) {
-		FreeBoard freeBoard = freeBoardService.getOneFreeBoard(freeboardId);
+		FreeBoard freeBoard = freeBoardRepository.getOne(freeboardId);
 		FreeBoardAnswer freeBoardAnswer = FreeBoardAnswer.builder()
 				.writer(loginUser)
 				.freeBoard(freeBoard)
 				.contents(contents.replace("\r\n", "<br>"))
 				.createDate(LocalDateTime.now())
 				.build();
-		freeBoardAnswerRepository.save(freeBoardAnswer);
 		
-		Timeline timeline = Timeline.builder()
-				.type("freeBoard answer")
-				.icon("comment")
-				.freeBoardAnswer(freeBoardAnswer)
-				.user(loginUser)
-				.saveDate(freeBoardAnswer.getCreateDate())
-				.build();
-		timelineRepository.save(timeline);
-		
+		FreeBoardAnswer createdFreeBoardAnswer = freeBoardAnswerRepository.save(freeBoardAnswer);
+		timelineService.createTimeline(createdFreeBoardAnswer);
 		
 		if(!freeBoard.matchUser(loginUser)) {
-			Alert alert = new Alert("FreeBoard", freeBoardAnswer, freeBoard.getWriter(), freeBoardAnswer.getCreateDate());
+//			Alert alert = new Alert("FreeBoard", freeBoardAnswer, freeBoard.getWriter(), freeBoardAnswer.getCreateDate());
+			Alert alert = Alert.builder()
+					.type("FreeBoard")
+					.freeBoardAnswer(freeBoardAnswer)
+					.postWriter(freeBoard.getWriter())
+					.createDate(LocalDateTime.now())
+					.build();
 			alertRepository.save(alert);
-			freeBoardAnswer.setAlert(alert);
 		}
 		
-		return freeBoardAnswerRepository.save(freeBoardAnswer);
+		return createdFreeBoardAnswer;
 	}
 	
 	@Override
@@ -74,11 +70,14 @@ public class FreeBoardAnswerServiceImpl implements FreeBoardAnswerService {
 		if(!freeBoardAnswer.isSameWriter(loginUser)) {
 			throw new MatchNotUserExceptioin("본인이 작성한 글만 삭제 가능합니다.");
 		}
-		Timeline timeline = timelineRepository.findByFreeBoardAnswer(freeBoardAnswer);
-		timelineRepository.delete(timeline);
+		timelineService.deleteTimeline(freeBoardAnswer);
+		
+		Alert alert = alertRepository.findByFreeBoardAnswer(freeBoardAnswer);
+		alertRepository.delete(alert);
+		
 		freeBoardAnswerRepository.deleteById(id);
 		
-		FreeBoard freeBoard = freeBoardService.getOneFreeBoard(freeBoardAnswer.getFreeBoard().getId());
+		FreeBoard freeBoard = freeBoardRepository.getOne(freeBoardAnswer.getFreeBoard().getId());
 		freeBoard.getFreeBoardAnswers().remove(freeBoardAnswer);
 		log.info("countOfAnswer : {}", freeBoard.getCountOfAnswer());
 		return "{\"success\":\"" + freeBoard.getCountOfAnswer() +"\"}";

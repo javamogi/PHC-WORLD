@@ -13,8 +13,14 @@ import com.phcworld.domain.user.User;
 
 public interface TimelineRepository extends JpaRepository<Timeline, Long> {
 	Page<Timeline> findByUser(User user, Pageable Pageable);
+	
 	Timeline findByFreeBoard(FreeBoard freeBoard);
+	
 	Timeline findByDiary(Diary diary);
+	
 	Timeline findByFreeBoardAnswer(FreeBoardAnswer freeBoardAnswer);
+	
 	Timeline findByDiaryAnswer(DiaryAnswer diaryAnswer);
+	
+	Timeline findByDiaryAndUser(Diary diary, User user);
 }

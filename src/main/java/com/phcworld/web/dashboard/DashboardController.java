@@ -12,13 +12,13 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.phcworld.domain.alert.Alert;
-import com.phcworld.domain.alert.AlertServiceImpl;
 import com.phcworld.domain.answer.DiaryAnswer;
 import com.phcworld.domain.answer.FreeBoardAnswer;
 import com.phcworld.domain.board.Diary;
 import com.phcworld.domain.board.FreeBoard;
 import com.phcworld.domain.timeline.Timeline;
 import com.phcworld.domain.user.User;
+import com.phcworld.service.alert.AlertServiceImpl;
 import com.phcworld.service.answer.DiaryAnswerServiceImpl;
 import com.phcworld.service.answer.FreeBoardAnswerServiceImpl;
 import com.phcworld.service.board.DiaryServiceImpl;
@@ -67,7 +67,9 @@ public class DashboardController {
 		
 		List<Alert> alerts = alertService.findPageRequestAlertByPostUser(loginUser);
 		
-		List<Timeline> timelines = timelineService.findPageTimelineByUser(loginUser).getContent();
+//		List<Timeline> timelines = timelineService.findPageTimelineByUser(loginUser).getContent();
+		List<Timeline> timelines = timelineService.findTimelineList(0, loginUser);
+		
 
 		model.addAttribute("countAnswers", freeBoardAnswer.size() + diaryAnswer.size());
 		model.addAttribute("countFreeboards", freeBoards.size());

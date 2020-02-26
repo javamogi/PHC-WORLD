@@ -13,12 +13,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.phcworld.domain.alert.Alert;
-import com.phcworld.domain.alert.AlertRepository;
 import com.phcworld.domain.board.Diary;
-import com.phcworld.domain.timeline.Timeline;
 import com.phcworld.domain.user.User;
+import com.phcworld.repository.alert.AlertRepository;
 import com.phcworld.repository.board.DiaryRepository;
-import com.phcworld.repository.timeline.TimelineRepository;
+import com.phcworld.service.timeline.TimelineServiceImpl;
 
 @Service
 @Transactional
@@ -28,10 +27,10 @@ public class DiaryServiceImpl implements DiaryService {
 	private DiaryRepository diaryRepository;
 	
 	@Autowired
-	private TimelineRepository timelineRepository;
+	private AlertRepository alertRepository;
 	
 	@Autowired
-	private AlertRepository alertRepository;
+	private TimelineServiceImpl timelineService;
 	
 	@Override
 	public Page<Diary> findPageDiary(User loginUser, Integer pageNum, User requestUser) {
@@ -55,20 +54,11 @@ public class DiaryServiceImpl implements DiaryService {
 				.thumbnail(thumbnail)
 				.createDate(LocalDateTime.now())
 				.build();
-		diaryRepository.save(diary);
+		Diary createdDiary = diaryRepository.save(diary);
 
-//		Timeline timeline = new Timeline("diary", "edit", diary, user, diary.getCreateDate());
-		Timeline timeline = Timeline.builder()
-				.type("diary")
-				.icon("edit")
-				.diary(diary)
-				.user(user)
-				.saveDate(diary.getCreateDate())
-				.build();
-		timelineRepository.save(timeline);
+		timelineService.createTimeline(createdDiary);
 
-//		diary.setTimeline(timeline);
-		return diaryRepository.save(diary);
+		return createdDiary;
 	}
 
 	@Override
@@ -84,8 +74,7 @@ public class DiaryServiceImpl implements DiaryService {
 
 	@Override
 	public void deleteDiary(Diary diary) {
-		Timeline timeline = timelineRepository.findByDiary(diary);
-		timelineRepository.delete(timeline);
+		timelineService.deleteTimeline(diary);
 		diaryRepository.delete(diary);
 	}
 	
@@ -99,25 +88,26 @@ public class DiaryServiceImpl implements DiaryService {
 		Set<User> set = diary.getGoodPushedUser();
 		if(set.contains(loginUser)) {
 			set.remove(loginUser);
+//			timelineService.deleteTimeline(diary, loginUser);
 		} else {
 			set.add(loginUser);
 		}
 		
 		Diary updatedGoodCount = diaryRepository.save(diary);
 		
-//		Timeline timeline = new Timeline("good", "thumbs-up", diary, loginUser, LocalDateTime.now());
-		Timeline timeline = Timeline.builder()
-				.type("good")
-				.icon("thumbs-up")
-				.diary(diary)
-				.user(loginUser)
-				.saveDate(LocalDateTime.now())
-				.build();
-		timelineRepository.save(timeline);
+		timelineService.createTimeline(updatedGoodCount, loginUser);
+		//삭제 diaryAndUser
 		
 		if(!diary.matchUser(loginUser)) {
-			Alert alert = new Alert("Diary", diary, diary.getWriter(), loginUser, LocalDateTime.now());
+			Alert alert = Alert.builder()
+					.type("Diary")
+					.diary(diary)
+					.postWriter(diary.getWriter())
+					.registerUser(loginUser)
+					.createDate(LocalDateTime.now())
+					.build();
 			alertRepository.save(alert);
+			// 삭제 diaryAndRegisterUser
 		}
 		
 		return "{\"success\":\"" + Integer.toString(updatedGoodCount.getCountOfGood()) +"\"}";
