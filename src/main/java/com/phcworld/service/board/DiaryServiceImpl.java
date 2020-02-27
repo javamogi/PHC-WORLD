@@ -12,25 +12,33 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.phcworld.domain.alert.Alert;
+import com.phcworld.domain.answer.DiaryAnswer;
 import com.phcworld.domain.board.Diary;
+import com.phcworld.domain.timeline.Timeline;
 import com.phcworld.domain.user.User;
-import com.phcworld.repository.alert.AlertRepository;
+import com.phcworld.repository.answer.DiaryAnswerRepository;
 import com.phcworld.repository.board.DiaryRepository;
+import com.phcworld.service.alert.AlertServiceImpl;
 import com.phcworld.service.timeline.TimelineServiceImpl;
+
+import lombok.extern.slf4j.Slf4j;
 
 @Service
 @Transactional
+@Slf4j
 public class DiaryServiceImpl implements DiaryService {
 	
 	@Autowired
 	private DiaryRepository diaryRepository;
 	
 	@Autowired
-	private AlertRepository alertRepository;
+	private AlertServiceImpl alertService;
 	
 	@Autowired
 	private TimelineServiceImpl timelineService;
+	
+	@Autowired
+	private DiaryAnswerRepository diaryAnswerRepository;
 	
 	@Override
 	public Page<Diary> findPageDiary(User loginUser, Integer pageNum, User requestUser) {
@@ -74,7 +82,14 @@ public class DiaryServiceImpl implements DiaryService {
 
 	@Override
 	public void deleteDiary(Diary diary) {
-		timelineService.deleteTimeline(diary);
+		timelineService.deleteTimeline("diary", diary);
+		List<DiaryAnswer> answerList = diary.getDiaryAnswers();
+		for(int i = 0; i < answerList.size(); i++) {
+			DiaryAnswer diaryAnswer = answerList.get(i);
+			timelineService.deleteTimeline(diaryAnswer);
+			alertService.deleteAlert(diaryAnswer);
+			diaryAnswerRepository.delete(diaryAnswer);
+		}
 		diaryRepository.delete(diary);
 	}
 	
@@ -85,31 +100,30 @@ public class DiaryServiceImpl implements DiaryService {
 	
 	public String updateGood(Long diaryId, User loginUser) {
 		Diary diary = diaryRepository.getOne(diaryId);
+//		boolean isRemove = diary.pushGoodUser(loginUser); 
+		boolean isRemove = false; 
 		Set<User> set = diary.getGoodPushedUser();
 		if(set.contains(loginUser)) {
 			set.remove(loginUser);
-//			timelineService.deleteTimeline(diary, loginUser);
+			isRemove = true;
 		} else {
 			set.add(loginUser);
 		}
 		
 		Diary updatedGoodCount = diaryRepository.save(diary);
 		
-		timelineService.createTimeline(updatedGoodCount, loginUser);
-		//삭제 diaryAndUser
-		
-		if(!diary.matchUser(loginUser)) {
-			Alert alert = Alert.builder()
-					.type("Diary")
-					.diary(diary)
-					.postWriter(diary.getWriter())
-					.registerUser(loginUser)
-					.createDate(LocalDateTime.now())
-					.build();
-			alertRepository.save(alert);
-			// 삭제 diaryAndRegisterUser
+		if(isRemove) {
+			timelineService.deleteTimeline("good", updatedGoodCount, loginUser);
+			if(!diary.matchUser(loginUser)) {
+				alertService.deleteAlert(updatedGoodCount, loginUser);
+			}
+		} else {
+			timelineService.createTimeline("good", updatedGoodCount, loginUser);
+			if(!diary.matchUser(loginUser)) {
+				alertService.createAlert(updatedGoodCount, loginUser);
+			}
 		}
 		
-		return "{\"success\":\"" + Integer.toString(updatedGoodCount.getCountOfGood()) +"\"}";
+		return "{\"success\":\"" + Integer.toString(diary.getCountOfGood()) +"\"}";
 	}
 }

@@ -9,14 +9,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.phcworld.domain.alert.Alert;
 import com.phcworld.domain.answer.FreeBoardAnswer;
 import com.phcworld.domain.board.FreeBoard;
 import com.phcworld.domain.exception.MatchNotUserExceptioin;
 import com.phcworld.domain.user.User;
-import com.phcworld.repository.alert.AlertRepository;
 import com.phcworld.repository.answer.FreeBoardAnswerRepository;
 import com.phcworld.repository.board.FreeBoardRepository;
+import com.phcworld.service.alert.AlertServiceImpl;
 import com.phcworld.service.timeline.TimelineServiceImpl;
 
 @Service
@@ -26,13 +25,13 @@ public class FreeBoardAnswerServiceImpl implements FreeBoardAnswerService {
 	private static final Logger log = LoggerFactory.getLogger(FreeBoardAnswerServiceImpl.class);
 	
 	@Autowired
+	private FreeBoardRepository freeBoardRepository;
+
+	@Autowired
 	private FreeBoardAnswerRepository freeBoardAnswerRepository;
 	
 	@Autowired
-	private AlertRepository alertRepository;
-	
-	@Autowired
-	private FreeBoardRepository freeBoardRepository;
+	private AlertServiceImpl alertService;
 	
 	@Autowired
 	private TimelineServiceImpl timelineService;
@@ -51,14 +50,7 @@ public class FreeBoardAnswerServiceImpl implements FreeBoardAnswerService {
 		timelineService.createTimeline(createdFreeBoardAnswer);
 		
 		if(!freeBoard.matchUser(loginUser)) {
-//			Alert alert = new Alert("FreeBoard", freeBoardAnswer, freeBoard.getWriter(), freeBoardAnswer.getCreateDate());
-			Alert alert = Alert.builder()
-					.type("FreeBoard")
-					.freeBoardAnswer(freeBoardAnswer)
-					.postWriter(freeBoard.getWriter())
-					.createDate(LocalDateTime.now())
-					.build();
-			alertRepository.save(alert);
+			alertService.createAlert(createdFreeBoardAnswer);
 		}
 		
 		return createdFreeBoardAnswer;
@@ -70,11 +62,11 @@ public class FreeBoardAnswerServiceImpl implements FreeBoardAnswerService {
 		if(!freeBoardAnswer.isSameWriter(loginUser)) {
 			throw new MatchNotUserExceptioin("본인이 작성한 글만 삭제 가능합니다.");
 		}
+
 		timelineService.deleteTimeline(freeBoardAnswer);
-		
-		Alert alert = alertRepository.findByFreeBoardAnswer(freeBoardAnswer);
-		alertRepository.delete(alert);
-		
+		if(!freeBoardAnswer.isSameWriter(loginUser)) {
+			alertService.deleteAlert(freeBoardAnswer);
+		}
 		freeBoardAnswerRepository.deleteById(id);
 		
 		FreeBoard freeBoard = freeBoardRepository.getOne(freeBoardAnswer.getFreeBoard().getId());

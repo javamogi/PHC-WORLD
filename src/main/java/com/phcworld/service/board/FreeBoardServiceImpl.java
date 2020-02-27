@@ -7,9 +7,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.phcworld.domain.answer.FreeBoardAnswer;
 import com.phcworld.domain.board.FreeBoard;
 import com.phcworld.domain.user.User;
+import com.phcworld.repository.answer.FreeBoardAnswerRepository;
 import com.phcworld.repository.board.FreeBoardRepository;
+import com.phcworld.service.alert.AlertServiceImpl;
 import com.phcworld.service.timeline.TimelineServiceImpl;
 
 @Service
@@ -20,6 +23,12 @@ public class FreeBoardServiceImpl implements FreeBoardService {
 	
 	@Autowired
 	private TimelineServiceImpl timelineService;
+	
+	@Autowired
+	private FreeBoardAnswerRepository freeBoardAnswerRepository;
+	
+	@Autowired
+	private AlertServiceImpl alertService;
 
 	@Override
 	public List<FreeBoard> findFreeBoardAllList() {
@@ -64,6 +73,13 @@ public class FreeBoardServiceImpl implements FreeBoardService {
 	@Override
 	public void deleteFreeBoard(FreeBoard freeBoard) {
 		timelineService.deleteTimeline(freeBoard);
+		List<FreeBoardAnswer> answerList = freeBoard.getFreeBoardAnswers();
+		for(int i = 0; i < answerList.size(); i++) {
+			FreeBoardAnswer freeBoardAnswer = answerList.get(i);
+			timelineService.deleteTimeline(freeBoardAnswer);
+			alertService.deleteAlert(freeBoardAnswer);
+			freeBoardAnswerRepository.delete(freeBoardAnswer);
+		}
 		freeBoardRepository.delete(freeBoard);
 	}
 	

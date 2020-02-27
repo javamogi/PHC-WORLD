@@ -67,7 +67,6 @@ public class DashboardController {
 		
 		List<Alert> alerts = alertService.findPageRequestAlertByPostUser(loginUser);
 		
-//		List<Timeline> timelines = timelineService.findPageTimelineByUser(loginUser).getContent();
 		List<Timeline> timelines = timelineService.findTimelineList(0, loginUser);
 		
 

@@ -19,7 +19,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.phcworld.domain.board.FreeBoard;
 import com.phcworld.domain.user.User;
-import com.phcworld.repository.user.UserRepository;
 
 import lombok.extern.slf4j.Slf4j;
 

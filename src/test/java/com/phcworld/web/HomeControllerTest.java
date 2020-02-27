@@ -21,12 +21,12 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.phcworld.domain.alert.Alert;
-import com.phcworld.domain.alert.AlertServiceImpl;
 import com.phcworld.domain.answer.DiaryAnswer;
 import com.phcworld.domain.answer.FreeBoardAnswer;
 import com.phcworld.domain.board.Diary;
 import com.phcworld.domain.board.FreeBoard;
 import com.phcworld.domain.user.User;
+import com.phcworld.service.alert.AlertServiceImpl;
 
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -76,9 +76,15 @@ public class HomeControllerTest {
 				.diary(diary)
 				.contents("test")
 				.build();
-		
+		Alert diaryAnswerAlert = Alert.builder()
+				.type("Diary")
+				.diaryAnswer(diaryAnswer)
+				.postWriter(diary.getWriter())
+				.createDate(LocalDateTime.now())
+				.build();
+				
 		given(this.alertService.getOneAlert(1L))
-		.willReturn(new Alert("Diary", diaryAnswer, diary.getWriter(), diaryAnswer.getCreateDate()));
+		.willReturn(diaryAnswerAlert);
 		MockHttpSession mockSession = new MockHttpSession();
 		this.mvc.perform(get("/alert/{id}", 1L)
 				.session(mockSession))
@@ -101,9 +107,14 @@ public class HomeControllerTest {
 				.contents("test")
 				.createDate(LocalDateTime.now())
 				.build();
-		
+		Alert freeBoardAnswerAlert = Alert.builder()
+				.type("FreeBoard")
+				.freeBoardAnswer(freeBoardAnswer)
+				.postWriter(freeBoard.getWriter())
+				.createDate(LocalDateTime.now())
+				.build();
 		given(this.alertService.getOneAlert(2L))
-		.willReturn(new Alert("FreeBoard", freeBoardAnswer, freeBoard.getWriter(), freeBoardAnswer.getCreateDate()));
+		.willReturn(freeBoardAnswerAlert);
 		this.mvc.perform(get("/alert/{id}", 2L)
 				.session(mockSession))
 		.andDo(print())

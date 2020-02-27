@@ -25,13 +25,13 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.phcworld.domain.alert.Alert;
-import com.phcworld.domain.alert.AlertServiceImpl;
 import com.phcworld.domain.answer.DiaryAnswer;
 import com.phcworld.domain.answer.FreeBoardAnswer;
 import com.phcworld.domain.board.Diary;
 import com.phcworld.domain.board.FreeBoard;
 import com.phcworld.domain.timeline.Timeline;
 import com.phcworld.domain.user.User;
+import com.phcworld.service.alert.AlertServiceImpl;
 import com.phcworld.service.answer.DiaryAnswerServiceImpl;
 import com.phcworld.service.answer.FreeBoardAnswerServiceImpl;
 import com.phcworld.service.board.DiaryServiceImpl;
@@ -144,15 +144,19 @@ public class DashboardControllerTest {
 		given(this.diaryAnswerService.findDiaryAnswerListByWriter(user))
 		.willReturn(diaryAnswerList);
 		
-		Alert alert = new Alert("FreeBoard Answer", freeBoardAnswer, user, freeBoardAnswer.getCreateDate());
+//		Alert alert = new Alert("FreeBoard Answer", freeBoardAnswer, user, freeBoardAnswer.getCreateDate());
+		Alert alert = Alert.builder()
+				.type("FreeBoard Answer")
+				.freeBoardAnswer(freeBoardAnswer)
+				.postWriter(user)
+				.createDate(LocalDateTime.now())
+				.build();
 		alert.setId(1L);
 		List<Alert> alertList = new ArrayList<>();
 		alertList.add(alert);
 		given(this.alertService.findPageRequestAlertByPostUser(user))
 		.willReturn(alertList);
 		
-//		Timeline timeline = new Timeline("FreeBoard", "", freeBoard, user, freeBoard.getCreateDate());
-//		timeline.setId(1L);
 		Timeline timeline = Timeline.builder()
 				.id(1L)
 				.type("FreeBoard")
@@ -164,8 +168,8 @@ public class DashboardControllerTest {
 		List<Timeline> timelineList = new ArrayList<>();
 		timelineList.add(timeline);
 		Page<Timeline> pageTimeline = new PageImpl<Timeline>(timelineList);
-		given(this.timelineService.findPageTimelineByUser(user))
-		.willReturn(pageTimeline);
+//		given(this.timelineService.findPageTimelineByUser(user))
+//		.willReturn(pageTimeline);
 		
 		this.mvc.perform(get("/dashboard")
 				.session(mockSession))
@@ -226,8 +230,6 @@ public class DashboardControllerTest {
 				.contents("test")
 				.build();
 		
-//		Timeline timeline = new Timeline("FreeBoard", "", freeBoard, user, freeBoard.getCreateDate());
-//		timeline.setId(1L);
 		Timeline timeline = Timeline.builder()
 				.type("FreeBoard")
 				.icon("")
@@ -235,14 +237,12 @@ public class DashboardControllerTest {
 				.user(user)
 				.saveDate(freeBoard.getCreateDate())
 				.build();
-		given(this.timelineService.getOneTimeline(1L))
-		.willReturn(timeline);
+//		given(this.timelineService.getOneTimeline(1L))
+//		.willReturn(timeline);
 		
 		this.mvc.perform(get("/dashboard/timeline/{id}", 1L))
 		.andExpect(redirectedUrl("/freeboard/" + timeline.getFreeBoard().getId() + "/detail"));
 		
-//		Timeline timeline2 = new Timeline("FreeBoard Answer", "", freeBoard, freeBoardAnswer, user, freeBoardAnswer.getCreateDate());
-//		timeline2.setId(2L);
 		Timeline timeline2 = Timeline.builder()
 				.id(2L)
 				.type("FreeBoard Answer")
@@ -252,14 +252,12 @@ public class DashboardControllerTest {
 				.saveDate(freeBoardAnswer.getCreateDate())
 				.build();
 				
-		given(this.timelineService.getOneTimeline(2L))
-		.willReturn(timeline2);
+//		given(this.timelineService.getOneTimeline(2L))
+//		.willReturn(timeline2);
 		
 		this.mvc.perform(get("/dashboard/timeline/{id}", 2L))
 		.andExpect(redirectedUrl("/freeboard/" + timeline2.getFreeBoard().getId() + "/detail"));
 		
-//		Timeline timeline3 = new Timeline("Diary", "", diary, user, diary.getCreateDate());
-//		timeline3.setId(3L);
 		Timeline timeline3 = Timeline.builder()
 				.id(3L)
 				.type("Diary")
@@ -268,14 +266,12 @@ public class DashboardControllerTest {
 				.user(user)
 				.saveDate(diary.getCreateDate())
 				.build();
-		given(this.timelineService.getOneTimeline(3L))
-		.willReturn(timeline3);
+//		given(this.timelineService.getOneTimeline(3L))
+//		.willReturn(timeline3);
 		
 		this.mvc.perform(get("/dashboard/timeline/{id}", 3L))
 		.andExpect(redirectedUrl("/diary/" + timeline3.getDiary().getId() + "/detail"));
 
-//		Timeline timeline4 = new Timeline("Diary Answer", "", diary, diaryAnswer, user, diaryAnswer.getCreateDate());
-//		timeline4.setId(4L);
 		Timeline timeline4 = Timeline.builder()
 				.type("Diary Answer")
 				.icon("")
@@ -283,20 +279,11 @@ public class DashboardControllerTest {
 				.user(user)
 				.saveDate(diaryAnswer.getCreateDate())
 				.build();
-		given(this.timelineService.getOneTimeline(4L))
-		.willReturn(timeline4);
+//		given(this.timelineService.getOneTimeline(4L))
+//		.willReturn(timeline4);
 		
 		this.mvc.perform(get("/dashboard/timeline/{id}", 4L))
 		.andExpect(redirectedUrl("/diary/" + timeline4.getDiary().getId() + "/detail"));
-		
-				
-//		Timeline timeline5 = new Timeline("Good", "", diary, good, user, good.getSaveDate());
-//		timeline4.setId(5L);
-//		given(this.timelineService.getOneTimeline(5L))
-//		.willReturn(timeline5);
-//		
-//		this.mvc.perform(get("/dashboard/timeline/{id}", 5L))
-//		.andExpect(redirectedUrl("/diary/" + timeline5.getDiary().getId() + "/detail"));
 	}
 
 }

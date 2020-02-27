@@ -7,14 +7,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.phcworld.domain.alert.Alert;
 import com.phcworld.domain.answer.DiaryAnswer;
 import com.phcworld.domain.board.Diary;
 import com.phcworld.domain.exception.MatchNotUserExceptioin;
 import com.phcworld.domain.user.User;
-import com.phcworld.repository.alert.AlertRepository;
 import com.phcworld.repository.answer.DiaryAnswerRepository;
 import com.phcworld.repository.board.DiaryRepository;
+import com.phcworld.service.alert.AlertServiceImpl;
 import com.phcworld.service.timeline.TimelineServiceImpl;
 
 @Service
@@ -28,7 +27,7 @@ public class DiaryAnswerServiceImpl implements DiaryAnswerService {
 	private DiaryAnswerRepository diaryAnswerRepository;
 	
 	@Autowired
-	private AlertRepository alertRepository;
+	private AlertServiceImpl alertService;
 	
 	@Autowired
 	private TimelineServiceImpl timelineService;
@@ -46,14 +45,7 @@ public class DiaryAnswerServiceImpl implements DiaryAnswerService {
 		timelineService.createTimeline(createdDiaryAnswer);
 		
 		if(!diary.matchUser(user)) {
-//			Alert alert = new Alert("Diary", diaryAnswer, diary.getWriter(), diaryAnswer.getCreateDate());
-			Alert alert = Alert.builder()
-					.type("Diary")
-					.diaryAnswer(diaryAnswer)
-					.postWriter(diary.getWriter())
-					.createDate(LocalDateTime.now())
-					.build();
-			alertRepository.save(alert);
+			alertService.createAlert(createdDiaryAnswer);
 		}
 		
 		return createdDiaryAnswer;
@@ -67,8 +59,9 @@ public class DiaryAnswerServiceImpl implements DiaryAnswerService {
 		}
 		
 		timelineService.deleteTimeline(diaryAnswer);
-		Alert alert = alertRepository.findByDiaryAnswer(diaryAnswer);
-		alertRepository.delete(alert);
+		if(!diaryAnswer.isSameWriter(loginUser)) {
+			alertService.deleteAlert(diaryAnswer);
+		}
 		
 		diaryAnswerRepository.deleteById(id);
 		Diary diary = diaryRepository.getOne(diaryId);

@@ -12,7 +12,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
-import javax.persistence.PrimaryKeyJoinColumn;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -53,16 +52,14 @@ public class DiaryAnswer {
 	// @JsonBackReference
 	@JsonManagedReference
 	private Diary diary;
+	
+	@OneToOne(cascade = CascadeType.REMOVE)
+	@JoinColumn(foreignKey = @ForeignKey(name = "fk_diary_answer_alert"))
+	@JsonIgnore
+	private Alert alert;
 
 	@Lob
 	private String contents;
-
-	// @OneToOne(cascade = CascadeType.REMOVE)
-	@OneToOne(cascade = CascadeType.ALL)
-	// @JoinColumn(foreignKey = @ForeignKey(name = "fk_diary_answer_alert"))
-	@PrimaryKeyJoinColumn
-	@JsonIgnore
-	private Alert alert;
 
 	private LocalDateTime createDate;
 
