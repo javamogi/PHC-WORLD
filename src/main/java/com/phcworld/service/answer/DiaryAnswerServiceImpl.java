@@ -59,7 +59,7 @@ public class DiaryAnswerServiceImpl implements DiaryAnswerService {
 		}
 		
 		timelineService.deleteTimeline(diaryAnswer);
-		if(!diaryAnswer.isSameWriter(loginUser)) {
+		if(diaryAnswer.isSameWriter(loginUser)) {
 			alertService.deleteAlert(diaryAnswer);
 		}
 		

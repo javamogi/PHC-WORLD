@@ -6,8 +6,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -19,6 +19,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.phcworld.domain.board.Diary;
+import com.phcworld.domain.good.Good;
 import com.phcworld.domain.user.User;
 import com.phcworld.service.board.DiaryServiceImpl;
 import com.phcworld.web.HttpSessionUtils;
@@ -62,9 +63,14 @@ public class DiaryRestControllerTest {
 				.thumbnail("no-image-icon.gif")
 				.createDate(LocalDateTime.now())
 				.build();
-		Set<User> set = new HashSet<User>();
-		set.add(user);
-		diary.setGoodPushedUser(set);
+		Good good = Good.builder()
+				.diary(diary)
+				.user(user)
+				.createDate(LocalDateTime.now())
+				.build();
+		List<Good> list = new ArrayList<Good>();
+		list.add(good);
+		diary.setGoodPushedUser(list);
 		when(diaryService.updateGood(diary.getId(), user))
 		.thenReturn("{\"success\":\""+Integer.toString(diary.getCountOfGood())+"\"}");
 		this.mvc.perform(put("/api/diary/{diaryId}/good", 1L)

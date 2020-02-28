@@ -11,11 +11,11 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.phcworld.domain.answer.DiaryAnswer;
 import com.phcworld.domain.answer.FreeBoardAnswer;
 import com.phcworld.domain.board.Diary;
 import com.phcworld.domain.board.FreeBoard;
+import com.phcworld.domain.good.Good;
 import com.phcworld.domain.user.User;
 import com.phcworld.web.LocalDateTimeUtils;
 
@@ -40,26 +40,30 @@ public class Timeline {
 	private String icon;
 
 	@OneToOne
-	@JoinColumn(foreignKey = @ForeignKey(name = "fk_timeline_freeBoard"))
+	@JoinColumn(foreignKey = @ForeignKey(name = "fk_timeline_free_board"))
 	private FreeBoard freeBoard;
 
 	@OneToOne
-	@JoinColumn(foreignKey = @ForeignKey(name = "fk_timeline_freeBoard_Answer"))
+	@JoinColumn(foreignKey = @ForeignKey(name = "fk_timeline_free_board_answer"))
 	private FreeBoardAnswer freeBoardAnswer;
 
-	@OneToOne
+	@ManyToOne
 	@JoinColumn(foreignKey = @ForeignKey(name = "fk_timeline_diary"))
 	private Diary diary;
 
 	@OneToOne
 	@JoinColumn(foreignKey = @ForeignKey(name = "fk_timeline_diary_answer"))
 	private DiaryAnswer diaryAnswer;
+	
+	@OneToOne
+	@JoinColumn(foreignKey = @ForeignKey(name = "fk_timeline_good"))
+	private Good good;
 
 	@ManyToOne
 	@JoinColumn(foreignKey = @ForeignKey(name = "fk_timeline_user"))
-	@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
-	private User user;
-
+//	@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
+	private User user;                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
+	
 	private LocalDateTime saveDate;
 
 	public String getFormattedSaveDate() {

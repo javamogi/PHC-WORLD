@@ -22,6 +22,7 @@ import com.phcworld.domain.answer.DiaryAnswer;
 import com.phcworld.domain.answer.FreeBoardAnswer;
 import com.phcworld.domain.board.Diary;
 import com.phcworld.domain.board.FreeBoard;
+import com.phcworld.domain.good.Good;
 import com.phcworld.domain.timeline.Timeline;
 import com.phcworld.domain.user.User;
 import com.phcworld.service.answer.DiaryAnswerServiceImpl;
@@ -205,15 +206,6 @@ public class TimelineServiceImplTest {
 				.authority("ROLE_USER")
 				.createDate(LocalDateTime.now())
 				.build();
-		User loginUser = User.builder()
-				.id(2L)
-				.email("test4@test.test")
-				.password("test4")
-				.name("테스트4")
-				.profileImage("blank-profile-picture.png")
-				.authority("ROLE_USER")
-				.createDate(LocalDateTime.now())
-				.build();
 		Diary diary = Diary.builder()
 				.id(1L)
 				.writer(user)
@@ -222,18 +214,22 @@ public class TimelineServiceImplTest {
 				.thumbnail("no-image-icon.gif")
 				.createDate(LocalDateTime.now())
 				.build();
+		Good good = Good.builder()
+				.diary(diary)
+				.user(user)
+				.createDate(LocalDateTime.now())
+				.build();
 		Timeline timeline = Timeline.builder()
 				.type("good")
 				.icon("thumbs-up")
-				.diary(diary)
-				.user(loginUser)
+				.good(good)
+				.user(good.getUser())
 				.saveDate(LocalDateTime.now())
 				.build();
-		when(timelineService.createTimeline(diary, loginUser))
+		when(timelineService.createTimeline(good))
 		.thenReturn(timeline);
-		Timeline createdDiaryTimeline = timelineService.createTimeline(diary, loginUser);
-		assertThat("good", is(createdDiaryTimeline.getType()));
-		assertThat("thumbs-up", is(createdDiaryTimeline.getIcon()));
+		Timeline createdDiaryTimeline = timelineService.createTimeline(good);
+		assertThat(timeline, is(createdDiaryTimeline));
 	}
 	
 	@Test
@@ -340,8 +336,13 @@ public class TimelineServiceImplTest {
 				.thumbnail("no-image-icon.gif")
 				.createDate(LocalDateTime.now())
 				.build();
-		timelineService.deleteTimeline(diary);
-		verify(timelineService, times(1)).deleteTimeline(diary);
+		Good good = Good.builder()
+				.diary(diary)
+				.user(user)
+				.createDate(LocalDateTime.now())
+				.build();
+		timelineService.deleteTimeline(good);
+		verify(timelineService, times(1)).deleteTimeline(good);
 	}
 	
 	@Test
@@ -455,7 +456,11 @@ public class TimelineServiceImplTest {
 				.thumbnail("no-image-icon.gif")
 				.createDate(LocalDateTime.now())
 				.build();
-		timelineService.deleteTimeline(diary, user2);
-		verify(timelineService, times(1)).deleteTimeline(diary, user2);
+		Good good = Good.builder()
+				.diary(diary)
+				.user(user2)
+				.build();
+		timelineService.deleteTimeline(good);
+		verify(timelineService, times(1)).deleteTimeline(good);
 	}
 }

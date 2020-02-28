@@ -9,9 +9,7 @@ import static org.mockito.Mockito.when;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -22,7 +20,9 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.phcworld.domain.answer.DiaryAnswer;
 import com.phcworld.domain.board.Diary;
+import com.phcworld.domain.good.Good;
 import com.phcworld.domain.user.User;
 import com.phcworld.service.board.DiaryServiceImpl;
 
@@ -145,6 +145,29 @@ public class DiaryServiceImplTest {
 	}
 	
 	@Test
+	public void deleteDiaryEmptyDiaryAnswer() throws Exception {
+		User user = User.builder()
+				.id(1L)
+				.email("test3@test.test")
+				.password("test3")
+				.name("테스트3")
+				.profileImage("blank-profile-picture.png")
+				.authority("ROLE_USER")
+				.createDate(LocalDateTime.now())
+				.build();
+		Diary diary = Diary.builder()
+				.id(1L)
+				.writer(user)
+				.title("title")
+				.contents("content")
+				.thumbnail("no-image-icon.gif")
+				.createDate(LocalDateTime.now())
+				.build();
+		diaryService.deleteDiary(diary);
+		verify(diaryService, times(1)).deleteDiary(diary);
+	}
+	
+	@Test
 	public void deleteDiary() throws Exception {
 		User user = User.builder()
 				.id(1L)
@@ -163,6 +186,16 @@ public class DiaryServiceImplTest {
 				.thumbnail("no-image-icon.gif")
 				.createDate(LocalDateTime.now())
 				.build();
+		DiaryAnswer answer = DiaryAnswer.builder()
+				.id(1L)
+				.writer(user)
+				.diary(diary)
+				.contents("diary answer content")
+				.createDate(LocalDateTime.now())
+				.build();
+		List<DiaryAnswer> list = new ArrayList<DiaryAnswer>();
+		list.add(answer);
+		diary.setDiaryAnswers(list);
 		diaryService.deleteDiary(diary);
 		verify(diaryService, times(1)).deleteDiary(diary);
 	}
@@ -186,9 +219,14 @@ public class DiaryServiceImplTest {
 				.thumbnail("no-image-icon.gif")
 				.createDate(LocalDateTime.now())
 				.build();
-		Set<User> set = new HashSet<User>();
-		set.add(user);
-		diary.setGoodPushedUser(set);
+		Good good = Good.builder()
+				.diary(diary)
+				.user(user)
+				.createDate(LocalDateTime.now())
+				.build();
+		List<Good> list = new ArrayList<Good>();
+		list.add(good);
+		diary.setGoodPushedUser(list);
 		when(diaryService.updateGood(diary.getId(), user))
 		.thenReturn("{\"success\":\"" + Integer.toString(diary.getCountOfGood()) +"\"}");
 		String str = diaryService.updateGood(diary.getId(), user);
@@ -206,8 +244,6 @@ public class DiaryServiceImplTest {
 				.authority("ROLE_USER")
 				.createDate(LocalDateTime.now())
 				.build();
-		Set<User> set = new HashSet<User>();
-		set.add(user);
 		Diary diary = Diary.builder()
 				.id(1L)
 				.writer(user)
@@ -215,9 +251,16 @@ public class DiaryServiceImplTest {
 				.contents("content")
 				.thumbnail("no-image-icon.gif")
 				.createDate(LocalDateTime.now())
-				.goodPushedUser(set)
 				.build();
-		diary.getGoodPushedUser().remove(user);
+		Good good = Good.builder()
+				.diary(diary)
+				.user(user)
+				.createDate(LocalDateTime.now())
+				.build();
+		List<Good> list = new ArrayList<Good>();
+		list.add(good);
+		diary.setGoodPushedUser(list);
+		diary.getGoodPushedUser().remove(good);
 		when(diaryService.updateGood(diary.getId(), user))
 		.thenReturn("{\"success\":\"" + Integer.toString(diary.getCountOfGood()) +"\"}");
 		String str = diaryService.updateGood(diary.getId(), user);

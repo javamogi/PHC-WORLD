@@ -2,7 +2,6 @@ package com.phcworld.service.board;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -14,18 +13,16 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.phcworld.domain.answer.DiaryAnswer;
 import com.phcworld.domain.board.Diary;
-import com.phcworld.domain.timeline.Timeline;
+import com.phcworld.domain.good.Good;
 import com.phcworld.domain.user.User;
 import com.phcworld.repository.answer.DiaryAnswerRepository;
 import com.phcworld.repository.board.DiaryRepository;
 import com.phcworld.service.alert.AlertServiceImpl;
+import com.phcworld.service.good.GoodService;
 import com.phcworld.service.timeline.TimelineServiceImpl;
-
-import lombok.extern.slf4j.Slf4j;
 
 @Service
 @Transactional
-@Slf4j
 public class DiaryServiceImpl implements DiaryService {
 	
 	@Autowired
@@ -39,6 +36,9 @@ public class DiaryServiceImpl implements DiaryService {
 	
 	@Autowired
 	private DiaryAnswerRepository diaryAnswerRepository;
+	
+	@Autowired
+	private GoodService goodService;
 	
 	@Override
 	public Page<Diary> findPageDiary(User loginUser, Integer pageNum, User requestUser) {
@@ -82,13 +82,17 @@ public class DiaryServiceImpl implements DiaryService {
 
 	@Override
 	public void deleteDiary(Diary diary) {
-		timelineService.deleteTimeline("diary", diary);
+		timelineService.deleteTimeline(diary);
+		List<Good> goodList = diary.getGoodPushedUser();
+		for(int i = 0; i < goodList.size(); i++) {
+			timelineService.deleteTimeline(goodList.get(i));
+			alertService.deleteAlert(goodList.get(i).getDiary(), goodList.get(i).getUser());
+		}
 		List<DiaryAnswer> answerList = diary.getDiaryAnswers();
 		for(int i = 0; i < answerList.size(); i++) {
 			DiaryAnswer diaryAnswer = answerList.get(i);
 			timelineService.deleteTimeline(diaryAnswer);
 			alertService.deleteAlert(diaryAnswer);
-			diaryAnswerRepository.delete(diaryAnswer);
 		}
 		diaryRepository.delete(diary);
 	}
@@ -100,30 +104,12 @@ public class DiaryServiceImpl implements DiaryService {
 	
 	public String updateGood(Long diaryId, User loginUser) {
 		Diary diary = diaryRepository.getOne(diaryId);
-//		boolean isRemove = diary.pushGoodUser(loginUser); 
-		boolean isRemove = false; 
-		Set<User> set = diary.getGoodPushedUser();
-		if(set.contains(loginUser)) {
-			set.remove(loginUser);
-			isRemove = true;
-		} else {
-			set.add(loginUser);
-		}
 		
+		goodService.pushGood(diary, loginUser);
+
 		Diary updatedGoodCount = diaryRepository.save(diary);
 		
-		if(isRemove) {
-			timelineService.deleteTimeline("good", updatedGoodCount, loginUser);
-			if(!diary.matchUser(loginUser)) {
-				alertService.deleteAlert(updatedGoodCount, loginUser);
-			}
-		} else {
-			timelineService.createTimeline("good", updatedGoodCount, loginUser);
-			if(!diary.matchUser(loginUser)) {
-				alertService.createAlert(updatedGoodCount, loginUser);
-			}
-		}
-		
-		return "{\"success\":\"" + Integer.toString(diary.getCountOfGood()) +"\"}";
+		return "{\"success\":\"" + Integer.toString(updatedGoodCount.getCountOfGood()) +"\"}";
 	}
+	
 }

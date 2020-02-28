@@ -3,7 +3,6 @@ package com.phcworld.service.board;
 import static org.hamcrest.CoreMatchers.hasItems;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
-import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -122,6 +121,31 @@ public class FreeBoardServiceImplTest {
 	}
 	
 	@Test
+	public void deleteFreeBoardEmptyFreeBoardAnswer() {
+		User user = User.builder()
+				.id(1L)
+				.email("test3@test.test")
+				.password("test3")
+				.name("테스트3")
+				.profileImage("blank-profile-picture.png")
+				.authority("ROLE_USER")
+				.createDate(LocalDateTime.now())
+				.build();
+		FreeBoard board = FreeBoard.builder()
+				.id(1L)
+				.writer(user)
+				.title("title")
+				.contents("content")
+				.icon("")
+				.badge("new")
+				.createDate(LocalDateTime.now())
+				.count(0)
+				.build();
+		freeBoardService.deleteFreeBoard(board);
+		verify(freeBoardService, times(1)).deleteFreeBoard(board);
+	}
+	
+	@Test
 	public void deleteFreeBoard() {
 		User user = User.builder()
 				.id(1L)
@@ -142,6 +166,15 @@ public class FreeBoardServiceImplTest {
 				.createDate(LocalDateTime.now())
 				.count(0)
 				.build();
+		FreeBoardAnswer answer = FreeBoardAnswer.builder()
+				.writer(user)
+				.freeBoard(board)
+				.contents("content")
+				.createDate(LocalDateTime.now())
+				.build();
+		List<FreeBoardAnswer> list = new ArrayList<FreeBoardAnswer>();
+		list.add(answer);
+		board.setFreeBoardAnswers(list);
 		freeBoardService.deleteFreeBoard(board);
 		verify(freeBoardService, times(1)).deleteFreeBoard(board);
 	}

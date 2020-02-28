@@ -8,6 +8,7 @@ import com.phcworld.domain.answer.DiaryAnswer;
 import com.phcworld.domain.answer.FreeBoardAnswer;
 import com.phcworld.domain.board.Diary;
 import com.phcworld.domain.board.FreeBoard;
+import com.phcworld.domain.good.Good;
 import com.phcworld.domain.timeline.Timeline;
 import com.phcworld.domain.user.User;
 
@@ -22,5 +23,7 @@ public interface TimelineRepository extends JpaRepository<Timeline, Long> {
 	
 	Timeline findByDiaryAnswer(DiaryAnswer diaryAnswer);
 	
-	Timeline findByDiaryAndUser(Diary diary, User user);
+//	Timeline findByTypeAndDiaryAndUser(String type, Diary diary, User user);
+	
+	Timeline findByGood(Good good);
 }

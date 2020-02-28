@@ -2,13 +2,14 @@ package com.phcworld.repository.timeline;
 
 import static org.hamcrest.CoreMatchers.hasItems;
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertThat;
 
 import java.time.LocalDateTime;
-import java.util.HashSet;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -25,12 +26,14 @@ import com.phcworld.domain.answer.DiaryAnswer;
 import com.phcworld.domain.answer.FreeBoardAnswer;
 import com.phcworld.domain.board.Diary;
 import com.phcworld.domain.board.FreeBoard;
+import com.phcworld.domain.good.Good;
 import com.phcworld.domain.timeline.Timeline;
 import com.phcworld.domain.user.User;
 import com.phcworld.repository.answer.DiaryAnswerRepository;
 import com.phcworld.repository.answer.FreeBoardAnswerRepository;
 import com.phcworld.repository.board.DiaryRepository;
 import com.phcworld.repository.board.FreeBoardRepository;
+import com.phcworld.repository.good.GoodRepository;
 import com.phcworld.repository.user.UserRepository;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -55,6 +58,9 @@ public class TimelineRepositoryTest {
 	
 	@Autowired
 	private UserRepository userRepository;
+	
+	@Autowired
+	private GoodRepository goodRepository;
 
 	@Test
 	public void createDiaryTimeline() {
@@ -333,7 +339,7 @@ public class TimelineRepositoryTest {
 	}
 	
 	@Test
-	public void createGoodDiary() {
+	public void createGood() {
 		User user = User.builder()
 				.id(1L)
 				.email("test3@test.test")
@@ -343,26 +349,29 @@ public class TimelineRepositoryTest {
 				.authority("ROLE_USER")
 				.createDate(LocalDateTime.now())
 				.build();
-		Set<User> set = new HashSet<User>();
-		set.add(user);
 		Diary diary = Diary.builder()
 				.writer(user)
 				.title("test3")
 				.contents("test3")
 				.thumbnail("no-image-icon.gif")
-				.goodPushedUser(set)
 				.createDate(LocalDateTime.now())
 				.build();
 		Diary createdDiary = diaryRepository.save(diary);
+		Good good = Good.builder()
+				.diary(createdDiary)
+				.user(user)
+				.createDate(LocalDateTime.now())
+				.build();
+		Good newGood = goodRepository.save(good);
 		Timeline diaryTimeline = Timeline.builder()
 				.type("good")
 				.icon("thumbs-up")
-				.diary(createdDiary)
-				.user(user)
+				.good(newGood)
+				.user(newGood.getUser())
 				.saveDate(diary.getCreateDate())
 				.build();
 		Timeline createdTimeline = timelineRepository.save(diaryTimeline);
-		Timeline readTimeline = timelineRepository.findByDiaryAndUser(createdDiary, user);
+		Timeline readTimeline = timelineRepository.findByGood(newGood);
 		assertThat(createdTimeline, is(readTimeline));
 	}
 	
@@ -396,35 +405,47 @@ public class TimelineRepositoryTest {
 				.createDate(LocalDateTime.now())
 				.build();
 		userRepository.save(user3);
-		Set<User> set = new HashSet<User>();
-		set.add(user2);
-		set.add(user3);
 		Diary diary = Diary.builder()
 				.writer(user)
 				.title("test3")
 				.contents("test3")
 				.thumbnail("no-image-icon.gif")
-				.goodPushedUser(set)
 				.createDate(LocalDateTime.now())
 				.build();
 		Diary createdDiary = diaryRepository.save(diary);
+		Good good = Good.builder()
+				.diary(createdDiary)
+				.user(user2)
+				.createDate(LocalDateTime.now())
+				.build();
+		Good good2 = Good.builder()
+				.diary(createdDiary)
+				.user(user3)
+				.createDate(LocalDateTime.now())
+				.build();
+		Good createdGood = goodRepository.save(good);
+		Good createdGood2 = goodRepository.save(good2);
+		List<Good> list = new ArrayList<Good>();
+		list.add(createdGood);
+		list.add(createdGood2);
+		diary.setGoodPushedUser(list);
 		Timeline diaryTimeline = Timeline.builder()
 				.type("good")
 				.icon("thumbs-up")
-				.diary(createdDiary)
-				.user(user2)
+				.good(good)
+				.user(good.getUser())
 				.saveDate(diary.getCreateDate())
 				.build();
 		Timeline createdTimeline = timelineRepository.save(diaryTimeline);
 		Timeline diaryTimeline2 = Timeline.builder()
 				.type("good")
 				.icon("thumbs-up")
-				.diary(createdDiary)
-				.user(user3)
+				.good(good2)
+				.user(good2.getUser())
 				.saveDate(diary.getCreateDate())
 				.build();
 		timelineRepository.save(diaryTimeline2);
-		Timeline readTimeline = timelineRepository.findByDiaryAndUser(createdDiary, user2);
+		Timeline readTimeline = timelineRepository.findByGood(good);
 		assertThat(createdTimeline, is(readTimeline));
 	}
 	

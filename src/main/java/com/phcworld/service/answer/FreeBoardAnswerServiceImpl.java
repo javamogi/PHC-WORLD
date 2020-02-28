@@ -64,7 +64,7 @@ public class FreeBoardAnswerServiceImpl implements FreeBoardAnswerService {
 		}
 
 		timelineService.deleteTimeline(freeBoardAnswer);
-		if(!freeBoardAnswer.isSameWriter(loginUser)) {
+		if(freeBoardAnswer.isSameWriter(loginUser)) {
 			alertService.deleteAlert(freeBoardAnswer);
 		}
 		freeBoardAnswerRepository.deleteById(id);

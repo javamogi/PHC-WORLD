@@ -2,7 +2,6 @@ package com.phcworld.domain.board;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -18,6 +17,7 @@ import javax.persistence.OneToMany;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.phcworld.domain.answer.DiaryAnswer;
+import com.phcworld.domain.good.Good;
 import com.phcworld.domain.user.User;
 import com.phcworld.web.LocalDateTimeUtils;
 
@@ -33,12 +33,13 @@ import lombok.experimental.Accessors;
 @AllArgsConstructor
 @Builder
 @Accessors(chain = true)
+//@ToString(exclude = {"goodPushedUser"})
 public class Diary {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-
+	
 	@ManyToOne
 	@JoinColumn(foreignKey = @ForeignKey(name = "fk_dairy_writer"))
 	@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
@@ -56,8 +57,9 @@ public class Diary {
 	@JsonBackReference
 	private List<DiaryAnswer> diaryAnswers;
 
-	@OneToMany
-	private Set<User> goodPushedUser;
+	@OneToMany(mappedBy = "diary", cascade = CascadeType.REMOVE)
+	@JsonBackReference
+	private List<Good> goodPushedUser;
 
 	private LocalDateTime createDate;
 

@@ -15,6 +15,7 @@ import com.phcworld.domain.answer.DiaryAnswer;
 import com.phcworld.domain.answer.FreeBoardAnswer;
 import com.phcworld.domain.board.Diary;
 import com.phcworld.domain.board.FreeBoard;
+import com.phcworld.domain.good.Good;
 import com.phcworld.domain.timeline.Timeline;
 import com.phcworld.domain.user.User;
 import com.phcworld.repository.timeline.TimelineRepository;
@@ -82,21 +83,22 @@ public class TimelineServiceImpl implements TimelineService {
 		return timelineRepository.save(freeBoardAnswerTimeline);
 	}
 	
-	public Timeline createTimeline(Diary diary, User loginUser) {
+	public Timeline createTimeline(Good good) {
 		Timeline timeline = Timeline.builder()
 				.type("good")
 				.icon("thumbs-up")
-				.diary(diary)
-				.user(loginUser)
+				.good(good)
+				.user(good.getUser())
 				.saveDate(LocalDateTime.now())
 				.build();
 		return timelineRepository.save(timeline);
 	}
 	
 	public void deleteTimeline(Diary diary) {
-		Timeline timeline = timelineRepository.findByDiaryAndUser(diary, diary.getWriter());
+		Timeline timeline = timelineRepository.findByDiary(diary);
 		timelineRepository.delete(timeline);
 	}
+	
 	public void deleteTimeline(DiaryAnswer diaryAnswer) {
 		Timeline timeline = timelineRepository.findByDiaryAnswer(diaryAnswer);
 		timelineRepository.delete(timeline);
@@ -112,8 +114,8 @@ public class TimelineServiceImpl implements TimelineService {
 		timelineRepository.delete(timeline);
 	}
 	
-	public void deleteTimeline(Diary diary, User loginUser) {
-		Timeline timeline = timelineRepository.findByDiaryAndUser(diary, loginUser);
+	public void deleteTimeline(Good good) {
+		Timeline timeline = timelineRepository.findByGood(good);
 		timelineRepository.delete(timeline);
 	}
 	
