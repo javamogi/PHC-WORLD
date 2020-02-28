@@ -198,6 +198,43 @@ public class TimelineRepositoryTest {
 		assertNotNull(createdFreeBoardAnswerTimeline);
 	}
 	
+
+	public void createGood() {
+		User user = User.builder()
+				.id(1L)
+				.email("test3@test.test")
+				.password("test3")
+				.name("테스트3")
+				.profileImage("blank-profile-picture.png")
+				.authority("ROLE_USER")
+				.createDate(LocalDateTime.now())
+				.build();
+		Diary diary = Diary.builder()
+				.writer(user)
+				.title("test3")
+				.contents("test3")
+				.thumbnail("no-image-icon.gif")
+				.createDate(LocalDateTime.now())
+				.build();
+		Diary createdDiary = diaryRepository.save(diary);
+		Good good = Good.builder()
+				.diary(createdDiary)
+				.user(user)
+				.createDate(LocalDateTime.now())
+				.build();
+		Good newGood = goodRepository.save(good);
+		Timeline diaryTimeline = Timeline.builder()
+				.type("good")
+				.icon("thumbs-up")
+				.good(newGood)
+				.user(newGood.getUser())
+				.saveDate(diary.getCreateDate())
+				.build();
+		Timeline createdTimeline = timelineRepository.save(diaryTimeline);
+		Timeline readTimeline = timelineRepository.findByGood(newGood);
+		assertThat(createdTimeline, is(readTimeline));
+	}
+	
 	@Test
 	public void readDiaryTimeline() {
 		User user = User.builder()
@@ -339,44 +376,7 @@ public class TimelineRepositoryTest {
 	}
 	
 	@Test
-	public void createGood() {
-		User user = User.builder()
-				.id(1L)
-				.email("test3@test.test")
-				.password("test3")
-				.name("테스트3")
-				.profileImage("blank-profile-picture.png")
-				.authority("ROLE_USER")
-				.createDate(LocalDateTime.now())
-				.build();
-		Diary diary = Diary.builder()
-				.writer(user)
-				.title("test3")
-				.contents("test3")
-				.thumbnail("no-image-icon.gif")
-				.createDate(LocalDateTime.now())
-				.build();
-		Diary createdDiary = diaryRepository.save(diary);
-		Good good = Good.builder()
-				.diary(createdDiary)
-				.user(user)
-				.createDate(LocalDateTime.now())
-				.build();
-		Good newGood = goodRepository.save(good);
-		Timeline diaryTimeline = Timeline.builder()
-				.type("good")
-				.icon("thumbs-up")
-				.good(newGood)
-				.user(newGood.getUser())
-				.saveDate(diary.getCreateDate())
-				.build();
-		Timeline createdTimeline = timelineRepository.save(diaryTimeline);
-		Timeline readTimeline = timelineRepository.findByGood(newGood);
-		assertThat(createdTimeline, is(readTimeline));
-	}
-	
-	@Test
-	public void readDiaryAndUser() {
+	public void readGood() {
 		User user = User.builder()
 				.id(1L)
 				.email("test3@test.test")
@@ -591,6 +591,46 @@ public class TimelineRepositoryTest {
 		timelineRepository.delete(createdFreeBoardAnswerTimeline);
 		Optional<Timeline> deletedTimeline = timelineRepository.findById(createdFreeBoardAnswerTimeline.getId());
 		assertFalse(deletedTimeline.isPresent());
+	}
+	
+	@Test
+	public void deleteGood() {
+		User user = User.builder()
+				.id(1L)
+				.email("test3@test.test")
+				.password("test3")
+				.name("테스트3")
+				.profileImage("blank-profile-picture.png")
+				.authority("ROLE_USER")
+				.createDate(LocalDateTime.now())
+				.build();
+		Diary diary = Diary.builder()
+				.writer(user)
+				.title("test3")
+				.contents("test3")
+				.thumbnail("no-image-icon.gif")
+				.createDate(LocalDateTime.now())
+				.build();
+		Diary createdDiary = diaryRepository.save(diary);
+		Good good = Good.builder()
+				.diary(createdDiary)
+				.user(user)
+				.createDate(LocalDateTime.now())
+				.build();
+		Good createdGood = goodRepository.save(good);
+		List<Good> list = new ArrayList<Good>();
+		list.add(createdGood);
+		diary.setGoodPushedUser(list);
+		Timeline diaryTimeline = Timeline.builder()
+				.type("good")
+				.icon("thumbs-up")
+				.good(good)
+				.user(good.getUser())
+				.saveDate(diary.getCreateDate())
+				.build();
+		Timeline createdTimeline = timelineRepository.save(diaryTimeline);
+		Timeline readTimeline = timelineRepository.findByGood(good);
+		assertThat(createdTimeline, is(readTimeline));
 	}
 	
 	@Test

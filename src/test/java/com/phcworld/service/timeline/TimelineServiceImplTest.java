@@ -429,7 +429,7 @@ public class TimelineServiceImplTest {
 	}
 	
 	@Test
-	public void deleteGoodDiary() {
+	public void deleteGood() {
 		User user = User.builder()
 				.id(1L)
 				.email("test3@test.test")
