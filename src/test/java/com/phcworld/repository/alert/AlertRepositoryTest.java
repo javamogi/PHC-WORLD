@@ -24,11 +24,13 @@ import com.phcworld.domain.answer.DiaryAnswer;
 import com.phcworld.domain.answer.FreeBoardAnswer;
 import com.phcworld.domain.board.Diary;
 import com.phcworld.domain.board.FreeBoard;
+import com.phcworld.domain.good.Good;
 import com.phcworld.domain.user.User;
 import com.phcworld.repository.answer.DiaryAnswerRepository;
 import com.phcworld.repository.answer.FreeBoardAnswerRepository;
 import com.phcworld.repository.board.DiaryRepository;
 import com.phcworld.repository.board.FreeBoardRepository;
+import com.phcworld.repository.good.GoodRepository;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest
@@ -49,6 +51,9 @@ public class AlertRepositoryTest {
 	
 	@Autowired
 	private FreeBoardAnswerRepository freeBoardAnswerRepository;
+	
+	@Autowired
+	private GoodRepository goodRepository;
 	
 	@Test
 	public void createDiaryAnswerAlert() {
@@ -125,7 +130,7 @@ public class AlertRepositoryTest {
 	}
 	
 	@Test
-	public void createDiaryAlert() {
+	public void createGoodAlert() {
 		User user = User.builder()
 				.id(1L)
 				.email("test3@test.test")
@@ -152,11 +157,15 @@ public class AlertRepositoryTest {
 				.createDate(LocalDateTime.now())
 				.build();
 		Diary createdDiary = diaryRepository.save(diary);
+		Good good = Good.builder()
+				.diary(createdDiary)
+				.user(user2)
+				.createDate(LocalDateTime.now())
+				.build();
 		Alert alert = Alert.builder()
 				.type("Diary")
-				.diary(createdDiary)
-				.postWriter(createdDiary.getWriter())
-				.registerUser(user2)
+				.good(good)
+				.postWriter(good.getUser())
 				.createDate(LocalDateTime.now())
 				.build();
 		Alert createdAlert = alertRepository.save(alert);
@@ -227,7 +236,7 @@ public class AlertRepositoryTest {
 	}
 	
 	@Test
-	public void deleteDiaryAlert() {
+	public void deleteGoodAlert() {
 		User user = User.builder()
 				.id(1L)
 				.email("test3@test.test")
@@ -255,11 +264,15 @@ public class AlertRepositoryTest {
 				.createDate(LocalDateTime.now())
 				.build();
 		Diary createdDiary = diaryRepository.save(diary);
+		Good good = Good.builder()
+				.diary(createdDiary)
+				.user(user2)
+				.createDate(LocalDateTime.now())
+				.build();
 		Alert alert = Alert.builder()
 				.type("Diary")
-				.diary(createdDiary)
-				.postWriter(createdDiary.getWriter())
-				.registerUser(user2)
+				.good(good)
+				.postWriter(good.getUser())
 				.createDate(LocalDateTime.now())
 				.build();
 		Alert createdAlert = alertRepository.save(alert);
@@ -375,15 +388,20 @@ public class AlertRepositoryTest {
 				.createDate(LocalDateTime.now())
 				.build();
 		Diary createdDiary = diaryRepository.save(diary);
+		Good good = Good.builder()
+				.diary(createdDiary)
+				.user(user2)
+				.createDate(LocalDateTime.now())
+				.build();
+		Good createdGood = goodRepository.save(good);
 		Alert alert = Alert.builder()
 				.type("Diary")
-				.diary(createdDiary)
-				.postWriter(createdDiary.getWriter())
-				.registerUser(user2)
+				.good(createdGood)
+				.postWriter(createdGood.getUser())
 				.createDate(LocalDateTime.now())
 				.build();
 		Alert createdAlert = alertRepository.save(alert);
-		Alert selectAlert = alertRepository.findByDiaryAndRegisterUser(createdDiary, user2);
+		Alert selectAlert = alertRepository.findByGood(good);
 		assertThat(createdAlert, is(selectAlert));
 	}
 	

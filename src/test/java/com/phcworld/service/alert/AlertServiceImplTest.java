@@ -22,6 +22,7 @@ import com.phcworld.domain.answer.DiaryAnswer;
 import com.phcworld.domain.answer.FreeBoardAnswer;
 import com.phcworld.domain.board.Diary;
 import com.phcworld.domain.board.FreeBoard;
+import com.phcworld.domain.good.Good;
 import com.phcworld.domain.user.User;
 import com.phcworld.service.alert.AlertServiceImpl;
 
@@ -109,7 +110,7 @@ public class AlertServiceImplTest {
 	}
 	
 	@Test
-	public void createDiary() {
+	public void createGoodAlert() {
 		User user = User.builder()
 				.id(1L)
 				.email("test3@test.test")
@@ -136,17 +137,21 @@ public class AlertServiceImplTest {
 				.thumbnail("no-image-icon.gif")
 				.createDate(LocalDateTime.now())
 				.build();
-		Alert alert = Alert.builder()
-				.type("Diary")
+		Good good = Good.builder()
 				.diary(diary)
-				.postWriter(diary.getWriter())
-				.registerUser(user2)
+				.user(user2)
 				.createDate(LocalDateTime.now())
 				.build();
-		when(alertService.createAlert(diary, user2))
+		Alert alert = Alert.builder()
+				.type("Diary")
+				.good(good)
+				.postWriter(good.getUser())
+				.createDate(LocalDateTime.now())
+				.build();
+		when(alertService.createAlert(good))
 		.thenReturn(alert);
-		Alert alertCreated = alertService.createAlert(diary, user2);
-		assertThat(diary, is(alertCreated.getDiary()));
+		Alert alertCreated = alertService.createAlert(good);
+		assertThat(good, is(alertCreated.getGood()));
 	}
 	
 	@Test
@@ -252,7 +257,7 @@ public class AlertServiceImplTest {
 	}
 	
 	@Test
-	public void deleteDiaryAlert() {
+	public void deleteGoodAlert() {
 		User user = User.builder()
 				.id(1L)
 				.email("test3@test.test")
@@ -279,8 +284,13 @@ public class AlertServiceImplTest {
 				.thumbnail("no-image-icon.gif")
 				.createDate(LocalDateTime.now())
 				.build();
-		alertService.deleteAlert(diary, user2);
-		verify(alertService, times(1)).deleteAlert(diary, user2);
+		Good good = Good.builder()
+				.diary(diary)
+				.user(user2)
+				.createDate(LocalDateTime.now())
+				.build();
+		alertService.deleteAlert(good);
+		verify(alertService, times(1)).deleteAlert(good);
 	}
 	
 	@Test

@@ -14,7 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.phcworld.domain.alert.Alert;
 import com.phcworld.domain.answer.DiaryAnswer;
 import com.phcworld.domain.answer.FreeBoardAnswer;
-import com.phcworld.domain.board.Diary;
+import com.phcworld.domain.good.Good;
 import com.phcworld.domain.user.User;
 import com.phcworld.repository.alert.AlertRepository;
 
@@ -37,12 +37,11 @@ public class AlertServiceImpl implements AlertService {
 		return pageAlert.getContent();
 	}
 	
-	public Alert createAlert(Diary diary, User loginUser) {
+	public Alert createAlert(Good good) {
 		Alert alert = Alert.builder()
 				.type("Diary")
-				.diary(diary)
-				.postWriter(diary.getWriter())
-				.registerUser(loginUser)
+				.good(good)
+				.postWriter(good.getUser())
 				.createDate(LocalDateTime.now())
 				.build();
 		return alertRepository.save(alert);
@@ -68,8 +67,8 @@ public class AlertServiceImpl implements AlertService {
 		return alertRepository.save(alert);
 	}
 	
-	public void deleteAlert(Diary diary, User loginUser) {
-		Alert alert = alertRepository.findByDiaryAndRegisterUser(diary, loginUser);
+	public void deleteAlert(Good good) {
+		Alert alert = alertRepository.findByGood(good);
 		if(alert != null) {
 			alertRepository.delete(alert);
 		}

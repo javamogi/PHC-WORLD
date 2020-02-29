@@ -35,14 +35,14 @@ public class GoodService {
 			good = goodRepository.save(createdGood);
 			timelineService.createTimeline(good);
 			if(!diary.matchUser(loginUser)) {
-				alertService.createAlert(diary, loginUser);
+				alertService.createAlert(good);
 			}
 		} else {
 			goodRepository.delete(good);
 			diary.getGoodPushedUser().remove(good);
 			timelineService.deleteTimeline(good);
 			if(!diary.matchUser(loginUser)) {
-				alertService.deleteAlert(diary, loginUser);
+				alertService.deleteAlert(good);
 			}
 		}
 		return good;

@@ -86,7 +86,7 @@ public class DiaryServiceImpl implements DiaryService {
 		List<Good> goodList = diary.getGoodPushedUser();
 		for(int i = 0; i < goodList.size(); i++) {
 			timelineService.deleteTimeline(goodList.get(i));
-			alertService.deleteAlert(goodList.get(i).getDiary(), goodList.get(i).getUser());
+			alertService.deleteAlert(goodList.get(i));
 		}
 		List<DiaryAnswer> answerList = diary.getDiaryAnswers();
 		for(int i = 0; i < answerList.size(); i++) {

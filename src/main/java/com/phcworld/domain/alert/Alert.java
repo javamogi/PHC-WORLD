@@ -12,7 +12,7 @@ import javax.persistence.OneToOne;
 
 import com.phcworld.domain.answer.DiaryAnswer;
 import com.phcworld.domain.answer.FreeBoardAnswer;
-import com.phcworld.domain.board.Diary;
+import com.phcworld.domain.good.Good;
 import com.phcworld.domain.user.User;
 import com.phcworld.web.LocalDateTimeUtils;
 
@@ -34,8 +34,8 @@ public class Alert {
 	private String type;
 
 	@OneToOne
-	@JoinColumn(foreignKey = @ForeignKey(name = "fk_alert_diary"))
-	private Diary diary;
+	@JoinColumn(foreignKey = @ForeignKey(name = "fk_alert_good"))
+	private Good good;
 
 	@OneToOne
 	@JoinColumn(foreignKey = @ForeignKey(name = "fk_alert_diary_answer"))
@@ -49,20 +49,9 @@ public class Alert {
 	@JoinColumn(foreignKey = @ForeignKey(name = "fk_alert_post_writer"))
 	private User postWriter;
 	
-	@OneToOne
-	@JoinColumn(foreignKey = @ForeignKey(name = "fk_alert_user"))
-	private User registerUser;
-
 	private LocalDateTime createDate;
 
 	public String getFormattedCreateDate() {
 		return LocalDateTimeUtils.getTime(createDate);
-	}
-
-	public boolean getIsDiaryNull() {
-		if(getDiary() == null) {
-			return false;
-		}
-		return true;
 	}
 }
