@@ -2,7 +2,7 @@ package com.phcworld.web;
 
 import static org.hamcrest.Matchers.containsString;
 import static org.junit.Assert.*;
-import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
@@ -25,6 +25,7 @@ import com.phcworld.domain.answer.DiaryAnswer;
 import com.phcworld.domain.answer.FreeBoardAnswer;
 import com.phcworld.domain.board.Diary;
 import com.phcworld.domain.board.FreeBoard;
+import com.phcworld.domain.good.Good;
 import com.phcworld.domain.user.User;
 import com.phcworld.service.alert.AlertServiceImpl;
 
@@ -52,7 +53,7 @@ public class HomeControllerTest {
 	}
 
 	@Test
-	public void redirectToAlert() throws Exception {
+	public void redirectDiaryAnswerAlert() throws Exception {
 		User user = User.builder()
 				.id(1L)
 				.email("test3@test.test")
@@ -83,23 +84,36 @@ public class HomeControllerTest {
 				.createDate(LocalDateTime.now())
 				.build();
 				
-		given(this.alertService.getOneAlert(1L))
-		.willReturn(diaryAnswerAlert);
+		when(this.alertService.getOneAlert(1L))
+		.thenReturn(diaryAnswerAlert);
 		MockHttpSession mockSession = new MockHttpSession();
 		this.mvc.perform(get("/alert/{id}", 1L)
 				.session(mockSession))
 		.andDo(print())
-		.andExpect(redirectedUrl("/diary/" + 1L + "/detail"));
-
+		.andExpect(redirectedUrl("/diary/" + diaryAnswerAlert.getDiaryAnswer().getDiary().getId() + "/detail"));
+	}
+	
+	@Test
+	public void redirectFreeBoardAnswer() throws Exception {
+		MockHttpSession mockSession = new MockHttpSession();
+		User user = User.builder()
+				.id(1L)
+				.email("test3@test.test")
+				.password("test3")
+				.name("테스트3")
+				.profileImage("blank-profile-picture.png")
+				.authority("ROLE_USER")
+				.createDate(LocalDateTime.now())
+				.build();
 		FreeBoard freeBoard = FreeBoard.builder()
 				.id(1L)
+				.writer(user)
 				.title("title")
 				.contents("content")
 				.icon("")
 				.createDate(LocalDateTime.now())
 				.count(0)
 				.build();
-		
 		FreeBoardAnswer freeBoardAnswer = FreeBoardAnswer.builder()
 				.id(1L)
 				.writer(user)
@@ -113,18 +127,51 @@ public class HomeControllerTest {
 				.postWriter(freeBoard.getWriter())
 				.createDate(LocalDateTime.now())
 				.build();
-		given(this.alertService.getOneAlert(2L))
-		.willReturn(freeBoardAnswerAlert);
+		when(this.alertService.getOneAlert(2L))
+		.thenReturn(freeBoardAnswerAlert);
 		this.mvc.perform(get("/alert/{id}", 2L)
 				.session(mockSession))
 		.andDo(print())
-		.andExpect(redirectedUrl("/freeboard/" + 1L + "/detail"));
-		
-//		given(this.alertService.getOneAlert(3L))
-//		.willReturn(new Alert("Diary", good, diary.getWriter(), good.getSaveDate()));
-//		this.mvc.perform(get("/alert/{id}", 3L)
-//				.session(mockSession))
-//		.andDo(print())
-//		.andExpect(redirectedUrl("/diary/" + 1L + "/detail"));
+		.andExpect(redirectedUrl("/freeboard/" 
+				+ freeBoardAnswerAlert.getFreeBoardAnswer().getFreeBoard().getId() 
+					+ "/detail"));
+	}
+	
+	@Test
+	public void redirectGood() throws Exception {
+		MockHttpSession mockSession = new MockHttpSession();
+		User user = User.builder()
+				.id(1L)
+				.email("test3@test.test")
+				.password("test3")
+				.name("테스트3")
+				.profileImage("blank-profile-picture.png")
+				.authority("ROLE_USER")
+				.createDate(LocalDateTime.now())
+				.build();
+		Diary diary = Diary.builder()
+				.id(1L)
+				.writer(user)
+				.title("test3")
+				.contents("test3")
+				.thumbnail("no-image-icon.gif")
+				.createDate(LocalDateTime.now())
+				.build();
+		Good good = Good.builder()
+				.diary(diary)
+				.user(user)
+				.build();
+		Alert goodAlert = Alert.builder()
+				.type("good")
+				.good(good)
+				.postWriter(good.getUser())
+				.createDate(LocalDateTime.now())
+				.build();
+		when(this.alertService.getOneAlert(3L))
+		.thenReturn(goodAlert);
+		this.mvc.perform(get("/alert/{id}", 3L)
+				.session(mockSession))
+		.andDo(print())
+		.andExpect(redirectedUrl("/diary/" + goodAlert.getGood().getDiary().getId() + "/detail"));
 	}
 }

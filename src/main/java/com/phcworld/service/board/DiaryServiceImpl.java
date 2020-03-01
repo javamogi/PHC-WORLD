@@ -15,7 +15,6 @@ import com.phcworld.domain.answer.DiaryAnswer;
 import com.phcworld.domain.board.Diary;
 import com.phcworld.domain.good.Good;
 import com.phcworld.domain.user.User;
-import com.phcworld.repository.answer.DiaryAnswerRepository;
 import com.phcworld.repository.board.DiaryRepository;
 import com.phcworld.service.alert.AlertServiceImpl;
 import com.phcworld.service.good.GoodService;
@@ -33,9 +32,6 @@ public class DiaryServiceImpl implements DiaryService {
 	
 	@Autowired
 	private TimelineServiceImpl timelineService;
-	
-	@Autowired
-	private DiaryAnswerRepository diaryAnswerRepository;
 	
 	@Autowired
 	private GoodService goodService;

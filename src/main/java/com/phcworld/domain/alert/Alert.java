@@ -54,4 +54,11 @@ public class Alert {
 	public String getFormattedCreateDate() {
 		return LocalDateTimeUtils.getTime(createDate);
 	}
+	
+	public boolean getIsGoodNull() {
+		if(good != null) {
+			return true;
+		}
+		return false;
+	}
 }

@@ -26,11 +26,9 @@ import com.phcworld.service.board.FreeBoardServiceImpl;
 import com.phcworld.service.timeline.TimelineServiceImpl;
 import com.phcworld.web.HttpSessionUtils;
 
-import lombok.extern.slf4j.Slf4j;
 
 @Controller
 @RequestMapping("/dashboard")
-@Slf4j
 public class DashboardController {
 	
 	@Autowired
@@ -52,30 +50,31 @@ public class DashboardController {
 	private AlertServiceImpl alertService;
 	
 	@GetMapping("")
-	public String dashboard(HttpSession session, Model model) {
+	public String requestDashboard(HttpSession session, Model model) {
 		if(!HttpSessionUtils.isLoginUser(session)) {
 			model.addAttribute("errorMessage", "로그인이 필요합니다.");
 			return "/user/login";
 		}
 		User loginUser = HttpSessionUtils.getUserFromSession(session);
 		
-		List<FreeBoard> freeBoards = freeBoardService.findFreeBoardListByWriter(loginUser);
-		List<FreeBoardAnswer> freeBoardAnswer = freeBoardAnswerService.findFreeBoardAnswerListByWriter(loginUser);
+		List<FreeBoard> freeBoardList = freeBoardService.findFreeBoardListByWriter(loginUser);
+		List<FreeBoardAnswer> freeBoardAnswerList = freeBoardAnswerService.findFreeBoardAnswerListByWriter(loginUser);
 
-		List<Diary> diaries = diaryService.findDiaryListByWriter(loginUser);
-		List<DiaryAnswer> diaryAnswer = diaryAnswerService.findDiaryAnswerListByWriter(loginUser);
+		List<Diary> diaryList = diaryService.findDiaryListByWriter(loginUser);
+		List<DiaryAnswer> diaryAnswerList = diaryAnswerService.findDiaryAnswerListByWriter(loginUser);
 		
-		List<Alert> alerts = alertService.findPageRequestAlertByPostUser(loginUser);
+		List<Alert> alertList = alertService.findPageRequestAlertByPostUser(loginUser);
 		
-		List<Timeline> timelines = timelineService.findTimelineList(0, loginUser);
+		List<Timeline> timelineList = timelineService.findTimelineList(0, loginUser);
 		
+		Integer countAnswers = freeBoardAnswerList.size() + diaryAnswerList.size();
 
-		model.addAttribute("countAnswers", freeBoardAnswer.size() + diaryAnswer.size());
-		model.addAttribute("countFreeboards", freeBoards.size());
-		model.addAttribute("countDiaries", diaries.size());
-		model.addAttribute("countAlerts", alerts.size());
+		model.addAttribute("countAnswers", countAnswers);
+		model.addAttribute("countFreeboards", freeBoardList.size());
+		model.addAttribute("countDiaries", diaryList.size());
+		model.addAttribute("countAlerts", alertList.size());
 		
-		model.addAttribute("timelines", timelines);
+		model.addAttribute("timelines", timelineList);
 
 		return "/dashboard/dashboard";
 	}
@@ -83,7 +82,6 @@ public class DashboardController {
 	@GetMapping("/timeline/{id}")
 	public String redirectToTimeline(@PathVariable Long id) {
 		Timeline timeline = timelineService.getOneTimeline(id);
-		log.info("timeline : {}", timeline);
 		if(timeline.getType().equals("diary")) {
 			return "redirect:/diary/"+ timeline.getDiary().getId() + "/detail";
 		}
@@ -94,7 +92,7 @@ public class DashboardController {
 			return "redirect:/freeboard/" + timeline.getFreeBoard().getId() + "/detail";
 		}
 		if(timeline.getType().equals("good")) {
-			return "redirect:/diary/"+ timeline.getDiary().getId() + "/detail";
+			return "redirect:/diary/"+ timeline.getGood().getDiary().getId() + "/detail";
 		}
 		return "redirect:/freeboard/" + timeline.getFreeBoardAnswer().getFreeBoard().getId() + "/detail";
 	}

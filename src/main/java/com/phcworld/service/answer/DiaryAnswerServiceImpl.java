@@ -33,9 +33,9 @@ public class DiaryAnswerServiceImpl implements DiaryAnswerService {
 	private TimelineServiceImpl timelineService;
 	
 	@Override
-	public DiaryAnswer createDiaryAnswer(User user, Diary diary, String contents) {
+	public DiaryAnswer createDiaryAnswer(User loginUser, Diary diary, String contents) {
 		DiaryAnswer diaryAnswer = DiaryAnswer.builder()
-				.writer(user)
+				.writer(loginUser)
 				.diary(diary)
 				.contents(contents.replace("\r\n", "<br>"))
 				.createDate(LocalDateTime.now())
@@ -44,7 +44,7 @@ public class DiaryAnswerServiceImpl implements DiaryAnswerService {
 		DiaryAnswer createdDiaryAnswer = diaryAnswerRepository.save(diaryAnswer);
 		timelineService.createTimeline(createdDiaryAnswer);
 		
-		if(!diary.matchUser(user)) {
+		if(!diary.matchUser(loginUser)) {
 			alertService.createAlert(createdDiaryAnswer);
 		}
 		

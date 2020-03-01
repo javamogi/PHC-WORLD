@@ -55,17 +55,17 @@
                     	<li>
                             <a href="/alert/{{id}}">
                                 <div>
-                                	{{#isDiaryNull}}
-                                		{{registerUser.name}} 님이 {{diary.title}} 게시물에 좋아요를 눌렀습니다.
-                                	{{/isDiaryNull}}
-                                	{{^isDiaryNull}}
+                                	{{#isGoodNull}}
+                                		{{good.user.name}} 님이 {{good.diary.title}} 게시물에 좋아요를 눌렀습니다.
+                                	{{/isGoodNull}}
+                                	{{^isGoodNull}}
                                 		{{#freeBoardAnswer}}
                                     		{{freeBoardAnswer.writer.name}} 님이 {{freeBoardAnswer.freeBoard.title}} 게시물에 댓글을 달았습니다.
                                     	{{/freeBoardAnswer}}
                                     	{{#diaryAnswer}}
                                     		{{diaryAnswer.writer.name}} 님이 {{diaryAnswer.diary.title}} 게시물에 댓글을 달았습니다.
                                     	{{/diaryAnswer}} 
-                                	{{/isDiaryNull}}
+                                	{{/isGoodNull}}
                                     <span class="pull-right text-muted small">{{formattedCreateDate}}</span>
                                 </div>
                             </a>
