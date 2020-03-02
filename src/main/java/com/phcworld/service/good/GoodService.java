@@ -1,6 +1,7 @@
 package com.phcworld.service.good;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -46,5 +47,10 @@ public class GoodService {
 			}
 		}
 		return good;
+	}
+	
+	public List<Good> getGoodList(User user){
+		List<Good> goodList = goodRepository.findByUser(user);
+		return goodList;
 	}
 }

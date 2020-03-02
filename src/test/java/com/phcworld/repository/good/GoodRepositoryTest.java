@@ -1,9 +1,11 @@
 package com.phcworld.repository.good;
 
+import static org.hamcrest.CoreMatchers.hasItem;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 import org.junit.Test;
@@ -55,7 +57,7 @@ public class GoodRepositoryTest {
 	}
 	
 	@Test
-	public void readDiaryAndUser() {
+	public void readByDiaryAndUser() {
 		User writer = User.builder()
 				.id(1L)
 				.email("user@test.test")
@@ -77,6 +79,31 @@ public class GoodRepositoryTest {
 		Good newGood = goodRepository.save(good);
 		Good findGood = goodRepository.findByDiaryAndUser(newDiary, writer);
 		assertThat(newGood, is(findGood));
+	}
+	
+	@Test
+	public void readByUser() {
+		User writer = User.builder()
+				.id(1L)
+				.email("user@test.test")
+				.password("user")
+				.name("user")
+				.build();
+		Diary diary = Diary.builder()
+				.writer(writer)
+				.title("title")
+				.contents("content")
+				.thumbnail("no-image-icon.gif")
+				.createDate(LocalDateTime.now())
+				.build();
+		Diary newDiary = diaryRepository.save(diary);
+		Good good = Good.builder()
+				.diary(newDiary)
+				.user(writer)
+				.build();
+		Good newGood = goodRepository.save(good);
+		List<Good> goodList = goodRepository.findByUser(writer);
+		assertThat(goodList, hasItem(newGood));
 	}
 	
 	@Test

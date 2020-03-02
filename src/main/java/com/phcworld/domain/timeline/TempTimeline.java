@@ -6,7 +6,7 @@ import com.phcworld.domain.answer.DiaryAnswer;
 import com.phcworld.domain.answer.FreeBoardAnswer;
 import com.phcworld.domain.board.Diary;
 import com.phcworld.domain.board.FreeBoard;
-import com.phcworld.domain.user.User;
+import com.phcworld.domain.good.Good;
 import com.phcworld.web.LocalDateTimeUtils;
 
 import lombok.AllArgsConstructor;
@@ -33,6 +33,8 @@ public class TempTimeline {
 	private FreeBoard freeBoard;
 
 	private FreeBoardAnswer freeBoardAnswer;
+	
+	private Good good;
 	
 	private LocalDateTime saveDate;
 

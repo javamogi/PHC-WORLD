@@ -11,13 +11,14 @@ import com.phcworld.domain.answer.DiaryAnswer;
 import com.phcworld.domain.answer.FreeBoardAnswer;
 import com.phcworld.domain.board.Diary;
 import com.phcworld.domain.board.FreeBoard;
+import com.phcworld.domain.good.Good;
 import com.phcworld.domain.timeline.TempTimeline;
-import com.phcworld.domain.timeline.Timeline;
 import com.phcworld.domain.user.User;
 import com.phcworld.service.answer.DiaryAnswerServiceImpl;
 import com.phcworld.service.answer.FreeBoardAnswerServiceImpl;
 import com.phcworld.service.board.DiaryServiceImpl;
 import com.phcworld.service.board.FreeBoardServiceImpl;
+import com.phcworld.service.good.GoodService;
 
 @Service
 public class TempTimelineService {
@@ -33,6 +34,9 @@ public class TempTimelineService {
 	
 	@Autowired
 	private DiaryAnswerServiceImpl diaryAnswerService;
+	
+	@Autowired
+	private GoodService goodService;
 	
 	public List<TempTimeline> getTimeline(User loginUser) {
 		List<TempTimeline> timelineList = new ArrayList<TempTimeline>();
@@ -96,15 +100,30 @@ public class TempTimelineService {
 				break;
 			}
 		}
+		
+		List<Good> goodList = goodService.getGoodList(loginUser);
+		for(int i = 0; i < goodList.size(); i++) {
+			TempTimeline temp = TempTimeline.builder()
+					.type("good")
+					.icon("thumbs-up")
+					.url("/diary/"+goodList.get(i).getDiary().getId()+"/detail")
+					.good(goodList.get(i))
+					.saveDate(goodList.get(i).getCreateDate())
+					.build();
+			timelineList.add(temp);
+			if(i == 5) {
+				break;
+			}
+		}
+		Comparator<TempTimeline> compTimeline = new Comparator<TempTimeline>() {
+			@Override
+			public int compare(TempTimeline a, TempTimeline b) {
+				return b.getSaveDate().compareTo(a.getSaveDate());
+			}
+		};
+		
 		timelineList.sort(compTimeline);
 		return timelineList;
 	}
-	
-	Comparator<TempTimeline> compTimeline = new Comparator<TempTimeline>() {
-		@Override
-		public int compare(TempTimeline a, TempTimeline b) {
-			return b.getSaveDate().compareTo(a.getSaveDate());
-		}
-	};
 	
 }

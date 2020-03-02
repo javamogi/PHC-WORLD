@@ -16,6 +16,7 @@ import com.phcworld.domain.answer.DiaryAnswer;
 import com.phcworld.domain.answer.FreeBoardAnswer;
 import com.phcworld.domain.board.Diary;
 import com.phcworld.domain.board.FreeBoard;
+import com.phcworld.domain.timeline.TempTimeline;
 import com.phcworld.domain.timeline.Timeline;
 import com.phcworld.domain.user.User;
 import com.phcworld.service.alert.AlertServiceImpl;
@@ -23,6 +24,7 @@ import com.phcworld.service.answer.DiaryAnswerServiceImpl;
 import com.phcworld.service.answer.FreeBoardAnswerServiceImpl;
 import com.phcworld.service.board.DiaryServiceImpl;
 import com.phcworld.service.board.FreeBoardServiceImpl;
+import com.phcworld.service.timeline.TempTimelineService;
 import com.phcworld.service.timeline.TimelineServiceImpl;
 import com.phcworld.web.HttpSessionUtils;
 
@@ -49,6 +51,9 @@ public class DashboardController {
 	@Autowired
 	private AlertServiceImpl alertService;
 	
+	@Autowired
+	private TempTimelineService tempTimelineService;
+	
 	@GetMapping("")
 	public String requestDashboard(HttpSession session, Model model) {
 		if(!HttpSessionUtils.isLoginUser(session)) {
@@ -65,7 +70,7 @@ public class DashboardController {
 		
 		List<Alert> alertList = alertService.findPageRequestAlertByPostUser(loginUser);
 		
-		List<Timeline> timelineList = timelineService.findTimelineList(0, loginUser);
+//		List<Timeline> timelineList = timelineService.findTimelineList(0, loginUser);
 		
 		Integer countAnswers = freeBoardAnswerList.size() + diaryAnswerList.size();
 
@@ -74,8 +79,11 @@ public class DashboardController {
 		model.addAttribute("countDiaries", diaryList.size());
 		model.addAttribute("countAlerts", alertList.size());
 		
-		model.addAttribute("timelines", timelineList);
+//		model.addAttribute("timelines", timelineList);
 
+		List<TempTimeline> tempTimelineList = tempTimelineService.getTimeline(loginUser);
+		model.addAttribute("timelines", tempTimelineList);
+		
 		return "/dashboard/dashboard";
 	}
 	
