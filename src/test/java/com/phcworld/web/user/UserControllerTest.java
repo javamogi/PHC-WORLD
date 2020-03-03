@@ -3,6 +3,7 @@ package com.phcworld.web.user;
 import static org.hamcrest.Matchers.containsString;
 import static org.junit.Assert.assertNotNull;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
@@ -13,6 +14,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -24,13 +26,13 @@ import org.springframework.mock.web.MockHttpSession;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
-import com.phcworld.domain.alert.AlertServiceImpl;
 import com.phcworld.domain.email.EmailAuth;
 import com.phcworld.domain.email.EmailService;
 import com.phcworld.domain.message.Message;
 import com.phcworld.domain.message.MessageServiceImpl;
 import com.phcworld.domain.timeline.Timeline;
 import com.phcworld.domain.user.User;
+import com.phcworld.service.alert.AlertServiceImpl;
 import com.phcworld.service.timeline.TimelineServiceImpl;
 import com.phcworld.service.user.UserService;
 import com.phcworld.web.HttpSessionUtils;
@@ -430,11 +432,11 @@ public class UserControllerTest {
 				.authority("ROLE_USER")
 				.createDate(LocalDateTime.now())
 				.build();
-		given(this.userService.findUserById(2L))
-		.willReturn(user);
-		Page<Timeline> timelines = timelineService.findPageTimelineByUser(user);
-		given(this.timelineService.findPageTimelineByUser(user))
-		.willReturn(timelines);
+		when(this.userService.findUserById(2L))
+		.thenReturn(user);
+		List<Timeline> timelines = timelineService.findTimelineList(0, user);
+		when(this.timelineService.findTimelineList(0, user))
+		.thenReturn(timelines);
 		this.mvc.perform(get("/users/{id}/profile", 2L)
 				.param("id", "2L")
 				.session(mockSession))
@@ -464,9 +466,9 @@ public class UserControllerTest {
 		mockSession.setAttribute("alerts", null);
 		given(this.userService.findUserById(1L))
 		.willReturn(loginUser);
-		Page<Timeline> timelines = timelineService.findPageTimelineByUser(loginUser);
-		given(this.timelineService.findPageTimelineByUser(loginUser))
-		.willReturn(timelines);
+		List<Timeline> timelines = timelineService.findTimelineList(0, loginUser);
+		when(this.timelineService.findTimelineList(0, loginUser))
+		.thenReturn(timelines);
 		Page<Message> pageReceiveMessages = messageService.findMessageByReceiveMessages(1, loginUser);
 		given(this.messageService.findMessageByReceiveMessages(1, loginUser))
 		.willReturn(pageReceiveMessages);

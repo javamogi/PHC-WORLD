@@ -197,10 +197,6 @@ public class UserController {
 		User loginUser = HttpSessionUtils.getUserFromSession(session);
 		User user = userService.findUserById(id);
 		
-//		Page<Timeline> timelines = timelineService.findPageTimelineByUser(user);
-//		if(timelines != null) {
-//			temp = timelines.hasNext();
-//		}
 		List<Timeline> timelines = timelineService.findTimelineList(0, user);
 		boolean temp = false;
 		if(timelines.size() > 0) {

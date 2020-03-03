@@ -51,8 +51,8 @@ public class DashboardController {
 	@Autowired
 	private AlertServiceImpl alertService;
 	
-	@Autowired
-	private TempTimelineService tempTimelineService;
+//	@Autowired
+//	private TempTimelineService tempTimelineService;
 	
 	@GetMapping("")
 	public String requestDashboard(HttpSession session, Model model) {
@@ -70,7 +70,7 @@ public class DashboardController {
 		
 		List<Alert> alertList = alertService.findPageRequestAlertByPostUser(loginUser);
 		
-//		List<Timeline> timelineList = timelineService.findTimelineList(0, loginUser);
+		List<Timeline> timelineList = timelineService.findTimelineList(0, loginUser);
 		
 		Integer countAnswers = freeBoardAnswerList.size() + diaryAnswerList.size();
 
@@ -79,10 +79,10 @@ public class DashboardController {
 		model.addAttribute("countDiaries", diaryList.size());
 		model.addAttribute("countAlerts", alertList.size());
 		
-//		model.addAttribute("timelines", timelineList);
+		model.addAttribute("timelines", timelineList);
 
-		List<TempTimeline> tempTimelineList = tempTimelineService.getTimeline(loginUser);
-		model.addAttribute("timelines", tempTimelineList);
+//		List<TempTimeline> tempTimelineList = tempTimelineService.getTimeline(loginUser);
+//		model.addAttribute("timelines", tempTimelineList);
 		
 		return "/dashboard/dashboard";
 	}
@@ -90,19 +90,7 @@ public class DashboardController {
 	@GetMapping("/timeline/{id}")
 	public String redirectToTimeline(@PathVariable Long id) {
 		Timeline timeline = timelineService.getOneTimeline(id);
-		if(timeline.getType().equals("diary")) {
-			return "redirect:/diary/"+ timeline.getDiary().getId() + "/detail";
-		}
-		if(timeline.getType().equals("diary answer")) {
-			return "redirect:/diary/"+ timeline.getDiaryAnswer().getDiary().getId() + "/detail";
-		}
-		if(timeline.getType().equals("free board")) {
-			return "redirect:/freeboard/" + timeline.getFreeBoard().getId() + "/detail";
-		}
-		if(timeline.getType().equals("good")) {
-			return "redirect:/diary/"+ timeline.getGood().getDiary().getId() + "/detail";
-		}
-		return "redirect:/freeboard/" + timeline.getFreeBoardAnswer().getFreeBoard().getId() + "/detail";
+		return timeline.redirectUrl();
 	}
 	
 }
