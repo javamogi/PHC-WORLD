@@ -31,7 +31,7 @@ public class AlertServiceImpl implements AlertService {
 	}
 	
 	@Override
-	public List<Alert> findPageRequestAlertByPostUser(User loginUser) {
+	public List<Alert> findListAlertByPostUser(User loginUser) {
 		PageRequest pageRequest = PageRequest.of(0, 5, new Sort(Direction.DESC, "id"));
 		Page<Alert> pageAlert = alertRepository.findByPostWriter(loginUser, pageRequest);
 		return pageAlert.getContent();

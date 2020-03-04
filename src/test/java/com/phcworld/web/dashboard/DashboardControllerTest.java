@@ -152,7 +152,7 @@ public class DashboardControllerTest {
 				.build();
 		List<Alert> alertList = new ArrayList<>();
 		alertList.add(alert);
-		when(this.alertService.findPageRequestAlertByPostUser(user))
+		when(this.alertService.findListAlertByPostUser(user))
 		.thenReturn(alertList);
 		
 		Timeline timeline = Timeline.builder()

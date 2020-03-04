@@ -136,7 +136,7 @@ public class UserController {
 		session.setAttribute("messages", messages);
 		session.setAttribute("countMessages", countOfMessages);
 		
-		List<Alert> alerts = alertService.findPageRequestAlertByPostUser(user);
+		List<Alert> alerts = alertService.findListAlertByPostUser(user);
 		session.setAttribute("alerts", alerts);
 		
 		return "redirect:/dashboard";
@@ -198,11 +198,11 @@ public class UserController {
 		User user = userService.findUserById(id);
 		
 		List<Timeline> timelines = timelineService.findTimelineList(0, user);
-		boolean temp = false;
+		boolean showMore = false;
 		if(timelines.size() > 0) {
-			temp = true;
+			showMore = true;
 		}
-		model.addAttribute("show more", temp);
+		model.addAttribute("show more", showMore);
 
 		if(loginUser.matchId(id)) {
 			viewLoginUserMessage(sendPageNum, receivePageNum, model, user);

@@ -61,9 +61,9 @@ public class User {
 
 	private String profileImage;
 	
-	@OneToMany(mappedBy = "user")
-	@JsonIgnore
-	private List<Good> good;
+//	@OneToMany(mappedBy = "user")
+//	@JsonIgnore
+//	private List<Good> goods;
 	
 	public boolean matchId(Long newId) {
 		if (newId == null) {

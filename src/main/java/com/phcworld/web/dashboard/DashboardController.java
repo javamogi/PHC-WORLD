@@ -68,7 +68,7 @@ public class DashboardController {
 		List<Diary> diaryList = diaryService.findDiaryListByWriter(loginUser);
 		List<DiaryAnswer> diaryAnswerList = diaryAnswerService.findDiaryAnswerListByWriter(loginUser);
 		
-		List<Alert> alertList = alertService.findPageRequestAlertByPostUser(loginUser);
+		List<Alert> alertList = alertService.findListAlertByPostUser(loginUser);
 		
 		List<Timeline> timelineList = timelineService.findTimelineList(0, loginUser);
 		

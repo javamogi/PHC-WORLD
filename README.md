@@ -42,6 +42,8 @@
 * 회원가입을 하면 랜덤값을 가입요청한 메일주소로 보내고 받은 메일의 링크를 클릭하면 랜덤값을 저장된 값과 비교해 회원가입 승인을 합니다.
 * 타임라인과 알림은 생성과 삭제만 사용하기 때문에 수정 기능은 구현하지 않았습니다.
 * 자유게시판, 일기게시판, 프로필 사진에서 이미지 업로드를 사용할 수 있으며 ajax로 서버에 요청해서 MultipartFile을 이용해 파일을 쓰고 정보를 db에 저장 후 해당 정보를 가져와 본문 또는 회원 프로필에 적용하였습니다.
+* 이미지의 용량은 5MB로 javascript(jQuery)로 제한하였습니다.
+* 자유게시판과 일기게시판에 글쓰기는 다음에디터를 사용하였습니다.
 ***
 ### 업데이트 예정
 * 댓글 수정기능
@@ -50,3 +52,57 @@
 * 등록된 글의 회원을 클릭했을 때 회원페이지로 이동
 * 회원정보를 나타내는 페이지에서 다이어리 글로 이동
 ***
+### User 설명
+
+**Entity**
+
+* User는 Entity이므로 @Entity 어노테이션을 사용하였습니다.
+* 모든 필드에 getter와 setter, 서로 다른 User인지 비교하기위해  EqualsAndHashCode, log로 User를 보기위해 toString을 사용하기 위해 Lombok의 @Data어노테이션을 사용하였습니다.
+* User의 toString은 password는 제외시켜 log에 나타나지 않게 하였습니다.
+* 기본 생성자 @NoArgsConstructor 어노테이션, 모든 필드의 생성자 @AllArgsConstructor를 사용하였습니다.
+* User를 생성할 때 편리하게 사용하기위해 @Builder어노테이션을 사용하였습니다.
+* 필드
+  * id
+    * primary key @Id어노테이션 사용
+      * 읽기, 수정, 삭제를 위한 고유키
+    * 자동증가를 위해 @GenaratedValue 어노테이션 사용
+      * pk에 대한 전략으로 데이터베이스에 위임 IDENTITY (mysql과 같이 h2-database에서도 가능)
+  * email
+    * 이메일
+    * spring-boot-starter-validation에 있는 hibernate validation의 @Email 어노테이션 사용
+      * Email형식이 아닐 경우 "이메일 형식이 아닙니다." errorMessage 전달
+    * 회원가입 때 email주소를 반드시 기입하도록 하기위해 @NotNull어노테이션 사용
+    * pk값 이외에 email중복 방지를 위해 @Column 어노테이션의 unique 설정
+  * password
+    * 비밀번호
+    * 회원가입 때 password를 반드시 기입하도록 하기위해 @NotNull어노테이션 사용
+    * 짧은 비밀번호를 막기위해 @Size 어노테이션 사용
+      * 최소 4자 이상
+      * 4자 미만일 경우 errorMessage 전달
+    * Json으로 변경하고 사용할 때 password를 나타나지 않게 하기위해 @JsonIgnore 어노테이션 사용
+    * 보안을 위해 회원가입시 SHA-256을 사용해 변경후 저장
+    * 로그인 시에도 SHA-256으로 변경 후 확인
+      * SHA-256으로 변환하는 클래스를 따로 관리
+  * name
+    * 게시물 작성자를 나타내기 위해 반드시 회원가입 때 기입하도록 @NotNull 어노테이션 사용
+    * 짧은 이름 방지 및 긴 이름 방지를 위해 @Size 어노테이션 사용
+    * 이름에 javascript 명령어 등으로 장난치지 않게 @Pattern 어노테이션으로 정규표현식 적용
+  * authority
+    * 회원 권한
+    * 회원 권한으로 게시물을 삭제할 수 있다.
+    * 예시 회원
+      * email : test@test.test(관리자 권한) password : test
+      * email : test2@test.test(회원 권한) password : test2
+    * email이 pakoh200@naver.com(나)이면 회원권한을 관리자로 변경 (다른 방법으로 생각할 필요 있음)
+  * createDate
+    * 가입한 날짜(@CreatedDate 업데이트 필요)
+  * profileImage
+    * 회원 프로필 이미지명
+    * 회원가입 때는 기본 이미지 명을 사용
+    * 프로필 이미지를 등록했을 경우 프로필 이미지명으로 변경
+    * 이미지를 사용할 때는 이미지 경로 앞부분 + 이미지명으로 사용
+* User간의 확인보다는 pk값인 id를 비교하기 위해 만든 메서드
+* password를 비교하기 위해 만든 메서드
+  * 프로젝트가 시작될 때 예시회원의 비밀번호는 SHA-256으로 변환되지 않고 db에 저장되기 때문에 예시회원의 비밀번호 인 "test" 또는 "test2"는 바로 확인 (변경해야함)
+  * 이외에 패스워드들은 SHA-256으로 변환 후 확인  
+* User정보를 수정했을 때 사용되는 메서드

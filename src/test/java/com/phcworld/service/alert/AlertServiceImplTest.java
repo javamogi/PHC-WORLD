@@ -250,9 +250,9 @@ public class AlertServiceImplTest {
 		List<Alert> list = new ArrayList<Alert>();
 		list.add(diaryAnswerAlert);
 		list.add(freeBoardAnswerAlert);
-		when(alertService.findPageRequestAlertByPostUser(writer))
+		when(alertService.findListAlertByPostUser(writer))
 		.thenReturn(list);
-		List<Alert> alertList = alertService.findPageRequestAlertByPostUser(writer);
+		List<Alert> alertList = alertService.findListAlertByPostUser(writer);
 		assertThat(alertList, hasItems(diaryAnswerAlert, freeBoardAnswerAlert));
 	}
 	
