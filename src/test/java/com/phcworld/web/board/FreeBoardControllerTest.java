@@ -459,12 +459,20 @@ public class FreeBoardControllerTest {
 				.createDate(LocalDateTime.now())
 				.count(0)
 				.build();
+		FreeBoard newBoard = FreeBoard.builder()
+				.id(1L)
+				.writer(user)
+				.title("new title")
+				.contents("new content")
+				.icon("")
+				.badge("new")
+				.createDate(LocalDateTime.now())
+				.count(0)
+				.build();
 		when(this.freeBoardService.getOneFreeBoard(1L))
 		.thenReturn(board);
-		board.update("update test", "");
+		board.update(newBoard);
 		this.mvc.perform(put("/freeboard/{id}", 1L)
-				.param("contents", "updateTest")
-				.param("icon", "test.jpg")
 				.session(mockSession))
 		.andExpect(redirectedUrl("/freeboard/" + 1L + "/detail"));
 	}

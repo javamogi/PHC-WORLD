@@ -40,7 +40,7 @@ public class FreeBoard {
 
 	@ManyToOne
 	@JoinColumn(foreignKey = @ForeignKey(name = "fk_freeBoard_writer"))
-	@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
+//	@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 	private User writer;
 
 	private String title;
@@ -76,9 +76,9 @@ public class FreeBoard {
 		return LocalDateTimeUtils.getTime(createDate);
 	}
 
-	public void update(String newContents, String newIcon) {
-		this.contents = newContents;
-		this.icon = newIcon;
+	public void update(FreeBoard newFreeBoard) {
+		this.contents = newFreeBoard.getContents();
+		this.icon = newFreeBoard.getIcon();
 	}
 
 	public boolean matchUser(User loginUser) {

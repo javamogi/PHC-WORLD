@@ -48,9 +48,7 @@ public class FreeBoardController {
 		int minutesOfHour = 60;
 		if (createdDateAndNowDifferenceMinutes / minutesOfHour < hourOfDay) {
 			board.setBadge("New");
-		} else {
-			board.setBadge("");
-		}
+		} 
 	}
 
 	@GetMapping("/form")
@@ -62,15 +60,14 @@ public class FreeBoardController {
 	}
 
 	@PostMapping("")
-	public String create(String title, String contents, String icon, HttpSession session) {
+	public String create(FreeBoard freeBoard, HttpSession session) {
 		if (!HttpSessionUtils.isLoginUser(session)) {
 			return "/user/login";
 		}
-		log.debug("imgIcon : {}", icon);
 		User sessionUser = HttpSessionUtils.getUserFromSession(session);
-
-		freeBoardService.createFreeBoard(sessionUser, title, contents, icon);
-
+		
+		freeBoardService.createFreeBoard(sessionUser, freeBoard);
+		
 		return "redirect:/freeboard/list";
 	}
 
@@ -119,18 +116,18 @@ public class FreeBoardController {
 	}
 
 	@PutMapping("/{id}")
-	public String modify(@PathVariable Long id, String contents, String icon, HttpSession session, Model model) {
+	public String modify(@PathVariable Long id, FreeBoard freeBoard, HttpSession session, Model model) {
 		if (!HttpSessionUtils.isLoginUser(session)) {
 			return "/user/login";
 		}
 		User loginUser = HttpSessionUtils.getUserFromSession(session);
-		FreeBoard freeBoard = freeBoardService.getOneFreeBoard(id);
-		if (!loginUser.matchId(freeBoard.getWriter().getId())) {
+		FreeBoard oneFreeBoard = freeBoardService.getOneFreeBoard(id);
+		if (!loginUser.matchId(oneFreeBoard.getWriter().getId())) {
 			model.addAttribute("errorMessage", "본인의 작성한 글만 수정 가능합니다.");
 			return "/user/login";
 		}
-
-		freeBoardService.updateFreeBoard(freeBoard, contents, icon);
+		
+		freeBoardService.updateFreeBoard(freeBoard);
 		return "redirect:/freeboard/" + id + "/detail";
 	}
 

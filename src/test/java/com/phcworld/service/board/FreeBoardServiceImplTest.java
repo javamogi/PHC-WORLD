@@ -51,8 +51,8 @@ public class FreeBoardServiceImplTest {
 				.createDate(LocalDateTime.now())
 				.count(0)
 				.build();
-		when(freeBoardService.createFreeBoard(user, "title", "content", "")).thenReturn(board);
-		FreeBoard freeBoard = freeBoardService.createFreeBoard(user, "title", "content", "");
+		when(freeBoardService.createFreeBoard(user, board)).thenReturn(board);
+		FreeBoard freeBoard = freeBoardService.createFreeBoard(user, board);
 		assertThat(board, is(freeBoard));
 	}
 		
@@ -78,8 +78,8 @@ public class FreeBoardServiceImplTest {
 				.createDate(LocalDateTime.now())
 				.count(0)
 				.build();
-		when(freeBoardService.createFreeBoard(user, "title", "content", "")).thenReturn(board);
-		FreeBoard freeBoard = freeBoardService.createFreeBoard(user, "title", "content", "");
+		when(freeBoardService.createFreeBoard(user, board)).thenReturn(board);
+		FreeBoard freeBoard = freeBoardService.createFreeBoard(user, board);
 		
 		when(freeBoardService.getOneFreeBoard(freeBoard.getId())).thenReturn(board);
 		FreeBoard actual = freeBoardService.getOneFreeBoard(freeBoard.getId());
@@ -108,12 +108,22 @@ public class FreeBoardServiceImplTest {
 				.createDate(LocalDateTime.now())
 				.count(0)
 				.build();
-		when(freeBoardService.createFreeBoard(user, "title", "content", "")).thenReturn(board);
-		FreeBoard freeBoard = freeBoardService.createFreeBoard(user, "title", "content", "");
-		board.update("test update", "test");
+		when(freeBoardService.createFreeBoard(user, board)).thenReturn(board);
+		FreeBoard freeBoard = freeBoardService.createFreeBoard(user, board);
+		FreeBoard newBoard = FreeBoard.builder()
+				.id(1L)
+				.writer(user)
+				.title("new title")
+				.contents("new content")
+				.icon("")
+				.badge("new")
+				.createDate(LocalDateTime.now())
+				.count(0)
+				.build();
+		board.update(newBoard);
 		
-		when(freeBoardService.updateFreeBoard(freeBoard, "test update", "test")).thenReturn(board);
-		FreeBoard updatedfreeBoard = freeBoardService.updateFreeBoard(freeBoard, "test update", "test");
+		when(freeBoardService.updateFreeBoard(newBoard)).thenReturn(board);
+		FreeBoard updatedfreeBoard = freeBoardService.updateFreeBoard(newBoard);
 		
 		when(freeBoardService.getOneFreeBoard(freeBoard.getId())).thenReturn(updatedfreeBoard);
 		FreeBoard actual = freeBoardService.getOneFreeBoard(freeBoard.getId());

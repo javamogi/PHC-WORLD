@@ -9,13 +9,13 @@ public interface FreeBoardService {
 	
 	List<FreeBoard> findFreeBoardAllList();
 	
-	FreeBoard createFreeBoard(User user, String title, String contents, String icon);
+	FreeBoard createFreeBoard(User user, FreeBoard freeBoard);
 	
 	FreeBoard getOneFreeBoard(Long id);
 	
 	FreeBoard addFreeBoardCount(Long id);
 	
-	FreeBoard updateFreeBoard(FreeBoard freeBoard, String contents, String icon);
+	FreeBoard updateFreeBoard(FreeBoard freeBoard);
 	
 	void deleteFreeBoard(FreeBoard freeBoard);
 	

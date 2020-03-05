@@ -92,11 +92,19 @@ public class FreeBoardRepositoryTest {
 				.createDate(LocalDateTime.now())
 				.count(0)
 				.build();
+		FreeBoard newFreeBoard = FreeBoard.builder()
+				.writer(user)
+				.title("new title")
+				.contents("new content")
+				.icon("")
+				.createDate(LocalDateTime.now())
+				.count(0)
+				.build();
 		FreeBoard newBoard = freeBoardRepository.save(freeBoard);
 		FreeBoard regitBoard = freeBoardRepository.getOne(newBoard.getId());
-		regitBoard.update("modify content", "");
+		regitBoard.update(newFreeBoard);
 		FreeBoard updatedBoard = freeBoardRepository.save(regitBoard);
-		assertThat("modify content", is(updatedBoard.getContents()));
+		assertThat("new content", is(updatedBoard.getContents()));
 	}
 	
 	@Test

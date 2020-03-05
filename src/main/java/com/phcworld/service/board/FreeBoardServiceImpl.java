@@ -32,12 +32,12 @@ public class FreeBoardServiceImpl implements FreeBoardService {
 	}
 
 	@Override
-	public FreeBoard createFreeBoard(User user, String title, String contents, String icon) {
+	public FreeBoard createFreeBoard(User user, FreeBoard inputFreeBoard) {
 		FreeBoard freeBoard = FreeBoard.builder()
 				.writer(user)
-				.title(title)
-				.contents(contents)
-				.icon(icon)
+				.title(inputFreeBoard.getTitle())
+				.contents(inputFreeBoard.getContents())
+				.icon(inputFreeBoard.getIcon())
 				.createDate(LocalDateTime.now())
 				.count(0)
 				.build();
@@ -61,8 +61,9 @@ public class FreeBoardServiceImpl implements FreeBoardService {
 	}
 
 	@Override
-	public FreeBoard updateFreeBoard(FreeBoard freeBoard, String contents, String icon) {
-		freeBoard.update(contents, icon);
+	public FreeBoard updateFreeBoard(FreeBoard newFreeBoard) {
+		FreeBoard freeBoard = freeBoardRepository.getOne(newFreeBoard.getId());
+		freeBoard.update(newFreeBoard);
 		return freeBoardRepository.save(freeBoard);
 	}
 

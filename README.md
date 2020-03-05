@@ -106,3 +106,131 @@
   * 프로젝트가 시작될 때 예시회원의 비밀번호는 SHA-256으로 변환되지 않고 db에 저장되기 때문에 예시회원의 비밀번호 인 "test" 또는 "test2"는 바로 확인 (변경해야함)
   * 이외에 패스워드들은 SHA-256으로 변환 후 확인  
 * User정보를 수정했을 때 사용되는 메서드
+* 날짜 형식을 현재 시간과 등록된 시간을 비교해 1분이내에 쓰여진 글이면 "방금전", 1분이 지났을 때부터 "몇분 전", 1시간이후로는 "몇시간 전", 24시간 이후로는 " 월 일", 년도 다를경우는 " 년 월 일"을 출력
+* 권한을 확인하는 메서드
+* pakoh200@naver.com(나)일 경우 권한을 변경하는 메서드
+
+
+**service**
+
+* UserService는 interface없이 바로 구현
+* User 생성 메서드는 builder()를 사용하지 않고 setter를 사용
+* 등록된 Email이 있는지 확인하기 위해 Email로 User정보를 가져오는 메서드
+* 주소로 id값이 넘어오면 id로 User정보를 가져오는 메서드
+* User 정보를 수정하는 메서드
+* profile 이미지를 변경하는 메서드
+  
+
+**Controller**
+
+1. User의 timeline을 profile페이지에서 ajax로 보기 위해 만든 RestController
+2. 회원가입, 로그인, 회원 정보 수정 Controller
+    * 생성 Create
+      * 회원가입시 넘어오는 User 정보를 유효성 체크를 하고 Entity의 설정과 다를 경우 Model에 담아 view페이지에서  errorMessage를 출력
+      * 유효성 error가 없다면 넘어온 email로 User정보를 찾아서 있으면 errorMessage를 Model에 담아 view페이지에 출력
+      * email로 찾은 User가 없다면 User생성
+      * email과 랜덤 값을 db에 저장하고 가입한 email로 저장된 랜덤값을 링크로 보내 클릭하면 db에 저장된 email과 랜덤값을 확인 후 맞으면 승인 로그인할 때 승인여부 확인
+      * 전부 통과되면 로그인페이지로 이동
+    * 회원가입 form 과 login form
+      * 이미 로그인이 되어이쓰면 dashboard페이지로 이동
+      * 로그인이 되어있지 않으면 각각 페이지로 이동
+    * 로그인
+      * email과 password가 있는 모델 사용
+      * email로 회원 검색해서 없으면 errorMessage를 로그인 form에 전달 후 출력
+      * email로 회원 검색해서 있으면 password비교 후 틀리면 errorMessage를 로그인 form에 전달 후 출력
+      * 이메일로 가입 승인을 받았는지 승인 값을 확인하고 승인되지 않았으면 errorMessage를 로그인 form에 전달 후 출력
+      * 전부 통과했으면 HttpSession으로 User 정보를 저장
+      * 로그인 User가 받은 메세지 중 일지 않은 메세지 개수 모델에 담아 header-navbar.html에서 사용
+      * 읽지 않은 받은 메세지에서 상위 5개만 모델에 담아 header-navbar.html에 메세지에 사용
+      * 알림을 가져와서 header-navbar.html에 사용
+    * 로그아웃
+      * 저장된 Session정보 삭제 후 로그인 form으로 redirect 이동
+    * 회원 정보 수정
+       * 로그인 User가 없으면 errorMessage를 로그인 form에 전달 후 출력
+       * 요청 User id와 로그인 한 User id와 비교 후 같지 않으면 로그인 form에 errorMessage를 전달 후 출력
+       * 전부 통과하면 Model에 로그인한 User정보를 담아 update form에 전달
+       * 가져온 정보를 수정하고 update를 요청하면 로그인 한 User가 있는지 확인 후 없으면 errorMessage를 로그인 form으로 전달 후 출력
+       * update요청한 id와 로그인 한 User의 id를 비교 후 같지 않으면 errorMessage를 로그인 form에 전달 후 출력
+       * 수정하는 값들을 유효성 검사 후 틀리면 errorMessage를 redirect 한 update form으로 전달 후 출력
+       * 전부 통과하면 update 수행 후 dashboard로 redirect
+    * User 프로필 페이지
+      * User 프로필 페이지는 타임라인, 받은 메세지, 보낸 메세지를 볼 수 있다.
+      * 로그인이 되어있지 않으면 errorMessage를 로그인 form에 전달 후 출력
+      * 로그인 User가 저장한 타임라인을 가져와서 1개 이상이면 show more 버튼을 나오게 model에 boolean값을 담아 profile페이지에서 사용
+      * 넘어온 id와 로그인 한 User id와 비교 후 같으면 보낸 메시지와 받은 메세지를 가져와서 model에 담아 profile페이지에서 사용
+
+***
+### FreeBoard 설명
+**Entity**
+
+* FreeBoard는 Entity이므로 @Entity 어노테이션을 사용하였습니다.
+* 모든 필드에 getter와 setter, 서로 다른 FreeBoard인지 비교하기위해  EqualsAndHashCode, log로 FreeBoard를 보기위해 toString을 사용하기 위해 Lombok의 @Data어노테이션을 사용하였습니다.
+* 기본 생성자 @NoArgsConstructor 어노테이션, 모든 필드의 생성자 @AllArgsConstructor를 사용하였습니다.
+* FreeBoard를 생성할 때 편리하게 사용하기위해 @Builder어노테이션을 사용하였습니다.
+
+* 필드
+  * id
+    * primary key @Id어노테이션 사용
+      * 읽기, 수정, 삭제를 위한 고유키
+    * 자동증가를 위해 @GenaratedValue 어노테이션 사용
+      * pk에 대한 전략으로 데이터베이스에 위임 IDENTITY
+  * writer
+    * 한명의 User가 다수의 자유게시판 게시물을 작성 할 수 있어서 @ManyToOne으로 User와 매핑한다.
+    * User에서는 FreeBoard를 사용하지 않기 때문에 매핑을하지 않았다.
+    * FreeBoard에서 writer는 User의 외래키를 갖기 때문에 @JoinColumn을 foreignKey를 설정한다.
+  * titile
+    * 게시물의 제목
+  * contents
+    * 게시물의 내용
+    * 게시물의 내용이 많을 수도 있기 때문에 @Lob어노테이션 사용
+  * icon
+    * 게시물에 사진이 첨부되면 freeboard_form.html의 icon hidden 태그의 값을 변경하여 저장하게 한다.
+    * 변경하는 코드는 resource/static/daumeditor/js/trex/attachbox/attachbox_ui.js 파일에서 이미지가 추가될 때와 삭제할 때 값이 변하게 코드를 추가했다.
+  * badge
+    * 모든 자유게시판을 불러올 때 현재시간을 기준으로 등록된 글이 24시간내에 등록된 글이면 "New"를 저장하여 새롭게 등록된 글인지 확인하는 필드
+    * 24시간이 지나면 사용하지 않는 필드다.(다른 방법을 생각할 필요있음)
+  * createDate
+    * 등록한 날짜를 기록하는 필드(User의 createDate와 같이 변경 필요)
+  * count
+    * 해당 게시물의 조회수
+  * List<FreeBoardAnswer> freeBoardAnswer
+    * 해당 게시물의 댓글
+    * 자유게시판 게시글 하나에 여러개의 댓글이 달리기 때문에 자유게시판과의 관계는 @OneToMany
+    * 무한루프에 빠지지 않기 위해 @JsonBackReference어노테이션 사용 (공부할 것)
+    * 자유게시판 게시글을 지우면 해당 게시글의 댓글도 지우기 위해 cascade REMOVE 설정
+  
+* 해당 게시물의 댓글의 개수를 가져오기 위해 freeBoardAnswer의 size()를 가져와서 String으로 변경하는 메서드
+* 게시글을 읽어올 때 조회수를 올리는 메서드
+* 날짜 형식을 변경하는 메서드(User createDate와 같음)
+* 게시물을 update하는 메서드
+* 게시물 글쓴이와 로그인 User와 비교하는 메서드. 만약 글쓴이 이외에 회원 권한을 가진 User가 게시물을 삭제할 때 쓰인다.
+
+
+**service**
+
+* 자유게시판의 모든 게시물을 가져온다.
+* 로그인 한 유저의 정보와 입력받은 자유게시판 정보를 Lombok의 builder()를 사용해서 db에 저장 후 저장된 자유게시판 게시물을 timeline에 @OneToOne관계로 저장
+* 자유게시판 id를 가지고 id에 해당하는 게시물을 가져온다.
+* 자유게시판 id를 가지고 id에 해당하는 게시물을 가져와 조회수를 증가한다.
+* 입력받은 자유게시판 정보로 update한다.
+* timeline과 관계매핑을 하지 않아서 삭제할 게시물의 타임라인을 삭제하고 해당 자유게시판 게시물에 달린 댓글들의 타임라인과 알림을 삭제하고 자유게시판의 게시물을 삭제한다.
+* User의 정보로 User가 등록한 게시물을 가져온다.
+
+
+**controller**
+* 자유게시판의 모든 게시물을 가져오기
+  * 현재 시간을 기준으로 24시간내의 등록된 글이면 badge필드에 "New"를 넣는다. 그리고 게시물을 model에 담아 freeboard페이지에서 사용한다.
+* 자유게시판 글쓰기 페이지
+  * 로그인을 하지 않았으면 로그인페이지로 이동한다.
+* 게시물 생성
+  * 로그인 한 유저와 넘겨받은 자유게시판 정보로 db에 저장하면 자유게시판 리스트페이지로 이동한다.
+* 자유게시판 상세페이지
+  * 우선 조회수를 증가시키고 로그인 한 유저가 있는지 해당 게시물의 작성자와 로그인한 유저가 같은지 그리고 관리자 권한인지 확인하여 model에 boolean값을 넣어 해당 페이지에서 버튼을 다르게 나오게 한다.
+* 수정페이지
+  * 로그인한 유저가 있는지 확인하고 수정을 원하는 게시물의 작성자와 로그인한 유저가 같은지 확인하고 같지 않으면 errorMessage를 담아 로그인페이지에 나타낸다. 로그인 한 유저가 작성자라면 수정페이지로 이동하여 수정할 수 있다.
+* 수정 요청
+  *  다시 한번 로그인을 했는지 확인하고 수정 요청한 글의 작성자와 로그인한 유저와 같으면 수정을 하고 해당 게시물의 상세페이지로 이동한다.
+* 게시물 삭제
+  *  로그인 한 유저가 있는지 확인하고 로그인 한 유저가 해당 게시물의 작성자와 같은지 확인해서 같다면 게시물을 삭제하고 list페이지로 이동한다.
+
+***
