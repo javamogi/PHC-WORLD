@@ -234,3 +234,56 @@
   *  로그인 한 유저가 있는지 확인하고 로그인 한 유저가 해당 게시물의 작성자와 같은지 확인해서 같다면 게시물을 삭제하고 list페이지로 이동한다.
 
 ***
+### FreeBoardAnswer 설명
+**Entity**
+* FreeBoardAnswer는 Entity이므로 @Entity 어노테이션을 사용하였습니다.
+* 모든 필드에 getter와 setter, 서로 다른 FreeBoardAnswer인지 비교하기위해  EqualsAndHashCode, log로 FreeBoardAnswer를 보기위해 toString을 사용하기 위해 Lombok의 @Data어노테이션을 사용하였습니다.
+* 기본 생성자 @NoArgsConstructor 어노테이션, 모든 필드의 생성자 @AllArgsConstructor를 사용하였습니다.
+* FreeBoardAnswer를 생성할 때 편리하게 사용하기위해 @Builder어노테이션을 사용하였습니다.
+* 필드
+  * id
+    * primary key @Id어노테이션 사용
+      * 읽기, 수정, 삭제를 위한 고유키
+    * 자동증가를 위해 @GenaratedValue 어노테이션 사용
+      * pk에 대한 전략으로 데이터베이스에 위임 IDENTITY
+  * writer
+    * 한명의 User가 다수의 자유게시판 댓글을 작성 할 수 있어서 @ManyToOne으로 User와 매핑한다.
+    * User에서는 FreeBoardAnswer를 사용하지 않기 때문에 매핑을하지 않았다.
+    * FreeBoardAnswer에서 writer는 User의 외래키를 갖기 때문에 @JoinColumn을 foreignKey를 설정한다.
+  * freeBoard
+    * FreeBoardAnswer는 FreeBoard의 댓글이기 때문에 어떤 글의 댓글인지 @ManyToOne으로 매핑
+    * 외래키이기 때문에 @JoinColumn으로 ForeignKey를 설정하고 반드시 값이 있어야하기 때문에 nullable을 false로 설정한다.
+    * 무한루프에 빠지지 않기위해 @JsonIgnoreProperties와  @JsonManagedReference 어노테이션을 설정(검색으로 찾아서 확실하게 알아봐야함)
+  * contents
+    * 댓글의 내용
+    * 댓글의 내용이 많을 수도 있기 때문에 @Lob어노테이션 사용
+  * createDate
+    * 등록한 날짜를 기록하는 필드(변경 필요)
+* 날짜 형식을 변경하는 메서드
+* 작성자와 넘어오는 User가 같은지 확인하는 메서드
+* 댓글을 수정하는 메서드
+
+
+**service**
+* 댓글 생성
+  * 로그인 유저(작성자), 댓글을 작성하는 자유게시판 게시글의 id, 댓글의 내용을 받아서 FreeBoardAnswer의 builer()를 사용하여 FreeBoardAnswer를 생성
+  * 댓글의 내용은 html로 보여지기 때문에 String의 줄바꿈을 html 줄바꿈 태그로 변경
+  * db에 저장 후 timeline생성
+  * 댓글을 단 자유게시판 작성자와 댓글의 작성자가 다르면 알림에 저장
+* 댓글 삭제
+  * 넘어온 댓글의 id로 댓글을 db에서 가져온다.
+  * 댓글의 작성자와 로그인 유저(삭제를 요청한 유저)가 같은지 확인한다.
+  * 작성자와 로그인유저가 같다면 타임라인에서 댓글을 삭제
+  * 댓글의 작성자와 로그인 유저가 같으면 알림의 댓글을 삭제
+  * 댓글을 삭제
+  * 댓글을 삭제한 자유게시판의 게시물을 가져와서 게시물의 댓글에서 지우는 댓글을 삭제 후 자유게시판의 댓글의 개수를 리턴 (댓글이 지워지면 자유게시판의 게시물과 매핑을 했기 때문에 자유게시판의 게시물의 댓글도 지워지는데 처리가 안되는지 로직이 완료되지 않아서 인지 바뀐 댓글의 수가 리턴되지 않아 게시물의 댓글을 삭제하는 메서드를 넣음. 넣지 않을경우 ajax로는 이전 개수가 나오고 페이지를 새로고침하면 제대로 반영된다. 이부분에 대해서 공부할 필요가 있음.)
+  * 로그인유저(댓글 작성자)가 쓴 모든 자유게시판 게시물의 댓글을 가져온다.
+
+**controller**
+* 생성
+  * 로그인을 하지 않았다면 Exception 발생
+  * 댓글을 작성하는 자유게시판 게시물의 id와 댓글의 내용을 받아 댓글 생성
+* 삭제
+  * 로그인을 하지 않았다면 Exception 발생
+  * 삭제하는 댓글의 id를 받아서 삭제
+***

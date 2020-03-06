@@ -80,7 +80,4 @@ public class FreeBoardAnswerServiceImpl implements FreeBoardAnswerService {
 		return freeBoardAnswerRepository.findByWriter(loginUser);
 	}
 
-	public FreeBoardAnswer getOneFreeBoardAnswer(Long id) {
-		return freeBoardAnswerRepository.getOne(id);
-	}
 }
