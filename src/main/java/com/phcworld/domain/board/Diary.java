@@ -42,7 +42,7 @@ public class Diary {
 	
 	@ManyToOne
 	@JoinColumn(foreignKey = @ForeignKey(name = "fk_dairy_writer"))
-	@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
+//	@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 	private User writer;
 
 	private String title;
@@ -85,9 +85,9 @@ public class Diary {
 		return loginUser.equals(this.writer);
 	}
 
-	public void update(String newContents, String newThumbnail) {
-		this.contents = newContents;
-		this.thumbnail = newThumbnail;
+	public void update(Diary inputDiary) {
+		this.contents = inputDiary.getContents();
+		this.thumbnail = inputDiary.getThumbnail();
 	}
 
 	public boolean matchId(Long diaryId) {

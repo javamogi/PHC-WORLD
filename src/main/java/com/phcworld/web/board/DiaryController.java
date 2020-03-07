@@ -23,8 +23,11 @@ import com.phcworld.service.user.UserService;
 import com.phcworld.web.HttpSessionUtils;
 import com.phcworld.web.PageNationsUtil;
 
+import lombok.extern.slf4j.Slf4j;
+
 @Controller
 @RequestMapping("/diary")
+@Slf4j
 public class DiaryController {
 
 	@Autowired
@@ -42,8 +45,7 @@ public class DiaryController {
 		Page<Diary> diaryPage = diaryService.findPageDiary(loginUser, pageNum, requestUser);
 
 		if (diaryPage != null) {
-			PageNationsUtil pageNation = new PageNationsUtil();
-			pageNation.viewPageNation("", pageNum, diaryPage.getTotalPages(), model);
+			PageNationsUtil.viewPageNation("", pageNum, diaryPage.getTotalPages(), model);
 			List<Diary> diaries = diaryPage.getContent();
 			model.addAttribute("diaries", diaries);
 		}
@@ -64,13 +66,12 @@ public class DiaryController {
 	}
 
 	@PostMapping("")
-	public String create(String title, String contents, String thumbnail, HttpSession session) {
+	public String create(Diary diary, HttpSession session) {
 		if (!HttpSessionUtils.isLoginUser(session)) {
 			return "/user/login";
 		}
 		User sessionUser = HttpSessionUtils.getUserFromSession(session);
-
-		diaryService.createDiary(sessionUser, title, contents, thumbnail);
+		diaryService.createDiary(sessionUser, diary);
 
 		return "redirect:/diary/list/" + sessionUser.getEmail();
 	}
@@ -116,7 +117,7 @@ public class DiaryController {
 	}
 
 	@PutMapping("/{id}")
-	public String update(@PathVariable Long id, String contents, String thumbnail, HttpSession session, Model model) {
+	public String update(@PathVariable Long id, Diary inputDiary, HttpSession session, Model model) {
 		if (!HttpSessionUtils.isLoginUser(session)) {
 			return "/user/login";
 		}
@@ -126,7 +127,7 @@ public class DiaryController {
 			model.addAttribute("errorMessage", "본인의 작성한 글만 수정 가능합니다.");
 			return "/user/login";
 		}
-		diaryService.updateDiary(diary, contents, thumbnail);
+		diaryService.updateDiary(diary, inputDiary);
 		return "redirect:/diary/" + id + "/detail";
 	}
 

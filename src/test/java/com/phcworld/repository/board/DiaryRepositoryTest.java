@@ -87,7 +87,15 @@ public class DiaryRepositoryTest {
 				.thumbnail("no-image-icon.gif")
 				.createDate(LocalDateTime.now())
 				.build();
-		diary.update("update content", "test.jpg");
+		Diary newDiary = Diary.builder()
+				.writer(writer)
+				.title("title")
+				.contents("update content")
+				.thumbnail("test.jpg")
+				.createDate(LocalDateTime.now())
+				.build();
+		
+		diary.update(newDiary);
 		Diary updatedDiary = diaryRepository.save(diary);
 		assertThat("update content", is(updatedDiary.getContents()));
 		assertThat("test.jpg", is(updatedDiary.getThumbnail()));

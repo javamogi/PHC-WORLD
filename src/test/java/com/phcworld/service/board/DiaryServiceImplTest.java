@@ -87,9 +87,9 @@ public class DiaryServiceImplTest {
 				.thumbnail("no-image-icon.gif")
 				.createDate(LocalDateTime.now())
 				.build();
-		when(diaryService.createDiary(user, "title", "content", "no-image-icon.gif"))
+		when(diaryService.createDiary(user, diary))
 		.thenReturn(diary);
-		Diary createdDiary = diaryService.createDiary(user, "title", "content", "no-image-icon.gif");
+		Diary createdDiary = diaryService.createDiary(user, diary);
 		assertThat("title", is(createdDiary.getTitle()));
 		assertThat("content", is(createdDiary.getContents()));
 	}
@@ -136,10 +136,17 @@ public class DiaryServiceImplTest {
 				.thumbnail("no-image-icon.gif")
 				.createDate(LocalDateTime.now())
 				.build();
-		diary.update("updateDiary", "test.jpg");
-		when(diaryService.updateDiary(diary, "updateDiary", "test.jpg"))
+		Diary newDiary = Diary.builder()
+				.writer(user)
+				.title("title")
+				.contents("updateDiary")
+				.thumbnail("test.jpg")
+				.createDate(LocalDateTime.now())
+				.build();
+		diary.update(newDiary);
+		when(diaryService.updateDiary(diary, newDiary))
 		.thenReturn(diary);
-		Diary updatedDiary = diaryService.updateDiary(diary, "updateDiary", "test.jpg");
+		Diary updatedDiary = diaryService.updateDiary(diary, newDiary);
 		assertThat("updateDiary", is(updatedDiary.getContents()));
 		assertThat("test.jpg", is(updatedDiary.getThumbnail()));
 	}

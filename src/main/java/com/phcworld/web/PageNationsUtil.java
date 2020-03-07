@@ -7,7 +7,7 @@ import org.springframework.ui.Model;
 
 public class PageNationsUtil {
 	
-	public void viewPageNation(String pageName, Integer pageNum, int totalPages, Model model) {
+	public static void viewPageNation(String pageName, Integer pageNum, int totalPages, Model model) {
 		int tempPage = 0, startPage = 0, endPage = 0, pageSize = 10;
 		tempPage = (pageNum - 1) % pageSize;
 		startPage = pageNum - tempPage;

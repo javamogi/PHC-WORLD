@@ -11,11 +11,11 @@ import com.phcworld.domain.user.User;
 public interface DiaryService {
 	Page<Diary> findPageDiary(User loginUser, Integer pageNum, User requestUser);
 	
-	Diary createDiary(User user, String title, String contents, String thumbnail);
+	Diary createDiary(User user, Diary diary);
 	
 	Diary getOneDiary(Long id);
 	
-	Diary updateDiary(Diary diary, String contents, String thumbnail);
+	Diary updateDiary(Diary diary, Diary inputDiary);
 	
 	void deleteDiary(Diary diary);
 	

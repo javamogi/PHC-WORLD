@@ -39,29 +39,29 @@ public class DiaryServiceImpl implements DiaryService {
 	@Override
 	public Page<Diary> findPageDiary(User loginUser, Integer pageNum, User requestUser) {
 		PageRequest pageRequest = PageRequest.of(pageNum - 1, 6, new Sort(Direction.DESC, "id"));
-		if(isWriter(loginUser, requestUser)) {
+		if(isLoginUser(loginUser, requestUser)) {
 			return diaryRepository.findByWriter(requestUser, pageRequest);
 		}
 		return diaryRepository.findByWriter(loginUser, pageRequest);
 	}
 
-	private boolean isWriter(User loginUser, User requestUser) {
+	private boolean isLoginUser(User loginUser, User requestUser) {
 		return loginUser == null || !requestUser.matchId(loginUser.getId());
 	}
 
 	@Override
-	public Diary createDiary(User user, String title, String contents, String thumbnail) {
+	public Diary createDiary(User user, Diary inputDiary) {
 		Diary diary = Diary.builder()
 				.writer(user)
-				.title(title)
-				.contents(contents)
-				.thumbnail(thumbnail)
+				.title(inputDiary.getTitle())
+				.contents(inputDiary.getContents())
+				.thumbnail(inputDiary.getThumbnail())
 				.createDate(LocalDateTime.now())
 				.build();
 		Diary createdDiary = diaryRepository.save(diary);
-
+		
 		timelineService.createTimeline(createdDiary);
-
+		
 		return createdDiary;
 	}
 
@@ -71,8 +71,8 @@ public class DiaryServiceImpl implements DiaryService {
 	}
 
 	@Override
-	public Diary updateDiary(Diary diary, String contents, String thumbnail) {
-		diary.update(contents, thumbnail);
+	public Diary updateDiary(Diary diary, Diary inputDiary) {
+		diary.update(inputDiary);
 		return diaryRepository.save(diary);
 	}
 

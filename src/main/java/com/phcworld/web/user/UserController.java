@@ -214,18 +214,18 @@ public class UserController {
 	}
 
 	private void viewLoginUserMessage(Integer sendPageNum, Integer receivePageNum, Model model, User user) {
-		PageNationsUtil pageNation = new PageNationsUtil();
+//		PageNationsUtil pageNation = new PageNationsUtil();
 		Page<Message> pageReceiveMessages = messageService.findMessageByReceiveMessages(receivePageNum, user);
 		if(pageReceiveMessages != null) {
 			List<Message> receiveMessages = pageReceiveMessages.getContent();
-			pageNation.viewPageNation("receive", receivePageNum, pageReceiveMessages.getTotalPages(), model);
+			PageNationsUtil.viewPageNation("receive", receivePageNum, pageReceiveMessages.getTotalPages(), model);
 			model.addAttribute("receiveMessages", receiveMessages);
 		}
 
 		Page<Message> pageSendMessages = messageService.findMessageBySendMessage(sendPageNum, user);
 		if(pageSendMessages != null) {
 			List<Message> sendMessages = pageSendMessages.getContent();
-			pageNation.viewPageNation("send", sendPageNum, pageSendMessages.getTotalPages(), model);
+			PageNationsUtil.viewPageNation("send", sendPageNum, pageSendMessages.getTotalPages(), model);
 			model.addAttribute("sendMessages", sendMessages);
 		}
 		model.addAttribute("equalLoginUser", true);

@@ -44,7 +44,7 @@ public class FreeBoardAnswer {
 	@JoinColumn(foreignKey = @ForeignKey(name = "fk_freeBoardAnswer_to_freeBoard"), nullable = false)
 	@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 	// @JsonBackReference
-	@JsonManagedReference
+//	@JsonManagedReference
 	private FreeBoard freeBoard;
 	
 	@Lob

@@ -488,7 +488,7 @@ public class DiaryControllerTest {
 				.thumbnail("no-image-icon.gif")
 				.createDate(LocalDateTime.now())
 				.build();
-		given(this.diaryService.updateDiary(diary, "updateTest", "no-image-icon.gif"))
+		given(this.diaryService.updateDiary(diary, updatedDiary))
 		.willReturn(updatedDiary);
 		this.mvc.perform(put("/diary/{id}", 1L)
 				.param("contents", "updateTest")
