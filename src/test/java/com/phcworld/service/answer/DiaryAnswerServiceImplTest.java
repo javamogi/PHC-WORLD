@@ -59,9 +59,9 @@ public class DiaryAnswerServiceImplTest {
 		List<DiaryAnswer> list = new ArrayList<DiaryAnswer>();
 		list.add(answer);
 		diary.setDiaryAnswers(list);
-		when(diaryAnswerService.createDiaryAnswer(writer, diary, "diary answer content"))
+		when(diaryAnswerService.createDiaryAnswer(writer, diary.getId(), "diary answer content"))
 		.thenReturn(answer);
-		DiaryAnswer diaryAnswer = diaryAnswerService.createDiaryAnswer(writer, diary, "diary answer content");
+		DiaryAnswer diaryAnswer = diaryAnswerService.createDiaryAnswer(writer, diary.getId(), "diary answer content");
 		assertThat("diary answer content", is(diaryAnswer.getContents()));
 		assertThat("[1]", is(diaryAnswer.getDiary().getCountOfAnswer()));
 	}
@@ -101,9 +101,9 @@ public class DiaryAnswerServiceImplTest {
 				.contents("diary answer content")
 				.createDate(LocalDateTime.now())
 				.build();
-		when(diaryAnswerService.createDiaryAnswer(writer, diary, "diary answer content"))
+		when(diaryAnswerService.createDiaryAnswer(writer, diary.getId(), "diary answer content"))
 		.thenReturn(answer);
-		DiaryAnswer diaryAnswer = diaryAnswerService.createDiaryAnswer(writer, diary, "diary answer content");
+		DiaryAnswer diaryAnswer = diaryAnswerService.createDiaryAnswer(writer, diary.getId(), "diary answer content");
 		doThrow(MatchNotUserExceptioin.class)
 		.when(diaryAnswerService).deleteDiaryAnswer(diaryAnswer.getId(), user, diary.getId());
 		diaryAnswerService.deleteDiaryAnswer(diaryAnswer.getId(), user, diary.getId());
@@ -138,9 +138,9 @@ public class DiaryAnswerServiceImplTest {
 		list.add(answer);
 		diary.setDiaryAnswers(list);
 		
-		when(diaryAnswerService.createDiaryAnswer(writer, diary, "diary answer content"))
+		when(diaryAnswerService.createDiaryAnswer(writer, diary.getId(), "diary answer content"))
 		.thenReturn(answer);
-		DiaryAnswer diaryAnswer = diaryAnswerService.createDiaryAnswer(writer, diary, "diary answer content");
+		DiaryAnswer diaryAnswer = diaryAnswerService.createDiaryAnswer(writer, diary.getId(), "diary answer content");
 		diaryAnswer.getDiary().getDiaryAnswers().remove(diaryAnswer);
 		when(diaryAnswerService.deleteDiaryAnswer(diaryAnswer.getId(), writer, diary.getId()))
 		.thenReturn("{\"success\":\"" + diaryAnswer.getDiary().getCountOfAnswer() +"\"}");
@@ -188,35 +188,4 @@ public class DiaryAnswerServiceImplTest {
 		assertThat(diaryAnswerList, hasItems(answer, answer2));
 	}
 	
-	@Test
-	public void getOneDiaryAnswer() {
-		User writer = User.builder()
-				.id(1L)
-				.email("test@test.test")
-				.password("test")
-				.name("테스트")
-				.profileImage("blank-profile-picture.png")
-				.authority("ROLE_USER")
-				.createDate(LocalDateTime.now())
-				.build();
-		Diary diary = Diary.builder()
-				.id(1L)
-				.writer(writer)
-				.title("title")
-				.contents("content")
-				.thumbnail("no-image-icon.gif")
-				.createDate(LocalDateTime.now())
-				.build();
-		DiaryAnswer answer = DiaryAnswer.builder()
-				.id(1L)
-				.writer(writer)
-				.diary(diary)
-				.contents("diary answer content")
-				.createDate(LocalDateTime.now())
-				.build();
-		when(diaryAnswerService.getOneDiaryAnswer(answer.getId()))
-		.thenReturn(answer);
-		DiaryAnswer diaryAnswer = diaryAnswerService.getOneDiaryAnswer(answer.getId());
-		assertThat(answer, is(diaryAnswer));
-	}
 }

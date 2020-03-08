@@ -33,7 +33,8 @@ public class DiaryAnswerServiceImpl implements DiaryAnswerService {
 	private TimelineServiceImpl timelineService;
 	
 	@Override
-	public DiaryAnswer createDiaryAnswer(User loginUser, Diary diary, String contents) {
+	public DiaryAnswer createDiaryAnswer(User loginUser, Long diaryId, String contents) {
+		Diary diary = diaryRepository.getOne(diaryId);
 		DiaryAnswer diaryAnswer = DiaryAnswer.builder()
 				.writer(loginUser)
 				.diary(diary)
@@ -74,7 +75,4 @@ public class DiaryAnswerServiceImpl implements DiaryAnswerService {
 		return diaryAnswerRepository.findByWriter(loginUser);
 	}
 
-	public DiaryAnswer getOneDiaryAnswer(Long id) {
-		return diaryAnswerRepository.getOne(id);
-	}
 }
