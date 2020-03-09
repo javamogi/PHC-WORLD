@@ -4,7 +4,6 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -39,7 +38,7 @@ public class FreeBoardAnswerController {
 	}
 	
 	@DeleteMapping("/{id}")
-	public String delete(@PathVariable Long id, HttpSession session, Model model) 
+	public String delete(@PathVariable Long id, HttpSession session) 
 			throws LoginNotUserException, MatchNotUserExceptioin {
 		if(!HttpSessionUtils.isLoginUser(session)) {
 			throw new LoginNotUserException("로그인을 해야합니다.");

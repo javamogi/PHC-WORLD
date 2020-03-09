@@ -49,13 +49,17 @@ public class GoodServiceTest {
 				.createDate(LocalDateTime.now())
 				.build();
 		Good good = Good.builder()
+				.id(1L)
 				.diary(diary)
 				.user(user)
 				.build();
+		List<Good> list = new ArrayList<Good>();
+		list.add(good);
+		diary.setGoodPushedUser(list);
 		when(goodService.pushGood(diary, user))
-		.thenReturn(good);
-		Good createdGood = goodService.pushGood(diary, user);
-		assertThat(good, is(createdGood));
+		.thenReturn(diary);
+		Diary updatedGoodDiary = goodService.pushGood(diary, user);
+		assertThat(1, is(updatedGoodDiary.getGoodPushedUser().size()));
 	}
 	
 	@Test

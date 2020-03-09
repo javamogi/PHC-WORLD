@@ -25,7 +25,7 @@ public class GoodService {
 	@Autowired
 	private AlertServiceImpl alertService;
 	
-	public Good pushGood(Diary diary, User loginUser) {
+	public Diary pushGood(Diary diary, User loginUser) {
 		Good good = goodRepository.findByDiaryAndUser(diary, loginUser);
 		if(good == null) {
 			Good createdGood = Good.builder()
@@ -46,7 +46,7 @@ public class GoodService {
 				alertService.deleteAlert(good);
 			}
 		}
-		return good;
+		return diary;
 	}
 	
 	public List<Good> getGoodList(User user){

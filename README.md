@@ -46,6 +46,7 @@
 * 자유게시판과 일기게시판에 글쓰기는 다음에디터를 사용하였습니다.
 ***
 ### 업데이트 예정
+* REST API 공부 후 자유게시판 댓글, 일기게시판 댓글, 일기게시판 좋아요 수정하기
 * 댓글 수정기능
 * 회원탈퇴 요청시 회원을 삭제하지 않고 자격정지
 * 이미지가 있는 글을 삭제할 때 이미지파일도 삭제
@@ -111,14 +112,21 @@
 * pakoh200@naver.com(나)일 경우 권한을 변경하는 메서드
 
 
+
 **service**
 
 * UserService는 interface없이 바로 구현
+
 * User 생성 메서드는 builder()를 사용하지 않고 setter를 사용
+
 * 등록된 Email이 있는지 확인하기 위해 Email로 User정보를 가져오는 메서드
+
 * 주소로 id값이 넘어오면 id로 User정보를 가져오는 메서드
+
 * User 정보를 수정하는 메서드
+
 * profile 이미지를 변경하는 메서드
+
   
 
 **Controller**
@@ -162,12 +170,10 @@
 ***
 ### FreeBoard 설명
 **Entity**
-
 * FreeBoard는 Entity이므로 @Entity 어노테이션을 사용하였습니다.
 * 모든 필드에 getter와 setter, 서로 다른 FreeBoard인지 비교하기위해  EqualsAndHashCode, log로 FreeBoard를 보기위해 toString을 사용하기 위해 Lombok의 @Data어노테이션을 사용하였습니다.
 * 기본 생성자 @NoArgsConstructor 어노테이션, 모든 필드의 생성자 @AllArgsConstructor를 사용하였습니다.
 * FreeBoard를 생성할 때 편리하게 사용하기위해 @Builder어노테이션을 사용하였습니다.
-
 * 필드
   * id
     * primary key @Id어노테이션 사용
@@ -207,7 +213,6 @@
 
 
 **service**
-
 * 자유게시판의 모든 게시물을 가져온다.
 * 로그인 한 유저의 정보와 입력받은 자유게시판 정보를 Lombok의 builder()를 사용해서 db에 저장 후 저장된 자유게시판 게시물을 timeline에 @OneToOne관계로 저장
 * 자유게시판 id를 가지고 id에 해당하는 게시물을 가져온다.
@@ -253,7 +258,7 @@
   * freeBoard
     * FreeBoardAnswer는 FreeBoard의 댓글이기 때문에 어떤 글의 댓글인지 @ManyToOne으로 매핑
     * 외래키이기 때문에 @JoinColumn으로 ForeignKey를 설정하고 반드시 값이 있어야하기 때문에 nullable을 false로 설정한다.
-    * 무한루프에 빠지지 않기위해 @JsonIgnoreProperties와  @JsonManagedReference 어노테이션을 설정(검색으로 찾아서 확실하게 알아봐야함)
+    * 순환참조 무한루프에 빠지지 않기위해 @JsonIgnoreProperties와  @JsonManagedReference 어노테이션을 설정(검색으로 찾아서 확실하게 알아봐야함)
   * contents
     * 댓글의 내용
     * 댓글의 내용이 많을 수도 있기 때문에 @Lob어노테이션 사용
@@ -277,7 +282,7 @@
   * 댓글의 작성자와 로그인 유저가 같으면 알림의 댓글을 삭제
   * 댓글을 삭제
   * 댓글을 삭제한 자유게시판의 게시물을 가져와서 게시물의 댓글에서 지우는 댓글을 삭제 후 자유게시판의 댓글의 개수를 리턴 (댓글이 지워지면 자유게시판의 게시물과 매핑을 했기 때문에 자유게시판의 게시물의 댓글도 지워지는데 처리가 안되는지 로직이 완료되지 않아서 인지 바뀐 댓글의 수가 리턴되지 않아 게시물의 댓글을 삭제하는 메서드를 넣음. 넣지 않을경우 ajax로는 이전 개수가 나오고 페이지를 새로고침하면 제대로 반영된다. 이부분에 대해서 공부할 필요가 있음.)
-  * 로그인유저(댓글 작성자)가 쓴 모든 자유게시판 게시물의 댓글을 가져온다.
+* 로그인유저(댓글 작성자)가 쓴 모든 자유게시판 게시물의 댓글을 가져온다.
 
 **controller**
 * 생성
@@ -285,8 +290,9 @@
   * 댓글을 작성하는 자유게시판 게시물의 id와 댓글의 내용을 받아 댓글 생성
 * 삭제
   * 로그인을 하지 않았다면 Exception 발생
-  * 삭제하는 댓글의 id를 받아서 삭제
+  * 삭제하는 댓글의 id를 받아서 삭제 후 댓글의 개수 리턴
 ***
+
 ### Diary 설명
 **Entity**
 * Diary는 Entity이므로 @Entity 어노테이션을 사용하였습니다.
@@ -375,6 +381,11 @@
   * 로그인을 하지 않았으면 로그인페이지로 이동
   * 로그인 한 유저와 삭제를 요청한 게시물의 작성자가 같지않고 관리자 권한을 갖지 않았다면  errorMessage를 담아 로그인페이지로 이동 후 출력
   * 모두 통과되면 게시물 삭제 후 목록페이지로 redirect
+* 좋아요 개수 수정
+  * 로그인을 하지 않았으면 Exception으로 던져서 ExceptionHeandler가 처리하여 Exception의 message를 보낸다. 
+  * 좋아요를 눌렀을 때 개수를 Json으로 받기 위해 @ResponseBody를 사용한다.
+  * 원래는 RestController로 구현했으나 로직이 하나뿐이어서 DiaryController로 이동하였다.(DiaryRestController 삭제하지 않음)
+  * Exception을 처리하는 과정에서 error message임에도 Json의 객체는 success로 처리하는 것이 마음에 들지 않는다. REST API에 대해 확실히 공부하고 변경해야겠다.
 ***
 ### DiaryAnswer 설명
 **Entity**
@@ -426,4 +437,41 @@
 * 삭제
   * 로그인을 하지 않았다면 Exception 발생
   * 삭제하는 댓글의 id를 받아서 삭제 후 댓글의 개수 리턴
+***
+### Good 설명 
+**Entity**
+* 일기게시판 게시물에 좋아요를 담당하는 Entity이다.
+* 일기게시판의 좋아요를 눌렀을 때 누른 게시물과 유저를 담는다.
+* 일기게시판 게시물 하나에 다수의 Good이 저장될 수 있고 Good에는 좋아요를 누른 하나의 일기게시판 게시물과 유저 정보를 저장한다.
+* 모든 필드에 getter와 setter, log로 Timeline를 보기위해 toString을 사용하기 위해 Lombok의 @Data어노테이션을 사용하였습니다.
+* 기본 생성자 @NoArgsConstructor 어노테이션, 모든 필드의 생성자 @AllArgsConstructor를 사용하였습니다.
+* Good을 생성할 때 편리하게 사용하기위해 @Builder어노테이션을 사용하였습니다.
+* 필드
+  * id
+    * primary key @Id어노테이션 사용
+      * Tilmeline과의 매핑을 위해 사용
+    * 자동증가를 위해 @GenaratedValue 어노테이션 사용
+      * pk에 대한 전략으로 데이터베이스에 위임 IDENTITY
+  * diary
+    * 하나의 Diary가 다수의 Good의 정보를 가질 수 있기 때문에 @ManyToOne으로 Diary와 매핑한다.
+    * Good에서 Diary는 Diary의 외래키를 갖기 때문에 @JoinColumn을 foreignKey를 설정한다.
+  * user
+    * 한명의 User가 다수의 Good의 정보를 가질 수 있기 때문에 @ManyToOne으로 User와 매핑한다.
+    * User에서는 Good을 사용하지 않기 때문에 매핑을하지 않았다.
+    * Good에서 User는 User의 외래키를 갖기 때문에 @JoinColumn을 foreignKey를 설정한다.
+  *  createDate
+    * 등록한 날짜를 기록하는 필드(변경 필요)
+* 날짜 형식을 변경하는 메서드
+
+
+**service**
+* 일기게시판의 게시물에 좋아요를 눌렀을 때 해당 일기게시판 게시물의 정보와 좋아요를 누른 유저(로그인 유저)를 받아서 해당 게시물에 유저가 좋아요를 눌렀는지 찾아보고 없으면 Good을 생성하고 타임라인을 생성한다. 만약 좋아요를 누른 일기게시판의 게시물이 자신의 글이 아니면 알림도 생성한다.
+* 만약 일기게시판의 게시물에 좋아요를 눌렀다면 찾은 Good을 삭제하고 타임라인을 삭제한다. 만약 좋아요를 누른 일기게시판의 게시물이 자신의 글이 아니면 알림도 삭제한다.
+* 변경된 Diary를 리턴한다.
+* GoodService에서는 이에대한 로직 하나만 수행한다.
+* 좋아요의 개수를 증가시키고 감소시키는 것은 Diary가 하는 기능이지만 Good도 하나의 Entity이기 때문에 비록 하나뿐지만 Good service를 구현했다. 
+* 유저가 누른 좋아요의 목록을 가져온다.
+
+**controller**
+* DiaryRestController로 구현했으나 DiaryController로 해당 로직을 옮겼다. (DiaryController 설명에 추가함)
 ***

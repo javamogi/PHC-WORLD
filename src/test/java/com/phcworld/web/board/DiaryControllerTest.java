@@ -6,6 +6,7 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -27,6 +28,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.phcworld.domain.board.Diary;
+import com.phcworld.domain.good.Good;
 import com.phcworld.domain.user.User;
 import com.phcworld.service.board.DiaryServiceImpl;
 import com.phcworld.service.user.UserService;
@@ -639,6 +641,51 @@ public class DiaryControllerTest {
 		.andExpect(status().isOk())
 		.andExpect(model().attribute("errorMessage", "삭제 권한이 없습니다."))
 		.andExpect(model().size(1));
+	}
+	
+	@Test
+	public void pushUpbuttonWhenEmptyLoginUser() throws Exception {
+		MockHttpSession mockSession = new MockHttpSession();
+		this.mvc.perform(put("/diary/{diaryId}/good", 1L)
+				.session(mockSession))
+		.andExpect(jsonPath("$.success").value("로그인을 해야합니다."));
+	}
+	
+	@Test
+	public void pushUpbutton() throws Exception {
+		MockHttpSession mockSession = new MockHttpSession();
+		User user = User.builder()
+				.id(1L)
+				.email("test3@test.test")
+				.password("test3")
+				.name("테스트3")
+				.profileImage("blank-profile-picture.png")
+				.authority("ROLE_USER")
+				.createDate(LocalDateTime.now())
+				.build();
+		mockSession.setAttribute(HttpSessionUtils.USER_SESSION_KEY, user);
+		Diary diary = Diary.builder()
+				.id(1L)
+				.writer(user)
+				.title("title")
+				.contents("content")
+				.thumbnail("no-image-icon.gif")
+				.createDate(LocalDateTime.now())
+				.build();
+		Good good = Good.builder()
+				.diary(diary)
+				.user(user)
+				.createDate(LocalDateTime.now())
+				.build();
+		List<Good> list = new ArrayList<Good>();
+		list.add(good);
+		diary.setGoodPushedUser(list);
+		when(diaryService.updateGood(diary.getId(), user))
+		.thenReturn("{\"success\":\""+Integer.toString(diary.getCountOfGood())+"\"}");
+		this.mvc.perform(put("/diary/{diaryId}/good", 1L)
+				.session(mockSession))
+		.andExpect(status().isOk())
+		.andExpect(jsonPath("$.success").value(1));
 	}
 	
 }

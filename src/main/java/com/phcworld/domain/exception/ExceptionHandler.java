@@ -9,7 +9,7 @@ public class ExceptionHandler {
 
 	@org.springframework.web.bind.annotation.ExceptionHandler(value = LoginNotUserException.class)
 	public String handlerLoginNotUserException(LoginNotUserException e) {
-		return "{\"error\":\"" + e.getMessage() +"\"}";
+		return "{\"success\":\"" + e.getMessage() +"\"}";
 	}
 	
 	@org.springframework.web.bind.annotation.ExceptionHandler(value = MatchNotUserExceptioin.class)

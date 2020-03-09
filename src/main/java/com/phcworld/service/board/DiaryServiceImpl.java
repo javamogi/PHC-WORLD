@@ -101,9 +101,7 @@ public class DiaryServiceImpl implements DiaryService {
 	public String updateGood(Long diaryId, User loginUser) {
 		Diary diary = diaryRepository.getOne(diaryId);
 		
-		goodService.pushGood(diary, loginUser);
-
-		Diary updatedGoodCount = diaryRepository.save(diary);
+		Diary updatedGoodCount = diaryRepository.save(goodService.pushGood(diary, loginUser));
 		
 		return "{\"success\":\"" + Integer.toString(updatedGoodCount.getCountOfGood()) +"\"}";
 	}

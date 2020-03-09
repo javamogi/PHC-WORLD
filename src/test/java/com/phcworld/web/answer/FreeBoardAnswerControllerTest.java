@@ -72,8 +72,6 @@ public class FreeBoardAnswerControllerTest {
 		list.add(freeBoardAnswer);
 		freeBoard.setFreeBoardAnswers(list);
 		
-		when(freeBoardService.getOneFreeBoard(freeBoard.getId()))
-		.thenReturn(freeBoard);
 		when(this.freeBoardAnswerService.createFreeBoardAnswer(user, freeBoard.getId(), "test"))
 		.thenReturn(freeBoardAnswer);
 		this.mvc.perform(post("/freeboard/{freeboardId}/answer", 1L)
@@ -94,7 +92,7 @@ public class FreeBoardAnswerControllerTest {
 		this.mvc.perform(post("/freeboard/{freeboardId}/answer", 1L)
 				.param("contents", "test")
 				.session(mockSession))
-		.andExpect(jsonPath("$.error").value("로그인을 해야합니다."));
+		.andExpect(jsonPath("$.success").value("로그인을 해야합니다."));
 	}
 	
 	@Test
@@ -138,7 +136,7 @@ public class FreeBoardAnswerControllerTest {
 		MockHttpSession mockSession = new MockHttpSession();
 		this.mvc.perform(delete("/freeboard/{freeboardId}/answer/{id}", 1L, 1L)
 				.session(mockSession))
-		.andExpect(jsonPath("$.error").value("로그인을 해야합니다."));
+		.andExpect(jsonPath("$.success").value("로그인을 해야합니다."));
 	}
 	
 	@Test

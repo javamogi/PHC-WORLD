@@ -75,6 +75,9 @@ public class Diary {
 	}
 	
 	public Integer getCountOfGood() {
+		if(goodPushedUser == null) {
+			return 0;
+		}
 		return goodPushedUser.size();
 	}
 

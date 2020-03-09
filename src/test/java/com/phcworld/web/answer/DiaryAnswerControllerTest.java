@@ -1,6 +1,5 @@
 package com.phcworld.web.answer;
 
-import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -68,14 +67,13 @@ public class DiaryAnswerControllerTest {
 				.writer(user)
 				.diary(diary)
 				.contents("test")
+				.createDate(LocalDateTime.now())
 				.build();
 		List<DiaryAnswer> list = new ArrayList<DiaryAnswer>();
 		list.add(diaryAnswer);
 		diary.setDiaryAnswers(list);
-		when(diaryService.getOneDiary(diary.getId()))
-		.thenReturn(diary);
-		Diary oneDiary = diaryService.getOneDiary(diary.getId());
-		when(this.diaryAnswerService.createDiaryAnswer(user, oneDiary, "test"))
+		
+		when(this.diaryAnswerService.createDiaryAnswer(user, diary.getId(), "test"))
 		.thenReturn(diaryAnswer);
 		this.mvc.perform(post("/diary/{diaryId}/answer", 1L)
 				.contentType(MediaType.APPLICATION_JSON)
@@ -95,7 +93,7 @@ public class DiaryAnswerControllerTest {
 		this.mvc.perform(post("/diary/{diaryId}/answer", 1L)
 				.param("contents", "test")
 				.session(mockSession))
-		.andExpect(jsonPath("$.error").value("로그인을 해야합니다."));
+		.andExpect(jsonPath("$.success").value("로그인을 해야합니다."));
 	}
 	
 	@Test
@@ -125,8 +123,8 @@ public class DiaryAnswerControllerTest {
 				.diary(diary)
 				.contents("test")
 				.build();
-		given(this.diaryAnswerService.deleteDiaryAnswer(diaryAnswer.getId(), user, diary.getId()))
-		.willReturn("{\"success\":\"[]\"}");
+		when(this.diaryAnswerService.deleteDiaryAnswer(diaryAnswer.getId(), user, diary.getId()))
+		.thenReturn("{\"success\":\"[]\"}");
 		this.mvc.perform(delete("/diary/{diaryId}/answer/{id}", 1L, 1L)
 				.session(mockSession))
 		.andExpect(status().isOk())
@@ -138,7 +136,7 @@ public class DiaryAnswerControllerTest {
 		MockHttpSession mockSession = new MockHttpSession();
 		this.mvc.perform(delete("/diary/{diaryId}/answer/{id}", 1L, 1L)
 				.session(mockSession))
-		.andExpect(jsonPath("$.error").value("로그인을 해야합니다."));
+		.andExpect(jsonPath("$.success").value("로그인을 해야합니다."));
 	}
 	
 	@Test
@@ -177,8 +175,8 @@ public class DiaryAnswerControllerTest {
 				.diary(diary)
 				.contents("test")
 				.build();
-		given(this.diaryAnswerService.deleteDiaryAnswer(diaryAnswer.getId(), user, diary.getId()))
-		.willReturn("{\"error\":\"" + "본인이 작성한 글만 삭제 가능합니다." +"\"}");
+		when(this.diaryAnswerService.deleteDiaryAnswer(diaryAnswer.getId(), user, diary.getId()))
+		.thenReturn("{\"error\":\"" + "본인이 작성한 글만 삭제 가능합니다." +"\"}");
 		this.mvc.perform(delete("/diary/{diaryId}/answer/{id}", 1L, 1L)
 				.session(mockSession))
 		.andExpect(jsonPath("$.error").value("본인이 작성한 글만 삭제 가능합니다."));

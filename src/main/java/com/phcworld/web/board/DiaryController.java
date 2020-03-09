@@ -15,8 +15,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.phcworld.domain.board.Diary;
+import com.phcworld.domain.exception.LoginNotUserException;
 import com.phcworld.domain.user.User;
 import com.phcworld.service.board.DiaryServiceImpl;
 import com.phcworld.service.user.UserService;
@@ -144,5 +146,14 @@ public class DiaryController {
 		}
 		diaryService.deleteDiary(diary);
 		return "redirect:/diary/list/" + loginUser.getEmail();
+	}
+	
+	@PutMapping("/{id}/good")
+	public @ResponseBody String updateGoodCount(@PathVariable Long id, HttpSession session) throws LoginNotUserException {
+		if(!HttpSessionUtils.isLoginUser(session)) {
+			throw new LoginNotUserException("로그인을 해야합니다.");
+		}
+		User loginUser = HttpSessionUtils.getUserFromSession(session);
+		return diaryService.updateGood(id, loginUser);
 	}
 }
