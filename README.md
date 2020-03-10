@@ -114,23 +114,15 @@
 
 
 **service**
-
 * UserService는 interface없이 바로 구현
-
 * User 생성 메서드는 builder()를 사용하지 않고 setter를 사용
-
 * 등록된 Email이 있는지 확인하기 위해 Email로 User정보를 가져오는 메서드
-
 * 주소로 id값이 넘어오면 id로 User정보를 가져오는 메서드
-
 * User 정보를 수정하는 메서드
-
 * profile 이미지를 변경하는 메서드
-
   
 
 **Controller**
-
 1. User의 timeline을 profile페이지에서 ajax로 보기 위해 만든 RestController
 2. 회원가입, 로그인, 회원 정보 수정 Controller
     * 생성 Create
@@ -474,4 +466,80 @@
 
 **controller**
 * DiaryRestController로 구현했으나 DiaryController로 해당 로직을 옮겼다. (DiaryController 설명에 추가함)
+***
+### Timeline 설명
+* Timeline은 유저가 자유게시판, 자유게시판 댓글, 일기게시판, 일기게시판 댓글, 일기게시판 좋아요를 했을 때 @OneToOne으로  매핑된다.
+* 부모 Entity에 해당하는 자유게시판, 자유게시판 댓글, 일기게시판, 일기게시판 댓글, 일기게시판 좋아요와의 매핑을 하였지만 부모 Entity에서 자식 Entity를 사용하지 않아서 삭제하였다.
+* 타임라인의 삭제를 부모 Entity 로직에서 구현하지 않으려면 부모Entity에 매핑해야한다.
+* Timeline는 Entity이므로 @Entity 어노테이션을 사용하였습니다.
+* 모든 필드에 getter와 setter, log로 Timeline를 보기위해 toString을 사용하기 위해 Lombok의 @Data어노테이션을 사용하였습니다.
+* 기본 생성자 @NoArgsConstructor 어노테이션, 모든 필드의 생성자 @AllArgsConstructor를 사용하였습니다.
+* Timeline를 생성할 때 편리하게 사용하기위해 @Builder어노테이션을 사용하였습니다.
+* 필드
+  * id
+    * primary key @Id어노테이션 사용
+      * 읽기를 위한 고유키
+    * 자동증가를 위해 @GenaratedValue 어노테이션 사용
+      * pk에 대한 전략으로 데이터베이스에 위임 IDENTITY
+    * id를 사용하여 타임라인을 가져와서 저장된 게시물 정보로 redirect 하는게 id를 사용하지 않고 redirect하는 것보다 더 간단하게 구현할 수 있어서 id를 사용했지만 더 생각해 볼 필요가 있다.
+  * type
+    * 저장되는 게시물의 종류를 나타낸다.
+  * icon
+    * veiw에서 보여줄 아이콘을 저장
+  * freeBoard
+    * 작성한 자유게시판의 게시글을 저장
+    * FreeBoard 하나당 Timeline도 하나이기 때문에 @OneToOne으로 매핑
+    * FreeBoard에서는 Timeline을 사용하지 않기 때문에 매핑을 하지 않았다.(매핑을 하는 것이 사제할 때 편리)
+    * 외래키를 갖기 때문에 @JoinColumn을 foreignKey를 설정
+  * freeBoardAnswer
+    * 작성한 자유게시판의 게시물의 댓글을 저장
+    * FreeBoardAnswer 하나당 Timeline도 하나이기 때문에 @OneToOne으로 매핑
+    * FreeBoardAnwer에서는 Timeline을 사용하지 않기 때문에 매핑을 하지 않았다.
+    * 외래키를 갖기 때문에 @JoinColumn을 foreignKey를 설정
+  * diary
+    * 작성한 일기게시판의 게시물을 저장
+    * Diary 하나당 Timeline도 하나이기 때문에 @OneToOne으로 매핑
+    * Diary에서는 Timeline을 사용하지 않기 때문에 매핑을 하지 않았다.
+    * 외래키를 갖기 때문에 @JoinColumn을 foreignKey를 설정
+  *  diaryAnswer
+    * 작성한 일기게시판의 게시물의 댓글을 저장
+    * DiaryAnswer 하나당 Timeline도 하나이기 때문에 @OneToOne으로 매핑
+    * DiaryAnswer에서는 Timeline을 사용하지 않기 때문에 매핑을 하지 않았다.
+    * 외래키를 갖기 때문에 @JoinColumn을 foreignKey를 설정
+  * good
+    * 일기게시판의 좋아요를 눌렀을 때 Good을 저장
+    * Good 하나당 Timeline도 하나이기 때문에 @OneToOne으로 매핑
+    * Good에서는 Timeline을 사용하지 않기 때문에 매핑을 하지 않았다.
+    * 외래키를 갖기 때문에 @JoinColumn을 foreignKey를 설정
+  * user
+    * 자유게시판 게시물, 자유게시판 게시물의 댓글, 일기게시판 게시물, 일기게시판 게시물의 댓글의 작성자와 일기게시판 게시물의 좋아요를 누른 유저를 저장
+    * User 한명이 다수의 Timeline을 만들기 때문에 @ManyToOne으로 매핑
+    * User에서는 Timeline을 사용하지 않기 때문에 매핑을 하지 않았다.
+    * 외래키를 갖기 때문에 @JoinColumn을 foreignKey를 설정
+  * saveDate
+    * 자유게시판 게시물, 자유게시판 게시물의 댓글, 일기게시판 게시물, 일기게시판 게시물의 댓글, 일기게시판 게시물의 좋아요가 만들어진 날짜를 저장
+* 날짜 형식을 변경하는 메서드
+* 저장된 type을 확인하여 등록된 게시물에 접근하는 메서드
+
+
+**service **
+* 페이지 숫자와 유저 정보를 받아 유저가 등록한 타임라인을 요청받은 페이지의 타임라인 5개를 List로 반환한다.
+* 타임라인 id로 해당 id의 타임라인 정보를 가져온다.
+* create
+  * 메서드 오버로딩으로 일기게시판, 일기게시판 댓글, 일기게시판 좋아요, 자유게시판, 자유게시판 댓글 각각의 자료가 들어오면 각각의 자료에 맞게 타임라인을 생성한다.
+* delete
+  * 삭제도 생성과 마찬가지로 메서드 오버로딩으로 일기게시판, 일기게시판 댓글, 일기게시판 좋아요, 자유게시판, 자유게시판 댓글 각각의 자료가 들어오면 각각의 자료에 맞게 타임라인을 삭제한다.
+***
+### TempTimeline 설명
+**TempTimeline**
+
+* 이 클래스는 db에 저장된 데이터를 TempTimeline의 필드형에 맞게 가져와 List<TempTimeline>에 담아 위의 Timelime역할을 하는 클래스이다.
+* 현재는 Timeline Entity를 사용하고 있어서 TempTimeline으로 클래스명으로 정하고 사용하지 않는다.
+* 저장된 데이터를 또 db에 저장하는 것이 아까워서 일종의 DTO로 구현했다. 그렇기때문에 Entity가 아니다.
+* 필드는 Timeline과 크게 다르지 않고 id가 없기 때문에 redirect할 url을 저장하여 사용한다.
+
+
+**service**
+* 로그인 유저의 정보를 받아 로그인 저장된 유저가 작성한 자유게시판, 자유게시판 댓글, 일기게시판, 일기게시판 댓글과 좋아요를 누른 일기게시판을 최신 5개씩 가져와 List에 저장하고 Comparator를 날짜 내림차순(최신순)으로 구현하여 List를 정렬한다.
+* 로그인 유저의 프로필 페이지에서 타임라인으로 사용하려면 추가 작업이 필요하지만 임시로 구현했기 때문에 구현하지 않았다.
 ***

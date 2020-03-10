@@ -39,7 +39,7 @@ public class DiaryRestControllerTest {
 		MockHttpSession mockSession = new MockHttpSession();
 		this.mvc.perform(put("/api/diary/{diaryId}/good", 1L)
 				.session(mockSession))
-		.andExpect(jsonPath("$.error").value("로그인을 해야합니다."));
+		.andExpect(jsonPath("$.success").value("로그인을 해야합니다."));
 	}
 	
 	@Test

@@ -44,7 +44,7 @@ public class MessageControllerTest {
 		this.mvc.perform(post("/message")
 				.param("toUserEmail", "test2@test.test")
 				.param("contents", "test"))
-		.andExpect(jsonPath("$.error").value("로그인을 해야합니다."));
+		.andExpect(jsonPath("$.success").value("로그인을 해야합니다."));
 	}
 	
 	@Test
@@ -133,7 +133,7 @@ public class MessageControllerTest {
 	@Test
 	public void whenEmptyLoginUserConfirmMessage() throws Exception {
 		this.mvc.perform(get("/message/{id}", 1L))
-		.andExpect(jsonPath("$.error").value("로그인을 해야합니다."));
+		.andExpect(jsonPath("$.success").value("로그인을 해야합니다."));
 	}
 	
 	@Test
@@ -179,7 +179,7 @@ public class MessageControllerTest {
 	@Test
 	public void whenEmptyLoginUserGetToUserInfo() throws Exception {
 		this.mvc.perform(post("/message/info/{id}", 1L))
-		.andExpect(jsonPath("$.error").value("로그인을 해야합니다."));
+		.andExpect(jsonPath("$.success").value("로그인을 해야합니다."));
 	}
 	
 	@Test
