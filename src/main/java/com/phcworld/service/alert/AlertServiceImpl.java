@@ -1,6 +1,5 @@
 package com.phcworld.service.alert;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,8 +40,8 @@ public class AlertServiceImpl implements AlertService {
 		Alert alert = Alert.builder()
 				.type("Diary")
 				.good(good)
-				.postWriter(good.getUser())
-				.createDate(LocalDateTime.now())
+				.postWriter(good.getDiary().getWriter())
+				.createDate(good.getCreateDate())
 				.build();
 		return alertRepository.save(alert);
 	}
@@ -52,7 +51,7 @@ public class AlertServiceImpl implements AlertService {
 				.type("Diary")
 				.diaryAnswer(diaryAnswer)
 				.postWriter(diaryAnswer.getDiary().getWriter())
-				.createDate(LocalDateTime.now())
+				.createDate(diaryAnswer.getCreateDate())
 				.build();
 		return alertRepository.save(alert);
 	}
@@ -62,7 +61,7 @@ public class AlertServiceImpl implements AlertService {
 				.type("FreeBoard")
 				.freeBoardAnswer(freeBoardAnswer)
 				.postWriter(freeBoardAnswer.getFreeBoard().getWriter())
-				.createDate(LocalDateTime.now())
+				.createDate(freeBoardAnswer.getCreateDate())
 				.build();
 		return alertRepository.save(alert);
 	}

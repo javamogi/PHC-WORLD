@@ -145,7 +145,7 @@ public class AlertServiceImplTest {
 		Alert alert = Alert.builder()
 				.type("Diary")
 				.good(good)
-				.postWriter(good.getUser())
+				.postWriter(good.getDiary().getWriter())
 				.createDate(LocalDateTime.now())
 				.build();
 		when(alertService.createAlert(good))

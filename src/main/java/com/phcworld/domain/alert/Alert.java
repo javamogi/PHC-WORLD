@@ -8,6 +8,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 
 import com.phcworld.domain.answer.DiaryAnswer;
@@ -45,7 +46,7 @@ public class Alert {
 	@JoinColumn(foreignKey = @ForeignKey(name = "fk_alert_free_board_answer"))
 	private FreeBoardAnswer freeBoardAnswer;
 
-	@OneToOne
+	@ManyToOne
 	@JoinColumn(foreignKey = @ForeignKey(name = "fk_alert_post_writer"))
 	private User postWriter;
 	
@@ -53,12 +54,5 @@ public class Alert {
 
 	public String getFormattedCreateDate() {
 		return LocalDateTimeUtils.getTime(createDate);
-	}
-	
-	public boolean getIsGoodNull() {
-		if(good != null) {
-			return true;
-		}
-		return false;
 	}
 }
