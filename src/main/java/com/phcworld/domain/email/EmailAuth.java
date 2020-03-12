@@ -5,7 +5,16 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 @Entity
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class EmailAuth {
 	
 	@Id
@@ -16,33 +25,13 @@ public class EmailAuth {
 	
 	private String authKey;
 	
-	private String confirm;
-	
-	public EmailAuth() {
-	}
-
-	public EmailAuth(String email, String authKey) {
-		this.email = email;
-		this.authKey = authKey;
-		this.confirm = "N";
-	}
-
-	public boolean auth() {
-		if(this.confirm.equals("N")) {
-			return false;
-		}
-		return this.confirm.equals("Y");
-	}
+	private boolean authenticate;
 
 	public boolean matchAuthKey(String authKey) {
 		if(authKey == null) {
 			return false;
 		}
 		return authKey.equals(this.authKey);
-	}
-	
-	public void setConfirm(String confirm) {
-		this.confirm = confirm;
 	}
 	
 }

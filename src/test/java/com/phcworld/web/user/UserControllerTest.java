@@ -130,8 +130,8 @@ public class UserControllerTest {
 				.authority("ROLE_USER")
 				.createDate(LocalDateTime.now())
 				.build();
-		given(this.userService.findUserByEmail("test@test.test"))
-		.willReturn(user);
+		when(this.userService.findUserByEmail("test@test.test"))
+		.thenReturn(user);
 		this.mvc.perform(post("/users")
 				.param("email", "test@test.test")
 				.param("password", "test")
@@ -159,20 +159,23 @@ public class UserControllerTest {
 	@Test
 	public void successLoginUser() throws Exception {
 		User user = User.builder()
+				.id(1L)
 				.email("test@test.test")
 				.password("test")
 				.name("테스트")
 				.profileImage("blank-profile-picture.png")
-				.authority("ROLE_USER")
+				.authority("ROLE_ADMIN")
 				.createDate(LocalDateTime.now())
 				.build();
-		user.setAuthority("ROLE_ADMIN");
-		given(this.userService.findUserByEmail("test@test.test"))
-		.willReturn(user);
-		EmailAuth emailAuth = new EmailAuth("test@test.test", "1234");
-		emailAuth.setConfirm("Y");
-		given(this.emailService.findByEmail("test@test.test"))
-		.willReturn(emailAuth);
+		when(this.userService.findUserByEmail("test@test.test"))
+		.thenReturn(user);
+		EmailAuth emailAuth = EmailAuth.builder()
+				.email("test@test.test")
+				.authKey("1234")
+				.authenticate(true)
+				.build();
+		when(this.emailService.findByEmail("test@test.test"))
+		.thenReturn(emailAuth);
 		this.mvc.perform(post("/users/login")
 				.param("email", "test@test.test")
 				.param("password", "test"))
@@ -190,8 +193,8 @@ public class UserControllerTest {
 				.authority("ROLE_USER")
 				.createDate(LocalDateTime.now())
 				.build();
-		given(this.userService.findUserByEmail("test@test.test"))
-		.willReturn(user);
+		when(this.userService.findUserByEmail("test@test.test"))
+		.thenReturn(user);
 		this.mvc.perform(post("/users/login")
 				.param("email", "test2@test.test")
 				.param("password", "test"))
@@ -212,8 +215,8 @@ public class UserControllerTest {
 				.authority("ROLE_USER")
 				.createDate(LocalDateTime.now())
 				.build();
-		given(this.userService.findUserByEmail("test@test.test"))
-		.willReturn(user);
+		when(this.userService.findUserByEmail("test@test.test"))
+		.thenReturn(user);
 		this.mvc.perform(post("/users/login")
 				.param("email", "test@test.test")
 				.param("password", "test1"))
@@ -234,10 +237,15 @@ public class UserControllerTest {
 				.authority("ROLE_USER")
 				.createDate(LocalDateTime.now())
 				.build();
-		given(this.userService.findUserByEmail("test@test.test"))
-		.willReturn(user);
-		given(this.emailService.findByEmail("test@test.test"))
-		.willReturn(new EmailAuth("test@test.test", "1234"));
+		when(this.userService.findUserByEmail("test@test.test"))
+		.thenReturn(user);
+		EmailAuth emailAuth = EmailAuth.builder()
+				.email("test@test.test")
+				.authKey("1234")
+				.authenticate(false)
+				.build();
+		when(this.emailService.findByEmail("test@test.test"))
+		.thenReturn(emailAuth);
 		this.mvc.perform(post("/users/login")
 				.param("email", "test@test.test")
 				.param("password", "test"))
@@ -464,17 +472,17 @@ public class UserControllerTest {
 		mockSession.setAttribute("messages", null);
 		mockSession.setAttribute("countMessages", "");
 		mockSession.setAttribute("alerts", null);
-		given(this.userService.findUserById(1L))
-		.willReturn(loginUser);
+		when(this.userService.findUserById(1L))
+		.thenReturn(loginUser);
 		List<Timeline> timelines = timelineService.findTimelineList(0, loginUser);
 		when(this.timelineService.findTimelineList(0, loginUser))
 		.thenReturn(timelines);
-		Page<Message> pageReceiveMessages = messageService.findMessageByReceiveMessages(1, loginUser);
-		given(this.messageService.findMessageByReceiveMessages(1, loginUser))
-		.willReturn(pageReceiveMessages);
-		Page<Message> pageSendMessages = messageService.findMessageByReceiveMessages(1, loginUser);
-		given(this.messageService.findMessageByReceiveMessages(1, loginUser))
-		.willReturn(pageSendMessages);
+		Page<Message> pageReceiveMessages = messageService.findMessageByReceiverMessages(1, loginUser);
+		when(this.messageService.findMessageByReceiverMessages(1, loginUser))
+		.thenReturn(pageReceiveMessages);
+		Page<Message> pageSendMessages = messageService.findMessageByReceiverMessages(1, loginUser);
+		when(this.messageService.findMessageByReceiverMessages(1, loginUser))
+		.thenReturn(pageSendMessages);
 		this.mvc.perform(get("/users/{id}/profile", 1L)
 				.param("id", "1L")
 				.session(mockSession))

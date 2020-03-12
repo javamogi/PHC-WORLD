@@ -44,7 +44,11 @@ public class EmailControllerTest {
 	
 	@Test
 	public void whenNotEqualAuthKeyEmailUser() throws Exception{
-		EmailAuth emailAuth = new EmailAuth("email@test.test", "1234");
+		EmailAuth emailAuth = EmailAuth.builder()
+				.email("email@test.test")
+				.authKey("1234")
+				.authenticate(false)
+				.build();
 		given(emailAuthRepository.findByEmail("email@test.test"))
 		.willReturn(emailAuth);
 		this.mvc.perform(get("/email/emailConfirm")
@@ -58,7 +62,11 @@ public class EmailControllerTest {
 	
 	@Test
 	public void successAuthKeyConfirm() throws Exception{
-		EmailAuth emailAuth = new EmailAuth("email@test.test", "1234");
+		EmailAuth emailAuth = EmailAuth.builder()
+				.email("email@test.test")
+				.authKey("1234")
+				.authenticate(false)
+				.build();
 		given(emailAuthRepository.findByEmail("email@test.test"))
 		.willReturn(emailAuth);
 		this.mvc.perform(get("/email/emailConfirm")

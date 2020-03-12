@@ -20,7 +20,11 @@ public class EmailService {
 	
 	public void sendEmail(String email) throws Exception {
 		String authKey = UUID.randomUUID().toString().replaceAll("-", "");
-		EmailAuth emailAuth = new EmailAuth(email, authKey);
+		EmailAuth emailAuth = EmailAuth.builder()
+				.email(email)
+				.authKey(authKey)
+				.authenticate(false)
+				.build();
 		emailAuthRepository.save(emailAuth);
 		
 		MimeMessage msg = emailSender.createMimeMessage();

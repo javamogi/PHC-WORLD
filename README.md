@@ -17,7 +17,6 @@
 ***
 
 ### 프로젝트 기능
-
 * 게시판을 이용할 수 있는 사이트입니다.
 * 사이트의 모든 기능은 회원만 이용 가능합니다.
 * 게시판은 두 종류입니다.
@@ -34,7 +33,6 @@
 ***
 
 ### 프로젝트 구현 설명
-
 * MVC패턴 - Controller로 요청을 받고 Service Interface에서 선언한 메서드를 구현한 ServiceImpl에서 Repository로 처리 후 Controller에서 View로 응답합니다. (추상화 예정)
 * 모든 Service, Repository, Controller에 대한 Junit테스트를 구현했습니다.
   * Service 테스트에서는 @MockBean을 사용하여 테스트하였습니다.
@@ -56,7 +54,6 @@
 ***
 
 ### 업데이트 예정
-
 * REST API 공부 후 자유게시판 댓글, 일기게시판 댓글, 일기게시판 좋아요 수정하기
 * Timeline와 Alert TempTimeline처럼 데이터를 변환하여 사용하기
 * 댓글 수정기능
@@ -70,7 +67,6 @@
 ### User 설명
 
 **Entity**
-
 * User는 Entity이므로 @Entity 어노테이션을 사용하였습니다.
 * 모든 필드에 getter와 setter, 서로 다른 User인지 비교하기위해  EqualsAndHashCode, log로 User를 보기위해 toString을 사용하기 위해 Lombok의 @Data어노테이션을 사용하였습니다.
 * User의 toString은 password는 제외시켜 log에 나타나지 않게 하였습니다.
@@ -128,7 +124,6 @@
 
 
 **service**
-
 * UserService는 interface없이 바로 구현
 * User 생성 메서드는 builder()를 사용하지 않고 setter를 사용
 * 등록된 Email이 있는지 확인하기 위해 Email로 User정보를 가져오는 메서드
@@ -137,7 +132,6 @@
 * profile 이미지를 변경하는 메서드
 
 **Controller**
-
 1. User의 timeline을 profile페이지에서 ajax로 보기 위해 만든 RestController
 2. 회원가입, 로그인, 회원 정보 수정 Controller
    * 생성 Create
@@ -179,7 +173,6 @@
 ### FreeBoard 설명
 
 **Entity**
-
 * FreeBoard는 Entity이므로 @Entity 어노테이션을 사용하였습니다.
 * 모든 필드에 getter와 setter, 서로 다른 FreeBoard인지 비교하기위해  EqualsAndHashCode, log로 FreeBoard를 보기위해 toString을 사용하기 위해 Lombok의 @Data어노테이션을 사용하였습니다.
 * 기본 생성자 @NoArgsConstructor 어노테이션, 모든 필드의 생성자 @AllArgsConstructor를 사용하였습니다.
@@ -214,16 +207,13 @@
     * 자유게시판 게시글 하나에 여러개의 댓글이 달리기 때문에 자유게시판과의 관계는 @OneToMany
     * 무한루프에 빠지지 않기 위해 @JsonBackReference어노테이션 사용 (공부할 것)
     * 자유게시판 게시글을 지우면 해당 게시글의 댓글도 지우기 위해 cascade REMOVE 설정
-
 * 해당 게시물의 댓글의 개수를 가져오기 위해 freeBoardAnswer의 size()를 가져와서 String으로 변경하는 메서드
 * 게시글을 읽어올 때 조회수를 올리는 메서드
 * 날짜 형식을 변경하는 메서드(User createDate와 같음)
 * 게시물을 update하는 메서드
 * 게시물 글쓴이와 로그인 User와 비교하는 메서드. 만약 글쓴이 이외에 회원 권한을 가진 User가 게시물을 삭제할 때 쓰인다.
 
-
 **service**
-
 * 자유게시판의 모든 게시물을 가져온다.
 * 로그인 한 유저의 정보와 입력받은 자유게시판 정보를 Lombok의 builder()를 사용해서 db에 저장 후 저장된 자유게시판 게시물을 timeline에 @OneToOne관계로 저장
 * 자유게시판 id를 가지고 id에 해당하는 게시물을 가져온다.
@@ -234,7 +224,6 @@
 
 
 **controller**
-
 * 자유게시판의 모든 게시물을 가져오기
   * 현재 시간을 기준으로 24시간내의 등록된 글이면 badge필드에 "New"를 넣는다. 그리고 게시물을 model에 담아 freeboard페이지에서 사용한다.
 * 자유게시판 글쓰기 페이지
@@ -249,13 +238,10 @@
   *  다시 한번 로그인을 했는지 확인하고 수정 요청한 글의 작성자와 로그인한 유저와 같으면 수정을 하고 해당 게시물의 상세페이지로 이동한다.
 * 게시물 삭제
   *  로그인 한 유저가 있는지 확인하고 로그인 한 유저가 해당 게시물의 작성자와 같은지 확인해서 같다면 게시물을 삭제하고 list페이지로 이동한다.
-
 ***
-
 ### FreeBoardAnswer 설명
 
 **Entity**
-
 * FreeBoardAnswer는 Entity이므로 @Entity 어노테이션을 사용하였습니다.
 * 모든 필드에 getter와 setter, 서로 다른 FreeBoardAnswer인지 비교하기위해  EqualsAndHashCode, log로 FreeBoardAnswer를 보기위해 toString을 사용하기 위해 Lombok의 @Data어노테이션을 사용하였습니다.
 * 기본 생성자 @NoArgsConstructor 어노테이션, 모든 필드의 생성자 @AllArgsConstructor를 사용하였습니다.
@@ -285,7 +271,6 @@
 
 
 **service**
-
 * 댓글 생성
   * 로그인 유저(작성자), 댓글을 작성하는 자유게시판 게시글의 id, 댓글의 내용을 받아서 FreeBoardAnswer의 builer()를 사용하여 FreeBoardAnswer를 생성
   * 댓글의 내용은 html로 보여지기 때문에 String의 줄바꿈을 html 줄바꿈 태그로 변경
@@ -301,7 +286,6 @@
 * 로그인유저(댓글 작성자)가 쓴 모든 자유게시판 게시물의 댓글을 가져온다.
 
 **controller**
-
 * 생성
   * 로그인을 하지 않았다면 Exception 발생
   * 댓글을 작성하는 자유게시판 게시물의 id와 댓글의 내용을 받아 댓글 생성
@@ -314,7 +298,6 @@
 ### Diary 설명
 
 **Entity**
-
 * Diary는 Entity이므로 @Entity 어노테이션을 사용하였습니다.
 * 모든 필드에 getter와 setter, 서로 다른 Diary인지 비교하기위해  EqualsAndHashCode, log로 Diary를 보기위해 toString을 사용하기 위해 Lombok의 @Data어노테이션을 사용하였습니다.
 * 기본 생성자 @NoArgsConstructor 어노테이션, 모든 필드의 생성자 @AllArgsConstructor를 사용하였습니다.
@@ -354,7 +337,6 @@
 * 게시물의 id와 넘어온 id가 같은지 확인하는 메서드
 
 **service**
-
 * 게시물 가져오기
   * 로그인 유저, 페이지 숫자, email주소 유저(url에 email주소 입력 접근)를 받아서 PageRequest.of에 넘겨받은 페이지 숫자를 넣어 목록을 가져온다. 로그인 유저가 없거나 로그인유저와 email주소 유저가 다르면 email주소 유저가 작성한 게시물이 나온다.
   * 로그인 유저와 email주소 유저와 같으면 로그인 유저가 작성한 게시물이 나온다.
@@ -373,7 +355,6 @@
   * Good의 개수를 Json으로 리턴한다. (Json의 객체는 개수 하나만 가지고 있다.)
 
 **controller**
-
 * 일기게시판 게시물 가져오기
   * email과 pageNum을 받아서 email의 유저를 찾아서 email의 유저가 작성한 일기게시판 게시물을 pageNum에서 6개를 Page로 가져온다. pageNum을 받지 않으면 pageNum은 1이다.
   * PageNationsUtil을 사용해서 게시물의 페이지 숫자를 model에 담아 diary페이지에서 사용
@@ -414,7 +395,6 @@
 ### DiaryAnswer 설명
 
 **Entity**
-
 * DiaryAnswer는 Entity이므로 @Entity 어노테이션을 사용하였습니다.
 * 모든 필드에 getter와 setter, 서로 다른 DiaryAnswer인지 비교하기위해  EqualsAndHashCode, log로 DiaryAnswer를 보기위해 toString을 사용하기 위해 Lombok의 @Data어노테이션을 사용하였습니다.
 * 기본 생성자 @NoArgsConstructor 어노테이션, 모든 필드의 생성자 @AllArgsConstructor를 사용하였습니다.
@@ -442,7 +422,6 @@
 * 작성자와 넘어오는 User가 같은지 확인하는 메서드
 
 **service**
-
 * 댓글 생성
   * 로그인 유저(작성자), 댓글을 작성하는 일기게시판 게시글의 id, 댓글의 내용을 받아서 DiaryAnswer의 builer()를 사용하여 DiaryAnswer를 생성
   * 댓글의 내용은 html로 보여지기 때문에 String의 줄바꿈을 html 줄바꿈 태그로 변경
@@ -458,7 +437,6 @@
 * 로그인유저(댓글 작성자)가 쓴 모든 일기게시판 게시물의 댓글을 가져온다.
 
 **controller**
-
 * 생성
   * 로그인을 하지 않았다면 Exception 발생
   * 댓글을 작성하는 일기게시판 게시물의 id와 댓글의 내용을 받아 댓글 생성
@@ -471,7 +449,6 @@
 ### Good 설명 
 
 **Entity**
-
 * 일기게시판 게시물에 좋아요를 담당하는 Entity이다.
 * 일기게시판의 좋아요를 눌렀을 때 누른 게시물과 유저를 담는다.
 * 일기게시판 게시물 하나에 다수의 Good이 저장될 수 있고 Good에는 좋아요를 누른 하나의 일기게시판 게시물과 유저 정보를 저장한다.
@@ -497,7 +474,6 @@
 
 
 **service**
-
 * 일기게시판의 게시물에 좋아요를 눌렀을 때 해당 일기게시판 게시물의 정보와 좋아요를 누른 유저(로그인 유저)를 받아서 해당 게시물에 유저가 좋아요를 눌렀는지 찾아보고 없으면 Good을 생성하고 타임라인을 생성한다. 만약 좋아요를 누른 일기게시판의 게시물이 자신의 글이 아니면 알림도 생성한다.
 * 만약 일기게시판의 게시물에 좋아요를 눌렀다면 찾은 Good을 삭제하고 타임라인을 삭제한다. 만약 좋아요를 누른 일기게시판의 게시물이 자신의 글이 아니면 알림도 삭제한다.
 * 변경된 Diary를 리턴한다.
@@ -506,13 +482,11 @@
 * 유저가 누른 좋아요의 목록을 가져온다.
 
 **controller**
-
 * DiaryRestController로 구현했으나 DiaryController로 해당 로직을 옮겼다. (DiaryController 설명에 추가함)
 
 ***
 
 ### Timeline 설명
-
 * Timeline은 유저가 자유게시판, 자유게시판 댓글, 일기게시판, 일기게시판 댓글, 일기게시판 좋아요를 했을 때 @OneToOne으로  매핑된다.
 * 부모 Entity에 해당하는 자유게시판, 자유게시판 댓글, 일기게시판, 일기게시판 댓글, 일기게시판 좋아요와의 매핑을 하였지만 부모 Entity에서 자식 Entity를 사용하지 않아서 삭제하였다.
 * 타임라인의 삭제를 부모 Entity 로직에서 구현하지 않으려면 부모Entity에 매핑해야한다.
@@ -568,7 +542,6 @@
 
 
 **service **
-
 * 페이지 숫자와 유저 정보를 받아 유저가 등록한 타임라인을 요청받은 페이지의 타임라인 5개를 List로 반환한다.
 * 타임라인 id로 해당 id의 타임라인 정보를 가져온다.
 * create
@@ -581,7 +554,6 @@
 ### TempTimeline 설명
 
 **TempTimeline**
-
 * 이 클래스는 db에 저장된 데이터를 TempTimeline의 필드형에 맞게 가져와 List<TempTimeline>에 담아 위의 Timelime역할을 하는 클래스이다.
 * 현재는 Timeline Entity를 사용하고 있어서 TempTimeline으로 클래스명으로 정하고 사용하지 않는다.
 * 저장된 데이터를 또 db에 저장하는 것이 아까워서 일종의 DTO로 구현했다. 그렇기때문에 Entity가 아니다.
@@ -589,19 +561,16 @@
 
 
 **service**
-
 * 로그인 유저의 정보를 받아 로그인 저장된 유저가 작성한 자유게시판, 자유게시판 댓글, 일기게시판, 일기게시판 댓글과 좋아요를 누른 일기게시판을 최신 5개씩 가져와 List에 저장하고 Comparator를 날짜 내림차순(최신순)으로 구현하여 List를 정렬한다.
 * 로그인 유저의 프로필 페이지에서 타임라인으로 사용하려면 추가 작업이 필요하지만 임시로 구현했기 때문에 구현하지 않았다.
 
 ***
 
 ### Alert 설명
-
 * Alert는 자유게시판의 게시물에 작성자 이외의 유저가 댓글을 달았을 때와 일기게시판의 게시물에 작성자 이외의 유저가 댓글과 좋아요를 눌렀을 때 작성자에게 알려주는 기능이다.
 * Alert는 Timeline과 비슷한 구조를 가진다.
 
 **Entity**
-
 * 모든 필드에 getter와 setter, log로 Alert를 보기위해 toString을 사용하기 위해 Lombok의 @Data어노테이션을 사용하였습니다.
 * 기본 생성자 @NoArgsConstructor 어노테이션, 모든 필드의 생성자 @AllArgsConstructor를 사용하였습니다.
 * Alert를 생성할 때 편리하게 사용하기위해 @Builder어노테이션을 사용하였습니다.
@@ -639,7 +608,6 @@
 * 날짜 형식을 변경하는 메서드
 
 **service**
-
 * 하나의 alert가져오기
   * alert의 id로 id의 Alert 정보 하나 가져온다.
   * alert와 연결된 게시물에 redirect할 때 사용
@@ -651,12 +619,42 @@
   * 삭제도 생성과 마찬가지로 메서드 오버로딩으로일기게시판 댓글, 일기게시판 좋아요, 자유게시판 댓글 각각의 자료가 들어오면 각각의 자료에 맞게 알림을 삭제한다.
 
 **controller**
-
 * UserController에서 로그인을 요청하고 응답받을 때 로그인을 요청한 유저의 정보로 Alert 목록을 가져와서 view페이지의 상위 메뉴 알림에서 사용
 * DashboardController에서 로그인 한 유저의 정보로 Alert목록을 가져와서 Alert의 개수를 view페이지에서 사용
-
 **Alert도 TempTimeline처럼 db데이터를 변환하여 사용할 수 있지만 구현을 하지 않았다.**
-
 * README를 작성하며 Timeline과 Alert처럼 Entity로 관리하는 것 보다 TempTimeline으로 db에 저장하지 않고 변환하는 것이 좋아보인다.
+***
+### EmailAuth 설명
+1. EmailAuth는 회원가입을 요청한 email과 랜덤값, 그리고 인증되었는지 확인할 boolean값(false)을 저장한다.
+2. email 주소로 저장한 email과 랜덤값을 파라미터로 한 url 링크를 보낸다.  
+3. email에서 링크를 클릭하면 EmailAuth에 저장한 email로 정보를 불러와 랜덤값을 확인하여 인증을 확인하는 값을 인증이 되었다는 값(true)으로 변경한다.
+* 모든 필드에 getter와 setter, log로 EmailAuth를 보기위해 toString을 사용하기 위해 Lombok의 @Data어노테이션을 사용하였습니다.
+* 기본 생성자 @NoArgsConstructor 어노테이션, 모든 필드의 생성자 @AllArgsConstructor를 사용하였습니다.
+* EmailAuth를 생성할 때 편리하게 사용하기위해 @Builder어노테이션을 사용하였습니다.
+* 필드
+  * id    
+    * primary key @Id어노테이션 사용
+    * 자동증가를 위해 @GenaratedValue 어노테이션 사용
+      * pk에 대한 전략으로 데이터베이스에 위임 IDENTITY
+  * email
+    * 회원가입때의 email을 저장
+  * authKey
+    * 인증을 위한 랜덤 값
+  * authenticate
+    * 인증이 되었는지 확인하는 필드
+* 인증키를 확인하는 메서드
 
+**service**
+* 메일보내기
+  * UUID의 랜덤값을 만들어 email과 함께 EmailAuth를 생성 후 db에 저장
+  * JavaMailSender를 이용하여 email주소에 email과 랜덤 값을 파라미터로 한 파라미터를 받고 확인하는 url을 링크로 보낸다. 
+* email로 저장된 EmailAuth를 가져온다.
+
+**controller**
+* EmailAuth를 생성하고 인증메일을 보내는 작업은 UserController에서 회원가입 때 실행된다.
+* EmailController에서는 메일로 보낸 인증 url을 다룬다.
+  * email과 authKey를 받아서 EmailAuth에서 email로 정보를 검색해서 없으면 model에 errorMessage를 담아 회원가입 페이지로 이동
+  * 인증키가 맞지 않으면 model에 errorMessage를 담아 회원가입 페이지로 이동
+  * 인증키까지 맞다면 emailAuth의 인증 필드를 인증 되었다고 변경 후 저장. 
+  * model에 인증되었다는 메세지를 담아 로그인페이지로 이동
 ***

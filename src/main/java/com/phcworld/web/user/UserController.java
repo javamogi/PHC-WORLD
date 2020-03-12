@@ -119,16 +119,18 @@ public class UserController {
 		}
 		
 		EmailAuth emailAuth = emailService.findByEmail(user.getEmail());
-		if(!emailAuth.auth()) {
-			model.addAttribute("errorMessage", "이메일 인증이 안됐습니다. 메일에서 인증하세요.");
-			return "/user/login";
+		if(emailAuth != null) {
+			if(!emailAuth.isAuthenticate()) {
+				model.addAttribute("errorMessage", "이메일 인증이 안됐습니다. 메일에서 인증하세요.");
+				return "/user/login";
+			}
 		}
 		
 		session.setAttribute(HttpSessionUtils.USER_SESSION_KEY, user);
 		
-		List<Message> allMessages = messageService.findMessageAllByToUserAndConfirm(user, "읽지 않음");
+		List<Message> allMessages = messageService.findMessageAllBySenderAndNotConfirmUseProfile(user, "읽지 않음");
 		
-		List<Message> messages = messageService.findMessageByRequestPageToUserAndConfirm(user, "읽지 않음");
+		List<Message> messages = messageService.findMessageBySenderAndConfirmUseMenu(user, "읽지 않음");
 		String countOfMessages = Integer.toString(allMessages.size());
 		if(allMessages.size() == 0) {
 			countOfMessages = "";
@@ -215,14 +217,14 @@ public class UserController {
 
 	private void viewLoginUserMessage(Integer sendPageNum, Integer receivePageNum, Model model, User user) {
 //		PageNationsUtil pageNation = new PageNationsUtil();
-		Page<Message> pageReceiveMessages = messageService.findMessageByReceiveMessages(receivePageNum, user);
+		Page<Message> pageReceiveMessages = messageService.findMessageByReceiverMessages(receivePageNum, user);
 		if(pageReceiveMessages != null) {
 			List<Message> receiveMessages = pageReceiveMessages.getContent();
 			PageNationsUtil.viewPageNation("receive", receivePageNum, pageReceiveMessages.getTotalPages(), model);
 			model.addAttribute("receiveMessages", receiveMessages);
 		}
 
-		Page<Message> pageSendMessages = messageService.findMessageBySendMessage(sendPageNum, user);
+		Page<Message> pageSendMessages = messageService.findMessageBySenderMessage(sendPageNum, user);
 		if(pageSendMessages != null) {
 			List<Message> sendMessages = pageSendMessages.getContent();
 			PageNationsUtil.viewPageNation("send", sendPageNum, pageSendMessages.getTotalPages(), model);

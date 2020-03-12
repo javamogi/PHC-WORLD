@@ -75,7 +75,7 @@ $(document).ready(function(){
 	$('#upGood').click(function(e){
 		e.preventDefault();
 		var url = $('#upGood').attr("href");
-//		console.log("url : " + url);
+		console.log("url : " + url);
 		
 		$.ajax({
 			type : 'put',
@@ -83,10 +83,15 @@ $(document).ready(function(){
 			dataType : 'json',
 			error : function(xhr, status, error){
 				alert("좋아요실패");
+				var errorMessage = jQuery.parseJSON(xhr.responseText);
+				console.log(errorMessage);
 			},
 			success : function(data, status){
-//				console.log(data);
-				$("#countOfGood").text(" " + data.success);
+				if(data.success == "로그인을 해야합니다."){
+					alert(data.success);
+				} else {
+					$("#countOfGood").text(" " + data.success);
+				}
 			}
 		})
 	});

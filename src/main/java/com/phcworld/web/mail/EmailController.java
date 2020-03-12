@@ -28,7 +28,7 @@ public class EmailController {
 			return "/user/form";
 		}
 		
-		emailAuth.setConfirm("Y");
+		emailAuth.setAuthenticate(true);
 		emailAuthRepository.save(emailAuth);
 		model.addAttribute("authMessage", "인증되었습니다. 로그인하세요!");
 		return "/user/login";

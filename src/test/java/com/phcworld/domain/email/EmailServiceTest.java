@@ -23,7 +23,11 @@ public class EmailServiceTest {
 	@Transactional
 	public void sendEmailAndAuthKey() {
 		String authKey = UUID.randomUUID().toString().replaceAll("-", "");
-		EmailAuth emailAuth = new EmailAuth("test3@test.test", authKey);
+		EmailAuth emailAuth = EmailAuth.builder()
+				.email("test3@test.test")
+				.authKey(authKey)
+				.authenticate(false)
+				.build();
 		EmailAuth saveEmailAuth = emailAuthRepository.save(emailAuth);
 		EmailAuth confirmEmailAuth = emailAuthRepository.findByEmail("test3@test.test");
 		assertThat(confirmEmailAuth, is(saveEmailAuth));
