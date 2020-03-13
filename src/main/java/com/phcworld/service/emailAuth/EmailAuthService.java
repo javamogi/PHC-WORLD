@@ -1,4 +1,4 @@
-package com.phcworld.domain.email;
+package com.phcworld.service.emailAuth;
 
 import java.util.UUID;
 
@@ -9,8 +9,11 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Component;
 
+import com.phcworld.domain.emailAuth.EmailAuth;
+import com.phcworld.repository.emailAuth.EmailAuthRepository;
+
 @Component
-public class EmailService {
+public class EmailAuthService {
 
 	@Autowired
 	private JavaMailSender emailSender;

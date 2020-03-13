@@ -6,8 +6,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.phcworld.domain.email.EmailAuth;
-import com.phcworld.domain.email.EmailAuthRepository;
+import com.phcworld.domain.emailAuth.EmailAuth;
+import com.phcworld.repository.emailAuth.EmailAuthRepository;
 
 @Controller
 @RequestMapping("/email")

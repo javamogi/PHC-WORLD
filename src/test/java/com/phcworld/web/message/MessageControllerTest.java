@@ -1,6 +1,6 @@
 package com.phcworld.web.message;
 
-import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -21,8 +21,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.phcworld.domain.message.Message;
-import com.phcworld.domain.message.MessageServiceImpl;
 import com.phcworld.domain.user.User;
+import com.phcworld.service.message.MessageServiceImpl;
 import com.phcworld.service.user.UserService;
 import com.phcworld.web.HttpSessionUtils;
 
@@ -51,6 +51,7 @@ public class MessageControllerTest {
 	public void whenEmptyReceiveUser() throws Exception {
 		MockHttpSession mockSession = new MockHttpSession();
 		User user = User.builder()
+				.id(1L)
 				.email("test3@test.test")
 				.password("test3")
 				.name("테스트3")
@@ -58,10 +59,9 @@ public class MessageControllerTest {
 				.authority("ROLE_USER")
 				.createDate(LocalDateTime.now())
 				.build();
-		user.setId(1L);
 		mockSession.setAttribute(HttpSessionUtils.USER_SESSION_KEY, user);
-		given(this.userService.findUserByEmail("test2@test.test"))
-		.willReturn(null);
+		when(this.userService.findUserByEmail("test2@test.test"))
+		.thenReturn(null);
 		this.mvc.perform(post("/message")
 				.param("toUserEmail", "test2@test.test")
 				.param("contents", "test")
@@ -82,8 +82,8 @@ public class MessageControllerTest {
 				.build();
 		user.setId(1L);
 		mockSession.setAttribute(HttpSessionUtils.USER_SESSION_KEY, user);
-		given(this.userService.findUserByEmail("test@test.test"))
-		.willReturn(user);
+		when(this.userService.findUserByEmail("test@test.test"))
+		.thenReturn(user);
 		this.mvc.perform(post("/message")
 				.param("toUserEmail", "test@test.test")
 				.param("contents", "test")
@@ -95,6 +95,7 @@ public class MessageControllerTest {
 	public void sendMessage() throws Exception {
 		MockHttpSession mockSession = new MockHttpSession();
 		User user = User.builder()
+				.id(1L)
 				.email("test3@test.test")
 				.password("test3")
 				.name("테스트3")
@@ -102,8 +103,8 @@ public class MessageControllerTest {
 				.authority("ROLE_USER")
 				.createDate(LocalDateTime.now())
 				.build();
-		user.setId(1L);
 		User receiveUser = User.builder()
+				.id(2L)
 				.email("test4@test.test")
 				.password("test4")
 				.name("테스트4")
@@ -111,22 +112,28 @@ public class MessageControllerTest {
 				.authority("ROLE_USER")
 				.createDate(LocalDateTime.now())
 				.build();
-		user.setId(2L);
 		mockSession.setAttribute(HttpSessionUtils.USER_SESSION_KEY, user);
-		given(this.userService.findUserByEmail("test4@test.test"))
-		.willReturn(receiveUser);
-		Message message = new Message(user, receiveUser, "test"); 
-		message.setId(1L);
-		given(this.messageService.createMessage(user, receiveUser, "test"))
-		.willReturn(message);
+		when(this.userService.findUserByEmail("test4@test.test"))
+		.thenReturn(receiveUser);
+		Message message = Message.builder()
+				.id(1L)
+				.sender(user)
+				.receiver(receiveUser)
+				.contents("test")
+				.confirm("읽지 않음")
+				.className("important")
+				.sendDate(LocalDateTime.now())
+				.build();
+		when(this.messageService.createMessage(user, receiveUser, "test"))
+		.thenReturn(message);
 		this.mvc.perform(post("/message")
 				.param("toUserEmail", "test4@test.test")
 				.param("contents", "test")
 				.session(mockSession))
 		.andExpect(status().isOk())
 		.andExpect(jsonPath("$.id").value(message.getId()))
-		.andExpect(jsonPath("$.fromUser.id").value(message.getFromUser().getId()))
-		.andExpect(jsonPath("$.toUser.id").value(message.getToUser().getId()))
+		.andExpect(jsonPath("$.sender.id").value(message.getSender().getId()))
+		.andExpect(jsonPath("$.receiver.id").value(message.getReceiver().getId()))
 		.andExpect(jsonPath("$.contents").value(message.getContents()));
 	}
 	
@@ -140,6 +147,7 @@ public class MessageControllerTest {
 	public void confirmMessage() throws Exception {
 		MockHttpSession mockSession = new MockHttpSession();
 		User user = User.builder()
+				.id(1L)
 				.email("test3@test.test")
 				.password("test3")
 				.name("테스트3")
@@ -147,8 +155,8 @@ public class MessageControllerTest {
 				.authority("ROLE_USER")
 				.createDate(LocalDateTime.now())
 				.build();
-		user.setId(1L);
 		User receiveUser = User.builder()
+				.id(2L)
 				.email("test4@test.test")
 				.password("test4")
 				.name("테스트4")
@@ -157,18 +165,32 @@ public class MessageControllerTest {
 				.createDate(LocalDateTime.now())
 				.build();
 		mockSession.setAttribute(HttpSessionUtils.USER_SESSION_KEY, user);
-		Message message = new Message(user, receiveUser, "test"); 
-		message.setId(1L);
+		Message message = Message.builder()
+				.id(1L)
+				.sender(user)
+				.receiver(receiveUser)
+				.contents("test")
+				.confirm("읽지 않음")
+				.className("important")
+				.sendDate(LocalDateTime.now())
+				.build();
 		message.setConfirm("읽음");
 		message.setClassName("read");
-		given(this.messageService.confirmMessage(message.getId(), user))
-		.willReturn(message);
-		Message message2 = new Message(user, receiveUser, "test2");
-		message.setId(2L);
+		when(this.messageService.confirmMessage(message.getId(), user))
+		.thenReturn(message);
+		Message message2 = Message.builder()
+				.id(2L)
+				.sender(user)
+				.receiver(receiveUser)
+				.contents("test2")
+				.confirm("읽지 않음")
+				.className("important")
+				.sendDate(LocalDateTime.now())
+				.build();
 		List<Message> notReadMessageList = new ArrayList<>();
 		notReadMessageList.add(message2);
-		given(this.messageService.findMessageAllByToUserAndConfirm(user, "읽지 않음"))
-		.willReturn(notReadMessageList);
+		when(this.messageService.findMessageAllBySenderAndNotConfirmUseProfile(user, "읽지 않음"))
+		.thenReturn(notReadMessageList);
 		this.mvc.perform(get("/message/{id}", 1L)
 				.contentType(MediaType.APPLICATION_JSON)
 				.session(mockSession))
@@ -186,6 +208,7 @@ public class MessageControllerTest {
 	public void getToUserInfo() throws Exception {
 		MockHttpSession mockSession = new MockHttpSession();
 		User user = User.builder()
+				.id(1L)
 				.email("test3@test.test")
 				.password("test3")
 				.name("테스트3")
@@ -193,8 +216,8 @@ public class MessageControllerTest {
 				.authority("ROLE_USER")
 				.createDate(LocalDateTime.now())
 				.build();
-		user.setId(1L);
 		User receiveUser = User.builder()
+				.id(2L)
 				.email("test4@test.test")
 				.password("test4")
 				.name("테스트4")
@@ -203,22 +226,36 @@ public class MessageControllerTest {
 				.createDate(LocalDateTime.now())
 				.build();
 		mockSession.setAttribute(HttpSessionUtils.USER_SESSION_KEY, user);
-		Message message = new Message(user, receiveUser, "test"); 
-		message.setId(1L);
+		Message message = Message.builder()
+				.id(1L)
+				.sender(user)
+				.receiver(receiveUser)
+				.contents("test")
+				.confirm("읽지 않음")
+				.className("important")
+				.sendDate(LocalDateTime.now())
+				.build();
 		message.setConfirm("읽음");
 		message.setClassName("read");
-		given(this.messageService.confirmMessage(message.getId(), user))
-		.willReturn(message);
-		Message message2 = new Message(user, receiveUser, "test2");
-		message.setId(2L);
+		when(this.messageService.confirmMessage(message.getId(), user))
+		.thenReturn(message);
+		Message message2 = Message.builder()
+				.id(2L)
+				.sender(user)
+				.receiver(receiveUser)
+				.contents("test2")
+				.confirm("읽지 않음")
+				.className("important")
+				.sendDate(LocalDateTime.now())
+				.build();
 		List<Message> notReadMessageList = new ArrayList<>();
 		notReadMessageList.add(message2);
-		given(this.messageService.findMessageAllByToUserAndConfirm(user, "읽지 않음"))
-		.willReturn(notReadMessageList);
+		when(this.messageService.findMessageAllBySenderAndNotConfirmUseProfile(user, "읽지 않음"))
+		.thenReturn(notReadMessageList);
 		this.mvc.perform(post("/message/info/{id}", 1L)
 				.contentType(MediaType.APPLICATION_JSON)
 				.session(mockSession))
-		.andExpect(jsonPath("$.fromUser").value(message.getFromUser().getEmail()))
+		.andExpect(jsonPath("$.fromUser").value(message.getSender().getEmail()))
 		.andExpect(jsonPath("$.className").value(message.getConfirm()))
 		.andExpect(jsonPath("$.countOfMessage").value(notReadMessageList.size()));
 	}

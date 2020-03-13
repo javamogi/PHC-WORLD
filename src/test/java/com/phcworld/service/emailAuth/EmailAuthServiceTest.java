@@ -1,4 +1,4 @@
-package com.phcworld.domain.email;
+package com.phcworld.service.emailAuth;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.*;
@@ -12,9 +12,12 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.phcworld.domain.emailAuth.EmailAuth;
+import com.phcworld.repository.emailAuth.EmailAuthRepository;
+
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest
-public class EmailServiceTest {
+public class EmailAuthServiceTest {
 	
 	@Autowired
 	private EmailAuthRepository emailAuthRepository;

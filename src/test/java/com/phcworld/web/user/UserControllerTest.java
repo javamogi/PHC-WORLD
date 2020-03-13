@@ -26,13 +26,13 @@ import org.springframework.mock.web.MockHttpSession;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
-import com.phcworld.domain.email.EmailAuth;
-import com.phcworld.domain.email.EmailService;
+import com.phcworld.domain.emailAuth.EmailAuth;
 import com.phcworld.domain.message.Message;
-import com.phcworld.domain.message.MessageServiceImpl;
 import com.phcworld.domain.timeline.Timeline;
 import com.phcworld.domain.user.User;
 import com.phcworld.service.alert.AlertServiceImpl;
+import com.phcworld.service.emailAuth.EmailAuthService;
+import com.phcworld.service.message.MessageServiceImpl;
 import com.phcworld.service.timeline.TimelineServiceImpl;
 import com.phcworld.service.user.UserService;
 import com.phcworld.web.HttpSessionUtils;
@@ -61,7 +61,7 @@ public class UserControllerTest {
 	private AlertServiceImpl alertService;
 	
 	@MockBean
-	private EmailService emailService;
+	private EmailAuthService emailService;
 	
 	@MockBean
 	private HttpSessionUtils sessionUtil;

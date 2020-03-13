@@ -139,11 +139,11 @@
 				{{#receiveMessages}}
 					<li>
 							<div class="message-avatar">
-								<img src="/images/profile/{{fromUser.profileImage}}" alt="">
+								<img src="/images/profile/{{sender.profileImage}}" alt="">
 							</div>
 							<div class="message-body">
 								<div class="message-body-heading">
-									<h5><a href="/message/info/{{id}}" id="getUserInfo">{{fromUser.name}}</a> <a href="/message/{{id}}" id="messageConfirm"><span class="{{className}}">{{confirm}}</span></a></h5>
+									<h5><a href="/message/info/{{id}}" id="getUserInfo">{{sender.name}}</a> <a href="/message/{{id}}" id="messageConfirm"><span class="{{className}}">{{confirm}}</span></a></h5>
 									<span>{{formattedCreateDate}}</span>
 								</div>
 								<p>{{{contents}}}</p>
@@ -232,11 +232,11 @@
 				{{#sendMessages}}
 					<li>
 							<div class="message-avatar">
-								<img src="/images/profile/{{fromUser.profileImage}}" alt="">
+								<img src="/images/profile/{{sender.profileImage}}" alt="">
 							</div>
 							<div class="message-body">
 								<div class="message-body-heading">
-									<h5>{{toUser.name}} <span class="{{className}}">{{confirm}}</span></h5>
+									<h5>{{receiver.name}} <span class="{{className}}">{{confirm}}</span></h5>
 									<span>{{formattedCreateDate}}</span>
 								</div>
 								<p>{{{contents}}}</p>

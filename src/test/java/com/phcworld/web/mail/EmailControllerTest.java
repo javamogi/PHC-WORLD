@@ -16,8 +16,8 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
-import com.phcworld.domain.email.EmailAuth;
-import com.phcworld.domain.email.EmailAuthRepository;
+import com.phcworld.domain.emailAuth.EmailAuth;
+import com.phcworld.repository.emailAuth.EmailAuthRepository;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebMvcTest(EmailController.class)

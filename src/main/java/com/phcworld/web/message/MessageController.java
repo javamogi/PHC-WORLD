@@ -18,8 +18,8 @@ import com.phcworld.domain.exception.LoginNotUserException;
 import com.phcworld.domain.exception.MatchNotUserExceptioin;
 import com.phcworld.domain.exception.UserNotFoundException;
 import com.phcworld.domain.message.Message;
-import com.phcworld.domain.message.MessageServiceImpl;
 import com.phcworld.domain.user.User;
+import com.phcworld.service.message.MessageServiceImpl;
 import com.phcworld.service.user.UserService;
 import com.phcworld.web.HttpSessionUtils;
 
@@ -36,7 +36,8 @@ public class MessageController {
 	private MessageServiceImpl messageService;
 	
 	@PostMapping("")
-	public Message sendMessage(String toUserEmail, String contents, HttpSession session) throws LoginNotUserException, UserNotFoundException, MatchNotUserExceptioin {
+	public Message sendMessage(String toUserEmail, String contents, HttpSession session) 
+			throws LoginNotUserException, UserNotFoundException, MatchNotUserExceptioin {
 		log.debug("toUser : {}", toUserEmail); 
 		if(!HttpSessionUtils.isLoginUser(session)) {
 			throw new LoginNotUserException("로그인을 해야합니다.");
@@ -53,7 +54,8 @@ public class MessageController {
 	}
 	
 	@GetMapping("/{id}")
-	public String confirmMessage(@PathVariable Long id, Model model, HttpSession session) throws LoginNotUserException, MatchNotUserExceptioin {
+	public String confirmMessage(@PathVariable Long id, Model model, HttpSession session) 
+			throws LoginNotUserException, MatchNotUserExceptioin {
 		if(!HttpSessionUtils.isLoginUser(session)) {
 			throw new LoginNotUserException("로그인을 해야합니다.");
 		}
@@ -61,7 +63,7 @@ public class MessageController {
 		
 		Message message = messageService.confirmMessage(id, loginUser);
 		
-		List<Message> allMessages = messageService.findMessageAllByToUserAndConfirm(loginUser, "읽지 않음");
+		List<Message> allMessages = messageService.findMessageAllBySenderAndNotConfirmUseProfile(loginUser, "읽지 않음");
 		String countOfMessages = Integer.toString(allMessages.size());
 		if(allMessages.size() == 0) {
 			countOfMessages = "";
@@ -72,7 +74,8 @@ public class MessageController {
 	}
 	
 	@PostMapping("/info/{id}")
-	public String getToUserInfo(@PathVariable Long id, Model model, HttpSession session) throws LoginNotUserException, MatchNotUserExceptioin {
+	public String confirmAndGetReceiverInfo(@PathVariable Long id, Model model, HttpSession session) 
+			throws LoginNotUserException, MatchNotUserExceptioin {
 		if(!HttpSessionUtils.isLoginUser(session)) {
 			throw new LoginNotUserException("로그인을 해야합니다.");
 		}
@@ -80,13 +83,13 @@ public class MessageController {
 		
 		Message message = messageService.confirmMessage(id, loginUser);
 
-		List<Message> allMessages = messageService.findMessageAllByToUserAndConfirm(loginUser, "읽지 않음");
+		List<Message> allMessages = messageService.findMessageAllBySenderAndNotConfirmUseProfile(loginUser, "읽지 않음");
 		String countOfMessages = Integer.toString(allMessages.size());
 		if(allMessages.size() == 0) {
 			countOfMessages = "";
 		}
 		session.removeAttribute("countMessages");
 		session.setAttribute("countMessages", countOfMessages);
-		return "{\"fromUser\" : \""+ message.getFromUser().getEmail() +"\", \"className\":\"" + message.getConfirm() +"\", \"countOfMessage\" : \"" + countOfMessages +"\"}";
+		return "{\"fromUser\" : \""+ message.getSender().getEmail() +"\", \"className\":\"" + message.getConfirm() +"\", \"countOfMessage\" : \"" + countOfMessages +"\"}";
 	}
 }

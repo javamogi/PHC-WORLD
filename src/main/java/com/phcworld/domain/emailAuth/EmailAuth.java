@@ -1,4 +1,4 @@
-package com.phcworld.domain.email;
+package com.phcworld.domain.emailAuth;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;

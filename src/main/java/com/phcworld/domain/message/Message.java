@@ -15,8 +15,17 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.phcworld.domain.user.User;
 import com.phcworld.web.LocalDateTimeUtils;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 @Entity
-@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+//@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Message {
 
 	@Id
@@ -25,11 +34,11 @@ public class Message {
 
 	@ManyToOne
 	@JoinColumn(foreignKey = @ForeignKey(name = "fk_message_fromUser"))
-	private User fromUser;
+	private User sender;
 
 	@ManyToOne
 	@JoinColumn(foreignKey = @ForeignKey(name = "fk_message_toUser"))
-	private User toUser;
+	private User receiver;
 
 	@Lob
 	private String contents;
@@ -40,62 +49,8 @@ public class Message {
 
 	private LocalDateTime sendDate;
 
-	public Message() {
-	}
-
-	public Message(User loginUser, User receiveUser, String contents) {
-		this.fromUser = loginUser;
-		this.toUser = receiveUser;
-		this.contents = contents;
-		this.confirm = "읽지 않음";
-		this.className = "important";
-		this.sendDate = LocalDateTime.now();
-	}
-	
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public Long getId() {
-		return id;
-	}
-
-	public User getFromUser() {
-		return fromUser;
-	}
-
-	public User getToUser() {
-		return toUser;
-	}
-
-	public String getContents() {
-		return contents;
-	}
-
-	public String getConfirm() {
-		return confirm;
-	}
-	
-	public void setConfirm(String confirm) {
-		this.confirm = confirm;
-	}
-	
-	public String getClassName() {
-		return className;
-	}
-	
-	public void setClassName(String className) {
-		this.className = className;
-	}
-	
 	public String getFormattedCreateDate() {
 		return LocalDateTimeUtils.getTime(this.sendDate);
-	}
-
-	@Override
-	public String toString() {
-		return "Message [id=" + id + ", fromUser=" + fromUser + ", toUser=" + toUser + ", contents=" + contents
-				+ ", confirm=" + confirm + ", sendDate=" + sendDate + "]";
 	}
 
 }
