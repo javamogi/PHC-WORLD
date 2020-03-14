@@ -58,9 +58,10 @@ public class UploadController {
 		log.debug("realPath : {}", realPath);
 		
 		try {
-//			multipartFile.transferTo(new File(pathStr + File.separator + "src" + File.separator + "main" + File.separator + "resources"+ File.separator +"static"+ File.separator +"images" + File.separator + randName));
 			// 로컬환경
-			multipartFile.transferTo(new File(realPath + File.separator + "WEB-INF"+ File.separator +"classes"+ File.separator +"static" + File.separator + "images" + File.separator + randName));
+			multipartFile.transferTo(new File(pathStr + File.separator + "src" + File.separator + "main" + File.separator + "resources"+ File.separator +"static"+ File.separator +"images" + File.separator + randName));
+			
+//			multipartFile.transferTo(new File(realPath + File.separator + "WEB-INF"+ File.separator +"classes"+ File.separator +"static" + File.separator + "images" + File.separator + randName));
 		} catch(Exception e) {
 			log.debug("Error : {}", e);;
 		}
@@ -76,18 +77,16 @@ public class UploadController {
 		}
 		Path path = Paths.get("");
 		String pathStr = path.toAbsolutePath().toString();
+		File deleteFile = new File(pathStr + File.separator + "src" + File.separator + "main" + File.separator + "resources"+ File.separator +"static"+ File.separator +"images" + File.separator + randName);
 		
-		String realPath = request.getSession().getServletContext().getRealPath("/");
-		
-//		File deleteFile = new File(pathStr + File.separator + "src" + File.separator + "main" + File.separator + "resources"+ File.separator +"static"+ File.separator +"images" + File.separator + randName);
-		
-		File deleteFile = new File(realPath + File.separator + "WEB-INF"+ File.separator +"classes"+ File.separator +"static" + File.separator + "images" + File.separator + randName);
+//		String realPath = request.getSession().getServletContext().getRealPath("/");
+//		File deleteFile = new File(realPath + File.separator + "WEB-INF"+ File.separator +"classes"+ File.separator +"static" + File.separator + "images" + File.separator + randName);
 		if(deleteFile.exists()) {
 			if(deleteFile.delete()) {
-				log.debug("delete success");
+				return "{\"success\":\"success\"}";
 			}
 		}
-		return "{\"success\":\"success\"}";
+		return "{\"success\":\"파일이 존재하지 않습니다.\"}";
 	}
 	
 	@GetMapping("/findImage")
@@ -107,12 +106,13 @@ public class UploadController {
 		Path path = Paths.get("");
 		String pathStr = path.toAbsolutePath().toString();
 		
-		String realPath = request.getSession().getServletContext().getRealPath("/");
+//		String realPath = request.getSession().getServletContext().getRealPath("/");
 		
 		try {
-//			multipartFile.transferTo(new File(pathStr + File.separator + "src" + File.separator + "main" + File.separator + "resources"+ File.separator +"static"+ File.separator +"images" + File.separator +"profile" + File.separator + randName));
 			// 로컬환경
-			multipartFile.transferTo(new File(realPath + File.separator + "WEB-INF"+ File.separator +"classes"+ File.separator +"static" + File.separator + "images" + File.separator +"profile" + File.separator + randName));
+			multipartFile.transferTo(new File(pathStr + File.separator + "src" + File.separator + "main" + File.separator + "resources"+ File.separator +"static"+ File.separator +"images" + File.separator +"profile" + File.separator + randName));
+
+//			multipartFile.transferTo(new File(realPath + File.separator + "WEB-INF"+ File.separator +"classes"+ File.separator +"static" + File.separator + "images" + File.separator +"profile" + File.separator + randName));
 		} catch(Exception e) {
 			log.debug("Error : {}", e);;
 		}

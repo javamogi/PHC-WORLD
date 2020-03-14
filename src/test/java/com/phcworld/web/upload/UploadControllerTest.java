@@ -1,6 +1,6 @@
 package com.phcworld.web.upload;
 
-import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -41,6 +41,7 @@ public class UploadControllerTest {
 	public void uploadImage() throws Exception {
 		MockHttpSession mockSession = new MockHttpSession();
 		User user = User.builder()
+				.id(1L)
 				.email("test3@test.test")
 				.password("test3")
 				.name("테스트3")
@@ -48,16 +49,21 @@ public class UploadControllerTest {
 				.authority("ROLE_USER")
 				.createDate(LocalDateTime.now())
 				.build();
-		user.setId(1L);
 		mockSession.setAttribute(HttpSessionUtils.USER_SESSION_KEY, user);
 		mockSession.setAttribute("messages", null);
 		mockSession.setAttribute("countMessages", "");
 		mockSession.setAttribute("alerts", null);
-		Image image = new Image(user, "test.jpg", "1234.jpg", 9L);
-		image.setId(1L);
+		Image image = Image.builder()
+				.id(1L)
+				.writer(user)
+				.originalFileName("test.jpg")
+				.randFileName("1234.jpg")
+				.size(9L)
+				.createDate(LocalDateTime.now())
+				.build();
 		MockMultipartFile multipartFile = new MockMultipartFile("imageFile", "test.jpg", "image/jpeg", "test.jpg".getBytes());
-		given(this.imageService.createImage(user, "baba2.jpg", "1234.jpg", 9L))
-		.willReturn(image);
+		when(this.imageService.createImage(user, "baba2.jpg", "1234.jpg", 9L))
+		.thenReturn(image);
 		this.mvc.perform(multipart("/upload/imageUpload")
 				.file(multipartFile)
 				.session(mockSession))
@@ -75,6 +81,7 @@ public class UploadControllerTest {
 	@Test
 	public void findImage() throws Exception {
 		User user = User.builder()
+				.id(1L)
 				.email("test3@test.test")
 				.password("test3")
 				.name("테스트3")
@@ -82,10 +89,16 @@ public class UploadControllerTest {
 				.authority("ROLE_USER")
 				.createDate(LocalDateTime.now())
 				.build();
-		Image image = new Image(user, "test.jpg", "123.jpg", 113L);
-		image.setId(1L);
-		given(this.imageService.findImageByRandFileName("123.jpg"))
-		.willReturn(image);
+		Image image = Image.builder()
+				.id(1L)
+				.writer(user)
+				.originalFileName("test.jpg")
+				.randFileName("123.jpg")
+				.size(113L)
+				.createDate(LocalDateTime.now())
+				.build();
+		when(this.imageService.findImageByRandFileName("123.jpg"))
+		.thenReturn(image);
 		this.mvc.perform(get("/upload/findImage")
 				.param("randFileName", "123.jpg"))
 		.andExpect(status().isOk())
@@ -99,6 +112,7 @@ public class UploadControllerTest {
 	public void uploadProfileImage() throws Exception {
 		MockHttpSession mockSession = new MockHttpSession();
 		User user = User.builder()
+				.id(1L)
 				.email("test3@test.test")
 				.password("test3")
 				.name("테스트3")
@@ -106,17 +120,15 @@ public class UploadControllerTest {
 				.authority("ROLE_USER")
 				.createDate(LocalDateTime.now())
 				.build();
-		user.setId(1L);
 		mockSession.setAttribute(HttpSessionUtils.USER_SESSION_KEY, user);
 		mockSession.setAttribute("messages", null);
 		mockSession.setAttribute("countMessages", "");
 		mockSession.setAttribute("alerts", null);
-		Image image = new Image(user, "test.jpg", "123.jpg", 123L);
-		image.setId(1L);
+		
 		MockMultipartFile multipartFile = new MockMultipartFile("profileImage", "test.jpg", "image/jpeg", "test.jpg".getBytes());
 		user.setProfileImage("123.jpg");
-		given(this.userService.imageUpdate(user, "123.jpg"))
-		.willReturn(user);
+		when(this.userService.imageUpdate(user, "123.jpg"))
+		.thenReturn(user);
 		this.mvc.perform(multipart("/upload/profileUpload")
 				.file(multipartFile)
 				.session(mockSession))

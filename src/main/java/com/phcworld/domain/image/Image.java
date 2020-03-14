@@ -12,7 +12,16 @@ import javax.persistence.ManyToOne;
 
 import com.phcworld.domain.user.User;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 @Entity
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class Image {
 
 	@Id
@@ -30,50 +39,5 @@ public class Image {
 	private Long size;
 
 	private LocalDateTime createDate;
-
-	public Image() {
-	}
-
-	public Image(User writer, String originalFileName, String randFileName, Long size) {
-		this.writer = writer;
-		this.originalFileName = originalFileName;
-		this.randFileName = randFileName;
-		this.size = size;
-		this.createDate = LocalDateTime.now();
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public Long getId() {
-		return id;
-	}
-
-	public String getOriginalFileName() {
-		return originalFileName;
-	}
-
-	public String getRandFileName() {
-		return randFileName;
-	}
-
-	public User getWriter() {
-		return writer;
-	}
-
-	public Long getSize() {
-		return size;
-	}
-
-	public LocalDateTime getCreateDate() {
-		return createDate;
-	}
-
-	@Override
-	public String toString() {
-		return "Image [id=" + id + ", originalFileName=" + originalFileName + ", randFileName=" + randFileName
-				+ ", writer=" + writer + ", size=" + size + ", createDate=" + createDate + "]";
-	}
 
 }
