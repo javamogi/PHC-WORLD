@@ -1,0 +1,3 @@
+src/main/resources/static/dist/* linguist-vendored
+src/main/resources/static/port/* linguist-vendored
+src/main/resources/static/vendor/* linguist-vendored
