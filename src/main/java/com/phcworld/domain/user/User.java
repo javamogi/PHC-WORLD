@@ -1,5 +1,6 @@
 package com.phcworld.domain.user;
 
+import java.security.NoSuchAlgorithmException;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -72,7 +73,7 @@ public class User {
 		return newId.equals(id);
 	}
 
-	public boolean matchPassword(String inputPassword) {
+	public boolean matchPassword(String inputPassword) throws NoSuchAlgorithmException {
 		if (inputPassword == null) {
 			return false;
 		}

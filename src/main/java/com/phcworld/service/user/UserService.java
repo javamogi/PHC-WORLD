@@ -1,5 +1,6 @@
 package com.phcworld.service.user;
 
+import java.security.NoSuchAlgorithmException;
 import java.time.LocalDateTime;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +18,7 @@ public class UserService {
 	@Autowired
 	private UserRepository userRepository;
 
-	public User createUser(User user) {
+	public User createUser(User user) throws NoSuchAlgorithmException {
 		String password = SecurityUtils.getEncSHA256(user.getPassword());
 		user.setPassword(password);
 		user.setAuthority("ROLE_USER");

@@ -1,5 +1,6 @@
 package com.phcworld.web.user;
 
+import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
 import javax.servlet.http.HttpSession;
@@ -20,14 +21,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.phcworld.domain.alert.Alert;
-import com.phcworld.domain.email.EmailAuth;
-import com.phcworld.domain.email.EmailService;
+import com.phcworld.domain.emailAuth.EmailAuth;
 import com.phcworld.domain.message.Message;
-import com.phcworld.domain.message.MessageServiceImpl;
 import com.phcworld.domain.timeline.Timeline;
 import com.phcworld.domain.user.LoginRequestUser;
 import com.phcworld.domain.user.User;
 import com.phcworld.service.alert.AlertServiceImpl;
+import com.phcworld.service.emailAuth.EmailAuthService;
+import com.phcworld.service.message.MessageServiceImpl;
 import com.phcworld.service.timeline.TimelineServiceImpl;
 import com.phcworld.service.user.UserService;
 import com.phcworld.web.HttpSessionUtils;
@@ -53,10 +54,10 @@ public class UserController {
 	private AlertServiceImpl alertService;
 	
 	@Autowired
-	private EmailService emailService;
+	private EmailAuthService emailService;
 	
 	@PostMapping("")
-	public String create(@Valid User user, BindingResult bindingResult, Model model) {
+	public String create(@Valid User user, BindingResult bindingResult, Model model) throws NoSuchAlgorithmException {
 		log.debug("User : {}", user);
 		if(bindingResult.hasErrors()) {
 			log.debug("Binding Result has Error!");
@@ -106,7 +107,7 @@ public class UserController {
 	}
 	
 	@PostMapping("/login")
-	public String login(LoginRequestUser requestUser, Model model, HttpSession session) {
+	public String login(LoginRequestUser requestUser, Model model, HttpSession session) throws NoSuchAlgorithmException {
 		User user = userService.findUserByEmail(requestUser.getEmail());
 		log.debug("input User : {}", user);
 		if(!existUser(user)) {
