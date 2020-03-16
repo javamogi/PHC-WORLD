@@ -795,3 +795,12 @@
 * 인터넷에서 찾아서 사용하였다. (SHA-256 검색 추천)
 
 ***
+### 다음에디터
+* 다음에디터는 검색을 통해 파일을 다운받아 view페이지에서 사용한다.
+* 다음에디터의 js파일의 양은 어마어마하다 github의 언어가 javascript로 나와서 bootstrap 을 제외시켰는데도 javascript로 나올정도여서 다음에디터도 제외시켰다.
+* diary form과 freeboard form에서 각각 다른 form을 사용하기 위해 다음에디터를 처리하는 js파일도 다르다.
+* 이미지 업로드는 IE10 이하에서도 가능하도록 ajaxForm 사용했다.
+* daumeditor/pages/trex/image.html에 ajaxForm 추가하여 이미지 업로드 코드 추가했다.
+* daumeditor/js/trex/attachment.js(다음에디터의 첨부박스)에 remove function()에 ajax로 이미지 삭제 코드 추가했다.
+* 게시물 수정 요청시 본문을 가져올 때 등록된 이미지가 있으면 ajax로 파일명으로 파일정보를 가져온다.
+***
