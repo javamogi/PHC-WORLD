@@ -29,7 +29,7 @@ public class HomeController {
 		if(alert.getGood() != null) {
 			return "redirect:/diary/"+ alert.getGood().getDiary().getId() + "/detail";
 		}
-		return "redirect:/freeboard/"+ alert.getFreeBoardAnswer().getFreeBoard().getId() + "/detail";
+		return "redirect:/freeboards/"+ alert.getFreeBoardAnswer().getFreeBoard().getId() + "/detail";
 	}
 	
 }

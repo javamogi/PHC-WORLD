@@ -278,10 +278,16 @@
 
 **controller**
 * 생성
-  * 로그인을 하지 않았다면 Exception 발생
+  * 로그인을 하지 않았다면 Exception 발생. 
+  * ExceptionHandler에서 @ResponseStatus사용
+  * ErrorResponse에 http상태 코드와 error 메시지를 담아 리턴
+  * ajax error에서 알림으로 메시지 출력
   * 댓글을 작성하는 자유게시판 게시물의 id와 댓글의 내용을 받아 댓글 생성
 * 삭제
   * 로그인을 하지 않았다면 Exception 발생
+  * ExceptionHandler에서 @ResponseStatus사용
+  * ErrorResponse에 http상태 코드와 error 메시지를 담아 리턴
+  * ajax error에서 알림으로 메시지 출력
   * 삭제하는 댓글의 id를 받아서 삭제 후 댓글의 개수 리턴
 ***
 
@@ -377,7 +383,6 @@
   * 로그인을 하지 않았으면 Exception으로 던져서 ExceptionHeandler가 처리하여 Exception의 message를 보낸다. 
   * 좋아요를 눌렀을 때 개수를 Json으로 받기 위해 @ResponseBody를 사용한다.
   * 원래는 RestController로 구현했으나 로직이 하나뿐이어서 DiaryController로 이동하였다.(DiaryRestController 삭제하지 않음)
-  * Exception을 처리하는 과정에서 error message임에도 Json의 객체는 success로 처리하는 것이 마음에 들지 않는다. REST API에 대해 확실히 공부하고 변경해야겠다.
 ***
 ### DiaryAnswer 설명
 **Entity**
@@ -425,9 +430,15 @@
 **controller**
 * 생성
   * 로그인을 하지 않았다면 Exception 발생
+  * ExceptionHandler에서 @ResponseStatus사용
+  * ErrorResponse에 http상태 코드와 error 메시지를 담아 리턴
+  * ajax error에서 알림으로 메시지 출력
   * 댓글을 작성하는 일기게시판 게시물의 id와 댓글의 내용을 받아 댓글 생성
 * 삭제
   * 로그인을 하지 않았다면 Exception 발생
+  * ExceptionHandler에서 @ResponseStatus사용
+  * ErrorResponse에 http상태 코드와 error 메시지를 담아 리턴
+  * ajax error에서 알림으로 메시지 출력
   * 삭제하는 댓글의 id를 받아서 삭제 후 댓글의 개수 리턴
 ***
 ### Good 설명 
@@ -780,12 +791,12 @@
 * 페이징 처리를 하는 클래스
 * 일기게시판과 보낸메시지, 받은메시지의 view페이지의 페이징을 처리한다.
 * 페이징을 처리하는 페이지의 이름, 처리할 페이지 숫자, 총 페이지 수와 Model을 받아서 view페이지에 나타낼 페이지 숫자를 정한다.
-* 나머지 연산자를 사용해 1 ~ 10의 페이지 숫자가 넘어오면 시작페이지를 1, 끝페이지를 10으로 나오게 한다. (11 ~ 20은 시작페이지 11, 끝페이지 20....)
+* 나머지 연산자를 사용해 1 ~ 10의 페이지 숫자가 넘어오면 시작페이지를 1, 끝페이지를 10으로 나오게 한다. (11~20은 시작페이지 11, 끝페이지 20....)
 * 만약 끝페이지가 총페이지 수보다 크면 끝페이지를 총페이지 수로 바꾼다. 
 * 등록된 글이 없으면 기본적을 1(페이지)을 나오게 한다.
 * 위에서 구한 처음페이지와 끝페이지와 사이의 숫자들을 ArrayList<Integer>에 저장하여 pageName과 "pageNations"를 합친 문자열로 Model에 담아 일기게시판, 보낸메시지, 받은메시지 페이지에서 다르게 사용한다.
-* 그리고 이전페이지와 다음페이지는 1페이지씩 옮기는 것이 아니라 10페이지씩 옮기도록 하였다. (1 ~ 10페이지에서는 다음페이지는 11 ~ 20, 11 ~ 20페이지에서 이전페이지는 1 ~ 10페이지)
-* 1 ~ 10페이지에서는 이전페이지가 없기 때문에 이전페이지는 시작페이지가 1보다 클때만 나타내게 한다.
+* 그리고 이전페이지와 다음페이지는 1페이지씩 옮기는 것이 아니라 10페이지씩 옮기도록 하였다. (1~10페이지에서는 다음페이지는 11~20, 11~20페이지에서 이전페이지는 1~10페이지)
+* 1~10페이지에서는 이전페이지가 없기 때문에 이전페이지는 시작페이지가 1보다 클때만 나타내게 한다.
 * 다음페이지는 총 페이지 수가 끝페이지 수보다 크면 나타나게 한다.
 
 **SecurityUtils**

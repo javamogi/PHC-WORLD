@@ -62,7 +62,7 @@ public class FreeBoard {
 	private List<FreeBoardAnswer> freeBoardAnswers;
 
 	public String getCountOfAnswer() {
-		if (this.freeBoardAnswers.size() == 0) {
+		if (this.freeBoardAnswers == null|| this.freeBoardAnswers.size() == 0) {
 			return "";
 		}
 		return "[" + freeBoardAnswers.size() + "]";

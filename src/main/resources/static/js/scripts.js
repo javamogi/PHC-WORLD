@@ -15,7 +15,8 @@ $(document).ready(function(){
 			url : url,
 			data : queryString,
 			dataType : 'json',
-			error : function(){
+			error : function(jqXHR, txtStatus, errorThrown){
+				console.log(jqXHR);
 				alert("댓글통신실패");
 			},
 			success : function(data){
@@ -27,11 +28,11 @@ $(document).ready(function(){
 				"'><img src='/images/profile/" + data.writer.profileImage + "' class='be-ava-comment'></a></div>" + 
 				"<div class='be-comment-content'><span class='be-comment-name'><a href='" + profileUrl + 
 				"'>" + data.writer.name + "</a></span><span class='be-comment-time'><a class='answer-delete' href='"+deleteUrl+"'>삭제 </a><i class='fa fa-clock-o'></i> " + 
-				data.formattedCreateDate + "</span><p class='be-comment-text'>" + data.contents + "</p></div></div></article>";
+				data.createDate + "</span><p class='be-comment-text'>" + data.contents + "</p></div></div></article>";
 				$(".answer-template").append(answerTemplate);
 				$("textarea[name=contents]").val('');
 				if(url.indexOf("freeboard") > 0){
-					$("#countOfAnswer").text(data.freeBoard.countOfAnswer);
+					$("#countOfAnswer").text(data.countOfAnswers);
 				} else {
 					$("#countOfDiaryAnswer").text(data.diary.countOfAnswer);
 				}
@@ -51,22 +52,18 @@ $(document).ready(function(){
 			type : 'delete',
 			url : url,
 			dataType : 'json',
-			error : function(xhr, status, error){
-				alert("실패");
+			error : function(jqXHR, txtStatus, errorThrown){
+				console.log(jqXHR.responseJSON);
+				alert(jqXHR.responseJSON.error);
 			},
-			success : function(data, status){
+			success : function(data){
 //				console.log(data);
-//				if(data === "success"){
-				if(data.success != null){
-					deleteBtn.closest("article").remove();
-					var temp = $("#countOfDiaryAnswer").length;
-					if(temp === 0){
-						$("#countOfAnswer").text(data.success);
-					} else {
-						$("#countOfDiaryAnswer").text(data.success);
-					}
+				deleteBtn.closest("article").remove();
+				var temp = $("#countOfDiaryAnswer").length;
+				if(temp === 0){
+					$("#countOfAnswer").text(data.success);
 				} else {
-					alert(data.error);
+					$("#countOfDiaryAnswer").text(data.success);
 				}
 			}
 		});
@@ -87,11 +84,12 @@ $(document).ready(function(){
 				console.log(errorMessage);
 			},
 			success : function(data, status){
-				if(data.success == "로그인을 해야합니다."){
-					alert(data.success);
-				} else {
-					$("#countOfGood").text(" " + data.success);
-				}
+				$("#countOfGood").text(" " + data.success);
+//				if(data.success == "로그인을 해야합니다."){
+//					alert(data.success);
+//				} else {
+//					$("#countOfGood").text(" " + data.success);
+//				}
 			}
 		})
 	});
