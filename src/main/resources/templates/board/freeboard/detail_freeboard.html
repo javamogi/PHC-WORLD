@@ -75,7 +75,7 @@
 										<a href="/users/{{writer.id}}/profile">{{writer.name}}</a>
 									</span>
 									<span class="be-comment-time">
-										<a class="answer-delete" href="/freeboard/{{freeBoard.id}}/answer/{{id}}">삭제</a>
+										<a class="answer-delete" href="/freeboards/{{freeBoard.id}}/answers/{{id}}">삭제</a>
 										<i class="fa fa-clock-o"></i>
 											{{formattedCreateDate}}
 									</span>
@@ -92,7 +92,7 @@
  						{{#user}}
  						<!-- answer ajax를 이용하여 댓글 추가하기 댓글 나오는 폼 만들기-->
    						<div class="col-lg-12 col-md-12">
- 							<form class="write-answer" id="form-group" action="/freeboard/{{id}}/answer" method="post">
+ 							<form class="write-answer" id="form-group" action="/freeboards/{{id}}/answers" method="post">
   								<label for="contents">댓글 쓰기</label>
   								<div class="form-group">
      								<textarea class="col-lg-10 col-md-10" id="contents" name="contents" placeholder="내용"></textarea>
@@ -116,16 +116,16 @@
  					{{/user}}
  					<div class="col-lg-12 col-md-12"><br></div>
  					<div class="col-lg-12 col-md-12">
-	 					<a class="btn btn-primary" href="/freeboard/list" role="button">목록</a>
+	 					<a class="btn btn-primary" href="/freeboards/list" role="button">목록</a>
 	 					{{#matchUser}}
-   						<a class="btn btn-info" href="/freeboard/{{id}}/form" role="button">수정</a>
-   						<form class="form-delete" action="/freeboard/{{id}}/delete" method="POST" style="display:inline;">
+   						<a class="btn btn-info" href="/freeboards/{{id}}/form" role="button">수정</a>
+   						<form class="form-delete" action="/freeboards/{{id}}/delete" method="POST" style="display:inline;">
    							<input type="hidden" name="_method" value="DELETE">
    							<button class="btn btn-danger" type="submit">삭제</button>
    						</form>
    						{{/matchUser}}
 	 					{{#matchAuthority}}
-   						<form class="form-delete" action="/freeboard/{{id}}/delete" method="POST" style="display:inline;">
+   						<form class="form-delete" action="/freeboards/{{id}}/delete" method="POST" style="display:inline;">
    							<input type="hidden" name="_method" value="DELETE">
    							<button class="btn btn-danger" type="submit">삭제</button>
    						</form>

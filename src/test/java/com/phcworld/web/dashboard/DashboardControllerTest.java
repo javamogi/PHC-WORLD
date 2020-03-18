@@ -212,7 +212,7 @@ public class DashboardControllerTest {
 		when(this.timelineService.getOneTimeline(1L))
 		.thenReturn(timeline);
 		this.mvc.perform(get("/dashboard/timeline/{id}", 1L))
-		.andExpect(redirectedUrl("/freeboard/" + timeline.getFreeBoard().getId() + "/detail"));
+		.andExpect(redirectedUrl("/freeboards/" + timeline.getFreeBoard().getId() + "/detail"));
 	}
 	
 	@Test
@@ -253,7 +253,7 @@ public class DashboardControllerTest {
 		when(this.timelineService.getOneTimeline(1L))
 		.thenReturn(timeline);
 		this.mvc.perform(get("/dashboard/timeline/{id}", 1L))
-		.andExpect(redirectedUrl("/freeboard/" + timeline.getFreeBoardAnswer().getFreeBoard().getId() + "/detail"));
+		.andExpect(redirectedUrl("/freeboards/" + timeline.getFreeBoardAnswer().getFreeBoard().getId() + "/detail"));
 	}
 	
 	@Test

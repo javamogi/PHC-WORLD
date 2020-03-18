@@ -178,10 +178,10 @@ function addFreeboardTemplate(data){
 		+ "<img src='/images/profile/"+data.freeBoard.writer.profileImage+"' alt='#' width='44' height='44'>"
 		+ "</a><div class='activityContent'><ul class='simpleListings status'>"
 		+ "<li><div class='title'>"
-		+ "<a href='/freeboard/"+ data.freeBoard.id +"/detail'>"+ data.freeBoard.title +"</a>"
+		+ "<a href='/freeboards/"+ data.freeBoard.id +"/detail'>"+ data.freeBoard.title +"</a>"
 		+ "</div><div class='info'>"+ data.formattedSaveDate +"</div>"
 		+ "	<p>"+ data.type +"</p><div class='share'>"
-		+ "<a href='/freeboard/"+ data.freeBoard.id +"/detail' title='#'>"
+		+ "<a href='/freeboards/"+ data.freeBoard.id +"/detail' title='#'>"
 		+ "<i class='fa fa-comments'></i> "+ data.freeBoard.countOfAnswer +"</a></div></li>"
 		+ "</ul></div></div></div>";
 	$("#tab-item-2").append(template);

@@ -132,7 +132,7 @@ public class HomeControllerTest {
 		this.mvc.perform(get("/alert/{id}", 2L)
 				.session(mockSession))
 		.andDo(print())
-		.andExpect(redirectedUrl("/freeboard/" 
+		.andExpect(redirectedUrl("/freeboards/" 
 				+ freeBoardAnswerAlert.getFreeBoardAnswer().getFreeBoard().getId() 
 					+ "/detail"));
 	}

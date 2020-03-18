@@ -6,8 +6,6 @@ import java.util.List;
 
 import javax.servlet.http.HttpSession;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -24,10 +22,8 @@ import com.phcworld.service.board.FreeBoardServiceImpl;
 import com.phcworld.web.HttpSessionUtils;
 
 @Controller
-@RequestMapping("/freeboard")
+@RequestMapping("/freeboards")
 public class FreeBoardController {
-
-	private static final Logger log = LoggerFactory.getLogger(FreeBoardController.class);
 
 	@Autowired
 	private FreeBoardServiceImpl freeBoardService;
@@ -68,7 +64,7 @@ public class FreeBoardController {
 		
 		freeBoardService.createFreeBoard(sessionUser, freeBoard);
 		
-		return "redirect:/freeboard/list";
+		return "redirect:/freeboards/list";
 	}
 
 	@GetMapping("/{id}/detail")
@@ -128,7 +124,7 @@ public class FreeBoardController {
 		}
 		
 		freeBoardService.updateFreeBoard(freeBoard);
-		return "redirect:/freeboard/" + id + "/detail";
+		return "redirect:/freeboards/" + id + "/detail";
 	}
 
 	@DeleteMapping("/{id}/delete")
@@ -143,7 +139,7 @@ public class FreeBoardController {
 			return "/user/login";
 		}
 		freeBoardService.deleteFreeBoard(freeBoard);
-		return "redirect:/freeboard/list";
+		return "redirect:/freeboards/list";
 	}
 
 }

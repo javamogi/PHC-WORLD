@@ -21,7 +21,10 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.phcworld.domain.answer.FreeBoardAnswer;
+import com.phcworld.domain.api.model.response.FreeBoardAnswerApiResponse;
+import com.phcworld.domain.api.model.response.SuccessResponse;
 import com.phcworld.domain.board.FreeBoard;
+import com.phcworld.domain.exception.MatchNotUserExceptioin;
 import com.phcworld.domain.user.User;
 import com.phcworld.service.answer.FreeBoardAnswerServiceImpl;
 import com.phcworld.service.board.FreeBoardServiceImpl;
@@ -72,27 +75,35 @@ public class FreeBoardAnswerControllerTest {
 		list.add(freeBoardAnswer);
 		freeBoard.setFreeBoardAnswers(list);
 		
+		FreeBoardAnswerApiResponse freeBoardAnswerApiResponse = FreeBoardAnswerApiResponse.builder()
+				.id(freeBoardAnswer.getId())
+				.writer(freeBoardAnswer.getWriter())
+				.contents(freeBoardAnswer.getContents())
+				.countOfAnswers(freeBoard.getCountOfAnswer())
+				.createDate(freeBoardAnswer.getFormattedCreateDate())
+				.build();
+		
 		when(this.freeBoardAnswerService.createFreeBoardAnswer(user, freeBoard.getId(), "test"))
-		.thenReturn(freeBoardAnswer);
-		this.mvc.perform(post("/freeboard/{freeboardId}/answer", 1L)
+		.thenReturn(freeBoardAnswerApiResponse);
+		this.mvc.perform(post("/freeboards/{freeboardId}/answers", 1L)
 				.contentType(MediaType.APPLICATION_JSON)
 				.param("contents", "test")
 				.session(mockSession))
 		.andExpect(status().isCreated())
-		.andExpect(jsonPath("$.id").value(freeBoardAnswer.getId()))
-		.andExpect(jsonPath("$.writer.id").value(freeBoardAnswer.getWriter().getId()))
-		.andExpect(jsonPath("$.contents").value(freeBoardAnswer.getContents()))
-		.andExpect(jsonPath("$.freeBoard.id").value(freeBoardAnswer.getFreeBoard().getId()))
-		.andExpect(jsonPath("$.formattedCreateDate").value(freeBoardAnswer.getFormattedCreateDate()));
+		.andExpect(jsonPath("$.id").value(freeBoardAnswerApiResponse.getId()))
+		.andExpect(jsonPath("$.writer.id").value(freeBoardAnswerApiResponse.getWriter().getId()))
+		.andExpect(jsonPath("$.contents").value(freeBoardAnswerApiResponse.getContents()))
+		.andExpect(jsonPath("$.countOfAnswers").value(freeBoardAnswerApiResponse.getCountOfAnswers()))
+		.andExpect(jsonPath("$.createDate").value(freeBoardAnswerApiResponse.getCreateDate()));
 	}
 	
 	@Test
 	public void createFailedFreeBoardAnswerWhenNotLoginUser() throws Exception {
 		MockHttpSession mockSession = new MockHttpSession();
-		this.mvc.perform(post("/freeboard/{freeboardId}/answer", 1L)
+		this.mvc.perform(post("/freeboards/{freeboardId}/answers", 1L)
 				.param("contents", "test")
 				.session(mockSession))
-		.andExpect(jsonPath("$.success").value("로그인을 해야합니다."));
+		.andExpect(jsonPath("$.error").value("로그인을 해야합니다."));
 	}
 	
 	@Test
@@ -110,6 +121,7 @@ public class FreeBoardAnswerControllerTest {
 		mockSession.setAttribute(HttpSessionUtils.USER_SESSION_KEY, user);
 		FreeBoard freeBoard = FreeBoard.builder()
 				.id(1L)
+				.writer(user)
 				.title("title")
 				.contents("content")
 				.icon("")
@@ -123,20 +135,24 @@ public class FreeBoardAnswerControllerTest {
 				.contents("test")
 				.createDate(LocalDateTime.now())
 				.build();
+		SuccessResponse response = SuccessResponse.builder()
+				.success(freeBoardAnswer.getFreeBoard().getCountOfAnswer())
+				.build();
+		
 		when(this.freeBoardAnswerService.deleteFreeBoardAnswer(freeBoardAnswer.getId(), user))
-		.thenReturn("{\"success\":\"[]\"}");
-		this.mvc.perform(delete("/freeboard/{freeboardId}/answer/{id}", 1L, 1L)
+		.thenReturn(response);
+		this.mvc.perform(delete("/freeboards/{freeboardId}/answers/{id}", 1L, 1L)
 				.session(mockSession))
 		.andExpect(status().isOk())
-		.andExpect(jsonPath("$.success").value("[]"));
+		.andExpect(jsonPath("$.success").value(""));
 	}
 	
 	@Test
 	public void deleteFailedFreeBoardAnswerWhenNotLoginUser() throws Exception {
 		MockHttpSession mockSession = new MockHttpSession();
-		this.mvc.perform(delete("/freeboard/{freeboardId}/answer/{id}", 1L, 1L)
+		this.mvc.perform(delete("/freeboards/{freeboardId}/answers/{id}", 1L, 1L)
 				.session(mockSession))
-		.andExpect(jsonPath("$.success").value("로그인을 해야합니다."));
+		.andExpect(jsonPath("$.error").value("로그인을 해야합니다."));
 	}
 	
 	@Test
@@ -177,9 +193,11 @@ public class FreeBoardAnswerControllerTest {
 				.contents("test")
 				.createDate(LocalDateTime.now())
 				.build();
+		
+		
 		when(this.freeBoardAnswerService.deleteFreeBoardAnswer(freeBoardAnswer.getId(), user))
-		.thenReturn("{\"error\":\"본인이 작성한 글만 삭제 가능합니다.\"}");
-		this.mvc.perform(delete("/freeboard/{freeboardId}/answer/{id}", 1L, 1L)
+		.thenThrow(new MatchNotUserExceptioin("본인이 작성한 글만 삭제 가능합니다."));
+		this.mvc.perform(delete("/freeboards/{freeboardId}/answers/{id}", 1L, 1L)
 				.session(mockSession))
 		.andExpect(jsonPath("$.error").value("본인이 작성한 글만 삭제 가능합니다."));
 	}

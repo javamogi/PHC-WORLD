@@ -91,24 +91,24 @@
 									{{#freeBoard}}
 										<li>
 											<div class="title">
-												<a href="/freeboard/{{freeBoard.id}}/detail" title="{{freeBoard.title}}">{{freeBoard.title}}</a>
+												<a href="/freeboards/{{freeBoard.id}}/detail" title="{{freeBoard.title}}">{{freeBoard.title}}</a>
 											</div>
 											<div class="info">{{formattedSaveDate}}</div>
 											<p>{{type}}</p>
 											<div class="share">
-												<a href="/freeboard/{{freeBoard.id}}/detail" title="#"><i class="fa fa-comments"></i> {{freeBoard.countOfAnswer}}</a>
+												<a href="/freeboards/{{freeBoard.id}}/detail" title="#"><i class="fa fa-comments"></i> {{freeBoard.countOfAnswer}}</a>
 											</div>
 										</li>									
 									{{/freeBoard}}
 									{{#freeBoardAnswer}}
 										<li>
 											<div class="title">
-												<a href="/freeboard/{{freeBoardAnswer.freeBoard.id}}/detail" title="{{freeBoard.title}}">{{freeBoard.title}}</a>
+												<a href="/freeboards/{{freeBoardAnswer.freeBoard.id}}/detail" title="{{freeBoard.title}}">{{freeBoard.title}}</a>
 											</div>
 											<div class="info">{{formattedSaveDate}}</div>
 											<p>{{type}}</p>
 											<div class="share">
-												<a href="/freeboard/{{freeBoardAnswer.freeBoard.id}}/detail" title="#"><i class="fa fa-comments"></i> {{freeBoard.countOfAnswer}}</a>
+												<a href="/freeboards/{{freeBoardAnswer.freeBoard.id}}/detail" title="#"><i class="fa fa-comments"></i> {{freeBoard.countOfAnswer}}</a>
 											</div>
 										</li>									
 									{{/freeBoardAnswer}}

@@ -10,6 +10,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.phcworld.domain.answer.FreeBoardAnswer;
+import com.phcworld.domain.api.model.response.FreeBoardAnswerApiResponse;
+import com.phcworld.domain.api.model.response.SuccessResponse;
 import com.phcworld.domain.board.FreeBoard;
 import com.phcworld.domain.exception.MatchNotUserExceptioin;
 import com.phcworld.domain.user.User;
@@ -37,7 +39,7 @@ public class FreeBoardAnswerServiceImpl implements FreeBoardAnswerService {
 	private TimelineServiceImpl timelineService;
 	
 	@Override
-	public FreeBoardAnswer createFreeBoardAnswer(User loginUser, Long freeboardId, String contents) {
+	public FreeBoardAnswerApiResponse createFreeBoardAnswer(User loginUser, Long freeboardId, String contents) {
 		FreeBoard freeBoard = freeBoardRepository.getOne(freeboardId);
 		FreeBoardAnswer freeBoardAnswer = FreeBoardAnswer.builder()
 				.writer(loginUser)
@@ -47,17 +49,26 @@ public class FreeBoardAnswerServiceImpl implements FreeBoardAnswerService {
 				.build();
 		
 		FreeBoardAnswer createdFreeBoardAnswer = freeBoardAnswerRepository.save(freeBoardAnswer);
+		
+		FreeBoardAnswerApiResponse freeBoardAnswerApiResponse = FreeBoardAnswerApiResponse.builder()
+				.id(createdFreeBoardAnswer.getId())
+				.writer(createdFreeBoardAnswer.getWriter())
+				.contents(createdFreeBoardAnswer.getContents())
+				.countOfAnswers(createdFreeBoardAnswer.getFreeBoard().getCountOfAnswer())
+				.createDate(createdFreeBoardAnswer.getFormattedCreateDate())
+				.build();
+		
 		timelineService.createTimeline(createdFreeBoardAnswer);
 		
 		if(!freeBoard.matchUser(loginUser)) {
 			alertService.createAlert(createdFreeBoardAnswer);
 		}
 		
-		return createdFreeBoardAnswer;
+		return freeBoardAnswerApiResponse;
 	}
 	
 	@Override
-	public String deleteFreeBoardAnswer(Long id, User loginUser) {
+	public SuccessResponse deleteFreeBoardAnswer(Long id, User loginUser) {
 		FreeBoardAnswer freeBoardAnswer = freeBoardAnswerRepository.getOne(id);
 		if(!freeBoardAnswer.isSameWriter(loginUser)) {
 			throw new MatchNotUserExceptioin("본인이 작성한 글만 삭제 가능합니다.");
@@ -72,12 +83,14 @@ public class FreeBoardAnswerServiceImpl implements FreeBoardAnswerService {
 		FreeBoard freeBoard = freeBoardRepository.getOne(freeBoardAnswer.getFreeBoard().getId());
 		freeBoard.getFreeBoardAnswers().remove(freeBoardAnswer);
 		log.info("countOfAnswer : {}", freeBoard.getCountOfAnswer());
-		return "{\"success\":\"" + freeBoard.getCountOfAnswer() +"\"}";
+		return SuccessResponse.builder()
+				.success(freeBoard.getCountOfAnswer())
+				.build();
 	}
 	
 	@Override
 	public List<FreeBoardAnswer> findFreeBoardAnswerListByWriter(User loginUser) {
 		return freeBoardAnswerRepository.findByWriter(loginUser);
 	}
-
+	
 }

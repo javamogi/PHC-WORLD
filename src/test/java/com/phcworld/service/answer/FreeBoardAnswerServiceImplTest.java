@@ -18,6 +18,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.phcworld.domain.answer.FreeBoardAnswer;
+import com.phcworld.domain.api.model.response.FreeBoardAnswerApiResponse;
+import com.phcworld.domain.api.model.response.SuccessResponse;
 import com.phcworld.domain.board.FreeBoard;
 import com.phcworld.domain.exception.MatchNotUserExceptioin;
 import com.phcworld.domain.user.User;
@@ -51,6 +53,7 @@ public class FreeBoardAnswerServiceImplTest {
 				.count(0)
 				.build();
 		FreeBoardAnswer answer = FreeBoardAnswer.builder()
+				.id(1L)
 				.writer(writer)
 				.freeBoard(freeBoard)
 				.contents("content")
@@ -60,11 +63,20 @@ public class FreeBoardAnswerServiceImplTest {
 		list.add(answer);
 		freeBoard.setFreeBoardAnswers(list);
 		
-		when(freeBoardAnswerService.createFreeBoardAnswer(writer, freeBoard.getId(), "content")).thenReturn(answer);
-		FreeBoardAnswer freeBoardAnswer = 
+		FreeBoardAnswerApiResponse freeBoardAnswerApiResponse = FreeBoardAnswerApiResponse.builder()
+				.id(answer.getId())
+				.writer(answer.getWriter())
+				.contents(answer.getContents())
+				.countOfAnswers(answer.getFreeBoard().getCountOfAnswer())
+				.createDate(answer.getFormattedCreateDate())
+				.build();
+		
+		when(freeBoardAnswerService.createFreeBoardAnswer(writer, freeBoard.getId(), "content"))
+		.thenReturn(freeBoardAnswerApiResponse);
+		FreeBoardAnswerApiResponse createdFreeBoardAnswerApiResponse = 
 				freeBoardAnswerService.createFreeBoardAnswer(writer, freeBoard.getId(), "content");
-		assertThat("content", is(freeBoardAnswer.getContents()));
-		assertThat("[1]", is(freeBoardAnswer.getFreeBoard().getCountOfAnswer()));
+		assertThat("content", is(createdFreeBoardAnswerApiResponse.getContents()));
+		assertThat("[1]", is(createdFreeBoardAnswerApiResponse.getCountOfAnswers()));
 	}
 	
 	@Test
@@ -88,6 +100,7 @@ public class FreeBoardAnswerServiceImplTest {
 				.count(0)
 				.build();
 		FreeBoardAnswer answer = FreeBoardAnswer.builder()
+				.id(1L)
 				.writer(writer)
 				.freeBoard(freeBoard)
 				.contents("content")
@@ -96,16 +109,15 @@ public class FreeBoardAnswerServiceImplTest {
 		List<FreeBoardAnswer> list = new ArrayList<FreeBoardAnswer>();
 		list.add(answer);
 		freeBoard.setFreeBoardAnswers(list);
-		
-		when(freeBoardAnswerService.createFreeBoardAnswer(writer, freeBoard.getId(), "content")).thenReturn(answer);
-		FreeBoardAnswer freeBoardAnswer = 
-				freeBoardAnswerService.createFreeBoardAnswer(writer, freeBoard.getId(), "content");
-		
-		freeBoardAnswer.getFreeBoard().getFreeBoardAnswers().remove(answer);
-		when(freeBoardAnswerService.deleteFreeBoardAnswer(freeBoardAnswer.getId(), writer))
-		.thenReturn("{\"success\":\"" + freeBoardAnswer.getFreeBoard().getCountOfAnswer() +"\"}");
-		String successStr = freeBoardAnswerService.deleteFreeBoardAnswer(freeBoardAnswer.getId(), writer);
-		assertThat("{\"success\":\"\"}", is(successStr));
+
+		answer.getFreeBoard().getFreeBoardAnswers().remove(answer);
+		SuccessResponse response = SuccessResponse.builder()
+				.success(answer.getFreeBoard().getCountOfAnswer())
+				.build();
+		when(freeBoardAnswerService.deleteFreeBoardAnswer(answer.getId(), writer))
+		.thenReturn(response);
+		SuccessResponse success = freeBoardAnswerService.deleteFreeBoardAnswer(answer.getId(), writer);
+		assertThat(response, is(success));
 	}
 	
 	@Test(expected = MatchNotUserExceptioin.class)
@@ -145,12 +157,10 @@ public class FreeBoardAnswerServiceImplTest {
 				.contents("content")
 				.createDate(LocalDateTime.now())
 				.build();
-		when(freeBoardAnswerService.createFreeBoardAnswer(writer, freeBoard.getId(), "content")).thenReturn(answer);
-		FreeBoardAnswer freeBoardAnswer = 
-				freeBoardAnswerService.createFreeBoardAnswer(writer, freeBoard.getId(), "content");
+		
 		doThrow(MatchNotUserExceptioin.class)
-		.when(freeBoardAnswerService).deleteFreeBoardAnswer(freeBoardAnswer.getId(), user);
-		freeBoardAnswerService.deleteFreeBoardAnswer(freeBoardAnswer.getId(), user);
+		.when(freeBoardAnswerService).deleteFreeBoardAnswer(answer.getId(), user);
+		freeBoardAnswerService.deleteFreeBoardAnswer(answer.getId(), user);
 	}
 	
 	@Test
@@ -193,7 +203,8 @@ public class FreeBoardAnswerServiceImplTest {
 		answerList.add(answer2);
 		
 		when(freeBoardAnswerService.findFreeBoardAnswerListByWriter(writer)).thenReturn(answerList);
-		List<FreeBoardAnswer> findFreeBoardAnswerList = freeBoardAnswerService.findFreeBoardAnswerListByWriter(writer);
+		List<FreeBoardAnswer> findFreeBoardAnswerList = 
+				freeBoardAnswerService.findFreeBoardAnswerListByWriter(writer);
 		assertThat(findFreeBoardAnswerList, hasItems(answer, answer2));
 	}
 

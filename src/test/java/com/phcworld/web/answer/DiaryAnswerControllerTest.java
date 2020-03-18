@@ -93,7 +93,7 @@ public class DiaryAnswerControllerTest {
 		this.mvc.perform(post("/diary/{diaryId}/answer", 1L)
 				.param("contents", "test")
 				.session(mockSession))
-		.andExpect(jsonPath("$.success").value("로그인을 해야합니다."));
+		.andExpect(jsonPath("$.error").value("로그인을 해야합니다."));
 	}
 	
 	@Test
@@ -136,7 +136,7 @@ public class DiaryAnswerControllerTest {
 		MockHttpSession mockSession = new MockHttpSession();
 		this.mvc.perform(delete("/diary/{diaryId}/answer/{id}", 1L, 1L)
 				.session(mockSession))
-		.andExpect(jsonPath("$.success").value("로그인을 해야합니다."));
+		.andExpect(jsonPath("$.error").value("로그인을 해야합니다."));
 	}
 	
 	@Test
