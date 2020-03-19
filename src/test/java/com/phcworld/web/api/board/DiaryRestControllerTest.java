@@ -18,6 +18,7 @@ import org.springframework.mock.web.MockHttpSession;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
+import com.phcworld.domain.api.model.response.SuccessResponse;
 import com.phcworld.domain.board.Diary;
 import com.phcworld.domain.good.Good;
 import com.phcworld.domain.user.User;
@@ -39,7 +40,7 @@ public class DiaryRestControllerTest {
 		MockHttpSession mockSession = new MockHttpSession();
 		this.mvc.perform(put("/api/diary/{diaryId}/good", 1L)
 				.session(mockSession))
-		.andExpect(jsonPath("$.success").value("로그인을 해야합니다."));
+		.andExpect(jsonPath("$.error").value("로그인을 해야합니다."));
 	}
 	
 	@Test
@@ -71,12 +72,16 @@ public class DiaryRestControllerTest {
 		List<Good> list = new ArrayList<Good>();
 		list.add(good);
 		diary.setGoodPushedUser(list);
+		
+		SuccessResponse successResponse = SuccessResponse.builder()
+				.success(Integer.toString(diary.getCountOfGood()))
+				.build();
 		when(diaryService.updateGood(diary.getId(), user))
-		.thenReturn("{\"success\":\""+Integer.toString(diary.getCountOfGood())+"\"}");
+		.thenReturn(successResponse);
 		this.mvc.perform(put("/api/diary/{diaryId}/good", 1L)
 				.session(mockSession))
 		.andExpect(status().isOk())
-		.andExpect(jsonPath("$.success").value(1));
+		.andExpect(jsonPath("$.success").value(successResponse.getSuccess()));
 	}
 
 }
