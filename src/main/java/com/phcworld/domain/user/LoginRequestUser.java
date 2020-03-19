@@ -1,7 +1,5 @@
 package com.phcworld.domain.user;
 
-import com.phcworld.domain.email.EmailAuth;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
