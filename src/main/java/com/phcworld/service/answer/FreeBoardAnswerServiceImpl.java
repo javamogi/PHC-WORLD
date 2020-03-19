@@ -54,6 +54,7 @@ public class FreeBoardAnswerServiceImpl implements FreeBoardAnswerService {
 				.id(createdFreeBoardAnswer.getId())
 				.writer(createdFreeBoardAnswer.getWriter())
 				.contents(createdFreeBoardAnswer.getContents())
+				.freeBoardId(freeboardId)
 				.countOfAnswers(createdFreeBoardAnswer.getFreeBoard().getCountOfAnswer())
 				.createDate(createdFreeBoardAnswer.getFormattedCreateDate())
 				.build();
@@ -93,4 +94,39 @@ public class FreeBoardAnswerServiceImpl implements FreeBoardAnswerService {
 		return freeBoardAnswerRepository.findByWriter(loginUser);
 	}
 	
+	public FreeBoardAnswerApiResponse readFreeBoardAnswer(Long id, User loginUser) {
+		FreeBoardAnswer freeBoardAnswer = freeBoardAnswerRepository.getOne(id);
+		if(!freeBoardAnswer.isSameWriter(loginUser)) {
+			throw new MatchNotUserExceptioin("본인이 작성한 글만 수정 가능합니다.");
+		}
+		FreeBoardAnswerApiResponse freeBoardAnswerApiResponse = 
+				FreeBoardAnswerApiResponse.builder()
+				.id(freeBoardAnswer.getId())
+				.writer(loginUser)
+				.contents(freeBoardAnswer.getContents().replace("<br>", "\r\n"))
+				.freeBoardId(freeBoardAnswer.getFreeBoard().getId())
+				.countOfAnswers(freeBoardAnswer.getFreeBoard().getCountOfAnswer())
+				.createDate(freeBoardAnswer.getFormattedCreateDate())
+				.build();
+		return freeBoardAnswerApiResponse;
+	}
+	
+	public FreeBoardAnswerApiResponse updateFreeBoardAnswer(Long id, String contents, User loginUser) {
+		FreeBoardAnswer answer = freeBoardAnswerRepository.getOne(id);
+		if(!answer.isSameWriter(loginUser)) {
+			throw new MatchNotUserExceptioin("본인이 작성한 글만 수정 가능합니다.");
+		}
+		answer.update(contents.replace("\r\n", "<br>"));
+		FreeBoardAnswer updatedFreeBoardAnswer = freeBoardAnswerRepository.save(answer);
+		FreeBoardAnswerApiResponse freeBoardAnswerApiResponse = 
+				FreeBoardAnswerApiResponse.builder()
+				.id(updatedFreeBoardAnswer.getId())
+				.writer(updatedFreeBoardAnswer.getWriter())
+				.contents(updatedFreeBoardAnswer.getContents())
+				.freeBoardId(updatedFreeBoardAnswer.getFreeBoard().getId())
+				.countOfAnswers(updatedFreeBoardAnswer.getFreeBoard().getCountOfAnswer())
+				.createDate(updatedFreeBoardAnswer.getFormattedCreateDate())
+				.build();
+		return freeBoardAnswerApiResponse;
+	}
 }

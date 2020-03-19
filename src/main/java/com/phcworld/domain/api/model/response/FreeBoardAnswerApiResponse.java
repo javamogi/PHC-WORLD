@@ -16,6 +16,8 @@ public class FreeBoardAnswerApiResponse {
 
 	private String contents;
 	
+	private Long freeBoardId;
+	
 	private String countOfAnswers;
 
 	private String createDate;

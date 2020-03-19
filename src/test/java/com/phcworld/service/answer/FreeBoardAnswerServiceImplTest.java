@@ -67,6 +67,7 @@ public class FreeBoardAnswerServiceImplTest {
 				.id(answer.getId())
 				.writer(answer.getWriter())
 				.contents(answer.getContents())
+				.freeBoardId(answer.getFreeBoard().getId())
 				.countOfAnswers(answer.getFreeBoard().getCountOfAnswer())
 				.createDate(answer.getFormattedCreateDate())
 				.build();
@@ -77,6 +78,7 @@ public class FreeBoardAnswerServiceImplTest {
 				freeBoardAnswerService.createFreeBoardAnswer(writer, freeBoard.getId(), "content");
 		assertThat("content", is(createdFreeBoardAnswerApiResponse.getContents()));
 		assertThat("[1]", is(createdFreeBoardAnswerApiResponse.getCountOfAnswers()));
+		assertThat(freeBoard.getId(), is(createdFreeBoardAnswerApiResponse.getFreeBoardId()));
 	}
 	
 	@Test
@@ -206,6 +208,102 @@ public class FreeBoardAnswerServiceImplTest {
 		List<FreeBoardAnswer> findFreeBoardAnswerList = 
 				freeBoardAnswerService.findFreeBoardAnswerListByWriter(writer);
 		assertThat(findFreeBoardAnswerList, hasItems(answer, answer2));
+	}
+	
+	@Test
+	public void readFreeBoardAnswer() {
+		User writer = User.builder()
+				.id(1L)
+				.email("test@test.test")
+				.password("test")
+				.name("테스트")
+				.profileImage("blank-profile-picture.png")
+				.authority("ROLE_USER")
+				.createDate(LocalDateTime.now())
+				.build();
+		FreeBoard freeBoard = FreeBoard.builder()
+				.id(1L)
+				.writer(writer)
+				.title("title")
+				.contents("content")
+				.icon("")
+				.createDate(LocalDateTime.now())
+				.count(0)
+				.build();
+		FreeBoardAnswer answer = FreeBoardAnswer.builder()
+				.id(1L)
+				.writer(writer)
+				.freeBoard(freeBoard)
+				.contents("content")
+				.createDate(LocalDateTime.now())
+				.build();
+		List<FreeBoardAnswer> list = new ArrayList<FreeBoardAnswer>();
+		list.add(answer);
+		freeBoard.setFreeBoardAnswers(list);
+
+		FreeBoardAnswerApiResponse freeBoardAnswerApiResponse = FreeBoardAnswerApiResponse.builder()
+				.id(answer.getId())
+				.writer(answer.getWriter())
+				.contents(answer.getContents())
+				.freeBoardId(answer.getFreeBoard().getId())
+				.countOfAnswers(answer.getFreeBoard().getCountOfAnswer())
+				.createDate(answer.getFormattedCreateDate())
+				.build();
+		
+		when(freeBoardAnswerService.readFreeBoardAnswer(answer.getId(), writer))
+		.thenReturn(freeBoardAnswerApiResponse);
+		FreeBoardAnswerApiResponse createdFreeBoardAnswerApiResponse = 
+				freeBoardAnswerService.readFreeBoardAnswer(answer.getId(), writer);
+		assertThat(freeBoardAnswerApiResponse, is(createdFreeBoardAnswerApiResponse));
+	}
+	
+	@Test
+	public void update() {
+		User writer = User.builder()
+				.id(1L)
+				.email("test@test.test")
+				.password("test")
+				.name("테스트")
+				.profileImage("blank-profile-picture.png")
+				.authority("ROLE_USER")
+				.createDate(LocalDateTime.now())
+				.build();
+		FreeBoard freeBoard = FreeBoard.builder()
+				.id(1L)
+				.writer(writer)
+				.title("title")
+				.contents("content")
+				.icon("")
+				.createDate(LocalDateTime.now())
+				.count(0)
+				.build();
+		FreeBoardAnswer answer = FreeBoardAnswer.builder()
+				.id(1L)
+				.writer(writer)
+				.freeBoard(freeBoard)
+				.contents("content")
+				.createDate(LocalDateTime.now())
+				.build();
+		List<FreeBoardAnswer> list = new ArrayList<FreeBoardAnswer>();
+		list.add(answer);
+		freeBoard.setFreeBoardAnswers(list);
+		
+		answer.update("update content");
+		
+		FreeBoardAnswerApiResponse freeBoardAnswerApiResponse = FreeBoardAnswerApiResponse.builder()
+				.id(answer.getId())
+				.writer(answer.getWriter())
+				.contents(answer.getContents())
+				.freeBoardId(answer.getFreeBoard().getId())
+				.countOfAnswers(answer.getFreeBoard().getCountOfAnswer())
+				.createDate(answer.getFormattedCreateDate())
+				.build();
+		
+		when(freeBoardAnswerService.updateFreeBoardAnswer(answer.getId(), answer.getContents(), writer))
+		.thenReturn(freeBoardAnswerApiResponse);
+		FreeBoardAnswerApiResponse updatedFreeBoardAnswerApiResponse = 
+				freeBoardAnswerService.updateFreeBoardAnswer(answer.getId(), answer.getContents(), writer);
+		assertThat(freeBoardAnswerApiResponse, is(updatedFreeBoardAnswerApiResponse));
 	}
 
 }
