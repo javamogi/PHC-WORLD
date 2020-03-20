@@ -68,7 +68,7 @@ public class Diary {
 	}
 	
 	public String getCountOfAnswer() {
-		if (this.diaryAnswers.size() == 0) {
+		if (this.diaryAnswers == null || this.diaryAnswers.size() == 0) {
 			return "";
 		}
 		return "[" + diaryAnswers.size() + "]";

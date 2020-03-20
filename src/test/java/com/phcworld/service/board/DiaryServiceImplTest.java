@@ -21,6 +21,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.phcworld.domain.answer.DiaryAnswer;
+import com.phcworld.domain.api.model.response.SuccessResponse;
 import com.phcworld.domain.board.Diary;
 import com.phcworld.domain.good.Good;
 import com.phcworld.domain.user.User;
@@ -234,10 +235,15 @@ public class DiaryServiceImplTest {
 		List<Good> list = new ArrayList<Good>();
 		list.add(good);
 		diary.setGoodPushedUser(list);
+		
+		SuccessResponse successResponse = SuccessResponse.builder()
+				.success(Integer.toString(diary.getCountOfGood()))
+				.build();
+		
 		when(diaryService.updateGood(diary.getId(), user))
-		.thenReturn("{\"success\":\"" + Integer.toString(diary.getCountOfGood()) +"\"}");
-		String str = diaryService.updateGood(diary.getId(), user);
-		assertThat("{\"success\":\"1\"}", is(str));
+		.thenReturn(successResponse);
+		SuccessResponse newSuccessResponse = diaryService.updateGood(diary.getId(), user);
+		assertThat(successResponse, is(newSuccessResponse));
 	}
 	
 	@Test
@@ -268,10 +274,13 @@ public class DiaryServiceImplTest {
 		list.add(good);
 		diary.setGoodPushedUser(list);
 		diary.getGoodPushedUser().remove(good);
+		SuccessResponse successResponse = SuccessResponse.builder()
+				.success(Integer.toString(diary.getCountOfGood()))
+				.build();
 		when(diaryService.updateGood(diary.getId(), user))
-		.thenReturn("{\"success\":\"" + Integer.toString(diary.getCountOfGood()) +"\"}");
-		String str = diaryService.updateGood(diary.getId(), user);
-		assertThat("{\"success\":\"0\"}", is(str));
+		.thenReturn(successResponse);
+		SuccessResponse newSuccessResponse = diaryService.updateGood(diary.getId(), user);
+		assertThat(successResponse, is(newSuccessResponse));
 	}
 	
 	@Test

@@ -18,6 +18,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.phcworld.domain.answer.DiaryAnswer;
+import com.phcworld.domain.api.model.response.DiaryAnswerApiResponse;
+import com.phcworld.domain.api.model.response.SuccessResponse;
 import com.phcworld.domain.board.Diary;
 import com.phcworld.domain.exception.MatchNotUserExceptioin;
 import com.phcworld.domain.user.User;
@@ -51,6 +53,7 @@ public class DiaryAnswerServiceImplTest {
 				.createDate(LocalDateTime.now())
 				.build();
 		DiaryAnswer answer = DiaryAnswer.builder()
+				.id(1L)
 				.writer(writer)
 				.diary(diary)
 				.contents("diary answer content")
@@ -59,11 +62,22 @@ public class DiaryAnswerServiceImplTest {
 		List<DiaryAnswer> list = new ArrayList<DiaryAnswer>();
 		list.add(answer);
 		diary.setDiaryAnswers(list);
+		
+		DiaryAnswerApiResponse diaryAnswerApiResponse = DiaryAnswerApiResponse.builder()
+				.id(answer.getId())
+				.writer(answer.getWriter())
+				.contents(answer.getContents())
+				.diaryId(answer.getDiary().getId())
+				.countOfAnswers(answer.getDiary().getCountOfAnswer())
+				.createDate(answer.getFormattedCreateDate())
+				.build();
+				
+		
 		when(diaryAnswerService.createDiaryAnswer(writer, diary.getId(), "diary answer content"))
-		.thenReturn(answer);
-		DiaryAnswer diaryAnswer = diaryAnswerService.createDiaryAnswer(writer, diary.getId(), "diary answer content");
-		assertThat("diary answer content", is(diaryAnswer.getContents()));
-		assertThat("[1]", is(diaryAnswer.getDiary().getCountOfAnswer()));
+		.thenReturn(diaryAnswerApiResponse);
+		DiaryAnswerApiResponse createdDiaryAnswerApiResponse = 
+				diaryAnswerService.createDiaryAnswer(writer, diary.getId(), "diary answer content");
+		assertThat(diaryAnswerApiResponse, is(createdDiaryAnswerApiResponse));
 	}
 
 	@Test(expected = MatchNotUserExceptioin.class)
@@ -101,12 +115,10 @@ public class DiaryAnswerServiceImplTest {
 				.contents("diary answer content")
 				.createDate(LocalDateTime.now())
 				.build();
-		when(diaryAnswerService.createDiaryAnswer(writer, diary.getId(), "diary answer content"))
-		.thenReturn(answer);
-		DiaryAnswer diaryAnswer = diaryAnswerService.createDiaryAnswer(writer, diary.getId(), "diary answer content");
+		
 		doThrow(MatchNotUserExceptioin.class)
-		.when(diaryAnswerService).deleteDiaryAnswer(diaryAnswer.getId(), user, diary.getId());
-		diaryAnswerService.deleteDiaryAnswer(diaryAnswer.getId(), user, diary.getId());
+		.when(diaryAnswerService).deleteDiaryAnswer(answer.getId(), user, diary.getId());
+		diaryAnswerService.deleteDiaryAnswer(answer.getId(), user, diary.getId());
 	}
 	
 	@Test
@@ -138,14 +150,14 @@ public class DiaryAnswerServiceImplTest {
 		list.add(answer);
 		diary.setDiaryAnswers(list);
 		
-		when(diaryAnswerService.createDiaryAnswer(writer, diary.getId(), "diary answer content"))
-		.thenReturn(answer);
-		DiaryAnswer diaryAnswer = diaryAnswerService.createDiaryAnswer(writer, diary.getId(), "diary answer content");
-		diaryAnswer.getDiary().getDiaryAnswers().remove(diaryAnswer);
-		when(diaryAnswerService.deleteDiaryAnswer(diaryAnswer.getId(), writer, diary.getId()))
-		.thenReturn("{\"success\":\"" + diaryAnswer.getDiary().getCountOfAnswer() +"\"}");
-		String successStr = diaryAnswerService.deleteDiaryAnswer(diaryAnswer.getId(), writer, diary.getId());
-		assertThat("{\"success\":\"\"}", is(successStr));
+		answer.getDiary().getDiaryAnswers().remove(answer);
+		SuccessResponse response = SuccessResponse.builder()
+				.success(answer.getDiary().getCountOfAnswer())
+				.build();
+		when(diaryAnswerService.deleteDiaryAnswer(answer.getId(), writer, diary.getId()))
+		.thenReturn(response);
+		SuccessResponse success = diaryAnswerService.deleteDiaryAnswer(answer.getId(), writer, diary.getId());
+		assertThat(response, is(success));
 	}
 
 	@Test
@@ -186,6 +198,98 @@ public class DiaryAnswerServiceImplTest {
 		.thenReturn(list);
 		List<DiaryAnswer> diaryAnswerList = diaryAnswerService.findDiaryAnswerListByWriter(writer);
 		assertThat(diaryAnswerList, hasItems(answer, answer2));
+	}
+	
+	@Test
+	public void readDiaryAnswer() {
+		User writer = User.builder()
+				.id(1L)
+				.email("test@test.test")
+				.password("test")
+				.name("테스트")
+				.profileImage("blank-profile-picture.png")
+				.authority("ROLE_USER")
+				.createDate(LocalDateTime.now())
+				.build();
+		Diary diary = Diary.builder()
+				.id(1L)
+				.writer(writer)
+				.title("title")
+				.contents("content")
+				.thumbnail("no-image-icon.gif")
+				.createDate(LocalDateTime.now())
+				.build();
+		DiaryAnswer answer = DiaryAnswer.builder()
+				.writer(writer)
+				.diary(diary)
+				.contents("diary answer content")
+				.createDate(LocalDateTime.now())
+				.build();
+		List<DiaryAnswer> list = new ArrayList<DiaryAnswer>();
+		list.add(answer);
+		diary.setDiaryAnswers(list);
+		
+		DiaryAnswerApiResponse diaryAnswerApiResponse = DiaryAnswerApiResponse.builder()
+				.id(answer.getId())
+				.writer(answer.getWriter())
+				.contents(answer.getContents())
+				.diaryId(answer.getDiary().getId())
+				.countOfAnswers(answer.getDiary().getCountOfAnswer())
+				.createDate(answer.getFormattedCreateDate())
+				.build();
+		
+		when(diaryAnswerService.readDiaryAnswer(answer.getId(), writer))
+		.thenReturn(diaryAnswerApiResponse);
+		DiaryAnswerApiResponse createdDiaryAnswerApiResponse = 
+				diaryAnswerService.readDiaryAnswer(answer.getId(), writer);
+		assertThat(diaryAnswerApiResponse, is(createdDiaryAnswerApiResponse));
+	}
+	
+	@Test
+	public void update() {
+		User writer = User.builder()
+				.id(1L)
+				.email("test@test.test")
+				.password("test")
+				.name("테스트")
+				.profileImage("blank-profile-picture.png")
+				.authority("ROLE_USER")
+				.createDate(LocalDateTime.now())
+				.build();
+		Diary diary = Diary.builder()
+				.id(1L)
+				.writer(writer)
+				.title("title")
+				.contents("content")
+				.thumbnail("no-image-icon.gif")
+				.createDate(LocalDateTime.now())
+				.build();
+		DiaryAnswer answer = DiaryAnswer.builder()
+				.writer(writer)
+				.diary(diary)
+				.contents("diary answer content")
+				.createDate(LocalDateTime.now())
+				.build();
+		List<DiaryAnswer> list = new ArrayList<DiaryAnswer>();
+		list.add(answer);
+		diary.setDiaryAnswers(list);
+		
+		answer.update("diary answer update content");
+		
+		DiaryAnswerApiResponse diaryAnswerApiResponse = DiaryAnswerApiResponse.builder()
+				.id(answer.getId())
+				.writer(answer.getWriter())
+				.contents(answer.getContents())
+				.diaryId(answer.getDiary().getId())
+				.countOfAnswers(answer.getDiary().getCountOfAnswer())
+				.createDate(answer.getFormattedCreateDate())
+				.build();
+		
+		when(diaryAnswerService.updateDiaryAnswer(answer.getId(), answer.getContents(), writer))
+		.thenReturn(diaryAnswerApiResponse);
+		DiaryAnswerApiResponse updatedDiaryAnswerApiResponse = 
+				diaryAnswerService.updateDiaryAnswer(answer.getId(), answer.getContents(), writer);
+		assertThat(diaryAnswerApiResponse, is(updatedDiaryAnswerApiResponse));
 	}
 	
 }

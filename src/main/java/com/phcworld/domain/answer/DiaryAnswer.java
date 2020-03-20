@@ -64,5 +64,9 @@ public class DiaryAnswer {
 	public boolean isSameWriter(User loginUser) {
 		return this.writer.equals(loginUser);
 	}
+	
+	public void update(String contents) {
+		this.contents = contents;
+	}
 
 }

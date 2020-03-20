@@ -90,10 +90,12 @@ $(document).ready(function(){
 				alert(jqXHR.responseJSON.error);
 			},
 			success : function(data){
+				var subUrl = url.substring(0, url.lastIndexOf("/"));
+				console.log(subUrl);
 				console.log(data);
 				article.children().remove();
 				var updateTemplate = "<div class='col-lg-12 col-md-12'>" 
-					+ "<form class='write-update' id='form-group' action='/freeboards/" + data.freeBoardId + "/answers' method='put'>"
+					+ "<form class='write-update' id='form-group' action='" + subUrl + "' method='put'>"
 					+ "<div class='form-group'>"
 					+ "<input type='hidden' name='id' value='"+data.id+"'>"
 					+ "<textarea class='col-lg-10 col-md-10' id='contents' name='contents'>"+data.contents+"</textarea>"

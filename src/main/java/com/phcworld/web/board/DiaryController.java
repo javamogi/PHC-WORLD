@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.phcworld.domain.api.model.response.SuccessResponse;
 import com.phcworld.domain.board.Diary;
 import com.phcworld.domain.exception.LoginNotUserException;
 import com.phcworld.domain.user.User;
@@ -149,7 +150,8 @@ public class DiaryController {
 	}
 	
 	@PutMapping("/{id}/good")
-	public @ResponseBody String updateGoodCount(@PathVariable Long id, HttpSession session) throws LoginNotUserException {
+	public @ResponseBody SuccessResponse updateGoodCount(@PathVariable Long id, HttpSession session) 
+			throws LoginNotUserException {
 		if(!HttpSessionUtils.isLoginUser(session)) {
 			throw new LoginNotUserException("로그인을 해야합니다.");
 		}

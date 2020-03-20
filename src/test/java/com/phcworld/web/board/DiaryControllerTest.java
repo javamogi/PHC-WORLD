@@ -27,6 +27,7 @@ import org.springframework.mock.web.MockHttpSession;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
+import com.phcworld.domain.api.model.response.SuccessResponse;
 import com.phcworld.domain.board.Diary;
 import com.phcworld.domain.good.Good;
 import com.phcworld.domain.user.User;
@@ -680,12 +681,16 @@ public class DiaryControllerTest {
 		List<Good> list = new ArrayList<Good>();
 		list.add(good);
 		diary.setGoodPushedUser(list);
+		
+		SuccessResponse successResponse = SuccessResponse.builder()
+				.success(Integer.toString(diary.getCountOfGood()))
+				.build();
 		when(diaryService.updateGood(diary.getId(), user))
-		.thenReturn("{\"success\":\""+Integer.toString(diary.getCountOfGood())+"\"}");
+		.thenReturn(successResponse);
 		this.mvc.perform(put("/diary/{diaryId}/good", 1L)
 				.session(mockSession))
 		.andExpect(status().isOk())
-		.andExpect(jsonPath("$.success").value(1));
+		.andExpect(jsonPath("$.success").value(successResponse.getSuccess()));
 	}
 	
 }
