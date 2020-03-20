@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.phcworld.domain.answer.DiaryAnswer;
+import com.phcworld.domain.api.model.response.SuccessResponse;
 import com.phcworld.domain.board.Diary;
 import com.phcworld.domain.good.Good;
 import com.phcworld.domain.user.User;
@@ -98,12 +99,14 @@ public class DiaryServiceImpl implements DiaryService {
 		return diaryRepository.findByWriter(loginUser);
 	}
 	
-	public String updateGood(Long diaryId, User loginUser) {
+	public SuccessResponse updateGood(Long diaryId, User loginUser) {
 		Diary diary = diaryRepository.getOne(diaryId);
 		
 		Diary updatedGoodCount = diaryRepository.save(goodService.pushGood(diary, loginUser));
 		
-		return "{\"success\":\"" + Integer.toString(updatedGoodCount.getCountOfGood()) +"\"}";
+		return SuccessResponse.builder()
+				.success(Integer.toString(updatedGoodCount.getCountOfGood()))
+				.build();
 	}
 	
 }
