@@ -1,8 +1,8 @@
 insert into USER(ID, EMAIL, PASSWORD, NAME, AUTHORITY, CREATE_DATE, PROFILE_IMAGE) values('1', 'test@test.test', 'test', '테스트', 'ROLE_ADMIN', CURRENT_TIMESTAMP(), 'blank-profile-picture.png');
 insert into USER(ID, EMAIL, PASSWORD, NAME, AUTHORITY, CREATE_DATE, PROFILE_IMAGE) values('2', 'test2@test.test', 'test2', '테스트2', 'ROLE_USER', CURRENT_TIMESTAMP(), 'blank-profile-picture.png');
 
-insert into EMAIL_AUTH(ID, EMAIL, AUTH_KEY, CONFIRM) values('1', 'test@test.test', '1234', 'Y');
-insert into EMAIL_AUTH(ID, EMAIL, AUTH_KEY, CONFIRM) values('2', 'test2@test.test', '5678', 'Y');
+insert into EMAIL_AUTH(ID, EMAIL, AUTH_KEY) values('1', 'test@test.test', '1234');
+insert into EMAIL_AUTH(ID, EMAIL, AUTH_KEY) values('2', 'test2@test.test', '5678');
 
 insert into FREE_BOARD(ID, WRITER_ID, TITLE, CONTENTS, COUNT, CREATE_DATE, ICON, BADGE) values('1', '1', 'test', 'test', 0, '2018-07-16 15:55:20.879', '', '');
 insert into FREE_BOARD(ID, WRITER_ID, TITLE, CONTENTS, COUNT, CREATE_DATE, ICON, BADGE) values('2', '1', 'test2', 'test2', 0,  '2018-07-17 15:55:20.879', '', '');
