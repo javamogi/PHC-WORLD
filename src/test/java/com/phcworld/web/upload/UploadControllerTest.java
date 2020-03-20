@@ -75,7 +75,7 @@ public class UploadControllerTest {
 		this.mvc.perform(get("/upload/deleteImage")
 				.param("randFileName", "123.jpg"))
 		.andExpect(status().isOk())
-		.andExpect(jsonPath("$.success").value("success"));
+		.andExpect(jsonPath("$.success").value("파일이 존재하지 않습니다."));
 	}
 	
 	@Test

@@ -534,7 +534,7 @@ public class FreeBoardControllerTest {
 		.andExpect(view().name(containsString("/user/login")))
 		.andExpect(status().isOk())
 		.andExpect(model().attribute("errorMessage", "본인의 작성한 글만 수정 가능합니다."))
-		.andExpect(model().size(1));
+		.andExpect(model().size(2));
 	}
 	
 	@Test

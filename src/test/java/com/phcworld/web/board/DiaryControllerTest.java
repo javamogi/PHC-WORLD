@@ -555,7 +555,7 @@ public class DiaryControllerTest {
 		.andExpect(view().name(containsString("/user/login")))
 		.andExpect(status().isOk())
 		.andExpect(model().attribute("errorMessage", "본인의 작성한 글만 수정 가능합니다."))
-		.andExpect(model().size(1));
+		.andExpect(model().size(2));
 	}
 	
 	@Test
@@ -649,7 +649,7 @@ public class DiaryControllerTest {
 		MockHttpSession mockSession = new MockHttpSession();
 		this.mvc.perform(put("/diary/{diaryId}/good", 1L)
 				.session(mockSession))
-		.andExpect(jsonPath("$.success").value("로그인을 해야합니다."));
+		.andExpect(jsonPath("$.error").value("로그인을 해야합니다."));
 	}
 	
 	@Test
