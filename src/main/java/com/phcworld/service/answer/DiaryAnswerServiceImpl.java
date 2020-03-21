@@ -8,14 +8,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.phcworld.domain.answer.DiaryAnswer;
-import com.phcworld.domain.answer.FreeBoardAnswer;
 import com.phcworld.domain.api.model.response.DiaryAnswerApiResponse;
-import com.phcworld.domain.api.model.response.FreeBoardAnswerApiResponse;
 import com.phcworld.domain.api.model.response.SuccessResponse;
 import com.phcworld.domain.board.Diary;
 import com.phcworld.domain.exception.MatchNotUserExceptioin;
 import com.phcworld.domain.user.User;
-import com.phcworld.ifs.BaseService;
 import com.phcworld.ifs.CrudInterface;
 import com.phcworld.repository.answer.DiaryAnswerRepository;
 import com.phcworld.repository.board.DiaryRepository;
