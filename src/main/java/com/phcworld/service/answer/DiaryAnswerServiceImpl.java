@@ -15,6 +15,8 @@ import com.phcworld.domain.api.model.response.SuccessResponse;
 import com.phcworld.domain.board.Diary;
 import com.phcworld.domain.exception.MatchNotUserExceptioin;
 import com.phcworld.domain.user.User;
+import com.phcworld.ifs.BaseService;
+import com.phcworld.ifs.CrudInterface;
 import com.phcworld.repository.answer.DiaryAnswerRepository;
 import com.phcworld.repository.board.DiaryRepository;
 import com.phcworld.service.alert.AlertServiceImpl;
@@ -22,7 +24,7 @@ import com.phcworld.service.timeline.TimelineServiceImpl;
 
 @Service
 @Transactional
-public class DiaryAnswerServiceImpl implements DiaryAnswerService {
+public class DiaryAnswerServiceImpl implements CrudInterface<DiaryAnswerApiResponse, SuccessResponse> {
 	
 	@Autowired
 	private DiaryRepository diaryRepository;
@@ -37,7 +39,7 @@ public class DiaryAnswerServiceImpl implements DiaryAnswerService {
 	private TimelineServiceImpl timelineService;
 	
 	@Override
-	public DiaryAnswerApiResponse createDiaryAnswer(User loginUser, Long diaryId, String contents) {
+	public DiaryAnswerApiResponse create(User loginUser, Long diaryId, String contents) {
 		Diary diary = diaryRepository.getOne(diaryId);
 		DiaryAnswer diaryAnswer = DiaryAnswer.builder()
 				.writer(loginUser)
@@ -66,32 +68,7 @@ public class DiaryAnswerServiceImpl implements DiaryAnswerService {
 	}
 	
 	@Override
-	public SuccessResponse deleteDiaryAnswer(Long id, User loginUser, Long diaryId) {
-		DiaryAnswer diaryAnswer = diaryAnswerRepository.getOne(id);
-		if(!diaryAnswer.isSameWriter(loginUser)) {
-			throw new MatchNotUserExceptioin("본인이 작성한 글만 삭제 가능합니다.");
-		}
-		
-		timelineService.deleteTimeline(diaryAnswer);
-		if(diaryAnswer.isSameWriter(loginUser)) {
-			alertService.deleteAlert(diaryAnswer);
-		}
-		
-		diaryAnswerRepository.deleteById(id);
-		Diary diary = diaryRepository.getOne(diaryId);
-		diary.getDiaryAnswers().remove(diaryAnswer);
-		
-		return SuccessResponse.builder()
-				.success(diary.getCountOfAnswer())
-				.build();
-	}
-	
-	@Override
-	public List<DiaryAnswer> findDiaryAnswerListByWriter(User loginUser) {
-		return diaryAnswerRepository.findByWriter(loginUser);
-	}
-	
-	public DiaryAnswerApiResponse readDiaryAnswer(Long id, User loginUser) {
+	public DiaryAnswerApiResponse read(Long id, User loginUser) {
 		DiaryAnswer diaryAnswer = diaryAnswerRepository.getOne(id);
 		if(!diaryAnswer.isSameWriter(loginUser)) {
 			throw new MatchNotUserExceptioin("본인이 작성한 글만 수정 가능합니다.");
@@ -107,7 +84,8 @@ public class DiaryAnswerServiceImpl implements DiaryAnswerService {
 		return diaryAnswerApiResponse;
 	}
 	
-	public DiaryAnswerApiResponse updateDiaryAnswer(Long id, String contents, User loginUser) {
+	@Override
+	public DiaryAnswerApiResponse update(Long id, String contents, User loginUser) {
 		DiaryAnswer answer = diaryAnswerRepository.getOne(id);
 		if(!answer.isSameWriter(loginUser)) {
 			throw new MatchNotUserExceptioin("본인이 작성한 글만 수정 가능합니다.");
@@ -125,6 +103,31 @@ public class DiaryAnswerServiceImpl implements DiaryAnswerService {
 				.build();
 		
 		return diaryAnswerApiResponse;
+	}
+	
+	@Override
+	public SuccessResponse delete(Long id, User loginUser) {
+		DiaryAnswer diaryAnswer = diaryAnswerRepository.getOne(id);
+		if(!diaryAnswer.isSameWriter(loginUser)) {
+			throw new MatchNotUserExceptioin("본인이 작성한 글만 삭제 가능합니다.");
+		}
+		
+		timelineService.deleteTimeline(diaryAnswer);
+		if(diaryAnswer.isSameWriter(loginUser)) {
+			alertService.deleteAlert(diaryAnswer);
+		}
+		
+		diaryAnswerRepository.deleteById(id);
+		Diary diary = diaryRepository.getOne(diaryAnswer.getDiary().getId());
+		diary.getDiaryAnswers().remove(diaryAnswer);
+		
+		return SuccessResponse.builder()
+				.success(diary.getCountOfAnswer())
+				.build();
+	}
+	
+	public List<DiaryAnswer> findDiaryAnswerListByWriter(User loginUser) {
+		return diaryAnswerRepository.findByWriter(loginUser);
 	}
 
 }

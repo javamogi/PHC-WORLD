@@ -39,17 +39,7 @@ public class DiaryAnswerController {
 		}
 		User loginUser = HttpSessionUtils.getUserFromSession(session);
 		
-		return diaryAnswerService.createDiaryAnswer(loginUser, diaryId, contents);
-	}
-	
-	@DeleteMapping("/{id}")
-	public SuccessResponse delete(@PathVariable Long diaryId, @PathVariable Long id, HttpSession session, Model model) 
-			throws LoginNotUserException, MatchNotUserExceptioin {
-		if(!HttpSessionUtils.isLoginUser(session)) {
-			throw new LoginNotUserException("로그인을 해야합니다.");
-		}
-		User loginUser = HttpSessionUtils.getUserFromSession(session);
-		return diaryAnswerService.deleteDiaryAnswer(id, loginUser, diaryId);
+		return diaryAnswerService.create(loginUser, diaryId, contents);
 	}
 	
 	@GetMapping("/{id}")
@@ -59,7 +49,7 @@ public class DiaryAnswerController {
 			throw new LoginNotUserException("로그인을 해야합니다.");
 		}
 		User loginUser = HttpSessionUtils.getUserFromSession(session);
-		return diaryAnswerService.readDiaryAnswer(id, loginUser);
+		return diaryAnswerService.read(id, loginUser);
 	}
 	
 	@PatchMapping("")
@@ -69,7 +59,16 @@ public class DiaryAnswerController {
 			throw new LoginNotUserException("로그인을 해야합니다.");
 		}
 		User loginUser = HttpSessionUtils.getUserFromSession(session);
-		return diaryAnswerService.updateDiaryAnswer(id, contents, loginUser);
+		return diaryAnswerService.update(id, contents, loginUser);
 	}
 	
+	@DeleteMapping("/{id}")
+	public SuccessResponse delete(@PathVariable Long id, HttpSession session, Model model) 
+			throws LoginNotUserException, MatchNotUserExceptioin {
+		if(!HttpSessionUtils.isLoginUser(session)) {
+			throw new LoginNotUserException("로그인을 해야합니다.");
+		}
+		User loginUser = HttpSessionUtils.getUserFromSession(session);
+		return diaryAnswerService.delete(id, loginUser);
+	}
 }

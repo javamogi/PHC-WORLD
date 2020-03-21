@@ -85,7 +85,7 @@ public class FreeBoardAnswerControllerTest {
 				.createDate(freeBoardAnswer.getFormattedCreateDate())
 				.build();
 		
-		when(this.freeBoardAnswerService.createFreeBoardAnswer(user, freeBoard.getId(), "test"))
+		when(this.freeBoardAnswerService.create(user, freeBoard.getId(), "test"))
 		.thenReturn(freeBoardAnswerApiResponse);
 		this.mvc.perform(post("/freeboards/{freeboardId}/answers", 1L)
 				.param("contents", "test")
@@ -141,7 +141,7 @@ public class FreeBoardAnswerControllerTest {
 				.success(freeBoardAnswer.getFreeBoard().getCountOfAnswer())
 				.build();
 		
-		when(this.freeBoardAnswerService.deleteFreeBoardAnswer(freeBoardAnswer.getId(), user))
+		when(this.freeBoardAnswerService.delete(freeBoardAnswer.getId(), user))
 		.thenReturn(response);
 		this.mvc.perform(delete("/freeboards/{freeboardId}/answers/{id}", 1L, 1L)
 				.session(mockSession))
@@ -197,7 +197,7 @@ public class FreeBoardAnswerControllerTest {
 				.build();
 		
 		
-		when(this.freeBoardAnswerService.deleteFreeBoardAnswer(freeBoardAnswer.getId(), user))
+		when(this.freeBoardAnswerService.delete(freeBoardAnswer.getId(), user))
 		.thenThrow(new MatchNotUserExceptioin("본인이 작성한 글만 삭제 가능합니다."));
 		this.mvc.perform(delete("/freeboards/{freeboardId}/answers/{id}", 1L, 1L)
 				.session(mockSession))
@@ -245,7 +245,7 @@ public class FreeBoardAnswerControllerTest {
 				.createDate(freeBoardAnswer.getFormattedCreateDate())
 				.build();
 		
-		when(this.freeBoardAnswerService.readFreeBoardAnswer(freeBoardAnswer.getId(), user))
+		when(this.freeBoardAnswerService.read(freeBoardAnswer.getId(), user))
 		.thenReturn(freeBoardAnswerApiResponse);
 		this.mvc.perform(get("/freeboards/{freeboardId}/answers/{id}", 1L, 1L)
 				.session(mockSession))
@@ -300,7 +300,7 @@ public class FreeBoardAnswerControllerTest {
 				.createDate(freeBoardAnswer.getFormattedCreateDate())
 				.build();
 		
-		when(this.freeBoardAnswerService.updateFreeBoardAnswer(freeBoardAnswer.getId(), freeBoardAnswer.getContents(), user))
+		when(this.freeBoardAnswerService.update(freeBoardAnswer.getId(), freeBoardAnswer.getContents(), user))
 		.thenReturn(freeBoardAnswerApiResponse);
 		this.mvc.perform(patch("/freeboards/{freeboardId}/answers", 1L)
 				.param("id", "1")

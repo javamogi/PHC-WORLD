@@ -73,10 +73,10 @@ public class DiaryAnswerServiceImplTest {
 				.build();
 				
 		
-		when(diaryAnswerService.createDiaryAnswer(writer, diary.getId(), "diary answer content"))
+		when(diaryAnswerService.create(writer, diary.getId(), "diary answer content"))
 		.thenReturn(diaryAnswerApiResponse);
 		DiaryAnswerApiResponse createdDiaryAnswerApiResponse = 
-				diaryAnswerService.createDiaryAnswer(writer, diary.getId(), "diary answer content");
+				diaryAnswerService.create(writer, diary.getId(), "diary answer content");
 		assertThat(diaryAnswerApiResponse, is(createdDiaryAnswerApiResponse));
 	}
 
@@ -117,8 +117,8 @@ public class DiaryAnswerServiceImplTest {
 				.build();
 		
 		doThrow(MatchNotUserExceptioin.class)
-		.when(diaryAnswerService).deleteDiaryAnswer(answer.getId(), user, diary.getId());
-		diaryAnswerService.deleteDiaryAnswer(answer.getId(), user, diary.getId());
+		.when(diaryAnswerService).delete(answer.getId(), user);
+		diaryAnswerService.delete(answer.getId(), user);
 	}
 	
 	@Test
@@ -154,9 +154,9 @@ public class DiaryAnswerServiceImplTest {
 		SuccessResponse response = SuccessResponse.builder()
 				.success(answer.getDiary().getCountOfAnswer())
 				.build();
-		when(diaryAnswerService.deleteDiaryAnswer(answer.getId(), writer, diary.getId()))
+		when(diaryAnswerService.delete(answer.getId(), writer))
 		.thenReturn(response);
-		SuccessResponse success = diaryAnswerService.deleteDiaryAnswer(answer.getId(), writer, diary.getId());
+		SuccessResponse success = diaryAnswerService.delete(answer.getId(), writer);
 		assertThat(response, is(success));
 	}
 
@@ -238,10 +238,10 @@ public class DiaryAnswerServiceImplTest {
 				.createDate(answer.getFormattedCreateDate())
 				.build();
 		
-		when(diaryAnswerService.readDiaryAnswer(answer.getId(), writer))
+		when(diaryAnswerService.read(answer.getId(), writer))
 		.thenReturn(diaryAnswerApiResponse);
 		DiaryAnswerApiResponse createdDiaryAnswerApiResponse = 
-				diaryAnswerService.readDiaryAnswer(answer.getId(), writer);
+				diaryAnswerService.read(answer.getId(), writer);
 		assertThat(diaryAnswerApiResponse, is(createdDiaryAnswerApiResponse));
 	}
 	
@@ -285,10 +285,10 @@ public class DiaryAnswerServiceImplTest {
 				.createDate(answer.getFormattedCreateDate())
 				.build();
 		
-		when(diaryAnswerService.updateDiaryAnswer(answer.getId(), answer.getContents(), writer))
+		when(diaryAnswerService.update(answer.getId(), answer.getContents(), writer))
 		.thenReturn(diaryAnswerApiResponse);
 		DiaryAnswerApiResponse updatedDiaryAnswerApiResponse = 
-				diaryAnswerService.updateDiaryAnswer(answer.getId(), answer.getContents(), writer);
+				diaryAnswerService.update(answer.getId(), answer.getContents(), writer);
 		assertThat(diaryAnswerApiResponse, is(updatedDiaryAnswerApiResponse));
 	}
 	

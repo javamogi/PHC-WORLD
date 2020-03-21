@@ -72,10 +72,10 @@ public class FreeBoardAnswerServiceImplTest {
 				.createDate(answer.getFormattedCreateDate())
 				.build();
 		
-		when(freeBoardAnswerService.createFreeBoardAnswer(writer, freeBoard.getId(), "content"))
+		when(freeBoardAnswerService.create(writer, freeBoard.getId(), "content"))
 		.thenReturn(freeBoardAnswerApiResponse);
 		FreeBoardAnswerApiResponse createdFreeBoardAnswerApiResponse = 
-				freeBoardAnswerService.createFreeBoardAnswer(writer, freeBoard.getId(), "content");
+				freeBoardAnswerService.create(writer, freeBoard.getId(), "content");
 		assertThat("content", is(createdFreeBoardAnswerApiResponse.getContents()));
 		assertThat("[1]", is(createdFreeBoardAnswerApiResponse.getCountOfAnswers()));
 		assertThat(freeBoard.getId(), is(createdFreeBoardAnswerApiResponse.getFreeBoardId()));
@@ -116,9 +116,9 @@ public class FreeBoardAnswerServiceImplTest {
 		SuccessResponse response = SuccessResponse.builder()
 				.success(answer.getFreeBoard().getCountOfAnswer())
 				.build();
-		when(freeBoardAnswerService.deleteFreeBoardAnswer(answer.getId(), writer))
+		when(freeBoardAnswerService.delete(answer.getId(), writer))
 		.thenReturn(response);
-		SuccessResponse success = freeBoardAnswerService.deleteFreeBoardAnswer(answer.getId(), writer);
+		SuccessResponse success = freeBoardAnswerService.delete(answer.getId(), writer);
 		assertThat(response, is(success));
 	}
 	
@@ -161,8 +161,8 @@ public class FreeBoardAnswerServiceImplTest {
 				.build();
 		
 		doThrow(MatchNotUserExceptioin.class)
-		.when(freeBoardAnswerService).deleteFreeBoardAnswer(answer.getId(), user);
-		freeBoardAnswerService.deleteFreeBoardAnswer(answer.getId(), user);
+		.when(freeBoardAnswerService).delete(answer.getId(), user);
+		freeBoardAnswerService.delete(answer.getId(), user);
 	}
 	
 	@Test
@@ -250,10 +250,10 @@ public class FreeBoardAnswerServiceImplTest {
 				.createDate(answer.getFormattedCreateDate())
 				.build();
 		
-		when(freeBoardAnswerService.readFreeBoardAnswer(answer.getId(), writer))
+		when(freeBoardAnswerService.read(answer.getId(), writer))
 		.thenReturn(freeBoardAnswerApiResponse);
 		FreeBoardAnswerApiResponse createdFreeBoardAnswerApiResponse = 
-				freeBoardAnswerService.readFreeBoardAnswer(answer.getId(), writer);
+				freeBoardAnswerService.read(answer.getId(), writer);
 		assertThat(freeBoardAnswerApiResponse, is(createdFreeBoardAnswerApiResponse));
 	}
 	
@@ -299,10 +299,10 @@ public class FreeBoardAnswerServiceImplTest {
 				.createDate(answer.getFormattedCreateDate())
 				.build();
 		
-		when(freeBoardAnswerService.updateFreeBoardAnswer(answer.getId(), answer.getContents(), writer))
+		when(freeBoardAnswerService.update(answer.getId(), answer.getContents(), writer))
 		.thenReturn(freeBoardAnswerApiResponse);
 		FreeBoardAnswerApiResponse updatedFreeBoardAnswerApiResponse = 
-				freeBoardAnswerService.updateFreeBoardAnswer(answer.getId(), answer.getContents(), writer);
+				freeBoardAnswerService.update(answer.getId(), answer.getContents(), writer);
 		assertThat(freeBoardAnswerApiResponse, is(updatedFreeBoardAnswerApiResponse));
 	}
 

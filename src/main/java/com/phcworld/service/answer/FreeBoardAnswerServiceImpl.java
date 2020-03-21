@@ -2,6 +2,7 @@ package com.phcworld.service.answer;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,6 +16,7 @@ import com.phcworld.domain.api.model.response.SuccessResponse;
 import com.phcworld.domain.board.FreeBoard;
 import com.phcworld.domain.exception.MatchNotUserExceptioin;
 import com.phcworld.domain.user.User;
+import com.phcworld.ifs.CrudInterface;
 import com.phcworld.repository.answer.FreeBoardAnswerRepository;
 import com.phcworld.repository.board.FreeBoardRepository;
 import com.phcworld.service.alert.AlertServiceImpl;
@@ -22,7 +24,7 @@ import com.phcworld.service.timeline.TimelineServiceImpl;
 
 @Service
 @Transactional
-public class FreeBoardAnswerServiceImpl implements FreeBoardAnswerService {
+public class FreeBoardAnswerServiceImpl implements CrudInterface<FreeBoardAnswerApiResponse, SuccessResponse> {
 	
 	private static final Logger log = LoggerFactory.getLogger(FreeBoardAnswerServiceImpl.class);
 	
@@ -39,7 +41,7 @@ public class FreeBoardAnswerServiceImpl implements FreeBoardAnswerService {
 	private TimelineServiceImpl timelineService;
 	
 	@Override
-	public FreeBoardAnswerApiResponse createFreeBoardAnswer(User loginUser, Long freeboardId, String contents) {
+	public FreeBoardAnswerApiResponse create(User loginUser, Long freeboardId, String contents) {
 		FreeBoard freeBoard = freeBoardRepository.getOne(freeboardId);
 		FreeBoardAnswer freeBoardAnswer = FreeBoardAnswer.builder()
 				.writer(loginUser)
@@ -69,7 +71,45 @@ public class FreeBoardAnswerServiceImpl implements FreeBoardAnswerService {
 	}
 	
 	@Override
-	public SuccessResponse deleteFreeBoardAnswer(Long id, User loginUser) {
+	public FreeBoardAnswerApiResponse read(Long id, User loginUser) {
+		FreeBoardAnswer freeBoardAnswer = freeBoardAnswerRepository.getOne(id);
+		if(!freeBoardAnswer.isSameWriter(loginUser)) {
+			throw new MatchNotUserExceptioin("본인이 작성한 글만 수정 가능합니다.");
+		}
+		FreeBoardAnswerApiResponse freeBoardAnswerApiResponse = 
+				FreeBoardAnswerApiResponse.builder()
+				.id(freeBoardAnswer.getId())
+				.writer(loginUser)
+				.contents(freeBoardAnswer.getContents().replace("<br>", "\r\n"))
+				.freeBoardId(freeBoardAnswer.getFreeBoard().getId())
+				.countOfAnswers(freeBoardAnswer.getFreeBoard().getCountOfAnswer())
+				.createDate(freeBoardAnswer.getFormattedCreateDate())
+				.build();
+		return freeBoardAnswerApiResponse;
+	}
+	
+	@Override
+	public FreeBoardAnswerApiResponse update(Long id, String contents, User loginUser) {
+		FreeBoardAnswer answer = freeBoardAnswerRepository.getOne(id);
+		if(!answer.isSameWriter(loginUser)) {
+			throw new MatchNotUserExceptioin("본인이 작성한 글만 수정 가능합니다.");
+		}
+		answer.update(contents.replace("\r\n", "<br>"));
+		FreeBoardAnswer updatedFreeBoardAnswer = freeBoardAnswerRepository.save(answer);
+		FreeBoardAnswerApiResponse freeBoardAnswerApiResponse = 
+				FreeBoardAnswerApiResponse.builder()
+				.id(updatedFreeBoardAnswer.getId())
+				.writer(updatedFreeBoardAnswer.getWriter())
+				.contents(updatedFreeBoardAnswer.getContents())
+				.freeBoardId(updatedFreeBoardAnswer.getFreeBoard().getId())
+				.countOfAnswers(updatedFreeBoardAnswer.getFreeBoard().getCountOfAnswer())
+				.createDate(updatedFreeBoardAnswer.getFormattedCreateDate())
+				.build();
+		return freeBoardAnswerApiResponse;
+	}
+	
+	@Override
+	public SuccessResponse delete(Long id, User loginUser) {
 		FreeBoardAnswer freeBoardAnswer = freeBoardAnswerRepository.getOne(id);
 		if(!freeBoardAnswer.isSameWriter(loginUser)) {
 			throw new MatchNotUserExceptioin("본인이 작성한 글만 삭제 가능합니다.");
@@ -89,44 +129,7 @@ public class FreeBoardAnswerServiceImpl implements FreeBoardAnswerService {
 				.build();
 	}
 	
-	@Override
 	public List<FreeBoardAnswer> findFreeBoardAnswerListByWriter(User loginUser) {
 		return freeBoardAnswerRepository.findByWriter(loginUser);
-	}
-	
-	public FreeBoardAnswerApiResponse readFreeBoardAnswer(Long id, User loginUser) {
-		FreeBoardAnswer freeBoardAnswer = freeBoardAnswerRepository.getOne(id);
-		if(!freeBoardAnswer.isSameWriter(loginUser)) {
-			throw new MatchNotUserExceptioin("본인이 작성한 글만 수정 가능합니다.");
-		}
-		FreeBoardAnswerApiResponse freeBoardAnswerApiResponse = 
-				FreeBoardAnswerApiResponse.builder()
-				.id(freeBoardAnswer.getId())
-				.writer(loginUser)
-				.contents(freeBoardAnswer.getContents().replace("<br>", "\r\n"))
-				.freeBoardId(freeBoardAnswer.getFreeBoard().getId())
-				.countOfAnswers(freeBoardAnswer.getFreeBoard().getCountOfAnswer())
-				.createDate(freeBoardAnswer.getFormattedCreateDate())
-				.build();
-		return freeBoardAnswerApiResponse;
-	}
-	
-	public FreeBoardAnswerApiResponse updateFreeBoardAnswer(Long id, String contents, User loginUser) {
-		FreeBoardAnswer answer = freeBoardAnswerRepository.getOne(id);
-		if(!answer.isSameWriter(loginUser)) {
-			throw new MatchNotUserExceptioin("본인이 작성한 글만 수정 가능합니다.");
-		}
-		answer.update(contents.replace("\r\n", "<br>"));
-		FreeBoardAnswer updatedFreeBoardAnswer = freeBoardAnswerRepository.save(answer);
-		FreeBoardAnswerApiResponse freeBoardAnswerApiResponse = 
-				FreeBoardAnswerApiResponse.builder()
-				.id(updatedFreeBoardAnswer.getId())
-				.writer(updatedFreeBoardAnswer.getWriter())
-				.contents(updatedFreeBoardAnswer.getContents())
-				.freeBoardId(updatedFreeBoardAnswer.getFreeBoard().getId())
-				.countOfAnswers(updatedFreeBoardAnswer.getFreeBoard().getCountOfAnswer())
-				.createDate(updatedFreeBoardAnswer.getFormattedCreateDate())
-				.build();
-		return freeBoardAnswerApiResponse;
 	}
 }

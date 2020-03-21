@@ -87,7 +87,7 @@ public class DiaryAnswerControllerTest {
 				.createDate(diaryAnswer.getFormattedCreateDate())
 				.build();
 		
-		when(this.diaryAnswerService.createDiaryAnswer(user, diary.getId(), "test"))
+		when(this.diaryAnswerService.create(user, diary.getId(), "test"))
 		.thenReturn(diaryAnswerApiResponse);
 		this.mvc.perform(post("/diary/{diaryId}/answer", 1L)
 				.contentType(MediaType.APPLICATION_JSON)
@@ -144,7 +144,7 @@ public class DiaryAnswerControllerTest {
 				.build();
 		
 		
-		when(this.diaryAnswerService.deleteDiaryAnswer(diaryAnswer.getId(), user, diary.getId()))
+		when(this.diaryAnswerService.delete(diaryAnswer.getId(), user))
 		.thenReturn(response);
 		this.mvc.perform(delete("/diary/{diaryId}/answer/{id}", 1L, 1L)
 				.session(mockSession))
@@ -197,7 +197,7 @@ public class DiaryAnswerControllerTest {
 				.contents("test")
 				.build();
 		
-		when(this.diaryAnswerService.deleteDiaryAnswer(diaryAnswer.getId(), user, diary.getId()))
+		when(this.diaryAnswerService.delete(diaryAnswer.getId(), user))
 		.thenThrow(new MatchNotUserExceptioin("본인이 작성한 글만 삭제 가능합니다."));
 		this.mvc.perform(delete("/diary/{diaryId}/answer/{id}", 1L, 1L)
 				.session(mockSession))
@@ -245,7 +245,7 @@ public class DiaryAnswerControllerTest {
 				.createDate(diaryAnswer.getFormattedCreateDate())
 				.build();
 		
-		when(this.diaryAnswerService.readDiaryAnswer(diaryAnswer.getId(), user))
+		when(this.diaryAnswerService.read(diaryAnswer.getId(), user))
 		.thenReturn(diaryAnswerApiResponse);
 		
 		this.mvc.perform(get("/diary/{diaryId}/answer/{id}", 1L, 1L)
@@ -301,7 +301,7 @@ public class DiaryAnswerControllerTest {
 				.createDate(diaryAnswer.getFormattedCreateDate())
 				.build();
 		
-		when(this.diaryAnswerService.updateDiaryAnswer(diaryAnswer.getId(), diaryAnswer.getContents(), user))
+		when(this.diaryAnswerService.update(diaryAnswer.getId(), diaryAnswer.getContents(), user))
 		.thenReturn(diaryAnswerApiResponse);
 		this.mvc.perform(patch("/diary/{diaryId}/answer", 1L)
 				.param("id", "1")
