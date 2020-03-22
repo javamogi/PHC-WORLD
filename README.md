@@ -260,7 +260,7 @@
 * 작성자와 넘어오는 User가 같은지 확인하는 메서드
 * 댓글을 수정하는 메서드
 
-**FreeBoardAnswerApiResponse
+**FreeBoardAnswerApiResponse**
 * FreeBoardAnswer를 생성하고 응답으로 건내줄 DTO
 * 필드
   * id
@@ -271,7 +271,7 @@
     * FreeBoardAnswer의 내용
   * freeBoardId
     * 수정, 삭제에 사용할 FreeBoard id
-    * 순환참조 방어를 위해 id만 저장  
+    * 순환참조 방어를 위해 id만 저장
   * countOfAnswers
     * FreeBoardAnswer를 생성한 FreeBoard의 댓글 개수
     * 순환참조를 방어하기위해 String으로 저장
@@ -287,6 +287,12 @@
   * 생성한 FreeBoardAnswer를 FreeBoardAnswerApiResponse builder()로 FreeBoardAnswerApiResponse 생성 후 리턴
   * db에 저장 후 timeline생성
   * 댓글을 단 자유게시판 작성자와 댓글의 작성자가 다르면 알림에 저장
+* 댓글 수정
+  * FreeBoardAnswer id로 FreeBoardAnswer 정보를 가져와서 FreeBoardAnswerApiResponse를 생성 후 리턴
+  * 리턴 받은 정보로 view페이지에 form 생성
+  * form에서 FreeBoardAnswer의 id와 수정된 contents만 받아서 update 후 변경된 FreeBoardAnswer를 db에 저장
+  * 저장된 FreeBoardAnswer를 FreeBoardAnswerApiResponse로 생성 후 리턴
+  * 리턴받은 정보를 view페이지에 html로 그림
 * 댓글 삭제
   * 넘어온 댓글의 id로 댓글을 db에서 가져온다.
   * 댓글의 작성자와 로그인 유저(삭제를 요청한 유저)가 같은지 확인한다.
@@ -303,6 +309,12 @@
   * ErrorResponse에 http상태 코드와 error 메시지를 담아 리턴
   * ajax error에서 알림으로 메시지 출력
   * 댓글을 작성하는 자유게시판 게시물의 id와 댓글의 내용을 받아 댓글 생성
+* 읽기
+  * 파라미터로 받은 id로 FreeBoardAnswer 정보를 가져와서 FreeBoardAnswerApiResponse로 생성 후 FreeBoardAnswerApiResponse를 리턴
+* 수정
+  * 내용만 변경하기 때문에 @PatchMapping 어노테이션 사용
+  * 파라미터로 받은 id로 FreeBoardAnswer의 정보를 가져와서 파라미터로 받은 contents를 변경 후 db에 저장
+  * 저장한 FreeBoardAnswer를 FreeBoardAnswerApiResponse로 생성 후 FreeBoardAnswerApiResponse를 리턴
 * 삭제
   * 로그인을 하지 않았다면 Exception 발생
   * ExceptionHandler에서 @ResponseStatus사용
@@ -432,12 +444,37 @@
 * 날짜 형식을 변경하는 메서드
 * 작성자와 넘어오는 User가 같은지 확인하는 메서드
 
+**DiaryAnswerApiResponse**
+* DiaryAnswer를 생성하고 응답으로 건내줄 DTO
+* 필드
+  * id
+    * 수정 및 삭제를 위해 생성된 DiaryAnswer의 id값
+  * writer
+    * DiaryAnswer의 글쓴이 정보
+  * contetns
+    * DiaryAnswer의 내용
+  * diaryId
+    * 수정, 삭제에 사용할 Diary id
+    * 순환참조 방어를 위해 id만 저장
+  * countOfAnswers
+    * DiaryAnswer를 생성한 FreeBoard의 댓글 개수
+    * 순환참조를 방어하기위해 String으로 저장
+  * createDate
+    * DiaryAnswer가 생성된 날짜
+    * LocalDateTimeUtils로 변환한 값을 저장
+
 **service**
 * 댓글 생성
   * 로그인 유저(작성자), 댓글을 작성하는 일기게시판 게시글의 id, 댓글의 내용을 받아서 DiaryAnswer의 builer()를 사용하여 DiaryAnswer를 생성
   * 댓글의 내용은 html로 보여지기 때문에 String의 줄바꿈을 html 줄바꿈 태그로 변경
   * db에 저장 후 timeline생성 및 저장
   * 댓글을 단 일기게시판 작성자와 댓글의 작성자가 다르면 알림에 저장
+* 댓글 수정
+  * DiaryAnswer id로 DiaryAnswer정보를 가져와서 DiaryAnswerApiResponse를 생성 후 리턴
+  * 리턴 받은 정보로 view페이지에 form 생성
+  * form에서 DiaryAnswer의 id와 수정된 contents만 받아서 update 후 변경된 DiaryAnswer를 db에 저장
+  * 저장된 DiaryAnswer를 DiaryAnswerApiResponse로 생성 후 리턴
+  * 리턴받은 정보를 view페이지에 html로 그림
 * 댓글 삭제
   * 넘어온 댓글의 id로 댓글을 db에서 가져온다.
   * 댓글의 작성자와 로그인 유저(삭제를 요청한 유저)가 같은지 확인하여 다르면 예외로 던진다.
@@ -454,6 +491,12 @@
   * ErrorResponse에 http상태 코드와 error 메시지를 담아 리턴
   * ajax error에서 알림으로 메시지 출력
   * 댓글을 작성하는 일기게시판 게시물의 id와 댓글의 내용을 받아 댓글 생성
+* 읽기
+  * 파라미터로 받은 id로 DiaryAnswer 정보를 가져와서 DiaryAnswerApiResponse로 생성 후 DiaryAnswerApiResponse를 리턴
+* 수정
+  * 내용만 변경하기 때문에 @PatchMapping 어노테이션 사용
+  * 파라미터로 받은 id로 DiaryAnswer의 정보를 가져와서 파라미터로 받은 contents를 변경 후 db에 저장
+  * 저장한 DiaryAnswer를 DiaryAnswerApiResponse로 생성 후 DiaryAnswerApiResponse를 리턴
 * 삭제
   * 로그인을 하지 않았다면 Exception 발생
   * ExceptionHandler에서 @ResponseStatus사용
