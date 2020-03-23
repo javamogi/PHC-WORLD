@@ -56,9 +56,9 @@ $(document).ready(function(){
 				}
 				
 				$.each(data.items, function(key, value){
-					var searchList = "<div class='col-xs-18 col-md-12'><div class='media'><div class='media-left media-top'><a href='"+data.items[key].link+"' target='_blank'>" +
-					"<img class='media-object' src='"+data.items[key].image+"'></a></div><div class='media-body'><p>제목 : <a href='"+ data.items[key].link +"'>"+data.items[key].title+"</a></p>" +
-					"<p>제작년도 : "+ data.items[key].pubDate +"</p><p>감독 : "+data.items[key].director+"</p><p>배우 : "+data.items[key].actor+"</p><p>평점 : "+data.items[key].userRating+"</p></div></div></div>";
+					var searchList = "<div class='media'><div class='media-left media-middle'><a href='"+data.items[key].link+"'>" +
+					"<img class='mr-3' src='"+data.items[key].image+"'></a></div><div class='media-body'><p>제목 : <a href='"+ data.items[key].link +"'>"+data.items[key].title+"</a></p>" +
+					"<p>제작년도 : "+ data.items[key].pubDate +"</p><p>감독 : "+data.items[key].director+"</p><p>배우 : "+data.items[key].actor+"</p><p>평점 : "+data.items[key].userRating+"</p></div></div>";
 					$(".panel-body").append(searchList);
 				});
 			},
@@ -124,11 +124,12 @@ function addSearch(e){
 			
 			$.each(data.items, function(key, value){
 				console.log(data.items[key]);
-				var searchList = "<div class='col-xs-18 col-md-12'>" +
+				console.log(data.items[key].image);
+				var searchList = 
 						"<div class='media'>" +
-						"<div class='media-left media-top'>" +
-						"<a href='"+data.items[key].link+"' target='_blank'>" +
-				"<img class='media-object' src='"+data.items[key].image+"'>" +
+						"<div class='media-left media-middle'>" +
+						"<a href='"+data.items[key].link+"'>" +
+				"<img class='mr-3' src='"+data.items[key].image+"'>" +
 						"</a>" +
 						"</div>" +
 						"<div class='media-body'>" +
@@ -137,7 +138,7 @@ function addSearch(e){
 						"<p>감독 : "+data.items[key].director+"</p>" +
 								"<p>배우 : "+data.items[key].actor+"</p>" +
 										"<p>평점 : "+data.items[key].userRating+"</p>" +
-												"</div></div></div>";
+												"</div></div>";
 				$(".panel-body").append(searchList);
 			});
 		},
