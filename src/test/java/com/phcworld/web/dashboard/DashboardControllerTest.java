@@ -36,7 +36,7 @@ import com.phcworld.service.answer.FreeBoardAnswerServiceImpl;
 import com.phcworld.service.board.DiaryServiceImpl;
 import com.phcworld.service.board.FreeBoardServiceImpl;
 import com.phcworld.service.timeline.TimelineServiceImpl;
-import com.phcworld.web.HttpSessionUtils;
+import com.phcworld.utils.HttpSessionUtils;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebMvcTest(DashboardController.class)

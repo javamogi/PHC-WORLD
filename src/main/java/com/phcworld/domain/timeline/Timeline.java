@@ -17,7 +17,7 @@ import com.phcworld.domain.board.Diary;
 import com.phcworld.domain.board.FreeBoard;
 import com.phcworld.domain.good.Good;
 import com.phcworld.domain.user.User;
-import com.phcworld.web.LocalDateTimeUtils;
+import com.phcworld.utils.LocalDateTimeUtils;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

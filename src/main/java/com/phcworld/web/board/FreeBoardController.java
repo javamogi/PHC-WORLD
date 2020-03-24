@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.phcworld.domain.board.FreeBoard;
 import com.phcworld.domain.user.User;
 import com.phcworld.service.board.FreeBoardServiceImpl;
-import com.phcworld.web.HttpSessionUtils;
+import com.phcworld.utils.HttpSessionUtils;
 
 @Controller
 @RequestMapping("/freeboards")

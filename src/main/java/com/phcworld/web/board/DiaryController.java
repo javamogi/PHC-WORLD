@@ -23,8 +23,8 @@ import com.phcworld.domain.exception.LoginNotUserException;
 import com.phcworld.domain.user.User;
 import com.phcworld.service.board.DiaryServiceImpl;
 import com.phcworld.service.user.UserService;
-import com.phcworld.web.HttpSessionUtils;
-import com.phcworld.web.PageNationsUtil;
+import com.phcworld.utils.HttpSessionUtils;
+import com.phcworld.utils.PageNationsUtil;
 
 import lombok.extern.slf4j.Slf4j;
 

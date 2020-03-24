@@ -1,4 +1,4 @@
-package com.phcworld;
+package com.phcworld.config;
 
 import org.jasypt.encryption.StringEncryptor;
 import org.jasypt.encryption.pbe.PooledPBEStringEncryptor;

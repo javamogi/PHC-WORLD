@@ -23,7 +23,7 @@ import com.phcworld.domain.board.Diary;
 import com.phcworld.domain.good.Good;
 import com.phcworld.domain.user.User;
 import com.phcworld.service.board.DiaryServiceImpl;
-import com.phcworld.web.HttpSessionUtils;
+import com.phcworld.utils.HttpSessionUtils;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebMvcTest(DiaryRestController.class)

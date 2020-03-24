@@ -30,7 +30,7 @@ import com.phcworld.domain.exception.MatchNotUserExceptioin;
 import com.phcworld.domain.user.User;
 import com.phcworld.service.answer.DiaryAnswerServiceImpl;
 import com.phcworld.service.board.DiaryServiceImpl;
-import com.phcworld.web.HttpSessionUtils;
+import com.phcworld.utils.HttpSessionUtils;
 
 
 @RunWith(SpringJUnit4ClassRunner.class)

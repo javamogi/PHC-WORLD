@@ -26,7 +26,7 @@ import com.phcworld.service.board.DiaryServiceImpl;
 import com.phcworld.service.board.FreeBoardServiceImpl;
 import com.phcworld.service.timeline.TempTimelineService;
 import com.phcworld.service.timeline.TimelineServiceImpl;
-import com.phcworld.web.HttpSessionUtils;
+import com.phcworld.utils.HttpSessionUtils;
 
 
 @Controller

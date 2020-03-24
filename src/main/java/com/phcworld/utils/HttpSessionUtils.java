@@ -1,4 +1,4 @@
-package com.phcworld.web;
+package com.phcworld.utils;
 
 import javax.servlet.http.HttpSession;
 

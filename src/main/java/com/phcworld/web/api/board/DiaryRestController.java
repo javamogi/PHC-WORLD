@@ -12,7 +12,7 @@ import com.phcworld.domain.api.model.response.SuccessResponse;
 import com.phcworld.domain.exception.LoginNotUserException;
 import com.phcworld.domain.user.User;
 import com.phcworld.service.board.DiaryServiceImpl;
-import com.phcworld.web.HttpSessionUtils;
+import com.phcworld.utils.HttpSessionUtils;
 
 
 @RestController

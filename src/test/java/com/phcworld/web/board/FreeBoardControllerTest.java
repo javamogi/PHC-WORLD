@@ -28,7 +28,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import com.phcworld.domain.board.FreeBoard;
 import com.phcworld.domain.user.User;
 import com.phcworld.service.board.FreeBoardServiceImpl;
-import com.phcworld.web.HttpSessionUtils;
+import com.phcworld.utils.HttpSessionUtils;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebMvcTest(FreeBoardController.class)

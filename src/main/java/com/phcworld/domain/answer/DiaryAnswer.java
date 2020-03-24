@@ -15,7 +15,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.phcworld.domain.board.Diary;
 import com.phcworld.domain.user.User;
-import com.phcworld.web.LocalDateTimeUtils;
+import com.phcworld.utils.LocalDateTimeUtils;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

@@ -22,7 +22,7 @@ import com.phcworld.domain.image.Image;
 import com.phcworld.domain.image.ImageServiceImpl;
 import com.phcworld.domain.user.User;
 import com.phcworld.service.user.UserService;
-import com.phcworld.web.HttpSessionUtils;
+import com.phcworld.utils.HttpSessionUtils;
 
 @RestController
 @RequestMapping("/upload")

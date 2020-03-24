@@ -31,8 +31,8 @@ import com.phcworld.service.emailAuth.EmailAuthService;
 import com.phcworld.service.message.MessageServiceImpl;
 import com.phcworld.service.timeline.TimelineServiceImpl;
 import com.phcworld.service.user.UserService;
-import com.phcworld.web.HttpSessionUtils;
-import com.phcworld.web.PageNationsUtil;
+import com.phcworld.utils.HttpSessionUtils;
+import com.phcworld.utils.PageNationsUtil;
 
 import lombok.extern.slf4j.Slf4j;
 

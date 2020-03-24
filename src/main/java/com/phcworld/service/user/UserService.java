@@ -9,7 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.phcworld.domain.user.User;
 import com.phcworld.repository.user.UserRepository;
-import com.phcworld.web.SecurityUtils;
+import com.phcworld.utils.SecurityUtils;
 
 @Service
 @Transactional

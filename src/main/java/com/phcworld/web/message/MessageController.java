@@ -21,7 +21,7 @@ import com.phcworld.domain.message.Message;
 import com.phcworld.domain.user.User;
 import com.phcworld.service.message.MessageServiceImpl;
 import com.phcworld.service.user.UserService;
-import com.phcworld.web.HttpSessionUtils;
+import com.phcworld.utils.HttpSessionUtils;
 
 @RestController
 @RequestMapping("/message")
