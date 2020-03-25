@@ -57,7 +57,6 @@ public class DiaryAnswerServiceImplTest {
 				.writer(writer)
 				.diary(diary)
 				.contents("diary answer content")
-				.createDate(LocalDateTime.now())
 				.build();
 		List<DiaryAnswer> list = new ArrayList<DiaryAnswer>();
 		list.add(answer);
@@ -69,7 +68,7 @@ public class DiaryAnswerServiceImplTest {
 				.contents(answer.getContents())
 				.diaryId(answer.getDiary().getId())
 				.countOfAnswers(answer.getDiary().getCountOfAnswer())
-				.createDate(answer.getFormattedCreateDate())
+				.updateDate(answer.getFormattedUpdateDate())
 				.build();
 				
 		
@@ -113,7 +112,6 @@ public class DiaryAnswerServiceImplTest {
 				.writer(writer)
 				.diary(diary)
 				.contents("diary answer content")
-				.createDate(LocalDateTime.now())
 				.build();
 		
 		doThrow(MatchNotUserExceptioin.class)
@@ -144,7 +142,6 @@ public class DiaryAnswerServiceImplTest {
 				.writer(writer)
 				.diary(diary)
 				.contents("diary answer content")
-				.createDate(LocalDateTime.now())
 				.build();
 		List<DiaryAnswer> list = new ArrayList<DiaryAnswer>();
 		list.add(answer);
@@ -183,13 +180,11 @@ public class DiaryAnswerServiceImplTest {
 				.writer(writer)
 				.diary(diary)
 				.contents("diary answer content")
-				.createDate(LocalDateTime.now())
 				.build();
 		DiaryAnswer answer2 = DiaryAnswer.builder()
 				.writer(writer)
 				.diary(diary)
 				.contents("diary answer content2")
-				.createDate(LocalDateTime.now())
 				.build();
 		List<DiaryAnswer> list = new ArrayList<DiaryAnswer>();
 		list.add(answer);
@@ -223,7 +218,6 @@ public class DiaryAnswerServiceImplTest {
 				.writer(writer)
 				.diary(diary)
 				.contents("diary answer content")
-				.createDate(LocalDateTime.now())
 				.build();
 		List<DiaryAnswer> list = new ArrayList<DiaryAnswer>();
 		list.add(answer);
@@ -235,7 +229,7 @@ public class DiaryAnswerServiceImplTest {
 				.contents(answer.getContents())
 				.diaryId(answer.getDiary().getId())
 				.countOfAnswers(answer.getDiary().getCountOfAnswer())
-				.createDate(answer.getFormattedCreateDate())
+				.updateDate(answer.getFormattedUpdateDate())
 				.build();
 		
 		when(diaryAnswerService.read(answer.getId(), writer))
@@ -268,7 +262,6 @@ public class DiaryAnswerServiceImplTest {
 				.writer(writer)
 				.diary(diary)
 				.contents("diary answer content")
-				.createDate(LocalDateTime.now())
 				.build();
 		List<DiaryAnswer> list = new ArrayList<DiaryAnswer>();
 		list.add(answer);
@@ -282,7 +275,7 @@ public class DiaryAnswerServiceImplTest {
 				.contents(answer.getContents())
 				.diaryId(answer.getDiary().getId())
 				.countOfAnswers(answer.getDiary().getCountOfAnswer())
-				.createDate(answer.getFormattedCreateDate())
+				.updateDate(answer.getFormattedUpdateDate())
 				.build();
 		
 		when(diaryAnswerService.update(answer.getId(), answer.getContents(), writer))

@@ -20,6 +20,6 @@ public class FreeBoardAnswerApiResponse {
 	
 	private String countOfAnswers;
 
-	private String createDate;
+	private String updateDate;
 	
 }

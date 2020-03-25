@@ -19,6 +19,6 @@ public class DiaryAnswerApiResponse {
 	
 	private String countOfAnswers;
 
-	private String createDate;
+	private String updateDate;
 	
 }

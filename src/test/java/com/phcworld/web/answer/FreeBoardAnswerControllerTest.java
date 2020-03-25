@@ -70,7 +70,6 @@ public class FreeBoardAnswerControllerTest {
 				.writer(user)
 				.freeBoard(freeBoard)
 				.contents("test")
-				.createDate(LocalDateTime.now())
 				.build();
 		List<FreeBoardAnswer> list = new ArrayList<FreeBoardAnswer>();
 		list.add(freeBoardAnswer);
@@ -82,7 +81,7 @@ public class FreeBoardAnswerControllerTest {
 				.contents(freeBoardAnswer.getContents())
 				.freeBoardId(freeBoardAnswer.getFreeBoard().getId())
 				.countOfAnswers(freeBoardAnswer.getFreeBoard().getCountOfAnswer())
-				.createDate(freeBoardAnswer.getFormattedCreateDate())
+				.updateDate(freeBoardAnswer.getFormattedUpdateDate())
 				.build();
 		
 		when(this.freeBoardAnswerService.create(user, freeBoard.getId(), "test"))
@@ -96,7 +95,7 @@ public class FreeBoardAnswerControllerTest {
 		.andExpect(jsonPath("$.contents").value(freeBoardAnswerApiResponse.getContents()))
 		.andExpect(jsonPath("$.freeBoardId").value(freeBoardAnswerApiResponse.getFreeBoardId()))
 		.andExpect(jsonPath("$.countOfAnswers").value(freeBoardAnswerApiResponse.getCountOfAnswers()))
-		.andExpect(jsonPath("$.createDate").value(freeBoardAnswerApiResponse.getCreateDate()));
+		.andExpect(jsonPath("$.updateDate").value(freeBoardAnswerApiResponse.getUpdateDate()));
 	}
 	
 	@Test
@@ -135,7 +134,6 @@ public class FreeBoardAnswerControllerTest {
 				.writer(user)
 				.freeBoard(freeBoard)
 				.contents("test")
-				.createDate(LocalDateTime.now())
 				.build();
 		SuccessResponse response = SuccessResponse.builder()
 				.success(freeBoardAnswer.getFreeBoard().getCountOfAnswer())
@@ -193,7 +191,6 @@ public class FreeBoardAnswerControllerTest {
 				.writer(user2)
 				.freeBoard(freeBoard)
 				.contents("test")
-				.createDate(LocalDateTime.now())
 				.build();
 		
 		
@@ -230,7 +227,6 @@ public class FreeBoardAnswerControllerTest {
 				.writer(user)
 				.freeBoard(freeBoard)
 				.contents("test")
-				.createDate(LocalDateTime.now())
 				.build();
 		List<FreeBoardAnswer> list = new ArrayList<FreeBoardAnswer>();
 		list.add(freeBoardAnswer);
@@ -242,7 +238,7 @@ public class FreeBoardAnswerControllerTest {
 				.contents(freeBoardAnswer.getContents())
 				.freeBoardId(freeBoardAnswer.getFreeBoard().getId())
 				.countOfAnswers(freeBoard.getCountOfAnswer())
-				.createDate(freeBoardAnswer.getFormattedCreateDate())
+				.updateDate(freeBoardAnswer.getFormattedUpdateDate())
 				.build();
 		
 		when(this.freeBoardAnswerService.read(freeBoardAnswer.getId(), user))
@@ -255,7 +251,7 @@ public class FreeBoardAnswerControllerTest {
 		.andExpect(jsonPath("$.contents").value(freeBoardAnswerApiResponse.getContents()))
 		.andExpect(jsonPath("$.freeBoardId").value(freeBoardAnswerApiResponse.getFreeBoardId()))
 		.andExpect(jsonPath("$.countOfAnswers").value(freeBoardAnswerApiResponse.getCountOfAnswers()))
-		.andExpect(jsonPath("$.createDate").value(freeBoardAnswerApiResponse.getCreateDate()));
+		.andExpect(jsonPath("$.updateDate").value(freeBoardAnswerApiResponse.getUpdateDate()));
 	}
 	
 	@Test
@@ -284,7 +280,6 @@ public class FreeBoardAnswerControllerTest {
 				.writer(user)
 				.freeBoard(freeBoard)
 				.contents("test")
-				.createDate(LocalDateTime.now())
 				.build();
 		List<FreeBoardAnswer> list = new ArrayList<FreeBoardAnswer>();
 		list.add(freeBoardAnswer);
@@ -297,7 +292,7 @@ public class FreeBoardAnswerControllerTest {
 				.contents(freeBoardAnswer.getContents())
 				.freeBoardId(freeBoardAnswer.getFreeBoard().getId())
 				.countOfAnswers(freeBoard.getCountOfAnswer())
-				.createDate(freeBoardAnswer.getFormattedCreateDate())
+				.updateDate(freeBoardAnswer.getFormattedUpdateDate())
 				.build();
 		
 		when(this.freeBoardAnswerService.update(freeBoardAnswer.getId(), freeBoardAnswer.getContents(), user))
@@ -312,7 +307,7 @@ public class FreeBoardAnswerControllerTest {
 		.andExpect(jsonPath("$.contents").value(freeBoardAnswerApiResponse.getContents()))
 		.andExpect(jsonPath("$.freeBoardId").value(freeBoardAnswerApiResponse.getFreeBoardId()))
 		.andExpect(jsonPath("$.countOfAnswers").value(freeBoardAnswerApiResponse.getCountOfAnswers()))
-		.andExpect(jsonPath("$.createDate").value(freeBoardAnswerApiResponse.getCreateDate()));
+		.andExpect(jsonPath("$.updateDate").value(freeBoardAnswerApiResponse.getUpdateDate()));
 	}
 
 }

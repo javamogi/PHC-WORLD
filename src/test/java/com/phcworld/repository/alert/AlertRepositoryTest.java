@@ -79,7 +79,6 @@ public class AlertRepositoryTest {
 				.writer(user)
 				.diary(createdDiary)
 				.contents("test")
-				.createDate(LocalDateTime.now())
 				.build();
 		DiaryAnswer createdDiaryAnswer = diaryAnswerRepository.save(diaryAnswer);
 		Alert alert = Alert.builder()
@@ -116,7 +115,6 @@ public class AlertRepositoryTest {
 				.writer(user)
 				.freeBoard(createdFreeBoard)
 				.contents("test")
-				.createDate(LocalDateTime.now())
 				.build();
 		FreeBoardAnswer createdFreeBoardAnswer = freeBoardAnswerRepository.save(freeBoardAnswer);
 		Alert alert = Alert.builder()
@@ -196,7 +194,6 @@ public class AlertRepositoryTest {
 				.writer(user)
 				.freeBoard(createdFreeBoard)
 				.contents("test")
-				.createDate(LocalDateTime.now())
 				.build();
 		FreeBoardAnswer createdFreeBoardAnswer = freeBoardAnswerRepository.save(freeBoardAnswer);
 		Alert alert = Alert.builder()
@@ -219,7 +216,6 @@ public class AlertRepositoryTest {
 				.writer(user)
 				.diary(createdDiary)
 				.contents("test")
-				.createDate(LocalDateTime.now())
 				.build();
 		DiaryAnswer createdDiaryAnswer = diaryAnswerRepository.save(diaryAnswer);
 		Alert alert2 = Alert.builder()
@@ -305,7 +301,6 @@ public class AlertRepositoryTest {
 				.writer(user)
 				.diary(createdDiary)
 				.contents("test")
-				.createDate(LocalDateTime.now())
 				.build();
 		DiaryAnswer createdDiaryAnswer = diaryAnswerRepository.save(diaryAnswer);
 		Alert alert = Alert.builder()
@@ -344,7 +339,6 @@ public class AlertRepositoryTest {
 				.writer(user)
 				.freeBoard(createdFreeBoard)
 				.contents("test")
-				.createDate(LocalDateTime.now())
 				.build();
 		FreeBoardAnswer createdFreeBoardAnswer = freeBoardAnswerRepository.save(freeBoardAnswer);
 		Alert alert = Alert.builder()
@@ -429,7 +423,6 @@ public class AlertRepositoryTest {
 				.writer(user)
 				.diary(createdDiary)
 				.contents("test")
-				.createDate(LocalDateTime.now())
 				.build();
 		DiaryAnswer createdDiaryAnswer = diaryAnswerRepository.save(diaryAnswer);
 		Alert alert = Alert.builder()
@@ -467,7 +460,6 @@ public class AlertRepositoryTest {
 				.writer(user)
 				.freeBoard(createdFreeBoard)
 				.contents("test")
-				.createDate(LocalDateTime.now())
 				.build();
 		FreeBoardAnswer createdFreeBoardAnswer = freeBoardAnswerRepository.save(freeBoardAnswer);
 		Alert alert = Alert.builder()

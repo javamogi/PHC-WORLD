@@ -111,7 +111,6 @@ public class DashboardControllerTest {
 				.writer(user)
 				.freeBoard(freeBoard)
 				.contents("test")
-				.createDate(LocalDateTime.now())
 				.build();
 		List<FreeBoardAnswer> freeBoardAnswerList = new ArrayList<>();
 		freeBoardAnswerList.add(freeBoardAnswer);
@@ -240,7 +239,6 @@ public class DashboardControllerTest {
 				.writer(user)
 				.freeBoard(freeBoard)
 				.contents("test")
-				.createDate(LocalDateTime.now())
 				.build();
 		Timeline timeline = Timeline.builder()
 				.id(1L)

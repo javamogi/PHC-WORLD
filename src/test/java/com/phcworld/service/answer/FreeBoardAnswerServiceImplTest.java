@@ -57,7 +57,6 @@ public class FreeBoardAnswerServiceImplTest {
 				.writer(writer)
 				.freeBoard(freeBoard)
 				.contents("content")
-				.createDate(LocalDateTime.now())
 				.build();
 		List<FreeBoardAnswer> list = new ArrayList<FreeBoardAnswer>();
 		list.add(answer);
@@ -69,7 +68,7 @@ public class FreeBoardAnswerServiceImplTest {
 				.contents(answer.getContents())
 				.freeBoardId(answer.getFreeBoard().getId())
 				.countOfAnswers(answer.getFreeBoard().getCountOfAnswer())
-				.createDate(answer.getFormattedCreateDate())
+				.updateDate(answer.getFormattedUpdateDate())
 				.build();
 		
 		when(freeBoardAnswerService.create(writer, freeBoard.getId(), "content"))
@@ -106,7 +105,6 @@ public class FreeBoardAnswerServiceImplTest {
 				.writer(writer)
 				.freeBoard(freeBoard)
 				.contents("content")
-				.createDate(LocalDateTime.now())
 				.build();
 		List<FreeBoardAnswer> list = new ArrayList<FreeBoardAnswer>();
 		list.add(answer);
@@ -157,7 +155,6 @@ public class FreeBoardAnswerServiceImplTest {
 				.writer(writer)
 				.freeBoard(freeBoard)
 				.contents("content")
-				.createDate(LocalDateTime.now())
 				.build();
 		
 		doThrow(MatchNotUserExceptioin.class)
@@ -191,14 +188,12 @@ public class FreeBoardAnswerServiceImplTest {
 				.writer(writer)
 				.freeBoard(freeBoard)
 				.contents("content")
-				.createDate(LocalDateTime.now())
 				.build();
 		FreeBoardAnswer answer2 = FreeBoardAnswer.builder()
 				.id(2L)
 				.writer(writer)
 				.freeBoard(freeBoard)
 				.contents("content2")
-				.createDate(LocalDateTime.now())
 				.build();
 		List<FreeBoardAnswer> answerList = new ArrayList<FreeBoardAnswer>();
 		answerList.add(answer);
@@ -235,7 +230,6 @@ public class FreeBoardAnswerServiceImplTest {
 				.writer(writer)
 				.freeBoard(freeBoard)
 				.contents("content")
-				.createDate(LocalDateTime.now())
 				.build();
 		List<FreeBoardAnswer> list = new ArrayList<FreeBoardAnswer>();
 		list.add(answer);
@@ -247,7 +241,7 @@ public class FreeBoardAnswerServiceImplTest {
 				.contents(answer.getContents())
 				.freeBoardId(answer.getFreeBoard().getId())
 				.countOfAnswers(answer.getFreeBoard().getCountOfAnswer())
-				.createDate(answer.getFormattedCreateDate())
+				.updateDate(answer.getFormattedUpdateDate())
 				.build();
 		
 		when(freeBoardAnswerService.read(answer.getId(), writer))
@@ -282,7 +276,6 @@ public class FreeBoardAnswerServiceImplTest {
 				.writer(writer)
 				.freeBoard(freeBoard)
 				.contents("content")
-				.createDate(LocalDateTime.now())
 				.build();
 		List<FreeBoardAnswer> list = new ArrayList<FreeBoardAnswer>();
 		list.add(answer);
@@ -296,7 +289,7 @@ public class FreeBoardAnswerServiceImplTest {
 				.contents(answer.getContents())
 				.freeBoardId(answer.getFreeBoard().getId())
 				.countOfAnswers(answer.getFreeBoard().getCountOfAnswer())
-				.createDate(answer.getFormattedCreateDate())
+				.updateDate(answer.getFormattedUpdateDate())
 				.build();
 		
 		when(freeBoardAnswerService.update(answer.getId(), answer.getContents(), writer))

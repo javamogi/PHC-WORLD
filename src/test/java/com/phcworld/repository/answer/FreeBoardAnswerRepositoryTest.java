@@ -52,7 +52,6 @@ public class FreeBoardAnswerRepositoryTest {
 				.writer(user)
 				.freeBoard(freeBoard)
 				.contents("content")
-				.createDate(LocalDateTime.now())
 				.build();
 		
 		FreeBoardAnswer newAnswer = freeBoardAnswerRepository.save(answer);
@@ -80,7 +79,6 @@ public class FreeBoardAnswerRepositoryTest {
 				.writer(user)
 				.freeBoard(freeBoard)
 				.contents("content")
-				.createDate(LocalDateTime.now())
 				.build();
 		freeBoardAnswerRepository.save(freeBoardAnswer);
 		List<FreeBoardAnswer> freeBoardAnswerList = freeBoardAnswerRepository.findByWriter(user);
@@ -111,7 +109,6 @@ public class FreeBoardAnswerRepositoryTest {
 				.writer(user)
 				.freeBoard(freeBoard)
 				.contents("content")
-				.createDate(LocalDateTime.now())
 				.build();
 		FreeBoardAnswer newAnswer = freeBoardAnswerRepository.save(answer);
 		FreeBoardAnswer registAnswer = freeBoardAnswerRepository.getOne(newAnswer.getId());
@@ -141,7 +138,6 @@ public class FreeBoardAnswerRepositoryTest {
 				.writer(user)
 				.freeBoard(freeBoard)
 				.contents("content")
-				.createDate(LocalDateTime.now())
 				.build();
 		FreeBoardAnswer newAnswer = freeBoardAnswerRepository.save(answer);
 		assertNotNull(newAnswer);

@@ -30,7 +30,7 @@ $(document).ready(function(){
 				"<div class='be-comment-content'><span class='be-comment-name'><a href='" + profileUrl + 
 				"'>" + data.writer.name + "</a></span><span class='be-comment-time'><a class='answer-get' href='"+ getUrl + "'>수정 </a>"+
 						"<a class='answer-delete' href='"+deleteUrl+"'>삭제 </a><i class='fa fa-clock-o'></i> " + 
-				data.createDate + "</span><p class='be-comment-text'>" + data.contents + "</p></div></div></article>";
+				data.updateDate + "</span><p class='be-comment-text'>" + data.contents + "</p></div></div></article>";
 				$(".answer-template").append(answerTemplate);
 				$("textarea[name=contents]").val('');
 				if(url.indexOf("freeboard") > 0){
@@ -138,7 +138,7 @@ $(document).ready(function(){
 				"<div class='be-comment-content'><span class='be-comment-name'><a href='" + profileUrl + 
 				"'>" + data.writer.name + "</a></span><span class='be-comment-time'><a class='answer-get' href='"+ getUrl + "'>수정 </a>"+
 						"<a class='answer-delete' href='"+deleteUrl+"'>삭제 </a><i class='fa fa-clock-o'></i> " + 
-				data.createDate + "</span><p class='be-comment-text'>" + data.contents + "</p></div></div>";
+				data.updateDate + "</span><p class='be-comment-text'>" + data.contents + "</p></div></div>";
 				article.append(answerTemplate);
 			}
 		});

@@ -180,7 +180,6 @@ public class FreeBoardServiceImplTest {
 				.writer(user)
 				.freeBoard(board)
 				.contents("content")
-				.createDate(LocalDateTime.now())
 				.build();
 		List<FreeBoardAnswer> list = new ArrayList<FreeBoardAnswer>();
 		list.add(answer);

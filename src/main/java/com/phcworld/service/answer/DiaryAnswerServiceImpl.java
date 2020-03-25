@@ -42,7 +42,6 @@ public class DiaryAnswerServiceImpl implements CrudInterface<DiaryAnswerApiRespo
 				.writer(loginUser)
 				.diary(diary)
 				.contents(contents.replace("\r\n", "<br>"))
-				.createDate(LocalDateTime.now())
 				.build();
 		
 		DiaryAnswer createdDiaryAnswer = diaryAnswerRepository.save(diaryAnswer);
@@ -52,7 +51,7 @@ public class DiaryAnswerServiceImpl implements CrudInterface<DiaryAnswerApiRespo
 				.contents(createdDiaryAnswer.getContents())
 				.diaryId(createdDiaryAnswer.getDiary().getId())
 				.countOfAnswers(createdDiaryAnswer.getDiary().getCountOfAnswer())
-				.createDate(createdDiaryAnswer.getFormattedCreateDate())
+				.updateDate(createdDiaryAnswer.getFormattedUpdateDate())
 				.build();
 		
 		timelineService.createTimeline(createdDiaryAnswer);
@@ -76,7 +75,7 @@ public class DiaryAnswerServiceImpl implements CrudInterface<DiaryAnswerApiRespo
 				.contents(diaryAnswer.getContents())
 				.diaryId(diaryAnswer.getDiary().getId())
 				.countOfAnswers(diaryAnswer.getDiary().getCountOfAnswer())
-				.createDate(diaryAnswer.getFormattedCreateDate())
+				.updateDate(diaryAnswer.getFormattedUpdateDate())
 				.build();
 		return diaryAnswerApiResponse;
 	}
@@ -96,7 +95,7 @@ public class DiaryAnswerServiceImpl implements CrudInterface<DiaryAnswerApiRespo
 				.contents(updatedDiaryAnswer.getContents())
 				.diaryId(updatedDiaryAnswer.getDiary().getId())
 				.countOfAnswers(updatedDiaryAnswer.getDiary().getCountOfAnswer())
-				.createDate(updatedDiaryAnswer.getFormattedCreateDate())
+				.updateDate(updatedDiaryAnswer.getFormattedUpdateDate())
 				.build();
 		
 		return diaryAnswerApiResponse;

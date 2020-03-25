@@ -119,7 +119,6 @@ public class HomeControllerTest {
 				.writer(user)
 				.freeBoard(freeBoard)
 				.contents("test")
-				.createDate(LocalDateTime.now())
 				.build();
 		Alert freeBoardAnswerAlert = Alert.builder()
 				.type("FreeBoard")

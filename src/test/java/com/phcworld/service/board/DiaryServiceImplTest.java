@@ -199,7 +199,6 @@ public class DiaryServiceImplTest {
 				.writer(user)
 				.diary(diary)
 				.contents("diary answer content")
-				.createDate(LocalDateTime.now())
 				.build();
 		List<DiaryAnswer> list = new ArrayList<DiaryAnswer>();
 		list.add(answer);

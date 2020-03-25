@@ -72,7 +72,6 @@ public class DiaryAnswerControllerTest {
 				.writer(user)
 				.diary(diary)
 				.contents("test")
-				.createDate(LocalDateTime.now())
 				.build();
 		List<DiaryAnswer> list = new ArrayList<DiaryAnswer>();
 		list.add(diaryAnswer);
@@ -84,7 +83,7 @@ public class DiaryAnswerControllerTest {
 				.contents(diaryAnswer.getContents())
 				.diaryId(diaryAnswer.getDiary().getId())
 				.countOfAnswers(diaryAnswer.getDiary().getCountOfAnswer())
-				.createDate(diaryAnswer.getFormattedCreateDate())
+				.updateDate(diaryAnswer.getFormattedUpdateDate())
 				.build();
 		
 		when(this.diaryAnswerService.create(user, diary.getId(), "test"))
@@ -99,7 +98,7 @@ public class DiaryAnswerControllerTest {
 		.andExpect(jsonPath("$.contents").value(diaryAnswerApiResponse.getContents()))
 		.andExpect(jsonPath("$.diaryId").value(diaryAnswerApiResponse.getDiaryId()))
 		.andExpect(jsonPath("$.countOfAnswers").value(diaryAnswerApiResponse.getCountOfAnswers()))
-		.andExpect(jsonPath("$.createDate").value(diaryAnswerApiResponse.getCreateDate()));
+		.andExpect(jsonPath("$.updateDate").value(diaryAnswerApiResponse.getUpdateDate()));
 	}
 	
 	@Test
@@ -230,7 +229,6 @@ public class DiaryAnswerControllerTest {
 				.writer(user)
 				.diary(diary)
 				.contents("test")
-				.createDate(LocalDateTime.now())
 				.build();
 		List<DiaryAnswer> list = new ArrayList<DiaryAnswer>();
 		list.add(diaryAnswer);
@@ -242,7 +240,7 @@ public class DiaryAnswerControllerTest {
 				.contents(diaryAnswer.getContents())
 				.diaryId(diaryAnswer.getDiary().getId())
 				.countOfAnswers(diaryAnswer.getDiary().getCountOfAnswer())
-				.createDate(diaryAnswer.getFormattedCreateDate())
+				.updateDate(diaryAnswer.getFormattedUpdateDate())
 				.build();
 		
 		when(this.diaryAnswerService.read(diaryAnswer.getId(), user))
@@ -256,7 +254,7 @@ public class DiaryAnswerControllerTest {
 		.andExpect(jsonPath("$.contents").value(diaryAnswerApiResponse.getContents()))
 		.andExpect(jsonPath("$.diaryId").value(diaryAnswerApiResponse.getDiaryId()))
 		.andExpect(jsonPath("$.countOfAnswers").value(diaryAnswerApiResponse.getCountOfAnswers()))
-		.andExpect(jsonPath("$.createDate").value(diaryAnswerApiResponse.getCreateDate()));
+		.andExpect(jsonPath("$.updateDate").value(diaryAnswerApiResponse.getUpdateDate()));
 	}
 	
 	@Test
@@ -285,7 +283,6 @@ public class DiaryAnswerControllerTest {
 				.writer(user)
 				.diary(diary)
 				.contents("test")
-				.createDate(LocalDateTime.now())
 				.build();
 		List<DiaryAnswer> list = new ArrayList<DiaryAnswer>();
 		list.add(diaryAnswer);
@@ -298,7 +295,7 @@ public class DiaryAnswerControllerTest {
 				.contents(diaryAnswer.getContents())
 				.diaryId(diaryAnswer.getDiary().getId())
 				.countOfAnswers(diaryAnswer.getDiary().getCountOfAnswer())
-				.createDate(diaryAnswer.getFormattedCreateDate())
+				.updateDate(diaryAnswer.getFormattedUpdateDate())
 				.build();
 		
 		when(this.diaryAnswerService.update(diaryAnswer.getId(), diaryAnswer.getContents(), user))
@@ -313,7 +310,7 @@ public class DiaryAnswerControllerTest {
 		.andExpect(jsonPath("$.contents").value(diaryAnswerApiResponse.getContents()))
 		.andExpect(jsonPath("$.diaryId").value(diaryAnswerApiResponse.getDiaryId()))
 		.andExpect(jsonPath("$.countOfAnswers").value(diaryAnswerApiResponse.getCountOfAnswers()))
-		.andExpect(jsonPath("$.createDate").value(diaryAnswerApiResponse.getCreateDate()));
+		.andExpect(jsonPath("$.updateDate").value(diaryAnswerApiResponse.getUpdateDate()));
 	}
 	
 }

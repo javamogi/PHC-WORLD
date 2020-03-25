@@ -1,8 +1,6 @@
 package com.phcworld.service.answer;
 
-import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,7 +45,6 @@ public class FreeBoardAnswerServiceImpl implements CrudInterface<FreeBoardAnswer
 				.writer(loginUser)
 				.freeBoard(freeBoard)
 				.contents(contents.replace("\r\n", "<br>"))
-				.createDate(LocalDateTime.now())
 				.build();
 		
 		FreeBoardAnswer createdFreeBoardAnswer = freeBoardAnswerRepository.save(freeBoardAnswer);
@@ -58,7 +55,7 @@ public class FreeBoardAnswerServiceImpl implements CrudInterface<FreeBoardAnswer
 				.contents(createdFreeBoardAnswer.getContents())
 				.freeBoardId(freeboardId)
 				.countOfAnswers(createdFreeBoardAnswer.getFreeBoard().getCountOfAnswer())
-				.createDate(createdFreeBoardAnswer.getFormattedCreateDate())
+				.updateDate(createdFreeBoardAnswer.getFormattedUpdateDate())
 				.build();
 		
 		timelineService.createTimeline(createdFreeBoardAnswer);
@@ -83,7 +80,7 @@ public class FreeBoardAnswerServiceImpl implements CrudInterface<FreeBoardAnswer
 				.contents(freeBoardAnswer.getContents().replace("<br>", "\r\n"))
 				.freeBoardId(freeBoardAnswer.getFreeBoard().getId())
 				.countOfAnswers(freeBoardAnswer.getFreeBoard().getCountOfAnswer())
-				.createDate(freeBoardAnswer.getFormattedCreateDate())
+				.updateDate(freeBoardAnswer.getFormattedUpdateDate())
 				.build();
 		return freeBoardAnswerApiResponse;
 	}
@@ -103,7 +100,7 @@ public class FreeBoardAnswerServiceImpl implements CrudInterface<FreeBoardAnswer
 				.contents(updatedFreeBoardAnswer.getContents())
 				.freeBoardId(updatedFreeBoardAnswer.getFreeBoard().getId())
 				.countOfAnswers(updatedFreeBoardAnswer.getFreeBoard().getCountOfAnswer())
-				.createDate(updatedFreeBoardAnswer.getFormattedCreateDate())
+				.updateDate(updatedFreeBoardAnswer.getFormattedUpdateDate())
 				.build();
 		return freeBoardAnswerApiResponse;
 	}

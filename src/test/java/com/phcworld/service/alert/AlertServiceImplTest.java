@@ -95,7 +95,6 @@ public class AlertServiceImplTest {
 				.writer(user)
 				.freeBoard(freeBoard)
 				.contents("test")
-				.createDate(LocalDateTime.now())
 				.build();
 		Alert alert = Alert.builder()
 				.type("FreeBoard")
@@ -179,7 +178,6 @@ public class AlertServiceImplTest {
 				.writer(user)
 				.freeBoard(freeBoard)
 				.contents("test")
-				.createDate(LocalDateTime.now())
 				.build();
 		Alert alert = Alert.builder()
 				.id(1L)
@@ -239,7 +237,6 @@ public class AlertServiceImplTest {
 				.writer(writer)
 				.freeBoard(freeBoard)
 				.contents("test")
-				.createDate(LocalDateTime.now())
 				.build();
 		Alert freeBoardAnswerAlert = Alert.builder()
 				.type("Free Board")
@@ -317,7 +314,6 @@ public class AlertServiceImplTest {
 				.writer(user)
 				.diary(diary)
 				.contents("diaryAnswer")
-				.createDate(LocalDateTime.now())
 				.build();
 		alertService.deleteAlert(diaryAnswer);
 		verify(alertService, times(1)).deleteAlert(diaryAnswer);
@@ -348,7 +344,6 @@ public class AlertServiceImplTest {
 				.writer(user)
 				.freeBoard(freeBoard)
 				.contents("test")
-				.createDate(LocalDateTime.now())
 				.build();
 		alertService.deleteAlert(freeBoardAnswer);
 		verify(alertService, times(1)).deleteAlert(freeBoardAnswer);

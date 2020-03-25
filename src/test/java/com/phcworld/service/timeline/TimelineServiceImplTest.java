@@ -105,7 +105,6 @@ public class TimelineServiceImplTest {
 				.writer(user)
 				.diary(diary)
 				.contents("test")
-				.createDate(LocalDateTime.now())
 				.build();
 		Timeline diaryAnswerTimeline = Timeline.builder()
 				.type("diary answer")
@@ -179,7 +178,6 @@ public class TimelineServiceImplTest {
 				.writer(user)
 				.freeBoard(freeBoard)
 				.contents("test")
-				.createDate(LocalDateTime.now())
 				.build();
 		Timeline freeBoardAnswerTimeline = Timeline.builder()
 				.type("freeBoard answer")
@@ -368,7 +366,6 @@ public class TimelineServiceImplTest {
 				.writer(user)
 				.diary(diary)
 				.contents("test")
-				.createDate(LocalDateTime.now())
 				.build();
 		timelineService.deleteTimeline(diaryAnswer);
 		verify(timelineService, times(1)).deleteTimeline(diaryAnswer);
@@ -422,7 +419,6 @@ public class TimelineServiceImplTest {
 				.writer(user)
 				.freeBoard(freeBoard)
 				.contents("test")
-				.createDate(LocalDateTime.now())
 				.build();
 		timelineService.deleteTimeline(freeBoardAnswer);
 		verify(timelineService, times(1)).deleteTimeline(freeBoardAnswer);

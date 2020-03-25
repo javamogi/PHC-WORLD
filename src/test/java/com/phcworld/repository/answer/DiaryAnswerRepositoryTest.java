@@ -50,7 +50,6 @@ public class DiaryAnswerRepositoryTest {
 				.writer(writer)
 				.diary(createdDiary)
 				.contents("diary answer content")
-				.createDate(LocalDateTime.now())
 				.build();
 		DiaryAnswer createdAnswer = diaryAnswerRepository.save(answer);
 		assertNotNull(createdAnswer);
@@ -76,7 +75,6 @@ public class DiaryAnswerRepositoryTest {
 				.writer(writer)
 				.diary(createdDiary)
 				.contents("diary answer content")
-				.createDate(LocalDateTime.now())
 				.build();
 		DiaryAnswer createdAnswer = diaryAnswerRepository.save(answer);
 		DiaryAnswer actual = diaryAnswerRepository.getOne(createdAnswer.getId());
@@ -103,7 +101,6 @@ public class DiaryAnswerRepositoryTest {
 				.writer(writer)
 				.diary(createdDiary)
 				.contents("diary answer content")
-				.createDate(LocalDateTime.now())
 				.build();
 		DiaryAnswer createdAnswer = diaryAnswerRepository.save(answer);
 		createdAnswer.setContents("update content");
@@ -131,7 +128,6 @@ public class DiaryAnswerRepositoryTest {
 				.writer(writer)
 				.diary(createdDiary)
 				.contents("diary answer content")
-				.createDate(LocalDateTime.now())
 				.build();
 		DiaryAnswer createdAnswer = diaryAnswerRepository.save(answer);
 		assertNotNull(createdAnswer);

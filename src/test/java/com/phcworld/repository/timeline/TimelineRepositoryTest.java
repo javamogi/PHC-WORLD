@@ -115,7 +115,6 @@ public class TimelineRepositoryTest {
 				.writer(user)
 				.diary(createdDiary)
 				.contents("test")
-				.createDate(LocalDateTime.now())
 				.build();
 		DiaryAnswer createdDiaryAnswer = diaryAnswerRepository.save(diaryAnswer);
 		Timeline diaryAnswerTimeline = Timeline.builder()
@@ -184,7 +183,6 @@ public class TimelineRepositoryTest {
 				.writer(user)
 				.freeBoard(createdFreeBoard)
 				.contents("test")
-				.createDate(LocalDateTime.now())
 				.build();
 		FreeBoardAnswer createdFreeBoardAnswer = freeBoardAnswerRepository.save(freeBoardAnswer);
 		Timeline freeBoardAnswerTimeline = Timeline.builder()
@@ -289,7 +287,6 @@ public class TimelineRepositoryTest {
 				.writer(user)
 				.diary(createdDiary)
 				.contents("test")
-				.createDate(LocalDateTime.now())
 				.build();
 		DiaryAnswer createdDiaryAnswer = diaryAnswerRepository.save(diaryAnswer);
 		Timeline diaryAnswerTimeline = Timeline.builder()
@@ -360,7 +357,6 @@ public class TimelineRepositoryTest {
 				.writer(user)
 				.freeBoard(createdFreeBoard)
 				.contents("test")
-				.createDate(LocalDateTime.now())
 				.build();
 		FreeBoardAnswer createdFreeBoardAnswer = freeBoardAnswerRepository.save(freeBoardAnswer);
 		Timeline freeBoardAnswerTimeline = Timeline.builder()
@@ -504,7 +500,6 @@ public class TimelineRepositoryTest {
 				.writer(user)
 				.diary(createdDiary)
 				.contents("test")
-				.createDate(LocalDateTime.now())
 				.build();
 		DiaryAnswer createdDiaryAnswer = diaryAnswerRepository.save(diaryAnswer);
 		Timeline diaryAnswerTimeline = Timeline.builder()
@@ -577,7 +572,6 @@ public class TimelineRepositoryTest {
 				.writer(user)
 				.freeBoard(createdFreeBoard)
 				.contents("test")
-				.createDate(LocalDateTime.now())
 				.build();
 		FreeBoardAnswer createdFreeBoardAnswer = freeBoardAnswerRepository.save(freeBoardAnswer);
 		Timeline freeBoardAnswerTimeline = Timeline.builder()
