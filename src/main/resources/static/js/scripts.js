@@ -17,7 +17,8 @@ $(document).ready(function(){
 			dataType : 'json',
 			error : function(jqXHR, txtStatus, errorThrown){
 				console.log(jqXHR);
-				alert("댓글통신실패");
+//				alert("댓글통신실패");
+				alert(jqXHR.responseJSON.error);
 			},
 			success : function(data){
 //				console.log(data);
@@ -125,7 +126,7 @@ $(document).ready(function(){
 			dataType : 'json',
 			error : function(jqXHR, txtStatus, errorThrown){
 				console.log(jqXHR);
-//				alert(jqXHR.responseJSON.error);
+				alert(jqXHR.responseJSON.error);
 			},
 			success : function(data){
 				console.log(data);

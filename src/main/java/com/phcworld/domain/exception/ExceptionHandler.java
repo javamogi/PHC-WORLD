@@ -38,4 +38,13 @@ public class ExceptionHandler {
 				.build();
 	}
 	
+	@org.springframework.web.bind.annotation.ExceptionHandler(value = ContentsEmptyException.class)
+	@ResponseStatus(value = HttpStatus.BAD_REQUEST)
+	public ErrorResponse handlerContentsEmptyException(ContentsEmptyException e) {
+		return ErrorResponse.builder()
+				.status("400")
+				.error(e.getMessage())
+				.build();
+	}
+	
 }

@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.phcworld.domain.api.model.response.FreeBoardAnswerApiResponse;
 import com.phcworld.domain.api.model.response.SuccessResponse;
+import com.phcworld.domain.exception.ContentsEmptyException;
 import com.phcworld.domain.exception.LoginNotUserException;
 import com.phcworld.domain.exception.MatchNotUserExceptioin;
 import com.phcworld.domain.user.User;
@@ -36,6 +37,9 @@ public class FreeBoardAnswerController {
 	@ResponseStatus(value = HttpStatus.CREATED)
 	public FreeBoardAnswerApiResponse create(@PathVariable Long freeboardId, String contents, HttpSession session) 
 			throws LoginNotUserException {
+		if(contents.equals("")) {
+			throw new ContentsEmptyException("내용을 입력하세요.");
+		}
 		if(!HttpSessionUtils.isLoginUser(session)) {
 			throw new LoginNotUserException("로그인을 해야합니다.");
 		}
@@ -57,6 +61,9 @@ public class FreeBoardAnswerController {
 	@PatchMapping("")
 	public FreeBoardAnswerApiResponse update(Long id, String contents, HttpSession session) 
 			throws LoginNotUserException, MatchNotUserExceptioin {
+		if(contents.equals("")) {
+			throw new ContentsEmptyException("내용을 입력하세요.");
+		}
 		if(!HttpSessionUtils.isLoginUser(session)) {
 			throw new LoginNotUserException("로그인을 해야합니다.");
 		}

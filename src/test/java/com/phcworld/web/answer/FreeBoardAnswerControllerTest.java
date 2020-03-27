@@ -108,6 +108,15 @@ public class FreeBoardAnswerControllerTest {
 	}
 	
 	@Test
+	public void createFailedFreeBoardAnswerWhenEmptyContents() throws Exception {
+		MockHttpSession mockSession = new MockHttpSession();
+		this.mvc.perform(post("/freeboards/{freeboardId}/answers", 1L)
+				.param("contents", "")
+				.session(mockSession))
+		.andExpect(jsonPath("$.error").value("내용을 입력하세요."));
+	}
+	
+	@Test
 	public void deleteSuccessFreeBoardAnswer() throws Exception {
 		MockHttpSession mockSession = new MockHttpSession();
 		User user = User.builder()
@@ -252,6 +261,15 @@ public class FreeBoardAnswerControllerTest {
 		.andExpect(jsonPath("$.freeBoardId").value(freeBoardAnswerApiResponse.getFreeBoardId()))
 		.andExpect(jsonPath("$.countOfAnswers").value(freeBoardAnswerApiResponse.getCountOfAnswers()))
 		.andExpect(jsonPath("$.updateDate").value(freeBoardAnswerApiResponse.getUpdateDate()));
+	}
+	
+	@Test
+	public void updateFailedFreeBoardAnswerWhenEmptyContents() throws Exception {
+		MockHttpSession mockSession = new MockHttpSession();
+		this.mvc.perform(patch("/freeboards/{freeboardId}/answers", 1L)
+				.param("contents", "")
+				.session(mockSession))
+		.andExpect(jsonPath("$.error").value("내용을 입력하세요."));
 	}
 	
 	@Test

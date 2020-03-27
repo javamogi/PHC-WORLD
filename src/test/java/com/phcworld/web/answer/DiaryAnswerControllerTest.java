@@ -111,6 +111,15 @@ public class DiaryAnswerControllerTest {
 	}
 	
 	@Test
+	public void createEmptyContents() throws Exception {
+		MockHttpSession mockSession = new MockHttpSession();
+		this.mvc.perform(post("/diary/{diaryId}/answer", 1L)
+				.param("contents", "")
+				.session(mockSession))
+		.andExpect(jsonPath("$.error").value("내용을 입력하세요."));
+	}
+	
+	@Test
 	public void deleteSuccessDiaryAnswer() throws Exception {
 		MockHttpSession mockSession = new MockHttpSession();
 		User user = User.builder()
@@ -255,6 +264,15 @@ public class DiaryAnswerControllerTest {
 		.andExpect(jsonPath("$.diaryId").value(diaryAnswerApiResponse.getDiaryId()))
 		.andExpect(jsonPath("$.countOfAnswers").value(diaryAnswerApiResponse.getCountOfAnswers()))
 		.andExpect(jsonPath("$.updateDate").value(diaryAnswerApiResponse.getUpdateDate()));
+	}
+	
+	@Test
+	public void updateEmptyContents() throws Exception {
+		MockHttpSession mockSession = new MockHttpSession();
+		this.mvc.perform(patch("/diary/{diaryId}/answer", 1L)
+				.param("contents", "")
+				.session(mockSession))
+		.andExpect(jsonPath("$.error").value("내용을 입력하세요."));
 	}
 	
 	@Test
