@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
 import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -13,6 +14,10 @@ import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -32,6 +37,7 @@ import lombok.experimental.Accessors;
 @AllArgsConstructor
 @Builder
 @Accessors(chain = true)
+@EntityListeners(AuditingEntityListener.class)
 public class FreeBoard {
 
 	@Id
@@ -52,8 +58,12 @@ public class FreeBoard {
 
 	private String badge;
 
+	@CreatedDate
 	private LocalDateTime createDate;
-
+	
+	@LastModifiedDate
+	private LocalDateTime updateDate;
+	
 	private Integer count;
 
 	@OneToMany(mappedBy = "freeBoard", cascade = CascadeType.REMOVE)

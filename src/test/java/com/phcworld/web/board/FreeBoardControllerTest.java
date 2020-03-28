@@ -171,7 +171,6 @@ public class FreeBoardControllerTest {
 				.title("title")
 				.contents("content")
 				.icon("")
-				.createDate(LocalDateTime.now())
 				.count(0)
 				.build();
 		when(this.freeBoardService.addFreeBoardCount(1L))
@@ -206,7 +205,6 @@ public class FreeBoardControllerTest {
 				.title("title")
 				.contents("content")
 				.icon("")
-				.createDate(LocalDateTime.now())
 				.count(0)
 				.build();
 		when(this.freeBoardService.addFreeBoardCount(1L))
@@ -255,7 +253,6 @@ public class FreeBoardControllerTest {
 				.contents("content")
 				.icon("")
 				.badge("new")
-				.createDate(LocalDateTime.now())
 				.count(0)
 				.build();
 		when(this.freeBoardService.addFreeBoardCount(1L))
@@ -304,7 +301,6 @@ public class FreeBoardControllerTest {
 				.contents("content")
 				.icon("")
 				.badge("new")
-				.createDate(LocalDateTime.now())
 				.count(0)
 				.build();
 		when(this.freeBoardService.addFreeBoardCount(1L))
@@ -343,7 +339,6 @@ public class FreeBoardControllerTest {
 				.title("title")
 				.contents("content")
 				.icon("")
-				.createDate(LocalDateTime.now())
 				.count(0)
 				.build();
 		when(this.freeBoardService.getOneFreeBoard(1L))
@@ -375,7 +370,6 @@ public class FreeBoardControllerTest {
 				.title("title")
 				.contents("content")
 				.icon("")
-				.createDate(LocalDateTime.now())
 				.count(0)
 				.build();
 		when(this.freeBoardService.getOneFreeBoard(1L))
@@ -419,7 +413,6 @@ public class FreeBoardControllerTest {
 				.contents("content")
 				.icon("")
 				.badge("new")
-				.createDate(LocalDateTime.now())
 				.count(0)
 				.build();
 		when(this.freeBoardService.getOneFreeBoard(1L))
@@ -456,7 +449,6 @@ public class FreeBoardControllerTest {
 				.contents("content")
 				.icon("")
 				.badge("new")
-				.createDate(LocalDateTime.now())
 				.count(0)
 				.build();
 		FreeBoard newBoard = FreeBoard.builder()
@@ -466,7 +458,6 @@ public class FreeBoardControllerTest {
 				.contents("new content")
 				.icon("")
 				.badge("new")
-				.createDate(LocalDateTime.now())
 				.count(0)
 				.build();
 		when(this.freeBoardService.getOneFreeBoard(1L))
@@ -521,7 +512,6 @@ public class FreeBoardControllerTest {
 				.contents("content")
 				.icon("")
 				.badge("new")
-				.createDate(LocalDateTime.now())
 				.count(0)
 				.build();
 		when(this.freeBoardService.getOneFreeBoard(1L))
@@ -560,7 +550,6 @@ public class FreeBoardControllerTest {
 				.contents("content")
 				.icon("")
 				.badge("new")
-				.createDate(LocalDateTime.now())
 				.count(0)
 				.build();
 		when(this.freeBoardService.getOneFreeBoard(1L))
@@ -612,7 +601,6 @@ public class FreeBoardControllerTest {
 				.contents("content")
 				.icon("")
 				.badge("new")
-				.createDate(LocalDateTime.now())
 				.count(0)
 				.build();
 		when(this.freeBoardService.getOneFreeBoard(1L))

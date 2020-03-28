@@ -48,7 +48,6 @@ public class FreeBoardServiceImplTest {
 				.contents("content")
 				.icon("")
 				.badge("new")
-				.createDate(LocalDateTime.now())
 				.count(0)
 				.build();
 		when(freeBoardService.createFreeBoard(user, board)).thenReturn(board);
@@ -75,7 +74,6 @@ public class FreeBoardServiceImplTest {
 				.contents("content")
 				.icon("")
 				.badge("new")
-				.createDate(LocalDateTime.now())
 				.count(0)
 				.build();
 		when(freeBoardService.createFreeBoard(user, board)).thenReturn(board);
@@ -105,7 +103,6 @@ public class FreeBoardServiceImplTest {
 				.contents("content")
 				.icon("")
 				.badge("new")
-				.createDate(LocalDateTime.now())
 				.count(0)
 				.build();
 		when(freeBoardService.createFreeBoard(user, board)).thenReturn(board);
@@ -117,7 +114,6 @@ public class FreeBoardServiceImplTest {
 				.contents("new content")
 				.icon("")
 				.badge("new")
-				.createDate(LocalDateTime.now())
 				.count(0)
 				.build();
 		board.update(newBoard);
@@ -148,7 +144,6 @@ public class FreeBoardServiceImplTest {
 				.contents("content")
 				.icon("")
 				.badge("new")
-				.createDate(LocalDateTime.now())
 				.count(0)
 				.build();
 		freeBoardService.deleteFreeBoard(board);
@@ -173,7 +168,6 @@ public class FreeBoardServiceImplTest {
 				.contents("content")
 				.icon("")
 				.badge("new")
-				.createDate(LocalDateTime.now())
 				.count(0)
 				.build();
 		FreeBoardAnswer answer = FreeBoardAnswer.builder()
@@ -206,7 +200,6 @@ public class FreeBoardServiceImplTest {
 				.contents("content")
 				.icon("")
 				.badge("new")
-				.createDate(LocalDateTime.now())
 				.count(0)
 				.build();
 		board.addCount();
@@ -233,7 +226,6 @@ public class FreeBoardServiceImplTest {
 				.contents("content")
 				.icon("")
 				.badge("new")
-				.createDate(LocalDateTime.now())
 				.count(0)
 				.build();
 		FreeBoard board2 = FreeBoard.builder()
@@ -243,7 +235,6 @@ public class FreeBoardServiceImplTest {
 				.contents("content2")
 				.icon("")
 				.badge("new")
-				.createDate(LocalDateTime.now())
 				.count(0)
 				.build();
 		List<FreeBoard> freeBoardList = new ArrayList<FreeBoard>();
@@ -272,7 +263,6 @@ public class FreeBoardServiceImplTest {
 				.contents("content")
 				.icon("")
 				.badge("new")
-				.createDate(LocalDateTime.now())
 				.count(0)
 				.build();
 		User user2 = User.builder()
@@ -290,7 +280,6 @@ public class FreeBoardServiceImplTest {
 				.contents("content2")
 				.icon("")
 				.badge("new")
-				.createDate(LocalDateTime.now())
 				.count(0)
 				.build();
 		List<FreeBoard> freeBoardList = new ArrayList<FreeBoard>();

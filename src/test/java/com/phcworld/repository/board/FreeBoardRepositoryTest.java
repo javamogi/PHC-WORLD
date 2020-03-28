@@ -6,7 +6,6 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -44,7 +43,6 @@ public class FreeBoardRepositoryTest {
 				.title("title")
 				.contents("content")
 				.icon("")
-				.createDate(LocalDateTime.now())
 				.count(0)
 				.build();
 		log.info("freeBoard : {}", freeBoard);
@@ -65,7 +63,6 @@ public class FreeBoardRepositoryTest {
 				.title("title")
 				.contents("content")
 				.icon("")
-				.createDate(LocalDateTime.now())
 				.count(0)
 				.build();
 		freeBoardRepository.save(freeBoard);
@@ -89,7 +86,6 @@ public class FreeBoardRepositoryTest {
 				.title("title")
 				.contents("content")
 				.icon("")
-				.createDate(LocalDateTime.now())
 				.count(0)
 				.build();
 		FreeBoard newFreeBoard = FreeBoard.builder()
@@ -97,7 +93,6 @@ public class FreeBoardRepositoryTest {
 				.title("new title")
 				.contents("new content")
 				.icon("")
-				.createDate(LocalDateTime.now())
 				.count(0)
 				.build();
 		FreeBoard newBoard = freeBoardRepository.save(freeBoard);
@@ -120,7 +115,6 @@ public class FreeBoardRepositoryTest {
 				.title("title")
 				.contents("content")
 				.icon("")
-				.createDate(LocalDateTime.now())
 				.count(0)
 				.build();
 		FreeBoard newBoard = freeBoardRepository.save(freeBoard);

@@ -1,6 +1,5 @@
 package com.phcworld.service.board;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +37,6 @@ public class FreeBoardServiceImpl implements FreeBoardService {
 				.title(inputFreeBoard.getTitle())
 				.contents(inputFreeBoard.getContents())
 				.icon(inputFreeBoard.getIcon())
-				.createDate(LocalDateTime.now())
 				.count(0)
 				.build();
 		FreeBoard createdFreeBoard = freeBoardRepository.save(freeBoard);
