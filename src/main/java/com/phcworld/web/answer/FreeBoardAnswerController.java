@@ -36,7 +36,7 @@ public class FreeBoardAnswerController {
 	@PostMapping("")
 	@ResponseStatus(value = HttpStatus.CREATED)
 	public FreeBoardAnswerApiResponse create(@PathVariable Long freeboardId, String contents, HttpSession session) 
-			throws LoginNotUserException {
+			throws LoginNotUserException, ContentsEmptyException {
 		if(contents.equals("")) {
 			throw new ContentsEmptyException("내용을 입력하세요.");
 		}

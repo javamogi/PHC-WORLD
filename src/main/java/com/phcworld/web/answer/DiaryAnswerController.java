@@ -34,7 +34,7 @@ public class DiaryAnswerController {
 	@PostMapping("")
 	@ResponseStatus(value = HttpStatus.CREATED)
 	public DiaryAnswerApiResponse create(@PathVariable Long diaryId, String contents, HttpSession session) 
-			throws LoginNotUserException {
+			throws LoginNotUserException, ContentsEmptyException {
 		if(contents.equals("")) {
 			throw new ContentsEmptyException("내용을 입력하세요.");
 		}
