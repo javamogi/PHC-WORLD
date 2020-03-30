@@ -57,7 +57,6 @@ public class DiaryServiceImpl implements DiaryService {
 				.title(inputDiary.getTitle())
 				.contents(inputDiary.getContents())
 				.thumbnail(inputDiary.getThumbnail())
-				.createDate(LocalDateTime.now())
 				.build();
 		Diary createdDiary = diaryRepository.save(diary);
 		

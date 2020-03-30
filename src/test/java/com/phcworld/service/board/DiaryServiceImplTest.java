@@ -51,14 +51,12 @@ public class DiaryServiceImplTest {
 				.title("title")
 				.contents("content")
 				.thumbnail("no-image-icon.gif")
-				.createDate(LocalDateTime.now())
 				.build();
 		Diary diary2 = Diary.builder()
 				.writer(user)
 				.title("title2")
 				.contents("content2")
 				.thumbnail("no-image-icon.gif")
-				.createDate(LocalDateTime.now())
 				.build();
 		List<Diary> list = new ArrayList<Diary>();
 		list.add(diary);
@@ -86,7 +84,6 @@ public class DiaryServiceImplTest {
 				.title("title")
 				.contents("content")
 				.thumbnail("no-image-icon.gif")
-				.createDate(LocalDateTime.now())
 				.build();
 		when(diaryService.createDiary(user, diary))
 		.thenReturn(diary);
@@ -112,7 +109,6 @@ public class DiaryServiceImplTest {
 				.title("title")
 				.contents("content")
 				.thumbnail("no-image-icon.gif")
-				.createDate(LocalDateTime.now())
 				.build();
 		when(diaryService.getOneDiary(1L)).thenReturn(diary);
 		Diary oneDiary = diaryService.getOneDiary(1L);
@@ -135,14 +131,12 @@ public class DiaryServiceImplTest {
 				.title("title")
 				.contents("content")
 				.thumbnail("no-image-icon.gif")
-				.createDate(LocalDateTime.now())
 				.build();
 		Diary newDiary = Diary.builder()
 				.writer(user)
 				.title("title")
 				.contents("updateDiary")
 				.thumbnail("test.jpg")
-				.createDate(LocalDateTime.now())
 				.build();
 		diary.update(newDiary);
 		when(diaryService.updateDiary(diary, newDiary))
@@ -169,7 +163,6 @@ public class DiaryServiceImplTest {
 				.title("title")
 				.contents("content")
 				.thumbnail("no-image-icon.gif")
-				.createDate(LocalDateTime.now())
 				.build();
 		diaryService.deleteDiary(diary);
 		verify(diaryService, times(1)).deleteDiary(diary);
@@ -192,7 +185,6 @@ public class DiaryServiceImplTest {
 				.title("title")
 				.contents("content")
 				.thumbnail("no-image-icon.gif")
-				.createDate(LocalDateTime.now())
 				.build();
 		DiaryAnswer answer = DiaryAnswer.builder()
 				.id(1L)
@@ -224,7 +216,6 @@ public class DiaryServiceImplTest {
 				.title("title")
 				.contents("content")
 				.thumbnail("no-image-icon.gif")
-				.createDate(LocalDateTime.now())
 				.build();
 		Good good = Good.builder()
 				.diary(diary)
@@ -262,7 +253,6 @@ public class DiaryServiceImplTest {
 				.title("title")
 				.contents("content")
 				.thumbnail("no-image-icon.gif")
-				.createDate(LocalDateTime.now())
 				.build();
 		Good good = Good.builder()
 				.diary(diary)
@@ -299,7 +289,6 @@ public class DiaryServiceImplTest {
 				.title("title")
 				.contents("content")
 				.thumbnail("no-image-icon.gif")
-				.createDate(LocalDateTime.now())
 				.build();
 		List<Diary> list = new ArrayList<Diary>();
 		list.add(diary);

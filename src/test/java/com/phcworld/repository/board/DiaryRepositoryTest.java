@@ -44,7 +44,6 @@ public class DiaryRepositoryTest {
 				.title("title")
 				.contents("content")
 				.thumbnail("no-image-icon.gif")
-				.createDate(LocalDateTime.now())
 				.build();
 		Diary newDiary = diaryRepository.save(diary);
 		assertNotNull(newDiary);
@@ -63,7 +62,6 @@ public class DiaryRepositoryTest {
 				.title("title")
 				.contents("content")
 				.thumbnail("no-image-icon.gif")
-				.createDate(LocalDateTime.now())
 				.build();
 		diaryRepository.save(diary);
 		PageRequest pageRequest = PageRequest.of(0, 6, new Sort(Direction.DESC, "id"));
@@ -85,14 +83,12 @@ public class DiaryRepositoryTest {
 				.title("title")
 				.contents("content")
 				.thumbnail("no-image-icon.gif")
-				.createDate(LocalDateTime.now())
 				.build();
 		Diary newDiary = Diary.builder()
 				.writer(writer)
 				.title("title")
 				.contents("update content")
 				.thumbnail("test.jpg")
-				.createDate(LocalDateTime.now())
 				.build();
 		
 		diary.update(newDiary);
@@ -114,7 +110,6 @@ public class DiaryRepositoryTest {
 				.title("title")
 				.contents("content")
 				.thumbnail("no-image-icon.gif")
-				.createDate(LocalDateTime.now())
 				.build();
 		Diary newDiary = diaryRepository.save(diary);
 		diaryRepository.delete(newDiary);

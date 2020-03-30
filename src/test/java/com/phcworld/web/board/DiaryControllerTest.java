@@ -82,7 +82,6 @@ public class DiaryControllerTest {
 				.title("test")
 				.contents("test")
 				.thumbnail("no-image-icon.gif")
-				.createDate(LocalDateTime.now())
 				.build();
 		Diary diary2 = Diary.builder()
 				.id(2L)
@@ -90,7 +89,6 @@ public class DiaryControllerTest {
 				.title("test2")
 				.contents("test2")
 				.thumbnail("no-image-icon.gif")
-				.createDate(LocalDateTime.now())
 				.build();
 		List<Diary> diaryList = new ArrayList<Diary>();
 		diaryList.add(diary);
@@ -203,7 +201,6 @@ public class DiaryControllerTest {
 				.title("test")
 				.contents("test")
 				.thumbnail("no-image-icon.gif")
-				.createDate(LocalDateTime.now())
 				.build();
 		when(this.diaryService.getOneDiary(1L))
 		.thenReturn(diary);
@@ -237,7 +234,6 @@ public class DiaryControllerTest {
 				.title("test")
 				.contents("test")
 				.thumbnail("no-image-icon.gif")
-				.createDate(LocalDateTime.now())
 				.build();
 		when(this.diaryService.getOneDiary(1L))
 		.thenReturn(diary);
@@ -284,7 +280,6 @@ public class DiaryControllerTest {
 				.title("test")
 				.contents("test")
 				.thumbnail("no-image-icon.gif")
-				.createDate(LocalDateTime.now())
 				.build();
 		when(this.diaryService.getOneDiary(1L))
 		.thenReturn(diary);
@@ -332,7 +327,6 @@ public class DiaryControllerTest {
 				.title("test")
 				.contents("test")
 				.thumbnail("no-image-icon.gif")
-				.createDate(LocalDateTime.now())
 				.build();
 		when(this.diaryService.getOneDiary(1L))
 		.thenReturn(diary);
@@ -370,7 +364,6 @@ public class DiaryControllerTest {
 				.title("test")
 				.contents("test")
 				.thumbnail("no-image-icon.gif")
-				.createDate(LocalDateTime.now())
 				.build();
 		when(this.diaryService.getOneDiary(1L))
 		.thenReturn(diary);
@@ -401,7 +394,6 @@ public class DiaryControllerTest {
 				.title("test")
 				.contents("test")
 				.thumbnail("no-image-icon.gif")
-				.createDate(LocalDateTime.now())
 				.build();
 		when(this.diaryService.getOneDiary(1L))
 		.thenReturn(diary);
@@ -443,7 +435,6 @@ public class DiaryControllerTest {
 				.title("test")
 				.contents("test")
 				.thumbnail("no-image-icon.gif")
-				.createDate(LocalDateTime.now())
 				.build();
 		when(this.diaryService.getOneDiary(1L))
 		.thenReturn(diary);
@@ -479,7 +470,6 @@ public class DiaryControllerTest {
 				.title("test")
 				.contents("test")
 				.thumbnail("no-image-icon.gif")
-				.createDate(LocalDateTime.now())
 				.build();
 		when(this.diaryService.getOneDiary(1L))
 		.thenReturn(diary);
@@ -489,7 +479,6 @@ public class DiaryControllerTest {
 				.title("test")
 				.contents("updateTest")
 				.thumbnail("no-image-icon.gif")
-				.createDate(LocalDateTime.now())
 				.build();
 		given(this.diaryService.updateDiary(diary, updatedDiary))
 		.willReturn(updatedDiary);
@@ -543,7 +532,6 @@ public class DiaryControllerTest {
 				.title("test")
 				.contents("test")
 				.thumbnail("no-image-icon.gif")
-				.createDate(LocalDateTime.now())
 				.build();
 		when(this.diaryService.getOneDiary(1L))
 		.thenReturn(diary);
@@ -580,7 +568,6 @@ public class DiaryControllerTest {
 				.title("test")
 				.contents("test")
 				.thumbnail("no-image-icon.gif")
-				.createDate(LocalDateTime.now())
 				.build();
 		when(this.diaryService.getOneDiary(1L))
 		.thenReturn(diary);
@@ -631,7 +618,6 @@ public class DiaryControllerTest {
 				.title("test")
 				.contents("test")
 				.thumbnail("no-image-icon.gif")
-				.createDate(LocalDateTime.now())
 				.build();
 		when(this.diaryService.getOneDiary(1L))
 		.thenReturn(diary);
@@ -671,7 +657,6 @@ public class DiaryControllerTest {
 				.title("title")
 				.contents("content")
 				.thumbnail("no-image-icon.gif")
-				.createDate(LocalDateTime.now())
 				.build();
 		Good good = Good.builder()
 				.diary(diary)
