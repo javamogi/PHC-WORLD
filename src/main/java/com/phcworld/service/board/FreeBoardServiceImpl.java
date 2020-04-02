@@ -1,5 +1,7 @@
 package com.phcworld.service.board;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,8 +28,20 @@ public class FreeBoardServiceImpl implements FreeBoardService {
 	private AlertServiceImpl alertService;
 
 	@Override
-	public List<FreeBoard> findFreeBoardAllList() {
-		return freeBoardRepository.findAll();
+	public List<FreeBoard> findFreeBoardAllListAndSetNewBadge() {
+		int hourOfDay = 24;
+		int minutesOfHour = 60;
+		List<FreeBoard> list = freeBoardRepository.findAll();
+		for (int i = list.size()-1; i >= 0; i--) {
+			long createdDateAndNowDifferenceMinutes = 
+					Duration.between(list.get(i).getCreateDate(), LocalDateTime.now()).toMinutes();
+			if (createdDateAndNowDifferenceMinutes / minutesOfHour < hourOfDay) {
+				list.get(i).setBadge("New");
+			} else {
+				break;
+			}
+		}
+		return list;
 	}
 
 	@Override

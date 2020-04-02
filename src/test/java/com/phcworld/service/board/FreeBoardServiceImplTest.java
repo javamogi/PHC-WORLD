@@ -285,8 +285,8 @@ public class FreeBoardServiceImplTest {
 		List<FreeBoard> freeBoardList = new ArrayList<FreeBoard>();
 		freeBoardList.add(board);
 		freeBoardList.add(board2);
-		when(freeBoardService.findFreeBoardAllList()).thenReturn(freeBoardList);
-		List<FreeBoard> findAllfreeBoardList =  freeBoardService.findFreeBoardAllList();
+		when(freeBoardService.findFreeBoardAllListAndSetNewBadge()).thenReturn(freeBoardList);
+		List<FreeBoard> findAllfreeBoardList =  freeBoardService.findFreeBoardAllListAndSetNewBadge();
 		assertThat(findAllfreeBoardList, hasItems(board, board2));
 	}
 	

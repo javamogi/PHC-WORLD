@@ -7,7 +7,7 @@ import com.phcworld.domain.user.User;
 
 public interface FreeBoardService {
 	
-	List<FreeBoard> findFreeBoardAllList();
+	List<FreeBoard> findFreeBoardAllListAndSetNewBadge();
 	
 	FreeBoard createFreeBoard(User user, FreeBoard freeBoard);
 	

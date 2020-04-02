@@ -85,6 +85,10 @@ public class FreeBoard {
 	public String getFormattedCreateDate() {
 		return LocalDateTimeUtils.getTime(createDate);
 	}
+	
+	public String getFormattedUpdateDate() {
+		return LocalDateTimeUtils.getTime(updateDate);
+	}
 
 	public void update(FreeBoard newFreeBoard) {
 		this.contents = newFreeBoard.getContents();

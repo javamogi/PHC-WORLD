@@ -74,7 +74,7 @@ public class FreeBoardControllerTest {
 		List<FreeBoard> list = new ArrayList<FreeBoard>();
 		list.add(board);
 		list.add(board2);
-		when(this.freeBoardService.findFreeBoardAllList())
+		when(this.freeBoardService.findFreeBoardAllListAndSetNewBadge())
 		.thenReturn(list);
 		this.mvc.perform(get("/freeboards/list"))
 		.andDo(print())

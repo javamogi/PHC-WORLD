@@ -1,7 +1,5 @@
 package com.phcworld.web.board;
 
-import java.time.Duration;
-import java.time.LocalDateTime;
 import java.util.List;
 
 import javax.servlet.http.HttpSession;
@@ -27,24 +25,12 @@ public class FreeBoardController {
 
 	@Autowired
 	private FreeBoardServiceImpl freeBoardService;
-
-	@GetMapping("/list") // 게시글이 100000개 이상일 경우를 생각해야함
-	public String viewFreeBoardAllList(Model model) {
-		List<FreeBoard> list = freeBoardService.findFreeBoardAllList();
-		for (int i = 0; i < list.size(); i++) {
-			checkWithinHourOfDay(list.get(i));
-		}
+	
+	@GetMapping("/list")
+	public String getFreeBoardAllList(Model model) {
+		List<FreeBoard> list = freeBoardService.findFreeBoardAllListAndSetNewBadge();
 		model.addAttribute("freeboards", list);
 		return "/board/freeboard/freeboard";
-	}
-
-	private void checkWithinHourOfDay(FreeBoard board) {
-		long createdDateAndNowDifferenceMinutes = Duration.between(board.getCreateDate(), LocalDateTime.now()).toMinutes();
-		int hourOfDay = 24;
-		int minutesOfHour = 60;
-		if (createdDateAndNowDifferenceMinutes / minutesOfHour < hourOfDay) {
-			board.setBadge("New");
-		} 
 	}
 
 	@GetMapping("/form")
@@ -96,6 +82,20 @@ public class FreeBoardController {
 		return "/board/freeboard/detail_freeboard";
 	}
 
+//	@GetMapping("/{id}/form")
+//	public String update(@PathVariable Long id, Model model, HttpSession session) {
+//		if (!HttpSessionUtils.isLoginUser(session)) {
+//			return "/user/login";
+//		}
+//		User loginUser = HttpSessionUtils.getUserFromSession(session);
+//		FreeBoardResponse freeBoard = freeBoardService.getOneFreeBoard(id);
+//		if (!loginUser.matchId(freeBoard.getWriter().getId())) {
+//			model.addAttribute("errorMessage", "본인의 작성한 글만 수정 가능합니다.");
+//			return "/user/login";
+//		}
+//		model.addAttribute("freeBoard", freeBoard);
+//		return "/board/freeboard/freeboard_updateForm";
+//	}
 	@GetMapping("/{id}/form")
 	public String update(@PathVariable Long id, Model model, HttpSession session) {
 		if (!HttpSessionUtils.isLoginUser(session)) {
