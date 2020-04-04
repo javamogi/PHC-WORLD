@@ -48,9 +48,9 @@ public class FreeBoardController {
 		}
 		User sessionUser = HttpSessionUtils.getUserFromSession(session);
 		
-		freeBoardService.createFreeBoard(sessionUser, freeBoard);
+		FreeBoard createdFreeBoard = freeBoardService.createFreeBoard(sessionUser, freeBoard);
 		
-		return "redirect:/freeboards/list";
+		return "redirect:/freeboards/"+ createdFreeBoard.getId() + "/detail";
 	}
 
 	@GetMapping("/{id}/detail")
