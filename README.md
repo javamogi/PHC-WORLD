@@ -221,7 +221,7 @@
 * 자유게시판 글쓰기 페이지
   * 로그인을 하지 않았으면 로그인페이지로 이동한다.
 * 게시물 생성
-  * 로그인 한 유저와 넘겨받은 자유게시판 정보로 db에 저장하면 자유게시판 리스트페이지로 이동한다.
+  * 로그인 한 유저와 넘겨받은 자유게시판 정보로 db에 저장 후 생성한 게시물로 이동한다.
 * 자유게시판 상세페이지
   * 우선 조회수를 증가시키고 로그인 한 유저가 있는지 해당 게시물의 작성자와 로그인한 유저가 같은지 그리고 관리자 권한인지 확인하여 model에 boolean값을 넣어 해당 페이지에서 버튼을 다르게 나오게 한다.
 * 수정페이지
@@ -234,6 +234,7 @@
 ***
 ### FreeBoardAnswer 설명
 **Entity**
+
 * FreeBoardAnswer는 Entity이므로 @Entity 어노테이션을 사용하였습니다.
 * 모든 필드에 getter와 setter, 서로 다른 FreeBoardAnswer인지 비교하기위해  EqualsAndHashCode, log로 FreeBoardAnswer를 보기위해 toString을 사용하기 위해 Lombok의 @Data어노테이션을 사용하였습니다.
 * 기본 생성자 @NoArgsConstructor 어노테이션, 모든 필드의 생성자 @AllArgsConstructor를 사용하였습니다.
