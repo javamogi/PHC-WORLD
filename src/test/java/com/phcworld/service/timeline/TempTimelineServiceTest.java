@@ -86,7 +86,7 @@ public class TempTimelineServiceTest {
 				.build();
 		TempTimeline freeBoardTimeline = TempTimeline.builder()
 				.type("free board")
-				.url("/freeboards/"+freeBoard.getId()+"/detail")
+				.url("/freeboards/"+freeBoard.getId())
 				.icon("list-alt")
 				.freeBoard(freeBoard)
 				.saveDate(freeBoard.getCreateDate())
@@ -102,7 +102,7 @@ public class TempTimelineServiceTest {
 		TempTimeline freeBoardAnswerTimeline = TempTimeline.builder()
 				.type("free board answer")
 				.icon("comment")
-				.url("/freeboards/"+freeBoardAnswer.getFreeBoard().getId()+"/detail")
+				.url("/freeboards/"+freeBoardAnswer.getFreeBoard().getId())
 				.freeBoardAnswer(freeBoardAnswer)
 				.saveDate(freeBoardAnswer.getCreateDate())
 				.build();

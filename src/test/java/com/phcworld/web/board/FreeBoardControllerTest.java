@@ -76,7 +76,7 @@ public class FreeBoardControllerTest {
 		list.add(board2);
 		when(this.freeBoardService.findFreeBoardAllListAndSetNewBadge())
 		.thenReturn(list);
-		this.mvc.perform(get("/freeboards/list"))
+		this.mvc.perform(get("/freeboards"))
 		.andDo(print())
 		.andExpect(view().name(containsString("/board/freeboard/freeboard")))
 		.andExpect(status().isOk())
@@ -134,7 +134,7 @@ public class FreeBoardControllerTest {
 				.param("contents", "test")
 				.param("icon", "")
 				.session(mockSession))
-		.andExpect(redirectedUrl("/freeboards/list"));
+		.andExpect(redirectedUrl("/freeboards"));
 	}
 	
 	@Test
@@ -175,7 +175,7 @@ public class FreeBoardControllerTest {
 				.build();
 		when(this.freeBoardService.addFreeBoardCount(1L))
 		.thenReturn(freeBoard);
-		this.mvc.perform(get("/freeboards/{id}/detail", 1L)
+		this.mvc.perform(get("/freeboards/{id}", 1L)
 				.session(mockSession))
 		.andDo(print())
 		.andExpect(view().name(containsString("/board/freeboard/detail_freeboard")))
@@ -209,7 +209,7 @@ public class FreeBoardControllerTest {
 				.build();
 		when(this.freeBoardService.addFreeBoardCount(1L))
 		.thenReturn(freeBoard);
-		this.mvc.perform(get("/freeboards/{id}/detail", 1L)
+		this.mvc.perform(get("/freeboards/{id}", 1L)
 				.session(mockSession))
 		.andDo(print())
 		.andExpect(view().name(containsString("/board/freeboard/detail_freeboard")))
@@ -257,7 +257,7 @@ public class FreeBoardControllerTest {
 				.build();
 		when(this.freeBoardService.addFreeBoardCount(1L))
 		.thenReturn(board);
-		this.mvc.perform(get("/freeboards/{id}/detail", 1L)
+		this.mvc.perform(get("/freeboards/{id}", 1L)
 				.session(mockSession))
 		.andDo(print())
 		.andExpect(view().name(containsString("/board/freeboard/detail_freeboard")))
@@ -305,7 +305,7 @@ public class FreeBoardControllerTest {
 				.build();
 		when(this.freeBoardService.addFreeBoardCount(1L))
 		.thenReturn(board);
-		this.mvc.perform(get("/freeboards/{id}/detail", 1L)
+		this.mvc.perform(get("/freeboards/{id}", 1L)
 				.session(mockSession))
 		.andDo(print())
 		.andExpect(view().name(containsString("/board/freeboard/detail_freeboard")))
@@ -465,7 +465,7 @@ public class FreeBoardControllerTest {
 		board.update(newBoard);
 		this.mvc.perform(put("/freeboards/{id}", 1L)
 				.session(mockSession))
-		.andExpect(redirectedUrl("/freeboards/" + 1L + "/detail"));
+		.andExpect(redirectedUrl("/freeboards/" + 1L));
 	}
 	
 	@Test
@@ -554,15 +554,15 @@ public class FreeBoardControllerTest {
 				.build();
 		when(this.freeBoardService.getOneFreeBoard(1L))
 		.thenReturn(board);
-		this.mvc.perform(delete("/freeboards/{id}/delete", 1L)
+		this.mvc.perform(delete("/freeboards/{id}", 1L)
 				.session(mockSession))
-		.andExpect(redirectedUrl("/freeboards/list"));
+		.andExpect(redirectedUrl("/freeboards"));
 	}
 	
 	@Test
 	public void deleteWhenEmptyLoginUser() throws Exception {
 		MockHttpSession mockSession = new MockHttpSession();
-		this.mvc.perform(delete("/freeboards/{id}/delete", 1L)
+		this.mvc.perform(delete("/freeboards/{id}", 1L)
 				.session(mockSession))
 		.andDo(print())
 		.andExpect(view().name(containsString("/user/login")))
@@ -605,7 +605,7 @@ public class FreeBoardControllerTest {
 				.build();
 		when(this.freeBoardService.getOneFreeBoard(1L))
 		.thenReturn(board);
-		this.mvc.perform(delete("/freeboards/{id}/delete", 1L)
+		this.mvc.perform(delete("/freeboards/{id}", 1L)
 				.session(mockSession))
 		.andDo(print())
 		.andExpect(view().name(containsString("/user/login")))

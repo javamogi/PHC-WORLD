@@ -132,8 +132,7 @@ public class HomeControllerTest {
 				.session(mockSession))
 		.andDo(print())
 		.andExpect(redirectedUrl("/freeboards/" 
-				+ freeBoardAnswerAlert.getFreeBoardAnswer().getFreeBoard().getId() 
-					+ "/detail"));
+				+ freeBoardAnswerAlert.getFreeBoardAnswer().getFreeBoard().getId()));
 	}
 	
 	@Test

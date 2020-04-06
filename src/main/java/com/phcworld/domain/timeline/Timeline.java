@@ -78,12 +78,12 @@ public class Timeline {
 			return "redirect:/diary/"+ this.getDiaryAnswer().getDiary().getId() + "/detail";
 		}
 		if(this.type.equals("free board")) {
-			return "redirect:/freeboards/" + this.getFreeBoard().getId() + "/detail";
+			return "redirect:/freeboards/" + this.getFreeBoard().getId();
 		}
 		if(this.type.equals("good")) {
 			return "redirect:/diary/"+ this.getGood().getDiary().getId() + "/detail";
 		}
-		return "redirect:/freeboards/" + this.getFreeBoardAnswer().getFreeBoard().getId() + "/detail";
+		return "redirect:/freeboards/" + this.getFreeBoardAnswer().getFreeBoard().getId();
 	}
 
 }

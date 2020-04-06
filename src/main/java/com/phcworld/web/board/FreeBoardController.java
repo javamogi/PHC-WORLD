@@ -50,10 +50,10 @@ public class FreeBoardController {
 		
 		FreeBoard createdFreeBoard = freeBoardService.createFreeBoard(sessionUser, freeBoard);
 		
-		return "redirect:/freeboards/"+ createdFreeBoard.getId() + "/detail";
+		return "redirect:/freeboards/"+ createdFreeBoard.getId();
 	}
 
-	@GetMapping("/{id}/detail")
+	@GetMapping("/{id}")
 	public String read(@PathVariable Long id, HttpSession session, Model model) {
 		boolean isLoginUser = false;
 		boolean matchLoginUserAndWriter = false;
@@ -110,10 +110,10 @@ public class FreeBoardController {
 		}
 		
 		freeBoardService.updateFreeBoard(freeBoard);
-		return "redirect:/freeboards/" + id + "/detail";
+		return "redirect:/freeboards/" + id;
 	}
 
-	@DeleteMapping("/{id}/delete")
+	@DeleteMapping("/{id}")
 	public String delete(@PathVariable Long id, HttpSession session, Model model) {
 		if (!HttpSessionUtils.isLoginUser(session)) {
 			return "/user/login";
@@ -125,7 +125,7 @@ public class FreeBoardController {
 			return "/user/login";
 		}
 		freeBoardService.deleteFreeBoard(freeBoard);
-		return "redirect:/freeboards/list";
+		return "redirect:/freeboards";
 	}
 
 }

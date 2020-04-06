@@ -45,7 +45,7 @@ public class TempTimelineService {
 		for(int i = 0; i < freeBoardList.size(); i++) {
 			TempTimeline temp = TempTimeline.builder()
 					.type("free board")
-					.url("/freeboards/"+freeBoardList.get(i).getId()+"/detail")
+					.url("/freeboards/"+freeBoardList.get(i).getId())
 					.icon("list-alt")
 					.freeBoard(freeBoardList.get(i))
 					.saveDate(freeBoardList.get(i).getCreateDate())
@@ -61,7 +61,7 @@ public class TempTimelineService {
 			TempTimeline temp = TempTimeline.builder()
 					.type("free board answer")
 					.icon("comment")
-					.url("/freeboards/"+freeBoardAnswerList.get(i).getFreeBoard().getId()+"/detail")
+					.url("/freeboards/"+freeBoardAnswerList.get(i).getFreeBoard().getId())
 					.freeBoardAnswer(freeBoardAnswerList.get(i))
 					.saveDate(freeBoardAnswerList.get(i).getCreateDate())
 					.build();
