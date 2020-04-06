@@ -26,7 +26,7 @@ public class FreeBoardController {
 	@Autowired
 	private FreeBoardServiceImpl freeBoardService;
 	
-	@GetMapping("/list")
+	@GetMapping("")
 	public String getFreeBoardAllList(Model model) {
 		List<FreeBoard> list = freeBoardService.findFreeBoardAllListAndSetNewBadge();
 		model.addAttribute("freeboards", list);
