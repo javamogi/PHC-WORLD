@@ -20,7 +20,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class MovieApiController {
 
-	@GetMapping("/view")
+	@GetMapping("/page")
 	public String view() {
 		
 		return "/movie/movie";

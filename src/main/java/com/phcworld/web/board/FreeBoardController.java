@@ -82,20 +82,6 @@ public class FreeBoardController {
 		return "/board/freeboard/detail_freeboard";
 	}
 
-//	@GetMapping("/{id}/form")
-//	public String update(@PathVariable Long id, Model model, HttpSession session) {
-//		if (!HttpSessionUtils.isLoginUser(session)) {
-//			return "/user/login";
-//		}
-//		User loginUser = HttpSessionUtils.getUserFromSession(session);
-//		FreeBoardResponse freeBoard = freeBoardService.getOneFreeBoard(id);
-//		if (!loginUser.matchId(freeBoard.getWriter().getId())) {
-//			model.addAttribute("errorMessage", "본인의 작성한 글만 수정 가능합니다.");
-//			return "/user/login";
-//		}
-//		model.addAttribute("freeBoard", freeBoard);
-//		return "/board/freeboard/freeboard_updateForm";
-//	}
 	@GetMapping("/{id}/form")
 	public String update(@PathVariable Long id, Model model, HttpSession session) {
 		if (!HttpSessionUtils.isLoginUser(session)) {
