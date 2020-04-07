@@ -9,9 +9,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.phcworld.domain.board.FreeBoard;
@@ -97,20 +97,20 @@ public class FreeBoardController {
 		return "/board/freeboard/freeboard_updateForm";
 	}
 
-	@PutMapping("/{id}")
-	public String modify(@PathVariable Long id, FreeBoard freeBoard, HttpSession session, Model model) {
+	@PatchMapping("")
+	public String modify(FreeBoard freeBoard, HttpSession session, Model model) {
 		if (!HttpSessionUtils.isLoginUser(session)) {
 			return "/user/login";
 		}
 		User loginUser = HttpSessionUtils.getUserFromSession(session);
-		FreeBoard oneFreeBoard = freeBoardService.getOneFreeBoard(id);
+		FreeBoard oneFreeBoard = freeBoardService.getOneFreeBoard(freeBoard.getId());
 		if (!loginUser.matchId(oneFreeBoard.getWriter().getId())) {
 			model.addAttribute("errorMessage", "본인의 작성한 글만 수정 가능합니다.");
 			return "/user/login";
 		}
 		
 		freeBoardService.updateFreeBoard(freeBoard);
-		return "redirect:/freeboards/" + id;
+		return "redirect:/freeboards/" + freeBoard.getId();
 	}
 
 	@DeleteMapping("/{id}")
