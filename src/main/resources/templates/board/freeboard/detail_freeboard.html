@@ -62,7 +62,7 @@
  						<div class="col-lg-12 col-md-12">
  						<article class="answer-template">
  							<label for="contents"><h1 class="comments-title"><span class="fa fa-comments"></span> Comments<span id="countOfAnswer">{{countOfAnswer}}</span></h1></label>
-							{{#freeBoardAnswers}}
+							{{#freeBoardAnswerList}}
 							<article class="answer-article" id="answer-article">
 							<div class="be-comment">
 								<div class="be-img-comment">	
@@ -78,7 +78,7 @@
 										<a class="answer-get" href="/freeboards/{{freeBoard.id}}/answers/{{id}}">수정</a>
 										<a class="answer-delete" href="/freeboards/{{freeBoard.id}}/answers/{{id}}">삭제</a>
 										<i class="fa fa-clock-o"></i>
-											{{formattedUpdateDate}}
+											{{updateDate}}
 									</span>
 									<p class="be-comment-text">
 										{{{contents}}}
@@ -86,7 +86,7 @@
 								</div>
 							</div>
 							</article>
-							{{/freeBoardAnswers}}
+							{{/freeBoardAnswerList}}
  						</article>
  						</div>
  						

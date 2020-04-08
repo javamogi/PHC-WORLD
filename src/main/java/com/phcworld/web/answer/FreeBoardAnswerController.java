@@ -19,7 +19,6 @@ import com.phcworld.domain.exception.ContentsEmptyException;
 import com.phcworld.domain.exception.LoginNotUserException;
 import com.phcworld.domain.exception.MatchNotUserExceptioin;
 import com.phcworld.domain.user.User;
-import com.phcworld.ifs.CrudInterface;
 import com.phcworld.service.answer.FreeBoardAnswerServiceImpl;
 import com.phcworld.utils.HttpSessionUtils;
 

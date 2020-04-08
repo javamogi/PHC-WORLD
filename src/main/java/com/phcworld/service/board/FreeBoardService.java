@@ -3,21 +3,22 @@ package com.phcworld.service.board;
 import java.util.List;
 
 import com.phcworld.domain.board.FreeBoard;
+import com.phcworld.domain.board.FreeBoardResponse;
 import com.phcworld.domain.user.User;
 
 public interface FreeBoardService {
 	
-	List<FreeBoard> findFreeBoardAllListAndSetNewBadge();
+	List<FreeBoardResponse> findFreeBoardAllListAndSetNewBadge();
 	
-	FreeBoard createFreeBoard(User user, FreeBoard freeBoard);
+	FreeBoardResponse createFreeBoard(User user, FreeBoard freeBoard);
 	
-	FreeBoard getOneFreeBoard(Long id);
+	FreeBoardResponse getOneFreeBoard(Long id);
 	
-	FreeBoard addFreeBoardCount(Long id);
+	FreeBoardResponse addFreeBoardCount(Long id);
 	
-	FreeBoard updateFreeBoard(FreeBoard freeBoard);
+	FreeBoardResponse updateFreeBoard(FreeBoard freeBoard);
 	
-	void deleteFreeBoard(FreeBoard freeBoard);
+	void deleteFreeBoard(Long id);
 	
 	List<FreeBoard> findFreeBoardListByWriter(User loginUser);
 }

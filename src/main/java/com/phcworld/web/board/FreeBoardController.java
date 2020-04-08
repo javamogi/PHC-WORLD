@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.phcworld.domain.board.FreeBoard;
+import com.phcworld.domain.board.FreeBoardResponse;
 import com.phcworld.domain.user.User;
 import com.phcworld.service.board.FreeBoardServiceImpl;
 import com.phcworld.utils.HttpSessionUtils;
@@ -28,7 +29,7 @@ public class FreeBoardController {
 	
 	@GetMapping("")
 	public String getFreeBoardAllList(Model model) {
-		List<FreeBoard> list = freeBoardService.findFreeBoardAllListAndSetNewBadge();
+		List<FreeBoardResponse> list = freeBoardService.findFreeBoardAllListAndSetNewBadge();
 		model.addAttribute("freeboards", list);
 		return "/board/freeboard/freeboard";
 	}
@@ -48,9 +49,9 @@ public class FreeBoardController {
 		}
 		User sessionUser = HttpSessionUtils.getUserFromSession(session);
 		
-		FreeBoard createdFreeBoard = freeBoardService.createFreeBoard(sessionUser, freeBoard);
+		FreeBoardResponse response = freeBoardService.createFreeBoard(sessionUser, freeBoard);
 		
-		return "redirect:/freeboards/"+ createdFreeBoard.getId();
+		return "redirect:/freeboards/"+ response.getId();
 	}
 
 	@GetMapping("/{id}")
@@ -60,13 +61,13 @@ public class FreeBoardController {
 		boolean matchAuthority = false;
 		User loginUser = HttpSessionUtils.getUserFromSession(session);
 
-		FreeBoard freeBoard = freeBoardService.addFreeBoardCount(id);
+		FreeBoardResponse freeBoard = freeBoardService.addFreeBoardCount(id);
 
 		// checkAdminAndWiter
 		if (loginUser != null) {
 			isLoginUser = true;
 			if (freeBoard != null) {
-				if (freeBoard.matchUser(loginUser)) {
+				if (freeBoard.getWriter().equals(loginUser)) {
 					matchLoginUserAndWriter = true;
 				}
 			}
@@ -88,7 +89,7 @@ public class FreeBoardController {
 			return "/user/login";
 		}
 		User loginUser = HttpSessionUtils.getUserFromSession(session);
-		FreeBoard freeBoard = freeBoardService.getOneFreeBoard(id);
+		FreeBoardResponse freeBoard = freeBoardService.getOneFreeBoard(id);
 		if (!loginUser.matchId(freeBoard.getWriter().getId())) {
 			model.addAttribute("errorMessage", "본인의 작성한 글만 수정 가능합니다.");
 			return "/user/login";
@@ -103,7 +104,7 @@ public class FreeBoardController {
 			return "/user/login";
 		}
 		User loginUser = HttpSessionUtils.getUserFromSession(session);
-		FreeBoard oneFreeBoard = freeBoardService.getOneFreeBoard(freeBoard.getId());
+		FreeBoardResponse oneFreeBoard = freeBoardService.getOneFreeBoard(freeBoard.getId());
 		if (!loginUser.matchId(oneFreeBoard.getWriter().getId())) {
 			model.addAttribute("errorMessage", "본인의 작성한 글만 수정 가능합니다.");
 			return "/user/login";
@@ -119,12 +120,12 @@ public class FreeBoardController {
 			return "/user/login";
 		}
 		User loginUser = HttpSessionUtils.getUserFromSession(session);
-		FreeBoard freeBoard = freeBoardService.getOneFreeBoard(id);
+		FreeBoardResponse freeBoard = freeBoardService.getOneFreeBoard(id);
 		if (!loginUser.matchId(freeBoard.getWriter().getId()) && !loginUser.matchAdminAuthority()) {
 			model.addAttribute("errorMessage", "삭제 권한이 없습니다.");
 			return "/user/login";
 		}
-		freeBoardService.deleteFreeBoard(freeBoard);
+		freeBoardService.deleteFreeBoard(id);
 		return "redirect:/freeboards";
 	}
 

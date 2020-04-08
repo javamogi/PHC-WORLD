@@ -4,8 +4,8 @@ import static org.hamcrest.Matchers.containsString;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
@@ -26,6 +26,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.phcworld.domain.board.FreeBoard;
+import com.phcworld.domain.board.FreeBoardResponse;
 import com.phcworld.domain.user.User;
 import com.phcworld.service.board.FreeBoardServiceImpl;
 import com.phcworld.utils.HttpSessionUtils;
@@ -51,29 +52,32 @@ public class FreeBoardControllerTest {
 				.authority("ROLE_USER")
 				.createDate(LocalDateTime.now())
 				.build();
-		FreeBoard board = FreeBoard.builder()
+		FreeBoardResponse response = FreeBoardResponse.builder()
 				.id(1L)
 				.writer(user)
 				.title("title")
 				.contents("content")
 				.icon("")
 				.badge("new")
-				.createDate(LocalDateTime.now())
 				.count(0)
+				.countOfAnswer("")
+				.updateDate("방금전")
 				.build();
-		FreeBoard board2 = FreeBoard.builder()
+		FreeBoardResponse response2 = FreeBoardResponse.builder()
 				.id(2L)
 				.writer(user)
 				.title("title2")
 				.contents("content2")
 				.icon("")
 				.badge("new")
-				.createDate(LocalDateTime.now())
 				.count(0)
+				.countOfAnswer("")
+				.updateDate("방금전")
 				.build();
-		List<FreeBoard> list = new ArrayList<FreeBoard>();
-		list.add(board);
-		list.add(board2);
+		List<FreeBoardResponse> list = new ArrayList<FreeBoardResponse>();
+		list.add(response);
+		list.add(response2);
+		
 		when(this.freeBoardService.findFreeBoardAllListAndSetNewBadge())
 		.thenReturn(list);
 		this.mvc.perform(get("/freeboards"))
@@ -165,22 +169,24 @@ public class FreeBoardControllerTest {
 		mockSession.setAttribute("messages", null);
 		mockSession.setAttribute("countMessages", "");
 		mockSession.setAttribute("alerts", null);
-		FreeBoard freeBoard = FreeBoard.builder()
+		FreeBoardResponse response = FreeBoardResponse.builder()
 				.id(1L)
 				.writer(user)
 				.title("title")
 				.contents("content")
 				.icon("")
+				.badge("new")
 				.count(0)
+				.countOfAnswer("")
 				.build();
 		when(this.freeBoardService.addFreeBoardCount(1L))
-		.thenReturn(freeBoard);
+		.thenReturn(response);
 		this.mvc.perform(get("/freeboards/{id}", 1L)
 				.session(mockSession))
 		.andDo(print())
 		.andExpect(view().name(containsString("/board/freeboard/detail_freeboard")))
 		.andExpect(status().isOk())
-		.andExpect(model().attribute("freeBoard", freeBoard))
+		.andExpect(model().attribute("freeBoard", response))
 		.andExpect(model().attribute("user", true))
 		.andExpect(model().attribute("matchUser", true))
 		.andExpect(model().attribute("matchAuthority", false))
@@ -199,22 +205,24 @@ public class FreeBoardControllerTest {
 				.authority("ROLE_USER")
 				.createDate(LocalDateTime.now())
 				.build();
-		FreeBoard freeBoard = FreeBoard.builder()
+		FreeBoardResponse response = FreeBoardResponse.builder()
 				.id(1L)
 				.writer(user)
 				.title("title")
 				.contents("content")
 				.icon("")
+				.badge("new")
 				.count(0)
+				.countOfAnswer("")
 				.build();
 		when(this.freeBoardService.addFreeBoardCount(1L))
-		.thenReturn(freeBoard);
+		.thenReturn(response);
 		this.mvc.perform(get("/freeboards/{id}", 1L)
 				.session(mockSession))
 		.andDo(print())
 		.andExpect(view().name(containsString("/board/freeboard/detail_freeboard")))
 		.andExpect(status().isOk())
-		.andExpect(model().attribute("freeBoard", freeBoard))
+		.andExpect(model().attribute("freeBoard", response))
 		.andExpect(model().attribute("user", false))
 		.andExpect(model().attribute("matchUser", false))
 		.andExpect(model().attribute("matchAuthority", false))
@@ -246,7 +254,7 @@ public class FreeBoardControllerTest {
 				.authority("ROLE_USER")
 				.createDate(LocalDateTime.now())
 				.build();
-		FreeBoard board = FreeBoard.builder()
+		FreeBoardResponse response = FreeBoardResponse.builder()
 				.id(1L)
 				.writer(user2)
 				.title("title")
@@ -254,15 +262,16 @@ public class FreeBoardControllerTest {
 				.icon("")
 				.badge("new")
 				.count(0)
+				.countOfAnswer("")
 				.build();
 		when(this.freeBoardService.addFreeBoardCount(1L))
-		.thenReturn(board);
+		.thenReturn(response);
 		this.mvc.perform(get("/freeboards/{id}", 1L)
 				.session(mockSession))
 		.andDo(print())
 		.andExpect(view().name(containsString("/board/freeboard/detail_freeboard")))
 		.andExpect(status().isOk())
-		.andExpect(model().attribute("freeBoard", board))
+		.andExpect(model().attribute("freeBoard", response))
 		.andExpect(model().attribute("user", true))
 		.andExpect(model().attribute("matchUser", false))
 		.andExpect(model().attribute("matchAuthority", false))
@@ -294,7 +303,7 @@ public class FreeBoardControllerTest {
 				.authority("ROLE_USER")
 				.createDate(LocalDateTime.now())
 				.build();
-		FreeBoard board = FreeBoard.builder()
+		FreeBoardResponse response = FreeBoardResponse.builder()
 				.id(1L)
 				.writer(user2)
 				.title("title")
@@ -302,15 +311,16 @@ public class FreeBoardControllerTest {
 				.icon("")
 				.badge("new")
 				.count(0)
+				.countOfAnswer("")
 				.build();
 		when(this.freeBoardService.addFreeBoardCount(1L))
-		.thenReturn(board);
+		.thenReturn(response);
 		this.mvc.perform(get("/freeboards/{id}", 1L)
 				.session(mockSession))
 		.andDo(print())
 		.andExpect(view().name(containsString("/board/freeboard/detail_freeboard")))
 		.andExpect(status().isOk())
-		.andExpect(model().attribute("freeBoard", board))
+		.andExpect(model().attribute("freeBoard", response))
 		.andExpect(model().attribute("user", true))
 		.andExpect(model().attribute("matchUser", false))
 		.andExpect(model().attribute("matchAuthority", true))
@@ -333,22 +343,24 @@ public class FreeBoardControllerTest {
 		mockSession.setAttribute("messages", null);
 		mockSession.setAttribute("countMessages", "");
 		mockSession.setAttribute("alerts", null);
-		FreeBoard freeBoard = FreeBoard.builder()
+		FreeBoardResponse response = FreeBoardResponse.builder()
 				.id(1L)
 				.writer(user)
 				.title("title")
 				.contents("content")
 				.icon("")
+				.badge("new")
 				.count(0)
+				.countOfAnswer("")
 				.build();
 		when(this.freeBoardService.getOneFreeBoard(1L))
-		.thenReturn(freeBoard);
+		.thenReturn(response);
 		this.mvc.perform(get("/freeboards/{id}/form", 1L)
 				.session(mockSession))
 		.andDo(print())
 		.andExpect(view().name(containsString("/board/freeboard/freeboard_updateForm")))
 		.andExpect(status().isOk())
-		.andExpect(model().attribute("freeBoard", freeBoard))
+		.andExpect(model().attribute("freeBoard", response))
 		.andExpect(model().size(1));
 	}
 	
@@ -364,16 +376,18 @@ public class FreeBoardControllerTest {
 				.authority("ROLE_USER")
 				.createDate(LocalDateTime.now())
 				.build();
-		FreeBoard freeBoard = FreeBoard.builder()
+		FreeBoardResponse response = FreeBoardResponse.builder()
 				.id(1L)
 				.writer(user)
 				.title("title")
 				.contents("content")
 				.icon("")
+				.badge("new")
 				.count(0)
+				.countOfAnswer("")
 				.build();
 		when(this.freeBoardService.getOneFreeBoard(1L))
-		.thenReturn(freeBoard);
+		.thenReturn(response);
 		this.mvc.perform(get("/freeboards/{id}/form", 1L)
 				.session(mockSession))
 		.andDo(print())
@@ -406,7 +420,7 @@ public class FreeBoardControllerTest {
 				.authority("ROLE_USER")
 				.createDate(LocalDateTime.now())
 				.build();
-		FreeBoard board = FreeBoard.builder()
+		FreeBoardResponse response = FreeBoardResponse.builder()
 				.id(1L)
 				.writer(user2)
 				.title("title")
@@ -414,9 +428,10 @@ public class FreeBoardControllerTest {
 				.icon("")
 				.badge("new")
 				.count(0)
+				.countOfAnswer("")
 				.build();
 		when(this.freeBoardService.getOneFreeBoard(1L))
-		.thenReturn(board);
+		.thenReturn(response);
 		this.mvc.perform(get("/freeboards/{id}/form", 1L)
 				.session(mockSession))
 		.andDo(print())
@@ -454,16 +469,26 @@ public class FreeBoardControllerTest {
 		FreeBoard newBoard = FreeBoard.builder()
 				.id(1L)
 				.writer(user)
-				.title("new title")
 				.contents("new content")
 				.icon("")
 				.badge("new")
 				.count(0)
 				.build();
-		when(this.freeBoardService.getOneFreeBoard(1L))
-		.thenReturn(board);
+		FreeBoardResponse response = FreeBoardResponse.builder()
+				.id(1L)
+				.writer(board.getWriter())
+				.title(board.getTitle())
+				.contents(board.getContents())
+				.icon(board.getIcon())
+				.badge(board.getBadge())
+				.count(board.getCount())
+				.countOfAnswer(board.getCountOfAnswer())
+				.build();
 		board.update(newBoard);
-		this.mvc.perform(put("/freeboards/{id}", 1L)
+		when(this.freeBoardService.getOneFreeBoard(1L))
+		.thenReturn(response);
+		this.mvc.perform(patch("/freeboards")
+				.param("id", "1")
 				.session(mockSession))
 		.andExpect(redirectedUrl("/freeboards/" + 1L));
 	}
@@ -471,7 +496,8 @@ public class FreeBoardControllerTest {
 	@Test
 	public void updateWhenEmptyLoginUser() throws Exception {
 		MockHttpSession mockSession = new MockHttpSession();
-		this.mvc.perform(put("/freeboards/{id}", 1L)
+		this.mvc.perform(patch("/freeboards")
+				.param("id", "1")
 				.param("contents", "updateTest")
 				.param("icon", "test.jpg")
 				.session(mockSession))
@@ -505,7 +531,7 @@ public class FreeBoardControllerTest {
 				.authority("ROLE_USER")
 				.createDate(LocalDateTime.now())
 				.build();
-		FreeBoard board = FreeBoard.builder()
+		FreeBoardResponse response = FreeBoardResponse.builder()
 				.id(1L)
 				.writer(user2)
 				.title("title")
@@ -513,10 +539,12 @@ public class FreeBoardControllerTest {
 				.icon("")
 				.badge("new")
 				.count(0)
+				.countOfAnswer("")
 				.build();
 		when(this.freeBoardService.getOneFreeBoard(1L))
-		.thenReturn(board);
-		this.mvc.perform(put("/freeboards/{id}", 1L)
+		.thenReturn(response);
+		this.mvc.perform(patch("/freeboards")
+				.param("id", "1")
 				.param("contents", "updateTest")
 				.param("icon", "test.jpg")
 				.session(mockSession))
@@ -543,7 +571,7 @@ public class FreeBoardControllerTest {
 		mockSession.setAttribute("messages", null);
 		mockSession.setAttribute("countMessages", "");
 		mockSession.setAttribute("alerts", null);
-		FreeBoard board = FreeBoard.builder()
+		FreeBoardResponse response = FreeBoardResponse.builder()
 				.id(1L)
 				.writer(user)
 				.title("title")
@@ -551,9 +579,10 @@ public class FreeBoardControllerTest {
 				.icon("")
 				.badge("new")
 				.count(0)
+				.countOfAnswer("")
 				.build();
 		when(this.freeBoardService.getOneFreeBoard(1L))
-		.thenReturn(board);
+		.thenReturn(response);
 		this.mvc.perform(delete("/freeboards/{id}", 1L)
 				.session(mockSession))
 		.andExpect(redirectedUrl("/freeboards"));
@@ -594,7 +623,7 @@ public class FreeBoardControllerTest {
 				.authority("ROLE_USER")
 				.createDate(LocalDateTime.now())
 				.build();
-		FreeBoard board = FreeBoard.builder()
+		FreeBoardResponse response = FreeBoardResponse.builder()
 				.id(1L)
 				.writer(user2)
 				.title("title")
@@ -602,9 +631,10 @@ public class FreeBoardControllerTest {
 				.icon("")
 				.badge("new")
 				.count(0)
+				.countOfAnswer("")
 				.build();
 		when(this.freeBoardService.getOneFreeBoard(1L))
-		.thenReturn(board);
+		.thenReturn(response);
 		this.mvc.perform(delete("/freeboards/{id}", 1L)
 				.session(mockSession))
 		.andDo(print())

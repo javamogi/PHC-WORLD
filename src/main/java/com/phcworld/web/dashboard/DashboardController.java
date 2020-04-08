@@ -16,7 +16,6 @@ import com.phcworld.domain.answer.DiaryAnswer;
 import com.phcworld.domain.answer.FreeBoardAnswer;
 import com.phcworld.domain.board.Diary;
 import com.phcworld.domain.board.FreeBoard;
-import com.phcworld.domain.timeline.TempTimeline;
 import com.phcworld.domain.timeline.Timeline;
 import com.phcworld.domain.user.User;
 import com.phcworld.service.alert.AlertServiceImpl;
@@ -24,7 +23,6 @@ import com.phcworld.service.answer.DiaryAnswerServiceImpl;
 import com.phcworld.service.answer.FreeBoardAnswerServiceImpl;
 import com.phcworld.service.board.DiaryServiceImpl;
 import com.phcworld.service.board.FreeBoardServiceImpl;
-import com.phcworld.service.timeline.TempTimelineService;
 import com.phcworld.service.timeline.TimelineServiceImpl;
 import com.phcworld.utils.HttpSessionUtils;
 

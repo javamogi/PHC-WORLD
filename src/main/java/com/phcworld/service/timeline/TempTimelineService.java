@@ -25,7 +25,7 @@ public class TempTimelineService {
 	
 	@Autowired
 	private FreeBoardServiceImpl freeBoardService;
-
+	
 	@Autowired
 	private FreeBoardAnswerServiceImpl freeBoardAnswerService;
 	
@@ -42,6 +42,7 @@ public class TempTimelineService {
 		List<TempTimeline> timelineList = new ArrayList<TempTimeline>();
 		
 		List<FreeBoard> freeBoardList = freeBoardService.findFreeBoardListByWriter(loginUser);
+		
 		for(int i = 0; i < freeBoardList.size(); i++) {
 			TempTimeline temp = TempTimeline.builder()
 					.type("free board")
