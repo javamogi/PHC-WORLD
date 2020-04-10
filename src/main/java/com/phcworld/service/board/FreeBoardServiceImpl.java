@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.phcworld.domain.answer.FreeBoardAnswer;
 import com.phcworld.domain.api.model.response.FreeBoardAnswerApiResponse;
 import com.phcworld.domain.board.FreeBoard;
+import com.phcworld.domain.board.FreeBoardRequest;
 import com.phcworld.domain.board.FreeBoardResponse;
 import com.phcworld.domain.user.User;
 import com.phcworld.repository.board.FreeBoardRepository;
@@ -64,12 +65,12 @@ public class FreeBoardServiceImpl implements FreeBoardService {
 	}
 
 	@Override
-	public FreeBoardResponse createFreeBoard(User user, FreeBoard inputFreeBoard) {
+	public FreeBoardResponse createFreeBoard(User user, FreeBoardRequest request) {
 		FreeBoard freeBoard = FreeBoard.builder()
 				.writer(user)
-				.title(inputFreeBoard.getTitle())
-				.contents(inputFreeBoard.getContents())
-				.icon(inputFreeBoard.getIcon())
+				.title(request.getTitle())
+				.contents(request.getContents())
+				.icon(request.getIcon())
 				.count(0)
 				.build();
 		FreeBoard createdFreeBoard = freeBoardRepository.save(freeBoard);
@@ -93,9 +94,9 @@ public class FreeBoardServiceImpl implements FreeBoardService {
 	}
 
 	@Override
-	public FreeBoardResponse updateFreeBoard(FreeBoard newFreeBoard) {
-		FreeBoard freeBoard = freeBoardRepository.getOne(newFreeBoard.getId());
-		freeBoard.update(newFreeBoard);
+	public FreeBoardResponse updateFreeBoard(FreeBoardRequest request) {
+		FreeBoard freeBoard = freeBoardRepository.getOne(request.getId());
+		freeBoard.update(request);
 		return response(freeBoardRepository.save(freeBoard));
 	}
 

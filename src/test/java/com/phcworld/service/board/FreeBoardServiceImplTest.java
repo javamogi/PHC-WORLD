@@ -20,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.phcworld.domain.answer.FreeBoardAnswer;
 import com.phcworld.domain.board.FreeBoard;
+import com.phcworld.domain.board.FreeBoardRequest;
 import com.phcworld.domain.board.FreeBoardResponse;
 import com.phcworld.domain.user.User;
 
@@ -42,12 +43,17 @@ public class FreeBoardServiceImplTest {
 				.authority("ROLE_USER")
 				.createDate(LocalDateTime.now())
 				.build();
+		FreeBoardRequest request = FreeBoardRequest.builder()
+				.title("title")
+				.contents("contents")
+				.icon("")
+				.build();
 		FreeBoard board = FreeBoard.builder()
 				.id(1L)
 				.writer(user)
-				.title("title")
-				.contents("content")
-				.icon("")
+				.title(request.getTitle())
+				.contents(request.getContents())
+				.icon(request.getIcon())
 				.badge("new")
 				.count(0)
 				.build();
@@ -60,8 +66,8 @@ public class FreeBoardServiceImplTest {
 				.badge(board.getBadge())
 				.count(board.getCount())
 				.build();
-		when(freeBoardService.createFreeBoard(user, board)).thenReturn(response);
-		FreeBoardResponse freeBoardResponse = freeBoardService.createFreeBoard(user, board);
+		when(freeBoardService.createFreeBoard(user, request)).thenReturn(response);
+		FreeBoardResponse freeBoardResponse = freeBoardService.createFreeBoard(user, request);
 		assertThat(response, is(freeBoardResponse));
 	}
 		
@@ -77,16 +83,20 @@ public class FreeBoardServiceImplTest {
 				.authority("ROLE_USER")
 				.createDate(LocalDateTime.now())
 				.build();
+		FreeBoardRequest request = FreeBoardRequest.builder()
+				.title("title")
+				.contents("contents")
+				.icon("")
+				.build();
 		FreeBoard board = FreeBoard.builder()
 				.id(1L)
 				.writer(user)
-				.title("title")
-				.contents("content")
-				.icon("")
+				.title(request.getTitle())
+				.contents(request.getContents())
+				.icon(request.getIcon())
 				.badge("new")
 				.count(0)
 				.build();
-		
 		FreeBoardResponse response = FreeBoardResponse.builder()
 				.id(1L)
 				.writer(user)
@@ -96,8 +106,8 @@ public class FreeBoardServiceImplTest {
 				.badge(board.getBadge())
 				.count(board.getCount())
 				.build();
-		when(freeBoardService.createFreeBoard(user, board)).thenReturn(response);
-		FreeBoardResponse freeBoardResponse = freeBoardService.createFreeBoard(user, board);
+		when(freeBoardService.createFreeBoard(user, request)).thenReturn(response);
+		FreeBoardResponse freeBoardResponse = freeBoardService.createFreeBoard(user, request);
 		
 		when(freeBoardService.getOneFreeBoard(response.getId())).thenReturn(response);
 		FreeBoardResponse actual = freeBoardService.getOneFreeBoard(response.getId());
@@ -126,15 +136,12 @@ public class FreeBoardServiceImplTest {
 				.count(0)
 				.build();
 		
-		FreeBoard newBoard = FreeBoard.builder()
+		FreeBoardRequest request = FreeBoardRequest.builder()
 				.id(1L)
-				.writer(user)
-				.contents("new content")
+				.contents("new contents")
 				.icon("")
-				.badge("new")
-				.count(0)
 				.build();
-		board.update(newBoard);
+		board.update(request);
 		
 		FreeBoardResponse response = FreeBoardResponse.builder()
 				.id(1L)
@@ -148,10 +155,10 @@ public class FreeBoardServiceImplTest {
 				.updateDate(board.getFormattedUpdateDate())
 				.build();
 		
-		when(freeBoardService.updateFreeBoard(newBoard)).thenReturn(response);
-		FreeBoardResponse updatedfreeBoard = freeBoardService.updateFreeBoard(newBoard);
+		when(freeBoardService.updateFreeBoard(request)).thenReturn(response);
+		FreeBoardResponse updatedfreeBoard = freeBoardService.updateFreeBoard(request);
 		
-		assertThat(newBoard.getContents(), is(updatedfreeBoard.getContents()));		
+		assertThat(request.getContents(), is(updatedfreeBoard.getContents()));		
 	}
 	
 	@Test

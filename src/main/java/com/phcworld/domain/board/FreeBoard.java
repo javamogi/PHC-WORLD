@@ -20,7 +20,6 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.phcworld.domain.answer.FreeBoardAnswer;
 import com.phcworld.domain.user.User;
 import com.phcworld.utils.LocalDateTimeUtils;
@@ -90,9 +89,9 @@ public class FreeBoard {
 		return LocalDateTimeUtils.getTime(updateDate);
 	}
 
-	public void update(FreeBoard newFreeBoard) {
-		this.contents = newFreeBoard.getContents();
-		this.icon = newFreeBoard.getIcon();
+	public void update(FreeBoardRequest request) {
+		this.contents = request.getContents();
+		this.icon = request.getIcon();
 	}
 
 	public boolean matchUser(User loginUser) {

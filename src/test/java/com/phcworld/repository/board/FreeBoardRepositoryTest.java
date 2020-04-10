@@ -17,6 +17,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.phcworld.domain.board.FreeBoard;
+import com.phcworld.domain.board.FreeBoardRequest;
 import com.phcworld.domain.user.User;
 
 import lombok.extern.slf4j.Slf4j;
@@ -88,18 +89,16 @@ public class FreeBoardRepositoryTest {
 				.icon("")
 				.count(0)
 				.build();
-		FreeBoard newFreeBoard = FreeBoard.builder()
-				.writer(user)
-				.title("new title")
-				.contents("new content")
+		FreeBoardRequest request = FreeBoardRequest.builder()
+				.id(1L)
+				.contents("new contents")
 				.icon("")
-				.count(0)
 				.build();
 		FreeBoard newBoard = freeBoardRepository.save(freeBoard);
 		FreeBoard regitBoard = freeBoardRepository.getOne(newBoard.getId());
-		regitBoard.update(newFreeBoard);
+		regitBoard.update(request);
 		FreeBoard updatedBoard = freeBoardRepository.save(regitBoard);
-		assertThat("new content", is(updatedBoard.getContents()));
+		assertThat(request.getContents(), is(updatedBoard.getContents()));
 	}
 	
 	@Test

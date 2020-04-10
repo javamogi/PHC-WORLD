@@ -26,6 +26,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.phcworld.domain.board.FreeBoard;
+import com.phcworld.domain.board.FreeBoardRequest;
 import com.phcworld.domain.board.FreeBoardResponse;
 import com.phcworld.domain.user.User;
 import com.phcworld.service.board.FreeBoardServiceImpl;
@@ -466,13 +467,10 @@ public class FreeBoardControllerTest {
 				.badge("new")
 				.count(0)
 				.build();
-		FreeBoard newBoard = FreeBoard.builder()
+		FreeBoardRequest request = FreeBoardRequest.builder()
 				.id(1L)
-				.writer(user)
-				.contents("new content")
+				.contents("new contents")
 				.icon("")
-				.badge("new")
-				.count(0)
 				.build();
 		FreeBoardResponse response = FreeBoardResponse.builder()
 				.id(1L)
@@ -484,7 +482,7 @@ public class FreeBoardControllerTest {
 				.count(board.getCount())
 				.countOfAnswer(board.getCountOfAnswer())
 				.build();
-		board.update(newBoard);
+		board.update(request);
 		when(this.freeBoardService.getOneFreeBoard(1L))
 		.thenReturn(response);
 		this.mvc.perform(patch("/freeboards")
