@@ -220,6 +220,19 @@
 * 게시물을 update하는 메서드
 * 게시물 글쓴이와 로그인 User와 비교하는 메서드. 만약 글쓴이 이외에 회원 권한을 가진 User가 게시물을 삭제할 때 쓰인다.
 
+**FreeBoardRequest**
+
+* FreeBoard에 대한 요청을 보낼 때 사용할 DTO
+* 필드
+  * id
+    * 수정을 요청할 때 사용하기 위한 id
+  * title
+    * 생성을 요청할 때 사용할 제목
+  * contents
+    * 생성과 수정을 요청할 때 사용할 내용
+  * icon
+    * 생성과 수정을 요청할 때 이미지가 있는지 없는지 사용할 icon
+
 **FreeBoardResponse**
 
 * FreeBoard를 생성하고 응답으로 건내줄 DTO
