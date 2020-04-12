@@ -24,10 +24,10 @@ public class HomeController {
 	public String redirectToAlert(@PathVariable Long id) {
 		Alert alert = alertService.getOneAlert(id);
 		if(alert.getDiaryAnswer() != null) {
-			return "redirect:/diary/"+ alert.getDiaryAnswer().getDiary().getId() + "/detail";
+			return "redirect:/diaries/"+ alert.getDiaryAnswer().getDiary().getId();
 		}
 		if(alert.getGood() != null) {
-			return "redirect:/diary/"+ alert.getGood().getDiary().getId() + "/detail";
+			return "redirect:/diaries/"+ alert.getGood().getDiary().getId();
 		}
 		return "redirect:/freeboards/"+ alert.getFreeBoardAnswer().getFreeBoard().getId();
 	}

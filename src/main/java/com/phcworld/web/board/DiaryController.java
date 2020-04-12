@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -26,11 +27,8 @@ import com.phcworld.service.user.UserService;
 import com.phcworld.utils.HttpSessionUtils;
 import com.phcworld.utils.PageNationsUtil;
 
-import lombok.extern.slf4j.Slf4j;
-
 @Controller
-@RequestMapping("/diary")
-@Slf4j
+@RequestMapping("/diaries")
 public class DiaryController {
 
 	@Autowired
@@ -76,10 +74,10 @@ public class DiaryController {
 		User sessionUser = HttpSessionUtils.getUserFromSession(session);
 		diaryService.createDiary(sessionUser, diary);
 
-		return "redirect:/diary/list/" + sessionUser.getEmail();
+		return "redirect:/diaries/list/" + sessionUser.getEmail();
 	}
 
-	@GetMapping("/{id}/detail")
+	@GetMapping("/{id}")
 	public String read(@PathVariable Long id, HttpSession session, Model model) {
 		boolean isLoginUser = false;
 		boolean matchLoginUserAndWriter = false;
@@ -119,8 +117,8 @@ public class DiaryController {
 		return "/board/diary/diary_updateForm";
 	}
 
-	@PutMapping("/{id}")
-	public String update(@PathVariable Long id, Diary inputDiary, HttpSession session, Model model) {
+	@PatchMapping("")
+	public String update(Long id, Diary inputDiary, HttpSession session, Model model) {
 		if (!HttpSessionUtils.isLoginUser(session)) {
 			return "/user/login";
 		}
@@ -131,10 +129,10 @@ public class DiaryController {
 			return "/user/login";
 		}
 		diaryService.updateDiary(diary, inputDiary);
-		return "redirect:/diary/" + id + "/detail";
+		return "redirect:/diaries/" + id;
 	}
 
-	@DeleteMapping("/{id}/delete")
+	@DeleteMapping("/{id}")
 	public String delete(@PathVariable Long id, HttpSession session, Model model) {
 		if (!HttpSessionUtils.isLoginUser(session)) {
 			return "/user/login";
@@ -146,7 +144,7 @@ public class DiaryController {
 			return "/user/login";
 		}
 		diaryService.deleteDiary(diary);
-		return "redirect:/diary/list/" + loginUser.getEmail();
+		return "redirect:/diaries/list/" + loginUser.getEmail();
 	}
 	
 	@PutMapping("/{id}/good")

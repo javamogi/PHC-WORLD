@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.phcworld.domain.api.model.response.DiaryAnswerApiResponse;
-import com.phcworld.domain.api.model.response.FreeBoardAnswerApiResponse;
 import com.phcworld.domain.api.model.response.SuccessResponse;
 import com.phcworld.domain.exception.ContentsEmptyException;
 import com.phcworld.domain.exception.LoginNotUserException;
@@ -25,7 +24,7 @@ import com.phcworld.service.answer.DiaryAnswerServiceImpl;
 import com.phcworld.utils.HttpSessionUtils;
 
 @RestController
-@RequestMapping("/diary/{diaryId}/answer")
+@RequestMapping("/diaries/{diaryId}/answer")
 public class DiaryAnswerController {
 	
 	@Autowired

@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.phcworld.domain.board.FreeBoard;
 import com.phcworld.domain.board.FreeBoardRequest;
 import com.phcworld.domain.board.FreeBoardResponse;
 import com.phcworld.domain.user.User;

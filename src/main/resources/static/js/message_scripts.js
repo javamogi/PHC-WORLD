@@ -164,10 +164,10 @@ function addDiaryTemplate(data){
 		+ "<img src='/images/profile/"+data.diary.writer.profileImage+"' alt='#' width='44' height='44'>"
 		+ "</a><div class='activityContent'><ul class='simpleListings status'>"
 		+ "<li><div class='title'>"
-		+ "<a href='/diary/"+ data.diary.id +"/detail'>"+ data.diary.title +"</a>"
+		+ "<a href='/diaries/"+ data.diary.id +"'>"+ data.diary.title +"</a>"
 		+ "</div><div class='info'>"+ data.formattedSaveDate +"</div>"
 		+ "	<p>"+ data.type +"</p><div class='share'>"
-		+ "<a href='/diary/"+ data.diary.id +"/detail' title='#'>"
+		+ "<a href='/diaries/"+ data.diary.id +"' title='#'>"
 		+ "<i class='fa fa-comments'></i> "+ data.diary.countOfAnswer +"</a></div></li>"
 		+ "</ul></div></div></div>";
 //	$("#timelineList").append(template);

@@ -102,7 +102,7 @@ public class DiaryControllerTest {
 		.thenReturn(page);
 		Page<Diary> diaryPage = diaryService.findPageDiary(user, 1, requestUser);
 		
-		this.mvc.perform(get("/diary/list/{email}", "test@test.test")
+		this.mvc.perform(get("/diaries/list/{email}", "test@test.test")
 				.session(mockSession))
 		.andDo(print())
 		.andExpect(view().name(containsString("/board/diary/diary")))
@@ -115,7 +115,7 @@ public class DiaryControllerTest {
 	
 	@Test
 	public void requestDiaryFormEmptyLoginUser() throws Exception {
-		this.mvc.perform(get("/diary/form"))
+		this.mvc.perform(get("/diaries/form"))
 		.andExpect(view().name(containsString("/user/login")))
 		.andExpect(status().isOk());
 	}
@@ -136,7 +136,7 @@ public class DiaryControllerTest {
 		mockSession.setAttribute("messages", null);
 		mockSession.setAttribute("countMessages", "");
 		mockSession.setAttribute("alerts", null);
-		this.mvc.perform(get("/diary/form")
+		this.mvc.perform(get("/diaries/form")
 				.session(mockSession))
 		.andExpect(view().name(containsString("/board/diary/diary_form")))
 		.andExpect(model().attribute("user", user))
@@ -159,18 +159,18 @@ public class DiaryControllerTest {
 		mockSession.setAttribute("messages", null);
 		mockSession.setAttribute("countMessages", "");
 		mockSession.setAttribute("alerts", null);
-		this.mvc.perform(post("/diary")
+		this.mvc.perform(post("/diaries")
 				.param("title", "test")
 				.param("contents", "test")
 				.param("thumbnail", "no-image-icon.gif")
 				.session(mockSession))
-		.andExpect(redirectedUrl("/diary/list/" + user.getEmail()));
+		.andExpect(redirectedUrl("/diaries/list/" + user.getEmail()));
 	}
 	
 	@Test
 	public void createWhenEmptyLoginUserDiary() throws Exception {
 		MockHttpSession mockSession = new MockHttpSession();
-		this.mvc.perform(post("/diary")
+		this.mvc.perform(post("/diaries")
 				.param("title", "test")
 				.param("contents", "test")
 				.param("thumbnail", "no-image-icon.gif")
@@ -204,7 +204,7 @@ public class DiaryControllerTest {
 				.build();
 		when(this.diaryService.getOneDiary(1L))
 		.thenReturn(diary);
-		this.mvc.perform(get("/diary/{id}/detail", 1L)
+		this.mvc.perform(get("/diaries/{id}", 1L)
 				.session(mockSession))
 		.andDo(print())
 		.andExpect(view().name(containsString("/board/diary/detail_diary")))
@@ -237,7 +237,7 @@ public class DiaryControllerTest {
 				.build();
 		when(this.diaryService.getOneDiary(1L))
 		.thenReturn(diary);
-		this.mvc.perform(get("/diary/{id}/detail", 1L)
+		this.mvc.perform(get("/diaries/{id}", 1L)
 				.session(mockSession))
 		.andDo(print())
 		.andExpect(view().name(containsString("/board/diary/detail_diary")))
@@ -283,7 +283,7 @@ public class DiaryControllerTest {
 				.build();
 		when(this.diaryService.getOneDiary(1L))
 		.thenReturn(diary);
-		this.mvc.perform(get("/diary/{id}/detail", 1L)
+		this.mvc.perform(get("/diaries/{id}", 1L)
 				.session(mockSession))
 		.andDo(print())
 		.andExpect(view().name(containsString("/board/diary/detail_diary")))
@@ -330,7 +330,7 @@ public class DiaryControllerTest {
 				.build();
 		when(this.diaryService.getOneDiary(1L))
 		.thenReturn(diary);
-		this.mvc.perform(get("/diary/{id}/detail", 1L)
+		this.mvc.perform(get("/diaries/{id}", 1L)
 				.session(mockSession))
 		.andDo(print())
 		.andExpect(view().name(containsString("/board/diary/detail_diary")))
@@ -367,7 +367,7 @@ public class DiaryControllerTest {
 				.build();
 		when(this.diaryService.getOneDiary(1L))
 		.thenReturn(diary);
-		this.mvc.perform(get("/diary/{id}/form", 1L)
+		this.mvc.perform(get("/diaries/{id}/form", 1L)
 				.session(mockSession))
 		.andDo(print())
 		.andExpect(view().name(containsString("/board/diary/diary_updateForm")))
@@ -397,7 +397,7 @@ public class DiaryControllerTest {
 				.build();
 		when(this.diaryService.getOneDiary(1L))
 		.thenReturn(diary);
-		this.mvc.perform(get("/diary/{id}/form", 1L)
+		this.mvc.perform(get("/diaries/{id}/form", 1L)
 				.session(mockSession))
 		.andDo(print())
 		.andExpect(view().name(containsString("/user/login")))
@@ -438,7 +438,7 @@ public class DiaryControllerTest {
 				.build();
 		when(this.diaryService.getOneDiary(1L))
 		.thenReturn(diary);
-		this.mvc.perform(get("/diary/{id}/form", 1L)
+		this.mvc.perform(get("/diaries/{id}/form", 1L)
 				.session(mockSession))
 		.andDo(print())
 		.andExpect(view().name(containsString("/user/login")))
@@ -482,17 +482,19 @@ public class DiaryControllerTest {
 				.build();
 		given(this.diaryService.updateDiary(diary, updatedDiary))
 		.willReturn(updatedDiary);
-		this.mvc.perform(put("/diary/{id}", 1L)
+		this.mvc.perform(patch("/diaries")
+				.param("id", "1")
 				.param("contents", "updateTest")
 				.param("thumbnail", "no-image-icon.gif")
 				.session(mockSession))
-		.andExpect(redirectedUrl("/diary/" + 1L + "/detail"));
+		.andExpect(redirectedUrl("/diaries/" + 1L));
 	}
 	
 	@Test
 	public void updateEmptyLoginUser() throws Exception {
 		MockHttpSession mockSession = new MockHttpSession();
-		this.mvc.perform(put("/diary/{id}", 1L)
+		this.mvc.perform(patch("/diaries")
+				.param("id", "1")
 				.param("contents", "updateTest")
 				.param("thumbnail", "no-image-icon.gif")
 				.session(mockSession))
@@ -535,7 +537,8 @@ public class DiaryControllerTest {
 				.build();
 		when(this.diaryService.getOneDiary(1L))
 		.thenReturn(diary);
-		this.mvc.perform(put("/diary/{id}", 1L)
+		this.mvc.perform(patch("/diaries")
+				.param("id", "1")
 				.param("contents", "updateTest")
 				.param("thumbnail", "no-image-icon.gif")
 				.session(mockSession))
@@ -572,15 +575,15 @@ public class DiaryControllerTest {
 		when(this.diaryService.getOneDiary(1L))
 		.thenReturn(diary);
 		diaryService.deleteDiary(diary);
-		this.mvc.perform(delete("/diary/{id}/delete", 1L)
+		this.mvc.perform(delete("/diaries/{id}", 1L)
 				.session(mockSession))
-		.andExpect(redirectedUrl("/diary/list/" + user.getEmail()));
+		.andExpect(redirectedUrl("/diaries/list/" + user.getEmail()));
 	}
 	
 	@Test
 	public void deleteEmptyLoginUser() throws Exception {
 		MockHttpSession mockSession = new MockHttpSession();
-		this.mvc.perform(delete("/diary/{id}/delete", 1L)
+		this.mvc.perform(delete("/diaries/{id}", 1L)
 				.session(mockSession))
 		.andDo(print())
 		.andExpect(view().name(containsString("/user/login")))
@@ -621,7 +624,7 @@ public class DiaryControllerTest {
 				.build();
 		when(this.diaryService.getOneDiary(1L))
 		.thenReturn(diary);
-		this.mvc.perform(delete("/diary/{id}/delete", 1L)
+		this.mvc.perform(delete("/diaries/{id}", 1L)
 				.session(mockSession))
 		.andDo(print())
 		.andExpect(view().name(containsString("/user/login")))
@@ -633,7 +636,7 @@ public class DiaryControllerTest {
 	@Test
 	public void pushUpbuttonWhenEmptyLoginUser() throws Exception {
 		MockHttpSession mockSession = new MockHttpSession();
-		this.mvc.perform(put("/diary/{diaryId}/good", 1L)
+		this.mvc.perform(put("/diaries/{diaryId}/good", 1L)
 				.session(mockSession))
 		.andExpect(jsonPath("$.error").value("로그인을 해야합니다."));
 	}
@@ -672,7 +675,7 @@ public class DiaryControllerTest {
 				.build();
 		when(diaryService.updateGood(diary.getId(), user))
 		.thenReturn(successResponse);
-		this.mvc.perform(put("/diary/{diaryId}/good", 1L)
+		this.mvc.perform(put("/diaries/{diaryId}/good", 1L)
 				.session(mockSession))
 		.andExpect(status().isOk())
 		.andExpect(jsonPath("$.success").value(successResponse.getSuccess()));

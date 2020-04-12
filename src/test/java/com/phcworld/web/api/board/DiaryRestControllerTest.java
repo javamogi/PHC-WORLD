@@ -38,7 +38,7 @@ public class DiaryRestControllerTest {
 	@Test
 	public void pushUpbuttonWhenEmptyLoginUser() throws Exception {
 		MockHttpSession mockSession = new MockHttpSession();
-		this.mvc.perform(put("/api/diary/{diaryId}/good", 1L)
+		this.mvc.perform(put("/api/diaries/{diaryId}/good", 1L)
 				.session(mockSession))
 		.andExpect(jsonPath("$.error").value("로그인을 해야합니다."));
 	}
@@ -78,7 +78,7 @@ public class DiaryRestControllerTest {
 				.build();
 		when(diaryService.updateGood(diary.getId(), user))
 		.thenReturn(successResponse);
-		this.mvc.perform(put("/api/diary/{diaryId}/good", 1L)
+		this.mvc.perform(put("/api/diaries/{diaryId}/good", 1L)
 				.session(mockSession))
 		.andExpect(status().isOk())
 		.andExpect(jsonPath("$.success").value(successResponse.getSuccess()));

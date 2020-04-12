@@ -55,7 +55,7 @@ public class TempTimelineServiceTest {
 		TempTimeline diaryTimeline = TempTimeline.builder()
 				.type("diary")
 				.icon("edit")
-				.url("/diary/"+diary.getId()+"/detail")
+				.url("/diaries/"+diary.getId())
 				.diary(diary)
 				.saveDate(diary.getCreateDate())
 				.build();
@@ -69,7 +69,7 @@ public class TempTimelineServiceTest {
 		TempTimeline diaryAnswerTimeline = TempTimeline.builder()
 				.type("diary answer")
 				.icon("comment")
-				.url("/diary/"+diaryAnswer.getDiary().getId()+"/detail")
+				.url("/diaries/"+diaryAnswer.getDiary().getId())
 				.diaryAnswer(diaryAnswer)
 				.saveDate(diaryAnswer.getCreateDate())
 				.build();
@@ -116,7 +116,7 @@ public class TempTimelineServiceTest {
 		TempTimeline goodTimeline = TempTimeline.builder()
 				.type("good")
 				.icon("thumbs-up")
-				.url("/diary/"+good.getDiary().getId()+"/detail")
+				.url("/diaries/"+good.getDiary().getId())
 				.good(good)
 				.saveDate(good.getCreateDate())
 				.build();

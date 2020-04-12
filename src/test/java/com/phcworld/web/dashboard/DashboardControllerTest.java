@@ -284,7 +284,7 @@ public class DashboardControllerTest {
 		when(this.timelineService.getOneTimeline(1L))
 		.thenReturn(timeline);
 		this.mvc.perform(get("/dashboard/timeline/{id}", 1L))
-		.andExpect(redirectedUrl("/diary/" + timeline.getDiary().getId() + "/detail"));
+		.andExpect(redirectedUrl("/diaries/" + timeline.getDiary().getId()));
 	}
 	
 	@Test
@@ -322,7 +322,7 @@ public class DashboardControllerTest {
 		when(this.timelineService.getOneTimeline(1L))
 		.thenReturn(timeline);
 		this.mvc.perform(get("/dashboard/timeline/{id}", 1L))
-		.andExpect(redirectedUrl("/diary/" + timeline.getDiaryAnswer().getDiary().getId() + "/detail"));
+		.andExpect(redirectedUrl("/diaries/" + timeline.getDiaryAnswer().getDiary().getId()));
 	}
 	
 	@Test
@@ -360,7 +360,7 @@ public class DashboardControllerTest {
 		when(this.timelineService.getOneTimeline(1L))
 		.thenReturn(timeline);
 		this.mvc.perform(get("/dashboard/timeline/{id}", 1L))
-		.andExpect(redirectedUrl("/diary/" + timeline.getGood().getDiary().getId() + "/detail"));
+		.andExpect(redirectedUrl("/diaries/" + timeline.getGood().getDiary().getId()));
 	}
 
 }

@@ -17,6 +17,7 @@ $(document).ready(function(){
 			dataType : 'json',
 			error : function(jqXHR, txtStatus, errorThrown){
 				console.log(jqXHR);
+				console.log(jqXHR.responseText.error)
 //				alert("댓글통신실패");
 				alert(jqXHR.responseJSON.error);
 			},
@@ -37,7 +38,7 @@ $(document).ready(function(){
 				if(url.indexOf("freeboard") > 0){
 					$("#countOfAnswer").text(data.countOfAnswers);
 				} else {
-					$("#countOfDiaryAnswer").text(data.diary.countOfAnswer);
+					$("#countOfDiaryAnswer").text(data.countOfAnswers);
 				}
 				$('html, body').scrollTop(document.body.scrollHeight);
 			}

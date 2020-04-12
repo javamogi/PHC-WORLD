@@ -72,16 +72,16 @@ public class Timeline {
 	
 	public String redirectUrl() {
 		if(this.type.equals("diary")) {
-			return "redirect:/diary/"+ this.getDiary().getId() + "/detail";
+			return "redirect:/diaries/"+ this.getDiary().getId();
 		}
 		if(this.type.equals("diary answer")) {
-			return "redirect:/diary/"+ this.getDiaryAnswer().getDiary().getId() + "/detail";
+			return "redirect:/diaries/"+ this.getDiaryAnswer().getDiary().getId();
 		}
 		if(this.type.equals("free board")) {
 			return "redirect:/freeboards/" + this.getFreeBoard().getId();
 		}
 		if(this.type.equals("good")) {
-			return "redirect:/diary/"+ this.getGood().getDiary().getId() + "/detail";
+			return "redirect:/diaries/"+ this.getGood().getDiary().getId();
 		}
 		return "redirect:/freeboards/" + this.getFreeBoardAnswer().getFreeBoard().getId();
 	}

@@ -16,7 +16,7 @@ import com.phcworld.utils.HttpSessionUtils;
 
 
 @RestController
-@RequestMapping("/api/diary")
+@RequestMapping("/api/diaries")
 public class DiaryRestController {
 	
 	@Autowired

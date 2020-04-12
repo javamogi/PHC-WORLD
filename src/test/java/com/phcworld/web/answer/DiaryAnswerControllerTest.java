@@ -88,7 +88,7 @@ public class DiaryAnswerControllerTest {
 		
 		when(this.diaryAnswerService.create(user, diary.getId(), "test"))
 		.thenReturn(diaryAnswerApiResponse);
-		this.mvc.perform(post("/diary/{diaryId}/answer", 1L)
+		this.mvc.perform(post("/diaries/{diaryId}/answer", 1L)
 				.contentType(MediaType.APPLICATION_JSON)
 				.param("contents", "test")
 				.session(mockSession))
@@ -104,7 +104,7 @@ public class DiaryAnswerControllerTest {
 	@Test
 	public void createEmptyLoginUser() throws Exception {
 		MockHttpSession mockSession = new MockHttpSession();
-		this.mvc.perform(post("/diary/{diaryId}/answer", 1L)
+		this.mvc.perform(post("/diaries/{diaryId}/answer", 1L)
 				.param("contents", "test")
 				.session(mockSession))
 		.andExpect(jsonPath("$.error").value("로그인을 해야합니다."));
@@ -113,7 +113,7 @@ public class DiaryAnswerControllerTest {
 	@Test
 	public void createEmptyContents() throws Exception {
 		MockHttpSession mockSession = new MockHttpSession();
-		this.mvc.perform(post("/diary/{diaryId}/answer", 1L)
+		this.mvc.perform(post("/diaries/{diaryId}/answer", 1L)
 				.param("contents", "")
 				.session(mockSession))
 		.andExpect(jsonPath("$.error").value("내용을 입력하세요."));
@@ -154,7 +154,7 @@ public class DiaryAnswerControllerTest {
 		
 		when(this.diaryAnswerService.delete(diaryAnswer.getId(), user))
 		.thenReturn(response);
-		this.mvc.perform(delete("/diary/{diaryId}/answer/{id}", 1L, 1L)
+		this.mvc.perform(delete("/diaries/{diaryId}/answer/{id}", 1L, 1L)
 				.session(mockSession))
 		.andExpect(status().isOk())
 		.andExpect(jsonPath("$.success").value(""));
@@ -163,7 +163,7 @@ public class DiaryAnswerControllerTest {
 	@Test
 	public void deleteEmptyLoginUser() throws Exception {
 		MockHttpSession mockSession = new MockHttpSession();
-		this.mvc.perform(delete("/diary/{diaryId}/answer/{id}", 1L, 1L)
+		this.mvc.perform(delete("/diaries/{diaryId}/answer/{id}", 1L, 1L)
 				.session(mockSession))
 		.andExpect(jsonPath("$.error").value("로그인을 해야합니다."));
 	}
@@ -207,7 +207,7 @@ public class DiaryAnswerControllerTest {
 		
 		when(this.diaryAnswerService.delete(diaryAnswer.getId(), user))
 		.thenThrow(new MatchNotUserExceptioin("본인이 작성한 글만 삭제 가능합니다."));
-		this.mvc.perform(delete("/diary/{diaryId}/answer/{id}", 1L, 1L)
+		this.mvc.perform(delete("/diaries/{diaryId}/answer/{id}", 1L, 1L)
 				.session(mockSession))
 		.andExpect(jsonPath("$.error").value("본인이 작성한 글만 삭제 가능합니다."));
 	}
@@ -255,7 +255,7 @@ public class DiaryAnswerControllerTest {
 		when(this.diaryAnswerService.read(diaryAnswer.getId(), user))
 		.thenReturn(diaryAnswerApiResponse);
 		
-		this.mvc.perform(get("/diary/{diaryId}/answer/{id}", 1L, 1L)
+		this.mvc.perform(get("/diaries/{diaryId}/answer/{id}", 1L, 1L)
 				.session(mockSession))
 		.andExpect(status().isOk())
 		.andExpect(jsonPath("$.id").value(diaryAnswerApiResponse.getId()))
@@ -269,7 +269,7 @@ public class DiaryAnswerControllerTest {
 	@Test
 	public void updateEmptyContents() throws Exception {
 		MockHttpSession mockSession = new MockHttpSession();
-		this.mvc.perform(patch("/diary/{diaryId}/answer", 1L)
+		this.mvc.perform(patch("/diaries/{diaryId}/answer", 1L)
 				.param("contents", "")
 				.session(mockSession))
 		.andExpect(jsonPath("$.error").value("내용을 입력하세요."));
@@ -318,7 +318,7 @@ public class DiaryAnswerControllerTest {
 		
 		when(this.diaryAnswerService.update(diaryAnswer.getId(), diaryAnswer.getContents(), user))
 		.thenReturn(diaryAnswerApiResponse);
-		this.mvc.perform(patch("/diary/{diaryId}/answer", 1L)
+		this.mvc.perform(patch("/diaries/{diaryId}/answer", 1L)
 				.param("id", "1")
 				.param("contents", "update")
 				.session(mockSession))
