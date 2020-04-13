@@ -1,7 +1,7 @@
 package com.phcworld.service.board;
 
-import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -12,8 +12,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.phcworld.domain.answer.DiaryAnswer;
+import com.phcworld.domain.api.model.response.DiaryAnswerApiResponse;
 import com.phcworld.domain.api.model.response.SuccessResponse;
 import com.phcworld.domain.board.Diary;
+import com.phcworld.domain.board.DiaryResponse;
 import com.phcworld.domain.good.Good;
 import com.phcworld.domain.user.User;
 import com.phcworld.repository.board.DiaryRepository;
@@ -37,6 +39,25 @@ public class DiaryServiceImpl implements DiaryService {
 	@Autowired
 	private GoodService goodService;
 	
+	public List<DiaryResponse> getDiaryResponseList(List<Diary> diaries) {
+		List<DiaryResponse> diaryResponseList = diaries.stream()
+				.map(diary -> {
+					DiaryResponse diaryResponse = DiaryResponse.builder()
+							.id(diary.getId())
+							.writer(diary.getWriter())
+							.title(diary.getTitle())
+							.contents(diary.getContents())
+							.thumbnail(diary.getThumbnail())
+							.countOfAnswers(diary.getCountOfAnswer())
+							.countOfGood(diary.getCountOfGood())
+							.updateDate(diary.getFormattedUpdateDate())
+							.build();
+					return diaryResponse;
+				})
+				.collect(Collectors.toList());
+		return diaryResponseList;
+	}
+	
 	@Override
 	public Page<Diary> findPageDiary(User loginUser, Integer pageNum, User requestUser) {
 		PageRequest pageRequest = PageRequest.of(pageNum - 1, 6, new Sort(Direction.DESC, "id"));
@@ -51,7 +72,7 @@ public class DiaryServiceImpl implements DiaryService {
 	}
 
 	@Override
-	public Diary createDiary(User user, Diary inputDiary) {
+	public DiaryResponse createDiary(User user, Diary inputDiary) {
 		Diary diary = Diary.builder()
 				.writer(user)
 				.title(inputDiary.getTitle())
@@ -62,22 +83,25 @@ public class DiaryServiceImpl implements DiaryService {
 		
 		timelineService.createTimeline(createdDiary);
 		
-		return createdDiary;
+		return response(diary);
 	}
 
 	@Override
-	public Diary getOneDiary(Long id) {
-		return diaryRepository.getOne(id);
+	public DiaryResponse getOneDiary(Long id) {
+		Diary diary = diaryRepository.getOne(id);
+		return response(diary);
 	}
 
 	@Override
-	public Diary updateDiary(Diary diary, Diary inputDiary) {
+	public DiaryResponse updateDiary(Diary inputDiary) {
+		Diary diary = diaryRepository.getOne(inputDiary.getId());
 		diary.update(inputDiary);
-		return diaryRepository.save(diary);
+		return response(diaryRepository.save(diary));
 	}
 
 	@Override
-	public void deleteDiary(Diary diary) {
+	public void deleteDiary(Long id) {
+		Diary diary = diaryRepository.getOne(id);
 		timelineService.deleteTimeline(diary);
 		List<Good> goodList = diary.getGoodPushedUser();
 		for(int i = 0; i < goodList.size(); i++) {
@@ -106,6 +130,37 @@ public class DiaryServiceImpl implements DiaryService {
 		return SuccessResponse.builder()
 				.success(Integer.toString(updatedGoodCount.getCountOfGood()))
 				.build();
+	}
+	
+	private DiaryResponse response(Diary diary) {
+		DiaryResponse diaryResponse = DiaryResponse.builder()
+				.id(diary.getId())
+				.writer(diary.getWriter())
+				.title(diary.getTitle())
+				.contents(diary.getContents())
+				.thumbnail(diary.getThumbnail())
+				.countOfAnswers(diary.getCountOfAnswer())
+				.countOfGood(diary.getCountOfGood())
+				.updateDate(diary.getFormattedUpdateDate())
+				.build();
+		List<DiaryAnswer> answerList = diary.getDiaryAnswers();
+		if(answerList != null) {
+			List<DiaryAnswerApiResponse> diaryAnswerApiResponseList = answerList.stream()
+					.map(answer -> {
+						DiaryAnswerApiResponse diaryAnswerApiResponse = DiaryAnswerApiResponse.builder()
+								.id(answer.getId())
+								.writer(answer.getWriter())
+								.contents(answer.getContents())
+								.diaryId(answer.getDiary().getId())
+								.countOfAnswers(answer.getDiary().getCountOfAnswer())
+								.updateDate(answer.getFormattedUpdateDate())
+								.build();
+						return diaryAnswerApiResponse;
+					})
+					.collect(Collectors.toList());
+			diaryResponse.setDiaryAnswerList(diaryAnswerApiResponseList);
+		}
+		return diaryResponse;
 	}
 	
 }

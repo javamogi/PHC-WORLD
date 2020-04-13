@@ -467,12 +467,22 @@ public class FreeBoardControllerTest {
 				.badge("new")
 				.count(0)
 				.build();
+		FreeBoardResponse response = FreeBoardResponse.builder()
+				.id(board.getId())
+				.writer(board.getWriter())
+				.title(board.getTitle())
+				.contents(board.getContents())
+				.icon(board.getIcon())
+				.badge(board.getBadge())
+				.count(board.getCount())
+				.countOfAnswer(board.getCountOfAnswer())
+				.build();
 		FreeBoardRequest request = FreeBoardRequest.builder()
 				.id(1L)
 				.contents("new contents")
 				.icon("")
 				.build();
-		FreeBoardResponse response = FreeBoardResponse.builder()
+		FreeBoardResponse response2 = FreeBoardResponse.builder()
 				.id(1L)
 				.writer(board.getWriter())
 				.title(board.getTitle())
@@ -485,6 +495,8 @@ public class FreeBoardControllerTest {
 		board.update(request);
 		when(this.freeBoardService.getOneFreeBoard(1L))
 		.thenReturn(response);
+		when(this.freeBoardService.updateFreeBoard(request))
+		.thenReturn(response2);
 		this.mvc.perform(patch("/freeboards")
 				.param("id", "1")
 				.session(mockSession))

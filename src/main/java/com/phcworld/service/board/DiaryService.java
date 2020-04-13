@@ -6,18 +6,19 @@ import java.util.List;
 import org.springframework.data.domain.Page;
 
 import com.phcworld.domain.board.Diary;
+import com.phcworld.domain.board.DiaryResponse;
 import com.phcworld.domain.user.User;
 
 public interface DiaryService {
 	Page<Diary> findPageDiary(User loginUser, Integer pageNum, User requestUser);
 	
-	Diary createDiary(User user, Diary diary);
+	DiaryResponse createDiary(User user, Diary diary);
 	
-	Diary getOneDiary(Long id);
+	DiaryResponse getOneDiary(Long id);
 	
-	Diary updateDiary(Diary diary, Diary inputDiary);
+	DiaryResponse updateDiary(Diary inputDiary);
 	
-	void deleteDiary(Diary diary);
+	void deleteDiary(Long id);
 	
 	List<Diary> findDiaryListByWriter(User loginUser);
 }

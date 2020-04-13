@@ -29,6 +29,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import com.phcworld.domain.api.model.response.SuccessResponse;
 import com.phcworld.domain.board.Diary;
+import com.phcworld.domain.board.DiaryResponse;
 import com.phcworld.domain.good.Good;
 import com.phcworld.domain.user.User;
 import com.phcworld.service.board.DiaryServiceImpl;
@@ -201,15 +202,26 @@ public class DiaryControllerTest {
 				.title("test")
 				.contents("test")
 				.thumbnail("no-image-icon.gif")
+				.updateDate(LocalDateTime.now())
+				.build();
+		DiaryResponse diaryResponse = DiaryResponse.builder()
+				.id(diary.getId())
+				.writer(diary.getWriter())
+				.title(diary.getTitle())
+				.contents(diary.getContents())
+				.thumbnail(diary.getThumbnail())
+				.countOfAnswers(diary.getCountOfAnswer())
+				.countOfGood(diary.getCountOfGood())
+				.updateDate(diary.getFormattedUpdateDate())
 				.build();
 		when(this.diaryService.getOneDiary(1L))
-		.thenReturn(diary);
+		.thenReturn(diaryResponse);
 		this.mvc.perform(get("/diaries/{id}", 1L)
 				.session(mockSession))
 		.andDo(print())
 		.andExpect(view().name(containsString("/board/diary/detail_diary")))
 		.andExpect(status().isOk())
-		.andExpect(model().attribute("diary", diary))
+		.andExpect(model().attribute("diary", diaryResponse))
 		.andExpect(model().attribute("user", true))
 		.andExpect(model().attribute("matchUser", true))
 		.andExpect(model().attribute("matchAuthority", false))
@@ -235,14 +247,24 @@ public class DiaryControllerTest {
 				.contents("test")
 				.thumbnail("no-image-icon.gif")
 				.build();
+		DiaryResponse diaryResponse = DiaryResponse.builder()
+				.id(diary.getId())
+				.writer(diary.getWriter())
+				.title(diary.getTitle())
+				.contents(diary.getContents())
+				.thumbnail(diary.getThumbnail())
+				.countOfAnswers(diary.getCountOfAnswer())
+				.countOfGood(diary.getCountOfGood())
+				.updateDate(diary.getFormattedUpdateDate())
+				.build();
 		when(this.diaryService.getOneDiary(1L))
-		.thenReturn(diary);
+		.thenReturn(diaryResponse);
 		this.mvc.perform(get("/diaries/{id}", 1L)
 				.session(mockSession))
 		.andDo(print())
 		.andExpect(view().name(containsString("/board/diary/detail_diary")))
 		.andExpect(status().isOk())
-		.andExpect(model().attribute("diary", diary))
+		.andExpect(model().attribute("diary", diaryResponse))
 		.andExpect(model().attribute("user", false))
 		.andExpect(model().attribute("matchUser", false))
 		.andExpect(model().attribute("matchAuthority", false))
@@ -281,14 +303,24 @@ public class DiaryControllerTest {
 				.contents("test")
 				.thumbnail("no-image-icon.gif")
 				.build();
+		DiaryResponse diaryResponse = DiaryResponse.builder()
+				.id(diary.getId())
+				.writer(diary.getWriter())
+				.title(diary.getTitle())
+				.contents(diary.getContents())
+				.thumbnail(diary.getThumbnail())
+				.countOfAnswers(diary.getCountOfAnswer())
+				.countOfGood(diary.getCountOfGood())
+				.updateDate(diary.getFormattedUpdateDate())
+				.build();
 		when(this.diaryService.getOneDiary(1L))
-		.thenReturn(diary);
+		.thenReturn(diaryResponse);
 		this.mvc.perform(get("/diaries/{id}", 1L)
 				.session(mockSession))
 		.andDo(print())
 		.andExpect(view().name(containsString("/board/diary/detail_diary")))
 		.andExpect(status().isOk())
-		.andExpect(model().attribute("diary", diary))
+		.andExpect(model().attribute("diary", diaryResponse))
 		.andExpect(model().attribute("user", true))
 		.andExpect(model().attribute("matchUser", false))
 		.andExpect(model().attribute("matchAuthority", false))
@@ -328,14 +360,24 @@ public class DiaryControllerTest {
 				.contents("test")
 				.thumbnail("no-image-icon.gif")
 				.build();
+		DiaryResponse diaryResponse = DiaryResponse.builder()
+				.id(diary.getId())
+				.writer(diary.getWriter())
+				.title(diary.getTitle())
+				.contents(diary.getContents())
+				.thumbnail(diary.getThumbnail())
+				.countOfAnswers(diary.getCountOfAnswer())
+				.countOfGood(diary.getCountOfGood())
+				.updateDate(diary.getFormattedUpdateDate())
+				.build();
 		when(this.diaryService.getOneDiary(1L))
-		.thenReturn(diary);
+		.thenReturn(diaryResponse);
 		this.mvc.perform(get("/diaries/{id}", 1L)
 				.session(mockSession))
 		.andDo(print())
 		.andExpect(view().name(containsString("/board/diary/detail_diary")))
 		.andExpect(status().isOk())
-		.andExpect(model().attribute("diary", diary))
+		.andExpect(model().attribute("diary", diaryResponse))
 		.andExpect(model().attribute("user", true))
 		.andExpect(model().attribute("matchUser", false))
 		.andExpect(model().attribute("matchAuthority", true))
@@ -365,14 +407,24 @@ public class DiaryControllerTest {
 				.contents("test")
 				.thumbnail("no-image-icon.gif")
 				.build();
+		DiaryResponse diaryResponse = DiaryResponse.builder()
+				.id(diary.getId())
+				.writer(diary.getWriter())
+				.title(diary.getTitle())
+				.contents(diary.getContents())
+				.thumbnail(diary.getThumbnail())
+				.countOfAnswers(diary.getCountOfAnswer())
+				.countOfGood(diary.getCountOfGood())
+				.updateDate(diary.getFormattedUpdateDate())
+				.build();
 		when(this.diaryService.getOneDiary(1L))
-		.thenReturn(diary);
+		.thenReturn(diaryResponse);
 		this.mvc.perform(get("/diaries/{id}/form", 1L)
 				.session(mockSession))
 		.andDo(print())
 		.andExpect(view().name(containsString("/board/diary/diary_updateForm")))
 		.andExpect(status().isOk())
-		.andExpect(model().attribute("diary", diary))
+		.andExpect(model().attribute("diary", diaryResponse))
 		.andExpect(model().size(1));
 	}
 	
@@ -395,8 +447,18 @@ public class DiaryControllerTest {
 				.contents("test")
 				.thumbnail("no-image-icon.gif")
 				.build();
+		DiaryResponse diaryResponse = DiaryResponse.builder()
+				.id(diary.getId())
+				.writer(diary.getWriter())
+				.title(diary.getTitle())
+				.contents(diary.getContents())
+				.thumbnail(diary.getThumbnail())
+				.countOfAnswers(diary.getCountOfAnswer())
+				.countOfGood(diary.getCountOfGood())
+				.updateDate(diary.getFormattedUpdateDate())
+				.build();
 		when(this.diaryService.getOneDiary(1L))
-		.thenReturn(diary);
+		.thenReturn(diaryResponse);
 		this.mvc.perform(get("/diaries/{id}/form", 1L)
 				.session(mockSession))
 		.andDo(print())
@@ -436,8 +498,18 @@ public class DiaryControllerTest {
 				.contents("test")
 				.thumbnail("no-image-icon.gif")
 				.build();
+		DiaryResponse diaryResponse = DiaryResponse.builder()
+				.id(diary.getId())
+				.writer(diary.getWriter())
+				.title(diary.getTitle())
+				.contents(diary.getContents())
+				.thumbnail(diary.getThumbnail())
+				.countOfAnswers(diary.getCountOfAnswer())
+				.countOfGood(diary.getCountOfGood())
+				.updateDate(diary.getFormattedUpdateDate())
+				.build();
 		when(this.diaryService.getOneDiary(1L))
-		.thenReturn(diary);
+		.thenReturn(diaryResponse);
 		this.mvc.perform(get("/diaries/{id}/form", 1L)
 				.session(mockSession))
 		.andDo(print())
@@ -459,7 +531,6 @@ public class DiaryControllerTest {
 				.authority("ROLE_USER")
 				.createDate(LocalDateTime.now())
 				.build();
-		user.setId(1L);
 		mockSession.setAttribute(HttpSessionUtils.USER_SESSION_KEY, user);
 		mockSession.setAttribute("messages", null);
 		mockSession.setAttribute("countMessages", "");
@@ -468,20 +539,36 @@ public class DiaryControllerTest {
 				.id(1L)
 				.writer(user)
 				.title("test")
-				.contents("test")
+				.contents("contents")
 				.thumbnail("no-image-icon.gif")
 				.build();
-		when(this.diaryService.getOneDiary(1L))
-		.thenReturn(diary);
-		Diary updatedDiary = Diary.builder()
+		DiaryResponse response = DiaryResponse.builder()
+				.id(diary.getId())
+				.writer(diary.getWriter())
+				.contents(diary.getContents())
+				.thumbnail(diary.getThumbnail())
+				.build();
+		Diary updateDiary = Diary.builder()
 				.id(1L)
 				.writer(user)
 				.title("test")
 				.contents("updateTest")
 				.thumbnail("no-image-icon.gif")
 				.build();
-		given(this.diaryService.updateDiary(diary, updatedDiary))
-		.willReturn(updatedDiary);
+		DiaryResponse updatedDiaryResponse = DiaryResponse.builder()
+				.id(updateDiary.getId())
+				.writer(updateDiary.getWriter())
+				.contents(updateDiary.getContents())
+				.thumbnail(updateDiary.getThumbnail())
+				.countOfAnswers(updateDiary.getCountOfAnswer())
+				.countOfGood(updateDiary.getCountOfGood())
+				.updateDate(updateDiary.getFormattedUpdateDate())
+				.build();
+		diary.update(updateDiary);
+		when(this.diaryService.getOneDiary(diary.getId()))
+		.thenReturn(response);
+		when(this.diaryService.updateDiary(updateDiary))
+		.thenReturn(updatedDiaryResponse);
 		this.mvc.perform(patch("/diaries")
 				.param("id", "1")
 				.param("contents", "updateTest")
@@ -535,8 +622,14 @@ public class DiaryControllerTest {
 				.contents("test")
 				.thumbnail("no-image-icon.gif")
 				.build();
+		DiaryResponse response = DiaryResponse.builder()
+				.id(diary.getId())
+				.writer(diary.getWriter())
+				.contents(diary.getContents())
+				.thumbnail(diary.getThumbnail())
+				.build();
 		when(this.diaryService.getOneDiary(1L))
-		.thenReturn(diary);
+		.thenReturn(response);
 		this.mvc.perform(patch("/diaries")
 				.param("id", "1")
 				.param("contents", "updateTest")
@@ -572,9 +665,15 @@ public class DiaryControllerTest {
 				.contents("test")
 				.thumbnail("no-image-icon.gif")
 				.build();
+		DiaryResponse response = DiaryResponse.builder()
+				.id(diary.getId())
+				.writer(diary.getWriter())
+				.contents(diary.getContents())
+				.thumbnail(diary.getThumbnail())
+				.build();
 		when(this.diaryService.getOneDiary(1L))
-		.thenReturn(diary);
-		diaryService.deleteDiary(diary);
+		.thenReturn(response);
+		diaryService.deleteDiary(1L);
 		this.mvc.perform(delete("/diaries/{id}", 1L)
 				.session(mockSession))
 		.andExpect(redirectedUrl("/diaries/list/" + user.getEmail()));
@@ -622,8 +721,14 @@ public class DiaryControllerTest {
 				.contents("test")
 				.thumbnail("no-image-icon.gif")
 				.build();
+		DiaryResponse response = DiaryResponse.builder()
+				.id(diary.getId())
+				.writer(diary.getWriter())
+				.contents(diary.getContents())
+				.thumbnail(diary.getThumbnail())
+				.build();
 		when(this.diaryService.getOneDiary(1L))
-		.thenReturn(diary);
+		.thenReturn(response);
 		this.mvc.perform(delete("/diaries/{id}", 1L)
 				.session(mockSession))
 		.andDo(print())

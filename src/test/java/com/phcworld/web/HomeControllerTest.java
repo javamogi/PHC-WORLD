@@ -90,7 +90,7 @@ public class HomeControllerTest {
 		this.mvc.perform(get("/alert/{id}", 1L)
 				.session(mockSession))
 		.andDo(print())
-		.andExpect(redirectedUrl("/diary/" + diaryAnswerAlert.getDiaryAnswer().getDiary().getId() + "/detail"));
+		.andExpect(redirectedUrl("/diaries/" + diaryAnswerAlert.getDiaryAnswer().getDiary().getId()));
 	}
 	
 	@Test
@@ -170,6 +170,6 @@ public class HomeControllerTest {
 		this.mvc.perform(get("/alert/{id}", 3L)
 				.session(mockSession))
 		.andDo(print())
-		.andExpect(redirectedUrl("/diary/" + goodAlert.getGood().getDiary().getId() + "/detail"));
+		.andExpect(redirectedUrl("/diaries/" + goodAlert.getGood().getDiary().getId()));
 	}
 }

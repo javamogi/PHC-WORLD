@@ -20,7 +20,6 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.phcworld.domain.answer.DiaryAnswer;
 import com.phcworld.domain.good.Good;
 import com.phcworld.domain.user.User;
@@ -75,6 +74,9 @@ public class Diary {
 
 	public String getFormattedCreateDate() {
 		return LocalDateTimeUtils.getTime(createDate);
+	}
+	public String getFormattedUpdateDate() {
+		return LocalDateTimeUtils.getTime(updateDate);
 	}
 	
 	public String getCountOfAnswer() {

@@ -23,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.phcworld.domain.answer.DiaryAnswer;
 import com.phcworld.domain.api.model.response.SuccessResponse;
 import com.phcworld.domain.board.Diary;
+import com.phcworld.domain.board.DiaryResponse;
 import com.phcworld.domain.good.Good;
 import com.phcworld.domain.user.User;
 import com.phcworld.service.board.DiaryServiceImpl;
@@ -85,15 +86,22 @@ public class DiaryServiceImplTest {
 				.contents("content")
 				.thumbnail("no-image-icon.gif")
 				.build();
+		DiaryResponse diaryResponse = DiaryResponse.builder()
+				.id(diary.getId())
+				.writer(diary.getWriter())
+				.title(diary.getTitle())
+				.contents(diary.getContents())
+				.thumbnail(diary.getThumbnail())
+				.build();
 		when(diaryService.createDiary(user, diary))
-		.thenReturn(diary);
-		Diary createdDiary = diaryService.createDiary(user, diary);
+		.thenReturn(diaryResponse);
+		DiaryResponse createdDiary = diaryService.createDiary(user, diary);
 		assertThat("title", is(createdDiary.getTitle()));
 		assertThat("content", is(createdDiary.getContents()));
 	}
 	
 	@Test
-	public void getOneDiary() {
+	public void getOneDiaryResponse() {
 		User user = User.builder()
 				.id(1L)
 				.email("test3@test.test")
@@ -110,9 +118,17 @@ public class DiaryServiceImplTest {
 				.contents("content")
 				.thumbnail("no-image-icon.gif")
 				.build();
-		when(diaryService.getOneDiary(1L)).thenReturn(diary);
-		Diary oneDiary = diaryService.getOneDiary(1L);
-		assertThat(diary, is(oneDiary));
+		DiaryResponse diaryResponse = DiaryResponse.builder()
+				.id(diary.getId())
+				.writer(diary.getWriter())
+				.title(diary.getTitle())
+				.contents(diary.getContents())
+				.thumbnail(diary.getThumbnail())
+				.countOfAnswers(diary.getCountOfAnswer())
+				.build();
+		when(diaryService.getOneDiary(1L)).thenReturn(diaryResponse);
+		DiaryResponse oneDiaryResponse = diaryService.getOneDiary(1L);
+		assertThat(diaryResponse, is(oneDiaryResponse));
 	}
 	
 	@Test
@@ -138,10 +154,18 @@ public class DiaryServiceImplTest {
 				.contents("updateDiary")
 				.thumbnail("test.jpg")
 				.build();
+		DiaryResponse diaryResponse = DiaryResponse.builder()
+				.id(newDiary.getId())
+				.writer(newDiary.getWriter())
+				.title(newDiary.getTitle())
+				.contents(newDiary.getContents())
+				.thumbnail(newDiary.getThumbnail())
+				.countOfAnswers(newDiary.getCountOfAnswer())
+				.build();
 		diary.update(newDiary);
-		when(diaryService.updateDiary(diary, newDiary))
-		.thenReturn(diary);
-		Diary updatedDiary = diaryService.updateDiary(diary, newDiary);
+		when(diaryService.updateDiary(newDiary))
+		.thenReturn(diaryResponse);
+		DiaryResponse updatedDiary = diaryService.updateDiary(newDiary);
 		assertThat("updateDiary", is(updatedDiary.getContents()));
 		assertThat("test.jpg", is(updatedDiary.getThumbnail()));
 	}
@@ -164,8 +188,8 @@ public class DiaryServiceImplTest {
 				.contents("content")
 				.thumbnail("no-image-icon.gif")
 				.build();
-		diaryService.deleteDiary(diary);
-		verify(diaryService, times(1)).deleteDiary(diary);
+		diaryService.deleteDiary(diary.getId());
+		verify(diaryService, times(1)).deleteDiary(diary.getId());
 	}
 	
 	@Test
@@ -195,8 +219,8 @@ public class DiaryServiceImplTest {
 		List<DiaryAnswer> list = new ArrayList<DiaryAnswer>();
 		list.add(answer);
 		diary.setDiaryAnswers(list);
-		diaryService.deleteDiary(diary);
-		verify(diaryService, times(1)).deleteDiary(diary);
+		diaryService.deleteDiary(diary.getId());
+		verify(diaryService, times(1)).deleteDiary(diary.getId());
 	}
 	
 	@Test

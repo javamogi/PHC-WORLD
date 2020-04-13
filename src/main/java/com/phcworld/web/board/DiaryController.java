@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.phcworld.domain.api.model.response.SuccessResponse;
 import com.phcworld.domain.board.Diary;
+import com.phcworld.domain.board.DiaryResponse;
 import com.phcworld.domain.exception.LoginNotUserException;
 import com.phcworld.domain.user.User;
 import com.phcworld.service.board.DiaryServiceImpl;
@@ -48,7 +49,8 @@ public class DiaryController {
 		if (diaryPage != null) {
 			PageNationsUtil.viewPageNation("", pageNum, diaryPage.getTotalPages(), model);
 			List<Diary> diaries = diaryPage.getContent();
-			model.addAttribute("diaries", diaries);
+			List<DiaryResponse> diaryResponseList = diaryService.getDiaryResponseList(diaries);
+			model.addAttribute("diaries", diaryResponseList);
 		}
 
 		model.addAttribute("requestUser", requestUser);
@@ -72,9 +74,9 @@ public class DiaryController {
 			return "/user/login";
 		}
 		User sessionUser = HttpSessionUtils.getUserFromSession(session);
-		diaryService.createDiary(sessionUser, diary);
+		DiaryResponse response = diaryService.createDiary(sessionUser, diary);
 
-		return "redirect:/diaries/list/" + sessionUser.getEmail();
+		return "redirect:/diaries/" + response.getId();
 	}
 
 	@GetMapping("/{id}")
@@ -83,11 +85,11 @@ public class DiaryController {
 		boolean matchLoginUserAndWriter = false;
 		boolean matchAuthority = false;
 		User loginUser = HttpSessionUtils.getUserFromSession(session);
-		Diary diary = diaryService.getOneDiary(id);
+		DiaryResponse diary = diaryService.getOneDiary(id);
 		if (loginUser != null) {
 			isLoginUser = true;
 			if (diary != null) {
-				if (diary.matchUser(loginUser)) {
+				if (diary.getWriter().equals(loginUser)) {
 					matchLoginUserAndWriter = true;
 				}
 			}
@@ -108,7 +110,7 @@ public class DiaryController {
 			return "/user/login";
 		}
 		User loginUser = HttpSessionUtils.getUserFromSession(session);
-		Diary diary = diaryService.getOneDiary(id);
+		DiaryResponse diary = diaryService.getOneDiary(id);
 		if (!loginUser.matchId(diary.getWriter().getId())) {
 			model.addAttribute("errorMessage", "본인의 작성한 글만 수정 가능합니다.");
 			return "/user/login";
@@ -118,18 +120,18 @@ public class DiaryController {
 	}
 
 	@PatchMapping("")
-	public String update(Long id, Diary inputDiary, HttpSession session, Model model) {
+	public String update(Diary inputDiary, HttpSession session, Model model) {
 		if (!HttpSessionUtils.isLoginUser(session)) {
 			return "/user/login";
 		}
 		User loginUser = HttpSessionUtils.getUserFromSession(session);
-		Diary diary = diaryService.getOneDiary(id);
+		DiaryResponse diary = diaryService.getOneDiary(inputDiary.getId());
 		if (!loginUser.matchId(diary.getWriter().getId())) {
 			model.addAttribute("errorMessage", "본인의 작성한 글만 수정 가능합니다.");
 			return "/user/login";
 		}
-		diaryService.updateDiary(diary, inputDiary);
-		return "redirect:/diaries/" + id;
+		diaryService.updateDiary(inputDiary);
+		return "redirect:/diaries/" + inputDiary.getId();
 	}
 
 	@DeleteMapping("/{id}")
@@ -138,12 +140,12 @@ public class DiaryController {
 			return "/user/login";
 		}
 		User loginUser = HttpSessionUtils.getUserFromSession(session);
-		Diary diary = diaryService.getOneDiary(id);
+		DiaryResponse diary = diaryService.getOneDiary(id);
 		if (!loginUser.matchId(diary.getWriter().getId()) && !loginUser.matchAdminAuthority()) {
 			model.addAttribute("errorMessage", "삭제 권한이 없습니다.");
 			return "/user/login";
 		}
-		diaryService.deleteDiary(diary);
+		diaryService.deleteDiary(id);
 		return "redirect:/diaries/list/" + loginUser.getEmail();
 	}
 	
