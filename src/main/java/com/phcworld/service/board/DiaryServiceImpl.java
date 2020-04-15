@@ -15,6 +15,7 @@ import com.phcworld.domain.answer.DiaryAnswer;
 import com.phcworld.domain.api.model.response.DiaryAnswerApiResponse;
 import com.phcworld.domain.api.model.response.SuccessResponse;
 import com.phcworld.domain.board.Diary;
+import com.phcworld.domain.board.DiaryRequest;
 import com.phcworld.domain.board.DiaryResponse;
 import com.phcworld.domain.good.Good;
 import com.phcworld.domain.user.User;
@@ -72,12 +73,12 @@ public class DiaryServiceImpl implements DiaryService {
 	}
 
 	@Override
-	public DiaryResponse createDiary(User user, Diary inputDiary) {
+	public DiaryResponse createDiary(User user, DiaryRequest request) {
 		Diary diary = Diary.builder()
 				.writer(user)
-				.title(inputDiary.getTitle())
-				.contents(inputDiary.getContents())
-				.thumbnail(inputDiary.getThumbnail())
+				.title(request.getTitle())
+				.contents(request.getContents())
+				.thumbnail(request.getThumbnail())
 				.build();
 		Diary createdDiary = diaryRepository.save(diary);
 		
@@ -93,9 +94,9 @@ public class DiaryServiceImpl implements DiaryService {
 	}
 
 	@Override
-	public DiaryResponse updateDiary(Diary inputDiary) {
-		Diary diary = diaryRepository.getOne(inputDiary.getId());
-		diary.update(inputDiary);
+	public DiaryResponse updateDiary(DiaryRequest request) {
+		Diary diary = diaryRepository.getOne(request.getId());
+		diary.update(request);
 		return response(diaryRepository.save(diary));
 	}
 

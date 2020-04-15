@@ -23,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.phcworld.domain.answer.DiaryAnswer;
 import com.phcworld.domain.api.model.response.SuccessResponse;
 import com.phcworld.domain.board.Diary;
+import com.phcworld.domain.board.DiaryRequest;
 import com.phcworld.domain.board.DiaryResponse;
 import com.phcworld.domain.good.Good;
 import com.phcworld.domain.user.User;
@@ -80,12 +81,18 @@ public class DiaryServiceImplTest {
 				.authority("ROLE_USER")
 				.createDate(LocalDateTime.now())
 				.build();
-		Diary diary = Diary.builder()
-				.writer(user)
+		DiaryRequest request = DiaryRequest.builder()
 				.title("title")
-				.contents("content")
+				.contents("contents")
 				.thumbnail("no-image-icon.gif")
 				.build();
+		Diary diary = Diary.builder()
+				.writer(user)
+				.title(request.getTitle())
+				.contents(request.getContents())
+				.thumbnail(request.getThumbnail())
+				.build();
+				
 		DiaryResponse diaryResponse = DiaryResponse.builder()
 				.id(diary.getId())
 				.writer(diary.getWriter())
@@ -93,11 +100,11 @@ public class DiaryServiceImplTest {
 				.contents(diary.getContents())
 				.thumbnail(diary.getThumbnail())
 				.build();
-		when(diaryService.createDiary(user, diary))
+		when(diaryService.createDiary(user, request))
 		.thenReturn(diaryResponse);
-		DiaryResponse createdDiary = diaryService.createDiary(user, diary);
+		DiaryResponse createdDiary = diaryService.createDiary(user, request);
 		assertThat("title", is(createdDiary.getTitle()));
-		assertThat("content", is(createdDiary.getContents()));
+		assertThat("contents", is(createdDiary.getContents()));
 	}
 	
 	@Test
@@ -154,6 +161,12 @@ public class DiaryServiceImplTest {
 				.contents("updateDiary")
 				.thumbnail("test.jpg")
 				.build();
+		DiaryRequest request = DiaryRequest.builder()
+				.id(newDiary.getId())
+				.title(newDiary.getTitle())
+				.contents(newDiary.getContents())
+				.thumbnail(newDiary.getThumbnail())
+				.build();
 		DiaryResponse diaryResponse = DiaryResponse.builder()
 				.id(newDiary.getId())
 				.writer(newDiary.getWriter())
@@ -162,10 +175,10 @@ public class DiaryServiceImplTest {
 				.thumbnail(newDiary.getThumbnail())
 				.countOfAnswers(newDiary.getCountOfAnswer())
 				.build();
-		diary.update(newDiary);
-		when(diaryService.updateDiary(newDiary))
+		diary.update(request);
+		when(diaryService.updateDiary(request))
 		.thenReturn(diaryResponse);
-		DiaryResponse updatedDiary = diaryService.updateDiary(newDiary);
+		DiaryResponse updatedDiary = diaryService.updateDiary(request);
 		assertThat("updateDiary", is(updatedDiary.getContents()));
 		assertThat("test.jpg", is(updatedDiary.getThumbnail()));
 	}

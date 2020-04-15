@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.phcworld.domain.api.model.response.SuccessResponse;
 import com.phcworld.domain.board.Diary;
+import com.phcworld.domain.board.DiaryRequest;
 import com.phcworld.domain.board.DiaryResponse;
 import com.phcworld.domain.exception.LoginNotUserException;
 import com.phcworld.domain.user.User;
@@ -69,12 +70,12 @@ public class DiaryController {
 	}
 
 	@PostMapping("")
-	public String create(Diary diary, HttpSession session) {
+	public String create(DiaryRequest diaryRequest, HttpSession session) {
 		if (!HttpSessionUtils.isLoginUser(session)) {
 			return "/user/login";
 		}
 		User sessionUser = HttpSessionUtils.getUserFromSession(session);
-		DiaryResponse response = diaryService.createDiary(sessionUser, diary);
+		DiaryResponse response = diaryService.createDiary(sessionUser, diaryRequest);
 
 		return "redirect:/diaries/" + response.getId();
 	}
@@ -120,18 +121,18 @@ public class DiaryController {
 	}
 
 	@PatchMapping("")
-	public String update(Diary inputDiary, HttpSession session, Model model) {
+	public String update(DiaryRequest diaryRequest, HttpSession session, Model model) {
 		if (!HttpSessionUtils.isLoginUser(session)) {
 			return "/user/login";
 		}
 		User loginUser = HttpSessionUtils.getUserFromSession(session);
-		DiaryResponse diary = diaryService.getOneDiary(inputDiary.getId());
+		DiaryResponse diary = diaryService.getOneDiary(diaryRequest.getId());
 		if (!loginUser.matchId(diary.getWriter().getId())) {
 			model.addAttribute("errorMessage", "본인의 작성한 글만 수정 가능합니다.");
 			return "/user/login";
 		}
-		diaryService.updateDiary(inputDiary);
-		return "redirect:/diaries/" + inputDiary.getId();
+		diaryService.updateDiary(diaryRequest);
+		return "redirect:/diaries/" + diaryRequest.getId();
 	}
 
 	@DeleteMapping("/{id}")

@@ -29,6 +29,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import com.phcworld.domain.api.model.response.SuccessResponse;
 import com.phcworld.domain.board.Diary;
+import com.phcworld.domain.board.DiaryRequest;
 import com.phcworld.domain.board.DiaryResponse;
 import com.phcworld.domain.good.Good;
 import com.phcworld.domain.user.User;
@@ -555,6 +556,12 @@ public class DiaryControllerTest {
 				.contents("updateTest")
 				.thumbnail("no-image-icon.gif")
 				.build();
+		DiaryRequest request = DiaryRequest.builder()
+				.id(updateDiary.getId())
+				.title(updateDiary.getTitle())
+				.contents(updateDiary.getContents())
+				.thumbnail(updateDiary.getThumbnail())
+				.build();
 		DiaryResponse updatedDiaryResponse = DiaryResponse.builder()
 				.id(updateDiary.getId())
 				.writer(updateDiary.getWriter())
@@ -564,10 +571,10 @@ public class DiaryControllerTest {
 				.countOfGood(updateDiary.getCountOfGood())
 				.updateDate(updateDiary.getFormattedUpdateDate())
 				.build();
-		diary.update(updateDiary);
+		diary.update(request);
 		when(this.diaryService.getOneDiary(diary.getId()))
 		.thenReturn(response);
-		when(this.diaryService.updateDiary(updateDiary))
+		when(this.diaryService.updateDiary(request))
 		.thenReturn(updatedDiaryResponse);
 		this.mvc.perform(patch("/diaries")
 				.param("id", "1")

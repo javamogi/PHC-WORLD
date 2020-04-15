@@ -4,7 +4,6 @@ import static org.hamcrest.CoreMatchers.hasItems;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.*;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,6 +19,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.phcworld.domain.board.Diary;
+import com.phcworld.domain.board.DiaryRequest;
 import com.phcworld.domain.user.User;
 
 
@@ -90,8 +90,14 @@ public class DiaryRepositoryTest {
 				.contents("update content")
 				.thumbnail("test.jpg")
 				.build();
+		DiaryRequest request = DiaryRequest.builder()
+				.id(newDiary.getId())
+				.title(newDiary.getTitle())
+				.contents(newDiary.getContents())
+				.thumbnail(newDiary.getThumbnail())
+				.build();
 		
-		diary.update(newDiary);
+		diary.update(request);
 		Diary updatedDiary = diaryRepository.save(diary);
 		assertThat("update content", is(updatedDiary.getContents()));
 		assertThat("test.jpg", is(updatedDiary.getThumbnail()));

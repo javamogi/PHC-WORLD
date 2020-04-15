@@ -100,9 +100,9 @@ public class Diary {
 		return loginUser.equals(this.writer);
 	}
 
-	public void update(Diary inputDiary) {
-		this.contents = inputDiary.getContents();
-		this.thumbnail = inputDiary.getThumbnail();
+	public void update(DiaryRequest diaryRequest) {
+		this.contents = diaryRequest.getContents();
+		this.thumbnail = diaryRequest.getThumbnail();
 	}
 
 	public boolean matchId(Long diaryId) {
