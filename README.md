@@ -414,6 +414,18 @@
 * 게시물을 수정하는 메서드
 * 게시물의 id와 넘어온 id가 같은지 확인하는 메서드
 
+**DiaryRequest**
+* Diary에 대한 요청을 보낼 때 사용할 DTO
+* 필드
+  * id
+    * 수정을 요청할 때 사용하기 위한 id
+  * title
+    * 생성을 요청할 때 사용할 제목
+  * contents
+    * 생성과 수정을 요청할 때 사용할 내용
+  * thumbnail
+    * 생성과 수정을 요청할 때 diary 목록에서 사용할 이미지를 저장
+
 **DiaryResponse**
 * Diary를 생성하고 응답으로 건내줄 DTO
 * 필드
