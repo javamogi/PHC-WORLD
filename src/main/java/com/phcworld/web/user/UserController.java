@@ -23,6 +23,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.phcworld.domain.alert.Alert;
 import com.phcworld.domain.emailAuth.EmailAuth;
 import com.phcworld.domain.message.Message;
+import com.phcworld.domain.message.MessageResponse;
 import com.phcworld.domain.timeline.Timeline;
 import com.phcworld.domain.user.LoginRequestUser;
 import com.phcworld.domain.user.User;
@@ -129,9 +130,11 @@ public class UserController {
 		
 		session.setAttribute(HttpSessionUtils.USER_SESSION_KEY, user);
 		
-		List<Message> allMessages = messageService.findMessageAllBySenderAndNotConfirmUseProfile(user, "읽지 않음");
+//		List<Message> allMessages = messageService.findMessageAllBySenderAndNotConfirmUseProfile(user, "읽지 않음");
+		List<MessageResponse> allMessages = messageService.findMessageAllBySenderAndNotConfirmUseProfile(user, "읽지 않음");
 		
-		List<Message> messages = messageService.findMessageBySenderAndConfirmUseMenu(user, "읽지 않음");
+		List<MessageResponse> messages = messageService.findMessageBySenderAndConfirmUseMenu(user, "읽지 않음");
+//		List<Message> messages = messageService.findMessageBySenderAndConfirmUseMenu(user, "읽지 않음");
 		String countOfMessages = Integer.toString(allMessages.size());
 		if(allMessages.size() == 0) {
 			countOfMessages = "";
@@ -217,17 +220,16 @@ public class UserController {
 	}
 
 	private void viewLoginUserMessage(Integer sendPageNum, Integer receivePageNum, Model model, User user) {
-//		PageNationsUtil pageNation = new PageNationsUtil();
 		Page<Message> pageReceiveMessages = messageService.findMessageByReceiverMessages(receivePageNum, user);
 		if(pageReceiveMessages != null) {
-			List<Message> receiveMessages = pageReceiveMessages.getContent();
+			List<MessageResponse> receiveMessages = messageService.responseList(pageReceiveMessages);
 			PageNationsUtil.viewPageNation("receive", receivePageNum, pageReceiveMessages.getTotalPages(), model);
 			model.addAttribute("receiveMessages", receiveMessages);
 		}
 
 		Page<Message> pageSendMessages = messageService.findMessageBySenderMessage(sendPageNum, user);
 		if(pageSendMessages != null) {
-			List<Message> sendMessages = pageSendMessages.getContent();
+			List<MessageResponse> sendMessages = messageService.responseList(pageSendMessages);
 			PageNationsUtil.viewPageNation("send", sendPageNum, pageSendMessages.getTotalPages(), model);
 			model.addAttribute("sendMessages", sendMessages);
 		}

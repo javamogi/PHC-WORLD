@@ -11,7 +11,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.phcworld.domain.user.User;
 import com.phcworld.utils.LocalDateTimeUtils;
 
@@ -21,7 +20,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-//@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @Data
 @Builder
 @NoArgsConstructor

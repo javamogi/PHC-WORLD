@@ -16,6 +16,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.phcworld.domain.message.Message;
+import com.phcworld.domain.message.MessageResponse;
 import com.phcworld.domain.user.User;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -46,8 +47,8 @@ public class MessageServiceImplTest {
 				.authority("ROLE_USER")
 				.createDate(LocalDateTime.now())
 				.build();
-		Message message = messageService.createMessage(user, receiveUser, "test");
-		Message actual = messageService.getOneMessage(message.getId());
+		MessageResponse message = messageService.createMessage(user, receiveUser, "test");
+		MessageResponse actual = messageService.getOneMessage(1L);
 		assertThat(actual, is(message));
 	}
 	
@@ -72,8 +73,8 @@ public class MessageServiceImplTest {
 				.authority("ROLE_USER")
 				.createDate(LocalDateTime.now())
 				.build();
-		Message message = messageService.createMessage(user, receiveUser, "test");
-		Message actual = messageService.confirmMessage(message.getId(), receiveUser);
+		MessageResponse message = messageService.createMessage(user, receiveUser, "test");
+		MessageResponse actual = messageService.confirmMessage(message.getId(), receiveUser);
 		assertThat(actual.getConfirm(), is("읽음"));
 		assertThat(actual.getClassName(), is("read"));
 	}
@@ -99,9 +100,9 @@ public class MessageServiceImplTest {
 				.authority("ROLE_USER")
 				.createDate(LocalDateTime.now())
 				.build();
-		Message message = messageService.createMessage(user, receiveUser, "test");
-		Message message2 = messageService.createMessage(user, receiveUser, "test2");
-		List<Message> messageList = messageService.findMessageAllBySenderAndNotConfirmUseProfile(receiveUser, "읽지 않음");
+		MessageResponse message = messageService.createMessage(user, receiveUser, "test");
+		MessageResponse message2 = messageService.createMessage(user, receiveUser, "test2");
+		List<MessageResponse> messageList = messageService.findMessageAllBySenderAndNotConfirmUseProfile(receiveUser, "읽지 않음");
 		assertThat(messageList, hasItems(message, message2));		
 	}
 	
@@ -126,9 +127,9 @@ public class MessageServiceImplTest {
 				.authority("ROLE_USER")
 				.createDate(LocalDateTime.now())
 				.build();
-		Message message = messageService.createMessage(user, receiveUser, "test");
-		Message message2 = messageService.createMessage(user, receiveUser, "test2");
-		List<Message> messageList = messageService.findMessageBySenderAndConfirmUseMenu(receiveUser, "읽지 않음");
+		MessageResponse message = messageService.createMessage(user, receiveUser, "test");
+		MessageResponse message2 = messageService.createMessage(user, receiveUser, "test2");
+		List<MessageResponse> messageList = messageService.findMessageBySenderAndConfirmUseMenu(receiveUser, "읽지 않음");
 		assertThat(messageList, hasItems(message, message2));		
 	}
 	
@@ -153,10 +154,10 @@ public class MessageServiceImplTest {
 				.authority("ROLE_USER")
 				.createDate(LocalDateTime.now())
 				.build();
-		Message message = messageService.createMessage(user, receiveUser, "test");
-		Message message2 = messageService.createMessage(user, receiveUser, "test2");
+		MessageResponse message = messageService.createMessage(user, receiveUser, "test");
+		MessageResponse message2 = messageService.createMessage(user, receiveUser, "test2");
 		Page<Message> messagePage = messageService.findMessageByReceiverMessages(1, receiveUser);
-		List<Message> messageList = messagePage.getContent();
+		List<MessageResponse> messageList = messageService.responseList(messagePage);
 		assertThat(messageList, hasItems(message, message2));	
 	}
 	
@@ -181,10 +182,10 @@ public class MessageServiceImplTest {
 				.authority("ROLE_USER")
 				.createDate(LocalDateTime.now())
 				.build();
-		Message message = messageService.createMessage(user, receiveUser, "test");
-		Message message2 = messageService.createMessage(user, receiveUser, "test2");
+		MessageResponse message = messageService.createMessage(user, receiveUser, "test");
+		MessageResponse message2 = messageService.createMessage(user, receiveUser, "test2");
 		Page<Message> messagePage = messageService.findMessageBySenderMessage(1, user);
-		List<Message> messageList = messagePage.getContent();
+		List<MessageResponse> messageList = messageService.responseList(messagePage);
 		assertThat(messageList, hasItems(message, message2));	
 	}
 

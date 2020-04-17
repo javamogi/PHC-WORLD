@@ -21,6 +21,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.phcworld.domain.message.Message;
+import com.phcworld.domain.message.MessageResponse;
 import com.phcworld.domain.user.User;
 import com.phcworld.service.message.MessageServiceImpl;
 import com.phcworld.service.user.UserService;
@@ -124,8 +125,17 @@ public class MessageControllerTest {
 				.className("important")
 				.sendDate(LocalDateTime.now())
 				.build();
+		MessageResponse messageResponse = MessageResponse.builder()
+				.id(message.getId())
+				.sender(message.getSender())
+				.receiver(message.getReceiver())
+				.contents(message.getContents())
+				.className(message.getClassName())
+				.confirm(message.getConfirm())
+				.sendDate(message.getFormattedCreateDate())
+				.build();
 		when(this.messageService.createMessage(user, receiveUser, "test"))
-		.thenReturn(message);
+		.thenReturn(messageResponse);
 		this.mvc.perform(post("/message")
 				.param("toUserEmail", "test4@test.test")
 				.param("contents", "test")
@@ -176,8 +186,17 @@ public class MessageControllerTest {
 				.build();
 		message.setConfirm("읽음");
 		message.setClassName("read");
+		MessageResponse messageResponse = MessageResponse.builder()
+				.id(message.getId())
+				.sender(message.getSender())
+				.receiver(message.getReceiver())
+				.contents(message.getContents())
+				.className(message.getClassName())
+				.confirm(message.getConfirm())
+				.sendDate(message.getFormattedCreateDate())
+				.build();
 		when(this.messageService.confirmMessage(message.getId(), user))
-		.thenReturn(message);
+		.thenReturn(messageResponse);
 		Message message2 = Message.builder()
 				.id(2L)
 				.sender(user)
@@ -187,8 +206,17 @@ public class MessageControllerTest {
 				.className("important")
 				.sendDate(LocalDateTime.now())
 				.build();
-		List<Message> notReadMessageList = new ArrayList<>();
-		notReadMessageList.add(message2);
+		MessageResponse messageResponse2 = MessageResponse.builder()
+				.id(message2.getId())
+				.sender(message2.getSender())
+				.receiver(message2.getReceiver())
+				.contents(message2.getContents())
+				.className(message2.getClassName())
+				.confirm(message2.getConfirm())
+				.sendDate(message2.getFormattedCreateDate())
+				.build();
+		List<MessageResponse> notReadMessageList = new ArrayList<>();
+		notReadMessageList.add(messageResponse2);
 		when(this.messageService.findMessageAllBySenderAndNotConfirmUseProfile(user, "읽지 않음"))
 		.thenReturn(notReadMessageList);
 		this.mvc.perform(get("/message/{id}", 1L)
@@ -237,8 +265,17 @@ public class MessageControllerTest {
 				.build();
 		message.setConfirm("읽음");
 		message.setClassName("read");
+		MessageResponse messageResponse = MessageResponse.builder()
+				.id(message.getId())
+				.sender(message.getSender())
+				.receiver(message.getReceiver())
+				.contents(message.getContents())
+				.className(message.getClassName())
+				.confirm(message.getConfirm())
+				.sendDate(message.getFormattedCreateDate())
+				.build();
 		when(this.messageService.confirmMessage(message.getId(), user))
-		.thenReturn(message);
+		.thenReturn(messageResponse);
 		Message message2 = Message.builder()
 				.id(2L)
 				.sender(user)
@@ -248,8 +285,17 @@ public class MessageControllerTest {
 				.className("important")
 				.sendDate(LocalDateTime.now())
 				.build();
-		List<Message> notReadMessageList = new ArrayList<>();
-		notReadMessageList.add(message2);
+		MessageResponse messageResponse2 = MessageResponse.builder()
+				.id(message2.getId())
+				.sender(message2.getSender())
+				.receiver(message2.getReceiver())
+				.contents(message2.getContents())
+				.className(message2.getClassName())
+				.confirm(message2.getConfirm())
+				.sendDate(message2.getFormattedCreateDate())
+				.build();
+		List<MessageResponse> notReadMessageList = new ArrayList<>();
+		notReadMessageList.add(messageResponse2);
 		when(this.messageService.findMessageAllBySenderAndNotConfirmUseProfile(user, "읽지 않음"))
 		.thenReturn(notReadMessageList);
 		this.mvc.perform(post("/message/info/{id}", 1L)

@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.phcworld.domain.exception.LoginNotUserException;
 import com.phcworld.domain.exception.MatchNotUserExceptioin;
 import com.phcworld.domain.exception.UserNotFoundException;
-import com.phcworld.domain.message.Message;
+import com.phcworld.domain.message.MessageResponse;
 import com.phcworld.domain.user.User;
 import com.phcworld.service.message.MessageServiceImpl;
 import com.phcworld.service.user.UserService;
@@ -36,7 +36,7 @@ public class MessageController {
 	private MessageServiceImpl messageService;
 	
 	@PostMapping("")
-	public Message sendMessage(String toUserEmail, String contents, HttpSession session) 
+	public MessageResponse sendMessage(String toUserEmail, String contents, HttpSession session) 
 			throws LoginNotUserException, UserNotFoundException, MatchNotUserExceptioin {
 		log.debug("toUser : {}", toUserEmail); 
 		if(!HttpSessionUtils.isLoginUser(session)) {
@@ -61,9 +61,9 @@ public class MessageController {
 		}
 		User loginUser = HttpSessionUtils.getUserFromSession(session);
 		
-		Message message = messageService.confirmMessage(id, loginUser);
+		MessageResponse message = messageService.confirmMessage(id, loginUser);
 		
-		List<Message> allMessages = messageService.findMessageAllBySenderAndNotConfirmUseProfile(loginUser, "읽지 않음");
+		List<MessageResponse> allMessages = messageService.findMessageAllBySenderAndNotConfirmUseProfile(loginUser, "읽지 않음");
 		String countOfMessages = Integer.toString(allMessages.size());
 		if(allMessages.size() == 0) {
 			countOfMessages = "";
@@ -81,9 +81,9 @@ public class MessageController {
 		}
 		User loginUser = HttpSessionUtils.getUserFromSession(session);
 		
-		Message message = messageService.confirmMessage(id, loginUser);
+		MessageResponse message = messageService.confirmMessage(id, loginUser);
 
-		List<Message> allMessages = messageService.findMessageAllBySenderAndNotConfirmUseProfile(loginUser, "읽지 않음");
+		List<MessageResponse> allMessages = messageService.findMessageAllBySenderAndNotConfirmUseProfile(loginUser, "읽지 않음");
 		String countOfMessages = Integer.toString(allMessages.size());
 		if(allMessages.size() == 0) {
 			countOfMessages = "";
