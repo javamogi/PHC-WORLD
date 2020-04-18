@@ -836,6 +836,24 @@
     * 메시지를 보낸시간 또는 받은 시간 나타낸다.
 * 날짜 형식을 변경하는 메서드
 
+**MessageResponse**
+* Message를 생성 또는 변경하고 응답으로 건내줄 DTO
+* 필드
+  * id
+    * 받은 메세지의 읽음을 변경하기 위해 view에서 사용하는 id값
+  * sender
+    * 메세지를 보낸 User의 정보
+  * receiver
+    * 메세지를 받은 User의 정보
+  * contents
+    * Message의 내용
+  * className
+    * view에서 Message의 '읽음' 또는 '읽지않음'의 상태를 나타내기 위한 html 태그 class명 
+  * confirm
+    * Message의 '읽음' 또는 '읽지않음'의 상태를 나타내는 필드
+  * sendDate
+    * Message를 보낸 날짜
+
 **service**
 * 메시지 생성
   * 메시지를 보낼 때 메시지를 생성
