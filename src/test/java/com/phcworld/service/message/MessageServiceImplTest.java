@@ -16,6 +16,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.phcworld.domain.message.Message;
+import com.phcworld.domain.message.MessageRequest;
 import com.phcworld.domain.message.MessageResponse;
 import com.phcworld.domain.user.User;
 
@@ -38,16 +39,20 @@ public class MessageServiceImplTest {
 				.authority("ROLE_USER")
 				.createDate(LocalDateTime.now())
 				.build();
+		MessageRequest request = MessageRequest.builder()
+				.toUserEmail("test4@test.test")
+				.contents("test")
+				.build();
 		User receiveUser = User.builder()
 				.id(2L)
-				.email("test4@test.test")
+				.email(request.getToUserEmail())
 				.password("test4")
 				.name("테스트4")
 				.profileImage("blank-profile-picture.png")
 				.authority("ROLE_USER")
 				.createDate(LocalDateTime.now())
 				.build();
-		MessageResponse message = messageService.createMessage(user, receiveUser, "test");
+		MessageResponse message = messageService.createMessage(user, receiveUser, request.getContents());
 		MessageResponse actual = messageService.getOneMessage(1L);
 		assertThat(actual, is(message));
 	}

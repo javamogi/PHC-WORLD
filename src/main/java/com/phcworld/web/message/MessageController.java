@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.phcworld.domain.exception.LoginNotUserException;
 import com.phcworld.domain.exception.MatchNotUserExceptioin;
 import com.phcworld.domain.exception.UserNotFoundException;
+import com.phcworld.domain.message.MessageRequest;
 import com.phcworld.domain.message.MessageResponse;
 import com.phcworld.domain.user.User;
 import com.phcworld.service.message.MessageServiceImpl;
@@ -36,21 +37,21 @@ public class MessageController {
 	private MessageServiceImpl messageService;
 	
 	@PostMapping("")
-	public MessageResponse sendMessage(String toUserEmail, String contents, HttpSession session) 
+	public MessageResponse sendMessage(MessageRequest request, HttpSession session) 
 			throws LoginNotUserException, UserNotFoundException, MatchNotUserExceptioin {
-		log.debug("toUser : {}", toUserEmail); 
+		log.debug("toUser : {}", request.getToUserEmail()); 
 		if(!HttpSessionUtils.isLoginUser(session)) {
 			throw new LoginNotUserException("로그인을 해야합니다.");
 		}
 		User loginUser = HttpSessionUtils.getUserFromSession(session);
-		User receiveUser = userService.findUserByEmail(toUserEmail);
+		User receiveUser = userService.findUserByEmail(request.getToUserEmail());
 		if(receiveUser == null) {
 			throw new UserNotFoundException("보낼 유저 정보가 없습니다.");
 		}
 		if(loginUser.matchId(receiveUser.getId())) {
 			throw new MatchNotUserExceptioin("자신에게는 메세지를 보낼 수 없습니다.");
 		}
-		return messageService.createMessage(loginUser, receiveUser, contents);
+		return messageService.createMessage(loginUser, receiveUser, request.getContents());
 	}
 	
 	@GetMapping("/{id}")
