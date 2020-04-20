@@ -836,6 +836,14 @@
     * 메시지를 보낸시간 또는 받은 시간 나타낸다.
 * 날짜 형식을 변경하는 메서드
 
+**MessageRequest**
+* Message에 대한 요청을 보낼 때 사용할 DTO
+* 필드  
+  * toUserEmail
+    * 생성을 요청할 때 사용할 받는 유저의 Email
+  * contents
+    * 생성을 요청할 때 사용할 내용
+
 **MessageResponse**
 * Message를 생성 또는 변경하고 응답으로 건내줄 DTO
 * 필드
