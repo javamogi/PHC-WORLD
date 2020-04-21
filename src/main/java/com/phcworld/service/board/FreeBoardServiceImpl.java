@@ -118,27 +118,6 @@ public class FreeBoardServiceImpl implements FreeBoardService {
 		return freeBoardRepository.findByWriter(loginUser);
 	}
 	
-//	@Override
-//	public List<FreeBoardResponse> findFreeBoardListByWriter(User loginUser) {
-////		return freeBoardRepository.findByWriter(loginUser);
-//		List<FreeBoard> list = freeBoardRepository.findByWriter(loginUser);
-//		return list.stream()
-//				.map(freeBoard -> {
-//					FreeBoardResponse freeBoardResponse = FreeBoardResponse.builder()
-//							.id(freeBoard.getId())
-//							.writer(freeBoard.getWriter())
-//							.title(freeBoard.getTitle())
-//							.contents(freeBoard.getContents())
-//							.icon(freeBoard.getIcon())
-//							.badge(freeBoard.getBadge())
-//							.updateDate(freeBoard.getFormattedUpdateDate())
-//							.count(freeBoard.getCount())
-//							.build();
-//					return freeBoardResponse;
-//				})
-//				.collect(Collectors.toList());
-//	}
-	
 	private FreeBoardResponse response(FreeBoard freeBoard) {
 		FreeBoardResponse freeBoardResponse = FreeBoardResponse.builder()
 				.id(freeBoard.getId())

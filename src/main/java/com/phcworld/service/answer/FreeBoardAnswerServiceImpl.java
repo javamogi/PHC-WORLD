@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.phcworld.domain.answer.FreeBoardAnswer;
+import com.phcworld.domain.api.model.request.FreeBoardAnswerRequest;
 import com.phcworld.domain.api.model.response.FreeBoardAnswerApiResponse;
 import com.phcworld.domain.api.model.response.SuccessResponse;
 import com.phcworld.domain.board.FreeBoard;
@@ -22,7 +23,7 @@ import com.phcworld.service.timeline.TimelineServiceImpl;
 
 @Service
 @Transactional
-public class FreeBoardAnswerServiceImpl implements CrudInterface<FreeBoardAnswerApiResponse, SuccessResponse> {
+public class FreeBoardAnswerServiceImpl implements CrudInterface<FreeBoardAnswerRequest, FreeBoardAnswerApiResponse, SuccessResponse> {
 	
 	private static final Logger log = LoggerFactory.getLogger(FreeBoardAnswerServiceImpl.class);
 	
@@ -39,12 +40,12 @@ public class FreeBoardAnswerServiceImpl implements CrudInterface<FreeBoardAnswer
 	private TimelineServiceImpl timelineService;
 	
 	@Override
-	public FreeBoardAnswerApiResponse create(User loginUser, Long freeboardId, String contents) {
+	public FreeBoardAnswerApiResponse create(User loginUser, Long freeboardId, FreeBoardAnswerRequest request) {
 		FreeBoard freeBoard = freeBoardRepository.getOne(freeboardId);
 		FreeBoardAnswer freeBoardAnswer = FreeBoardAnswer.builder()
 				.writer(loginUser)
 				.freeBoard(freeBoard)
-				.contents(contents.replace("\r\n", "<br>"))
+				.contents(request.getContents().replace("\r\n", "<br>"))
 				.build();
 		
 		FreeBoardAnswer createdFreeBoardAnswer = freeBoardAnswerRepository.save(freeBoardAnswer);
@@ -86,12 +87,12 @@ public class FreeBoardAnswerServiceImpl implements CrudInterface<FreeBoardAnswer
 	}
 	
 	@Override
-	public FreeBoardAnswerApiResponse update(Long id, String contents, User loginUser) {
-		FreeBoardAnswer answer = freeBoardAnswerRepository.getOne(id);
+	public FreeBoardAnswerApiResponse update(FreeBoardAnswerRequest request, User loginUser) {
+		FreeBoardAnswer answer = freeBoardAnswerRepository.getOne(request.getId());
 		if(!answer.isSameWriter(loginUser)) {
 			throw new MatchNotUserExceptioin("본인이 작성한 글만 수정 가능합니다.");
 		}
-		answer.update(contents.replace("\r\n", "<br>"));
+		answer.update(request.getContents().replace("\r\n", "<br>"));
 		FreeBoardAnswer updatedFreeBoardAnswer = freeBoardAnswerRepository.save(answer);
 		FreeBoardAnswerApiResponse freeBoardAnswerApiResponse = 
 				FreeBoardAnswerApiResponse.builder()

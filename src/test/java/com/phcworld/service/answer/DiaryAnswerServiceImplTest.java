@@ -18,6 +18,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.phcworld.domain.answer.DiaryAnswer;
+import com.phcworld.domain.api.model.request.DiaryAnswerRequest;
 import com.phcworld.domain.api.model.response.DiaryAnswerApiResponse;
 import com.phcworld.domain.api.model.response.SuccessResponse;
 import com.phcworld.domain.board.Diary;
@@ -52,15 +53,19 @@ public class DiaryAnswerServiceImplTest {
 				.thumbnail("no-image-icon.gif")
 				.createDate(LocalDateTime.now())
 				.build();
+		DiaryAnswerRequest request = DiaryAnswerRequest.builder()
+				.contents("diary answer contents")
+				.build();
 		DiaryAnswer answer = DiaryAnswer.builder()
 				.id(1L)
 				.writer(writer)
 				.diary(diary)
-				.contents("diary answer content")
+				.contents(request.getContents())
 				.build();
 		List<DiaryAnswer> list = new ArrayList<DiaryAnswer>();
 		list.add(answer);
 		diary.setDiaryAnswers(list);
+		
 		
 		DiaryAnswerApiResponse diaryAnswerApiResponse = DiaryAnswerApiResponse.builder()
 				.id(answer.getId())
@@ -72,10 +77,10 @@ public class DiaryAnswerServiceImplTest {
 				.build();
 				
 		
-		when(diaryAnswerService.create(writer, diary.getId(), "diary answer content"))
+		when(diaryAnswerService.create(writer, diary.getId(), request))
 		.thenReturn(diaryAnswerApiResponse);
 		DiaryAnswerApiResponse createdDiaryAnswerApiResponse = 
-				diaryAnswerService.create(writer, diary.getId(), "diary answer content");
+				diaryAnswerService.create(writer, diary.getId(), request);
 		assertThat(diaryAnswerApiResponse, is(createdDiaryAnswerApiResponse));
 	}
 
@@ -267,7 +272,12 @@ public class DiaryAnswerServiceImplTest {
 		list.add(answer);
 		diary.setDiaryAnswers(list);
 		
-		answer.update("diary answer update content");
+		DiaryAnswerRequest request = DiaryAnswerRequest.builder()
+				.id(answer.getId())
+				.contents("diary answer update content")
+				.build();
+		answer.update(request.getContents());
+		
 		
 		DiaryAnswerApiResponse diaryAnswerApiResponse = DiaryAnswerApiResponse.builder()
 				.id(answer.getId())
@@ -278,10 +288,10 @@ public class DiaryAnswerServiceImplTest {
 				.updateDate(answer.getFormattedUpdateDate())
 				.build();
 		
-		when(diaryAnswerService.update(answer.getId(), answer.getContents(), writer))
+		when(diaryAnswerService.update(request, writer))
 		.thenReturn(diaryAnswerApiResponse);
 		DiaryAnswerApiResponse updatedDiaryAnswerApiResponse = 
-				diaryAnswerService.update(answer.getId(), answer.getContents(), writer);
+				diaryAnswerService.update(request, writer);
 		assertThat(diaryAnswerApiResponse, is(updatedDiaryAnswerApiResponse));
 	}
 	

@@ -22,6 +22,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.phcworld.domain.answer.FreeBoardAnswer;
+import com.phcworld.domain.api.model.request.FreeBoardAnswerRequest;
 import com.phcworld.domain.api.model.response.FreeBoardAnswerApiResponse;
 import com.phcworld.domain.api.model.response.SuccessResponse;
 import com.phcworld.domain.board.FreeBoard;
@@ -65,11 +66,14 @@ public class FreeBoardAnswerControllerTest {
 				.createDate(LocalDateTime.now())
 				.count(0)
 				.build();
+		FreeBoardAnswerRequest request = FreeBoardAnswerRequest.builder()
+				.contents("test")
+				.build();
 		FreeBoardAnswer freeBoardAnswer = FreeBoardAnswer.builder()
 				.id(1L)
 				.writer(user)
 				.freeBoard(freeBoard)
-				.contents("test")
+				.contents(request.getContents())
 				.build();
 		List<FreeBoardAnswer> list = new ArrayList<FreeBoardAnswer>();
 		list.add(freeBoardAnswer);
@@ -84,7 +88,7 @@ public class FreeBoardAnswerControllerTest {
 				.updateDate(freeBoardAnswer.getFormattedUpdateDate())
 				.build();
 		
-		when(this.freeBoardAnswerService.create(user, freeBoard.getId(), "test"))
+		when(this.freeBoardAnswerService.create(user, freeBoard.getId(), request))
 		.thenReturn(freeBoardAnswerApiResponse);
 		this.mvc.perform(post("/freeboards/{freeboardId}/answers", 1L)
 				.param("contents", "test")
@@ -302,7 +306,11 @@ public class FreeBoardAnswerControllerTest {
 		List<FreeBoardAnswer> list = new ArrayList<FreeBoardAnswer>();
 		list.add(freeBoardAnswer);
 		freeBoard.setFreeBoardAnswers(list);
-		freeBoardAnswer.update("update");
+		FreeBoardAnswerRequest request = FreeBoardAnswerRequest.builder()
+				.id(freeBoardAnswer.getId())
+				.contents("update")
+				.build();
+		freeBoardAnswer.update(request.getContents());
 		
 		FreeBoardAnswerApiResponse freeBoardAnswerApiResponse = FreeBoardAnswerApiResponse.builder()
 				.id(freeBoardAnswer.getId())
@@ -313,7 +321,7 @@ public class FreeBoardAnswerControllerTest {
 				.updateDate(freeBoardAnswer.getFormattedUpdateDate())
 				.build();
 		
-		when(this.freeBoardAnswerService.update(freeBoardAnswer.getId(), freeBoardAnswer.getContents(), user))
+		when(this.freeBoardAnswerService.update(request, user))
 		.thenReturn(freeBoardAnswerApiResponse);
 		this.mvc.perform(patch("/freeboards/{freeboardId}/answers", 1L)
 				.param("id", "1")

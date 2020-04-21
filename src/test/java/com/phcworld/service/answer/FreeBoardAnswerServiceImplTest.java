@@ -18,6 +18,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.phcworld.domain.answer.FreeBoardAnswer;
+import com.phcworld.domain.api.model.request.FreeBoardAnswerRequest;
 import com.phcworld.domain.api.model.response.FreeBoardAnswerApiResponse;
 import com.phcworld.domain.api.model.response.SuccessResponse;
 import com.phcworld.domain.board.FreeBoard;
@@ -52,11 +53,14 @@ public class FreeBoardAnswerServiceImplTest {
 				.createDate(LocalDateTime.now())
 				.count(0)
 				.build();
+		FreeBoardAnswerRequest request = FreeBoardAnswerRequest.builder()
+				.contents("contents")
+				.build();
 		FreeBoardAnswer answer = FreeBoardAnswer.builder()
 				.id(1L)
 				.writer(writer)
 				.freeBoard(freeBoard)
-				.contents("content")
+				.contents(request.getContents())
 				.build();
 		List<FreeBoardAnswer> list = new ArrayList<FreeBoardAnswer>();
 		list.add(answer);
@@ -71,11 +75,11 @@ public class FreeBoardAnswerServiceImplTest {
 				.updateDate(answer.getFormattedUpdateDate())
 				.build();
 		
-		when(freeBoardAnswerService.create(writer, freeBoard.getId(), "content"))
+		when(freeBoardAnswerService.create(writer, freeBoard.getId(), request))
 		.thenReturn(freeBoardAnswerApiResponse);
 		FreeBoardAnswerApiResponse createdFreeBoardAnswerApiResponse = 
-				freeBoardAnswerService.create(writer, freeBoard.getId(), "content");
-		assertThat("content", is(createdFreeBoardAnswerApiResponse.getContents()));
+				freeBoardAnswerService.create(writer, freeBoard.getId(), request);
+		assertThat(request.getContents(), is(createdFreeBoardAnswerApiResponse.getContents()));
 		assertThat("[1]", is(createdFreeBoardAnswerApiResponse.getCountOfAnswers()));
 		assertThat(freeBoard.getId(), is(createdFreeBoardAnswerApiResponse.getFreeBoardId()));
 	}
@@ -281,7 +285,12 @@ public class FreeBoardAnswerServiceImplTest {
 		list.add(answer);
 		freeBoard.setFreeBoardAnswers(list);
 		
-		answer.update("update content");
+		FreeBoardAnswerRequest request = FreeBoardAnswerRequest.builder()
+				.id(answer.getId())
+				.contents("update contents")
+				.build();
+		
+		answer.update(request.getContents());
 		
 		FreeBoardAnswerApiResponse freeBoardAnswerApiResponse = FreeBoardAnswerApiResponse.builder()
 				.id(answer.getId())
@@ -292,10 +301,10 @@ public class FreeBoardAnswerServiceImplTest {
 				.updateDate(answer.getFormattedUpdateDate())
 				.build();
 		
-		when(freeBoardAnswerService.update(answer.getId(), answer.getContents(), writer))
+		when(freeBoardAnswerService.update(request, writer))
 		.thenReturn(freeBoardAnswerApiResponse);
 		FreeBoardAnswerApiResponse updatedFreeBoardAnswerApiResponse = 
-				freeBoardAnswerService.update(answer.getId(), answer.getContents(), writer);
+				freeBoardAnswerService.update(request, writer);
 		assertThat(freeBoardAnswerApiResponse, is(updatedFreeBoardAnswerApiResponse));
 	}
 

@@ -23,6 +23,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.phcworld.domain.answer.DiaryAnswer;
+import com.phcworld.domain.api.model.request.DiaryAnswerRequest;
 import com.phcworld.domain.api.model.response.DiaryAnswerApiResponse;
 import com.phcworld.domain.api.model.response.SuccessResponse;
 import com.phcworld.domain.board.Diary;
@@ -67,11 +68,14 @@ public class DiaryAnswerControllerTest {
 				.thumbnail("no-image-icon.gif")
 				.createDate(LocalDateTime.now())
 				.build();
+		DiaryAnswerRequest request = DiaryAnswerRequest.builder()
+				.contents("test")
+				.build();
 		DiaryAnswer diaryAnswer = DiaryAnswer.builder()
 				.id(1L)
 				.writer(user)
 				.diary(diary)
-				.contents("test")
+				.contents(request.getContents())
 				.build();
 		List<DiaryAnswer> list = new ArrayList<DiaryAnswer>();
 		list.add(diaryAnswer);
@@ -86,7 +90,7 @@ public class DiaryAnswerControllerTest {
 				.updateDate(diaryAnswer.getFormattedUpdateDate())
 				.build();
 		
-		when(this.diaryAnswerService.create(user, diary.getId(), "test"))
+		when(this.diaryAnswerService.create(user, diary.getId(), request))
 		.thenReturn(diaryAnswerApiResponse);
 		this.mvc.perform(post("/diaries/{diaryId}/answer", 1L)
 				.contentType(MediaType.APPLICATION_JSON)
@@ -305,7 +309,11 @@ public class DiaryAnswerControllerTest {
 		List<DiaryAnswer> list = new ArrayList<DiaryAnswer>();
 		list.add(diaryAnswer);
 		diary.setDiaryAnswers(list);
-		diaryAnswer.update("update");
+		DiaryAnswerRequest request = DiaryAnswerRequest.builder()
+				.id(diaryAnswer.getId())
+				.contents("update")
+				.build();
+		diaryAnswer.update(request.getContents());
 		
 		DiaryAnswerApiResponse diaryAnswerApiResponse = DiaryAnswerApiResponse.builder()
 				.id(diaryAnswer.getId())
@@ -316,7 +324,7 @@ public class DiaryAnswerControllerTest {
 				.updateDate(diaryAnswer.getFormattedUpdateDate())
 				.build();
 		
-		when(this.diaryAnswerService.update(diaryAnswer.getId(), diaryAnswer.getContents(), user))
+		when(this.diaryAnswerService.update(request, user))
 		.thenReturn(diaryAnswerApiResponse);
 		this.mvc.perform(patch("/diaries/{diaryId}/answer", 1L)
 				.param("id", "1")

@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.phcworld.domain.api.model.request.FreeBoardAnswerRequest;
 import com.phcworld.domain.api.model.response.FreeBoardAnswerApiResponse;
 import com.phcworld.domain.api.model.response.SuccessResponse;
 import com.phcworld.domain.exception.ContentsEmptyException;
@@ -22,11 +23,9 @@ import com.phcworld.domain.user.User;
 import com.phcworld.service.answer.FreeBoardAnswerServiceImpl;
 import com.phcworld.utils.HttpSessionUtils;
 
-import lombok.extern.slf4j.Slf4j;
 
 @RestController
 @RequestMapping("/freeboards/{freeboardId}/answers")
-@Slf4j
 public class FreeBoardAnswerController {
 	
 	@Autowired
@@ -34,9 +33,9 @@ public class FreeBoardAnswerController {
 	
 	@PostMapping("")
 	@ResponseStatus(value = HttpStatus.CREATED)
-	public FreeBoardAnswerApiResponse create(@PathVariable Long freeboardId, String contents, HttpSession session) 
+	public FreeBoardAnswerApiResponse create(@PathVariable Long freeboardId, FreeBoardAnswerRequest request, HttpSession session) 
 			throws LoginNotUserException, ContentsEmptyException {
-		if(contents.equals("")) {
+		if(request.getContents().equals("")) {
 			throw new ContentsEmptyException("내용을 입력하세요.");
 		}
 		if(!HttpSessionUtils.isLoginUser(session)) {
@@ -44,7 +43,7 @@ public class FreeBoardAnswerController {
 		}
 		User loginUser = HttpSessionUtils.getUserFromSession(session);
 		
-		return freeBoardAnswerService.create(loginUser, freeboardId, contents);
+		return freeBoardAnswerService.create(loginUser, freeboardId, request);
 	}
 	
 	@GetMapping("/{id}")
@@ -58,17 +57,16 @@ public class FreeBoardAnswerController {
 	}
 	
 	@PatchMapping("")
-	public FreeBoardAnswerApiResponse update(Long id, String contents, HttpSession session) 
+	public FreeBoardAnswerApiResponse update(FreeBoardAnswerRequest request, HttpSession session) 
 			throws LoginNotUserException, MatchNotUserExceptioin {
-		if(contents.equals("")) {
+		if(request.getContents().equals("")) {
 			throw new ContentsEmptyException("내용을 입력하세요.");
 		}
 		if(!HttpSessionUtils.isLoginUser(session)) {
 			throw new LoginNotUserException("로그인을 해야합니다.");
 		}
 		User loginUser = HttpSessionUtils.getUserFromSession(session);
-		log.info("id : {}, contents : {}", id, contents);
-		return freeBoardAnswerService.update(id, contents, loginUser);
+		return freeBoardAnswerService.update(request, loginUser);
 	}
 	
 	@DeleteMapping("/{id}")

@@ -1,6 +1,5 @@
 package com.phcworld.service.answer;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.phcworld.domain.answer.DiaryAnswer;
+import com.phcworld.domain.api.model.request.DiaryAnswerRequest;
 import com.phcworld.domain.api.model.response.DiaryAnswerApiResponse;
 import com.phcworld.domain.api.model.response.SuccessResponse;
 import com.phcworld.domain.board.Diary;
@@ -21,7 +21,7 @@ import com.phcworld.service.timeline.TimelineServiceImpl;
 
 @Service
 @Transactional
-public class DiaryAnswerServiceImpl implements CrudInterface<DiaryAnswerApiResponse, SuccessResponse> {
+public class DiaryAnswerServiceImpl implements CrudInterface<DiaryAnswerRequest, DiaryAnswerApiResponse, SuccessResponse> {
 	
 	@Autowired
 	private DiaryRepository diaryRepository;
@@ -36,12 +36,12 @@ public class DiaryAnswerServiceImpl implements CrudInterface<DiaryAnswerApiRespo
 	private TimelineServiceImpl timelineService;
 	
 	@Override
-	public DiaryAnswerApiResponse create(User loginUser, Long diaryId, String contents) {
+	public DiaryAnswerApiResponse create(User loginUser, Long diaryId, DiaryAnswerRequest request) {
 		Diary diary = diaryRepository.getOne(diaryId);
 		DiaryAnswer diaryAnswer = DiaryAnswer.builder()
 				.writer(loginUser)
 				.diary(diary)
-				.contents(contents.replace("\r\n", "<br>"))
+				.contents(request.getContents().replace("\r\n", "<br>"))
 				.build();
 		
 		DiaryAnswer createdDiaryAnswer = diaryAnswerRepository.save(diaryAnswer);
@@ -81,12 +81,12 @@ public class DiaryAnswerServiceImpl implements CrudInterface<DiaryAnswerApiRespo
 	}
 	
 	@Override
-	public DiaryAnswerApiResponse update(Long id, String contents, User loginUser) {
-		DiaryAnswer answer = diaryAnswerRepository.getOne(id);
+	public DiaryAnswerApiResponse update(DiaryAnswerRequest request, User loginUser) {
+		DiaryAnswer answer = diaryAnswerRepository.getOne(request.getId());
 		if(!answer.isSameWriter(loginUser)) {
 			throw new MatchNotUserExceptioin("본인이 작성한 글만 수정 가능합니다.");
 		}
-		answer.update(contents.replace("\r\n", "<br>"));
+		answer.update(request.getContents().replace("\r\n", "<br>"));
 		
 		DiaryAnswer updatedDiaryAnswer = diaryAnswerRepository.save(answer);
 		DiaryAnswerApiResponse diaryAnswerApiResponse = DiaryAnswerApiResponse.builder()

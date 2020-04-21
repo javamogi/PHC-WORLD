@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.phcworld.domain.api.model.request.DiaryAnswerRequest;
 import com.phcworld.domain.api.model.response.DiaryAnswerApiResponse;
 import com.phcworld.domain.api.model.response.SuccessResponse;
 import com.phcworld.domain.exception.ContentsEmptyException;
@@ -32,9 +33,9 @@ public class DiaryAnswerController {
 	
 	@PostMapping("")
 	@ResponseStatus(value = HttpStatus.CREATED)
-	public DiaryAnswerApiResponse create(@PathVariable Long diaryId, String contents, HttpSession session) 
+	public DiaryAnswerApiResponse create(@PathVariable Long diaryId, DiaryAnswerRequest request, HttpSession session) 
 			throws LoginNotUserException, ContentsEmptyException {
-		if(contents.equals("")) {
+		if(request.getContents().equals("")) {
 			throw new ContentsEmptyException("내용을 입력하세요.");
 		}
 		if(!HttpSessionUtils.isLoginUser(session)) {
@@ -42,7 +43,7 @@ public class DiaryAnswerController {
 		}
 		User loginUser = HttpSessionUtils.getUserFromSession(session);
 		
-		return diaryAnswerService.create(loginUser, diaryId, contents);
+		return diaryAnswerService.create(loginUser, diaryId, request);
 	}
 	
 	@GetMapping("/{id}")
@@ -56,16 +57,16 @@ public class DiaryAnswerController {
 	}
 	
 	@PatchMapping("")
-	public DiaryAnswerApiResponse update(Long id, String contents, HttpSession session) 
+	public DiaryAnswerApiResponse update(DiaryAnswerRequest request, HttpSession session) 
 			throws LoginNotUserException, MatchNotUserExceptioin {
-		if(contents.equals("")) {
+		if(request.getContents().equals("")) {
 			throw new ContentsEmptyException("내용을 입력하세요.");
 		}
 		if(!HttpSessionUtils.isLoginUser(session)) {
 			throw new LoginNotUserException("로그인을 해야합니다.");
 		}
 		User loginUser = HttpSessionUtils.getUserFromSession(session);
-		return diaryAnswerService.update(id, contents, loginUser);
+		return diaryAnswerService.update(request, loginUser);
 	}
 	
 	@DeleteMapping("/{id}")
