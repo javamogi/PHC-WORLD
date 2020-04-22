@@ -303,6 +303,14 @@
 * 작성자와 넘어오는 User가 같은지 확인하는 메서드
 * 댓글을 수정하는 메서드
 
+**FreeBoardAnswerRequest**
+* FreeBoardAnswer에 대한 요청을 보낼 때 사용할 DTO
+* 필드
+  * id
+    * 수정을 요청할 때 사용하기 위한 id
+  * contents
+    * 생성과 수정을 요청할 때 사용할 내용
+
 **FreeBoardAnswerApiResponse**
 * FreeBoardAnswer를 생성하고 응답으로 건내줄 DTO
 * 필드
@@ -531,6 +539,14 @@
     * 수정한 날짜를 기록하는 필드
 * 날짜 형식을 변경하는 메서드
 * 작성자와 넘어오는 User가 같은지 확인하는 메서드
+
+**DiaryAnswerRequest**
+* DiaryAnswer에 대한 요청을 보낼 때 사용할 DTO
+* 필드
+  * id
+    * 수정을 요청할 때 사용하기 위한 id
+  * contents
+    * 생성과 수정을 요청할 때 사용할 내용
 
 **DiaryAnswerApiResponse**
 * DiaryAnswer를 생성하고 응답으로 건내줄 DTO
