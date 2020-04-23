@@ -10,8 +10,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -22,19 +20,20 @@ import org.springframework.mock.web.MockHttpSession;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
-import com.phcworld.domain.alert.Alert;
 import com.phcworld.domain.answer.DiaryAnswer;
 import com.phcworld.domain.answer.FreeBoardAnswer;
 import com.phcworld.domain.board.Diary;
 import com.phcworld.domain.board.FreeBoard;
 import com.phcworld.domain.good.Good;
 import com.phcworld.domain.timeline.Timeline;
+import com.phcworld.domain.user.DashBoardUser;
 import com.phcworld.domain.user.User;
 import com.phcworld.service.alert.AlertServiceImpl;
 import com.phcworld.service.answer.DiaryAnswerServiceImpl;
 import com.phcworld.service.answer.FreeBoardAnswerServiceImpl;
 import com.phcworld.service.board.DiaryServiceImpl;
 import com.phcworld.service.board.FreeBoardServiceImpl;
+import com.phcworld.service.dashboard.DashboardService;
 import com.phcworld.service.timeline.TimelineServiceImpl;
 import com.phcworld.utils.HttpSessionUtils;
 
@@ -62,6 +61,9 @@ public class DashboardControllerTest {
 	
 	@MockBean
 	private AlertServiceImpl alertService;
+	
+	@MockBean
+	private DashboardService dashboardService;
 
 	@Test
 	public void requestDashboardWhenEmptyLoginUser() throws Exception {
@@ -91,93 +93,26 @@ public class DashboardControllerTest {
 		mockSession.setAttribute("messages", null);
 		mockSession.setAttribute("countMessages", "");
 		mockSession.setAttribute("alerts", null);
-		
-		FreeBoard freeBoard = FreeBoard.builder()
-				.id(1L)
-				.writer(user)
-				.title("title")
-				.contents("content")
-				.icon("")
-				.createDate(LocalDateTime.now())
-				.count(0)
-				.build();
-		List<FreeBoard> freeBoardList = new ArrayList<>();
-		freeBoardList.add(freeBoard);
-		when(this.freeBoardService.findFreeBoardListByWriter(user))
-		.thenReturn(freeBoardList);
-		
-		FreeBoardAnswer freeBoardAnswer = FreeBoardAnswer.builder()
-				.id(1L)
-				.writer(user)
-				.freeBoard(freeBoard)
-				.contents("test")
-				.build();
-		List<FreeBoardAnswer> freeBoardAnswerList = new ArrayList<>();
-		freeBoardAnswerList.add(freeBoardAnswer);
-		when(this.freeBoardAnswerService.findFreeBoardAnswerListByWriter(user))
-		.thenReturn(freeBoardAnswerList);
-		
-		Diary diary = Diary.builder()
-				.id(1L)
-				.writer(user)
-				.title("test")
-				.contents("test")
-				.thumbnail("")
-				.createDate(LocalDateTime.now())
-				.build();
-		
-		List<Diary> diaryList = new ArrayList<>();
-		diaryList.add(diary);
-		when(this.diaryService.findDiaryListByWriter(user))
-		.thenReturn(diaryList);
-		
-		DiaryAnswer diaryAnswer = DiaryAnswer.builder()
-				.id(1L)
-				.writer(user)
-				.diary(diary)
-				.contents("test")
-				.build();
-		List<DiaryAnswer> diaryAnswerList = new ArrayList<>();
-		diaryAnswerList.add(diaryAnswer);
-		when(this.diaryAnswerService.findDiaryAnswerListByWriter(user))
-		.thenReturn(diaryAnswerList);
-		
-		Alert alert = Alert.builder()
-				.id(1L)
-				.type("FreeBoard Answer")
-				.freeBoardAnswer(freeBoardAnswer)
-				.postWriter(user)
-				.createDate(LocalDateTime.now())
-				.build();
-		List<Alert> alertList = new ArrayList<>();
-		alertList.add(alert);
-		when(this.alertService.findListAlertByPostUser(user))
-		.thenReturn(alertList);
-		
-		Timeline timeline = Timeline.builder()
-				.id(1L)
-				.type("FreeBoard")
-				.icon("")
-				.freeBoard(freeBoard)
+		DashBoardUser dashboardUser = DashBoardUser.builder()
 				.user(user)
-				.saveDate(freeBoard.getCreateDate())
+				.countOfAnswer(0)
+				.countOfFreeBoard(0)
+				.countOfDiary(0)
+				.countOfAlert(0)
+				.timelineList(null)
 				.build();
-		List<Timeline> timelineList = new ArrayList<>();
-		timelineList.add(timeline);
-		when(this.timelineService.findTimelineList(0, user))
-		.thenReturn(timelineList);
+		when(this.dashboardService.getDashBoardUser(user))
+		.thenReturn(dashboardUser);
+		DashBoardUser dashboard = dashboardService.getDashBoardUser(user);
+		
 		
 		this.mvc.perform(get("/dashboard")
 				.session(mockSession))
 		.andDo(print())
 		.andExpect(view().name(containsString("/dashboard/dashboard")))
 		.andExpect(status().isOk())
-		.andExpect(model().attribute("countAnswers", freeBoardAnswerList.size() + diaryAnswerList.size()))
-		.andExpect(model().attribute("countFreeboards", freeBoardList.size()))
-		.andExpect(model().attribute("countDiaries", diaryList.size()))
-		.andExpect(model().attribute("countAlerts", alertList.size()))
-		.andExpect(model().attribute("timelines", timelineList))
-		.andExpect(model().size(5));
+		.andExpect(model().attribute("dashboard", dashboard))
+		.andExpect(model().size(1));
 	}
 	
 	@Test

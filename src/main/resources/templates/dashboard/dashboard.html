@@ -30,7 +30,7 @@
                                     <i class="fa fa-comment fa-5x"></i>
                                 </div>
                                 <div class="col-xs-9 text-right">
-                                    <div class="huge">{{countAnswers}}</div>
+                                    <div class="huge">{{dashboard.countOfAnswer}}</div>
                                     <div>New Comments!</div>
                                 </div>
                             </div>
@@ -56,7 +56,7 @@
                                     <i class="fa fa-list-alt fa-5x"></i>
                                 </div>
                                 <div class="col-xs-9 text-right">
-                                    <div class="huge">{{countFreeboards}}</div>
+                                    <div class="huge">{{dashboard.countOfFreeBoard}}</div>
                                     <div>New Posts!</div>
                                 </div>
                             </div>
@@ -81,7 +81,7 @@
                                     <i class="fa fa-book fa-5x"></i>
                                 </div>
                                 <div class="col-xs-9 text-right">
-                                    <div class="huge">{{countDiaries}}</div>
+                                    <div class="huge">{{dashboard.countOfDiary}}</div>
                                     <div>New Posts!</div>
                                 </div>
                             </div>
@@ -106,7 +106,7 @@
                                     <i class="fa fa-bell fa-5x"></i>
                                 </div>
                                 <div class="col-xs-9 text-right">
-                                    <div class="huge">{{countAlerts}}</div>
+                                    <div class="huge">{{dashboard.countOfAlert}}</div>
                                     <div>New Posts!</div>
                                 </div>
                             </div>
@@ -134,13 +134,13 @@
                         <!-- /.panel-heading -->
                         <div class="panel-body">
                             <div class="list-group">
-                            {{#timelines}}
+                            {{#dashboard.timelineList}}
                                 <a href="/dashboard/timeline/{{id}}" class="list-group-item">
                                     <i class="fa fa-{{icon}} fa-fw"></i> {{type}}
                                     <span class="pull-right text-muted small"><em>{{formattedSaveDate}}</em>
                                     </span>
                                 </a>
-                             {{/timelines}}                                
+                             {{/dashboard.timelineList}}                                
                             </div>
                             <!-- /.list-group -->
                             <!-- <a href="#" class="btn btn-default btn-block">View All Alerts</a> -->
