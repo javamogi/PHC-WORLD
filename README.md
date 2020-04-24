@@ -46,11 +46,7 @@
 * 이미지의 용량은 5MB로 javascript(jQuery)로 제한하였습니다.
 * 자유게시판과 일기게시판에 글쓰기는 다음에디터를 사용하였습니다.
 ***
-### 업데이트 예정
-* 이미지파일 경로 외부에 설정
-* 회원탈퇴 요청시 회원을 삭제하지 않고 자격정지
-* 회원정보를 나타내는 페이지에서 다이어리 글로 이동
-***
+
 ### User 설명
 
 **Entity**
@@ -1003,6 +999,31 @@
 * 유저가 입력한 password를 db에 저장할 때 암호화하여 저장한다.
 * 로그인을 요청하여 password를 확인할 때도 바뀐 password로 확인한다.
 * 인터넷에서 찾아서 사용하였다. (SHA-256 검색 추천)
+
+***
+### Dashboard 설명
+**DashBoardUser**
+* Dashboard에 나타낼 정보를 위한 DTO
+* 필드
+  * user
+    * 로그인한 유저(dashboard에 나타내는 유저)의 정보를 담는다.
+  * countOfAnswer
+    * 로그인한 유저가 등록한 FreeBoardAnswer와 DiaryAnswer의 총 개수
+  * countOfFreeBoard
+    * 로그인한 유저가 등록한 FreeBoard의 총 개수
+  * countOfDiary
+    * 로그인한 유저가 등록한 Diary의 총 개수
+  * countOfAlert
+    * 로그인한 유저가 등록한 Alert의 총 개수
+  * timelineList
+    * 로그인한 유저가 등록한 Timeline의 목록(최신순으로 5개만 저장)
+
+**Service**
+* DashBoardUser로 변환할 각각의 데이터를 가져와서 DashBoardUser의 @Builder어노테이션으로 DashBoardUser에 정보를 담아 리턴
+
+**Controller**
+* 로그인한 유저의 DashBoardUser의 정보를 model에 담아 view페이지에서 보여준다.
+* Dashboard의 view페이지에서 timeline 목록을 클릭하면 해당 게시물로 이동
 
 ***
 ### 다음에디터
