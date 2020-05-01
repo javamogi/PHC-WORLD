@@ -38,7 +38,7 @@ public class FreeBoardServiceImpl implements FreeBoardService {
 		List<FreeBoard> list = freeBoardRepository.findAll();
 		for (int i = list.size()-1; i >= 0; i--) {
 			long createdDateAndNowDifferenceMinutes = 
-					Duration.between(list.get(i).getCreateDate(), LocalDateTime.now()).toMinutes();
+					Duration.between(list.get(i).getUpdateDate(), LocalDateTime.now()).toMinutes();
 			if (createdDateAndNowDifferenceMinutes / minutesOfHour < hourOfDay) {
 				list.get(i).setBadge("New");
 			} else {

@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.phcworld.domain.board.FreeBoardRequest;
 import com.phcworld.domain.board.FreeBoardResponse;
 import com.phcworld.domain.user.User;
-import com.phcworld.service.board.FreeBoardServiceImpl;
+import com.phcworld.service.board.FreeBoardService;
 import com.phcworld.utils.HttpSessionUtils;
 
 @Controller
@@ -25,7 +25,7 @@ import com.phcworld.utils.HttpSessionUtils;
 public class FreeBoardController {
 
 	@Autowired
-	private FreeBoardServiceImpl freeBoardService;
+	private FreeBoardService freeBoardService;
 	
 	@GetMapping("")
 	public String getFreeBoardAllList(Model model) {

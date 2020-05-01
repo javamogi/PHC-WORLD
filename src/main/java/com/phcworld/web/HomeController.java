@@ -7,13 +7,14 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.phcworld.domain.alert.Alert;
+import com.phcworld.service.alert.AlertService;
 import com.phcworld.service.alert.AlertServiceImpl;
 
 @Controller
 public class HomeController {
 	
 	@Autowired
-	private AlertServiceImpl alertService;
+	private AlertService alertService;
 	
 	@GetMapping("")
 	public String home() {
