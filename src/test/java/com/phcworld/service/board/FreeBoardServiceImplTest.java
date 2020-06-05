@@ -152,7 +152,7 @@ public class FreeBoardServiceImplTest {
 				.badge(board.getBadge())
 				.count(board.getCount())
 				.countOfAnswer(board.getCountOfAnswer())
-				.updateDate(board.getFormattedUpdateDate())
+				.createDate(board.getFormattedCreateDate())
 				.build();
 		
 		when(freeBoardService.updateFreeBoard(request)).thenReturn(response);
@@ -247,7 +247,7 @@ public class FreeBoardServiceImplTest {
 				.badge(board.getBadge())
 				.count(board.getCount())
 				.countOfAnswer(board.getCountOfAnswer())
-				.updateDate(board.getFormattedUpdateDate())
+				.createDate(board.getFormattedCreateDate())
 				.build();
 		when(freeBoardService.addFreeBoardCount(board.getId())).thenReturn(response);
 		FreeBoardResponse addedFreeBoardAnswer = freeBoardService.addFreeBoardCount(board.getId());

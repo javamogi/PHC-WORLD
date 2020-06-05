@@ -24,7 +24,7 @@ public class FreeBoardResponse {
 	
 	private String badge;
 	
-	private String updateDate;
+	private String createDate;
 	
 	private Integer count;
 	
