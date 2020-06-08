@@ -5,8 +5,8 @@ insert into EMAIL_AUTH(ID, EMAIL, AUTH_KEY, AUTHENTICATE) values('1', 'test@test
 insert into EMAIL_AUTH(ID, EMAIL, AUTH_KEY, AUTHENTICATE) values('2', 'test2@test.test', '5678', true);
 
 insert into FREE_BOARD(ID, WRITER_ID, TITLE, CONTENTS, COUNT, CREATE_DATE, UPDATE_DATE, ICON, BADGE) values('1', '1', 'test', 'test', 0, '2018-07-16 15:55:20.879', '2018-07-16 15:55:20.879', '', '');
-insert into FREE_BOARD(ID, WRITER_ID, TITLE, CONTENTS, COUNT, CREATE_DATE, UPDATE_DATE, ICON, BADGE) values('2', '1', 'test2', 'test2', 0,  '2018-07-17 15:55:20.879', '2018-07-17 15:55:20.879', '', '');
-insert into FREE_BOARD(ID, WRITER_ID, TITLE, CONTENTS, COUNT, CREATE_DATE, UPDATE_DATE, ICON, BADGE) values('3', '1', 'test3', 'test3', 0,  CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP(), '', '');
+insert into FREE_BOARD(ID, WRITER_ID, TITLE, CONTENTS, COUNT, CREATE_DATE, UPDATE_DATE, ICON, BADGE) values('2', '1', 'test2', 'test2', 0, '2018-07-17 15:55:20.879', '2018-07-17 15:55:20.879', '', '');
+insert into FREE_BOARD(ID, WRITER_ID, TITLE, CONTENTS, COUNT, CREATE_DATE, UPDATE_DATE, ICON, BADGE) values('3', '1', 'test3', 'test3', 0, CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP(), '', '');
 insert into FREE_BOARD(ID, WRITER_ID, TITLE, CONTENTS, COUNT, CREATE_DATE, UPDATE_DATE, ICON, BADGE) values('4', '2', 'testtest', 'testtest', 0,  CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP(), '', '');
 
 insert into TIMELINE(ID, TYPE, ICON, FREE_BOARD_ID, USER_ID, SAVE_DATE) values('1', 'free board', 'list-alt', '1', '1', '2018-07-16 15:55:20.879');

@@ -42,7 +42,10 @@ public class FreeBoardServiceImpl implements FreeBoardService {
 			if (createdDateAndNowDifferenceMinutes / minutesOfHour < hourOfDay) {
 				list.get(i).setBadge("New");
 			} else {
-				break;
+				if(list.get(i).getBadge().equals("")) {
+					break;
+				}
+				list.get(i).setBadge("");
 			}
 		}
 		List<FreeBoardResponse> freeBoardAnswerApiResponseList = list.stream()
