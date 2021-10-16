@@ -12,9 +12,13 @@ import com.phcworld.domain.good.Good;
 import com.phcworld.domain.user.User;
 
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
+@RequiredArgsConstructor
 @Entity
 public class TempDiary extends BasicBoard {
 
@@ -28,10 +32,10 @@ public class TempDiary extends BasicBoard {
 	@OneToMany(mappedBy = "diary", cascade = CascadeType.REMOVE)
 	@JsonBackReference
 	private List<Good> goodPushedUser;
-	
+
 	@Builder
-	public TempDiary(User writer, String title, String contents, String thumbnail) {
-		super(writer, title, contents);
+	public TempDiary(Long id, User writer, String title, String contents, String thumbnail) {
+		super(id, writer, title, contents);
 		this.thumbnail = thumbnail;
 	}
 
@@ -41,9 +45,9 @@ public class TempDiary extends BasicBoard {
 		}
 		return "[" + diaryAnswers.size() + "]";
 	}
-	
+
 	public Integer getCountOfGood() {
-		if(goodPushedUser == null) {
+		if (goodPushedUser == null) {
 			return 0;
 		}
 		return goodPushedUser.size();
@@ -67,4 +71,13 @@ public class TempDiary extends BasicBoard {
 		}
 		return super.getId().equals(diaryId);
 	}
+
+	@Override
+	public String toString() {
+		return "TempDiary [id=" + super.getId() + ", writer=" + super.getWriter() + ", title=" + super.getTitle()
+				+ ", contents=" + super.getContents() + ", createDate=" + super.getCreateDate() + ", updateDate="
+				+ super.getUpdateDate() + ", thumbnail=" + thumbnail + ", diaryAnswers=" + diaryAnswers
+				+ ", goodPushedUser=" + goodPushedUser + "]";
+	}
+
 }

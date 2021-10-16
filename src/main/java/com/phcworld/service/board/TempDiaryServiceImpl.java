@@ -13,7 +13,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.phcworld.domain.answer.DiaryAnswer;
 import com.phcworld.domain.api.model.response.DiaryAnswerApiResponse;
-import com.phcworld.domain.api.model.response.SuccessResponse;
 import com.phcworld.domain.board.Diary;
 import com.phcworld.domain.board.DiaryResponse;
 import com.phcworld.domain.board.TempDiary;
@@ -42,10 +41,10 @@ public class TempDiaryServiceImpl implements TempDiaryService {
 	@Autowired
 	private GoodService goodService;
 	
-	public List<DiaryResponse> getDiaryResponseList(List<Diary> diaries) {
-		List<DiaryResponse> diaryResponseList = diaries.stream()
+	public List<TempDiaryResponse> getDiaryResponseList(List<TempDiary> diaries) {
+		List<TempDiaryResponse> diaryResponseList = diaries.stream()
 				.map(diary -> {
-					DiaryResponse diaryResponse = DiaryResponse.builder()
+					TempDiaryResponse diaryResponse = TempDiaryResponse.builder()
 							.id(diary.getId())
 							.writer(diary.getWriter())
 							.title(diary.getTitle())
@@ -82,7 +81,7 @@ public class TempDiaryServiceImpl implements TempDiaryService {
 				.contents(request.getContents())
 				.thumbnail(request.getThumbnail())
 				.build();
-		TempDiary createdDiary = diaryRepository.save(diary);
+//		TempDiary createdDiary = diaryRepository.save(diary);
 		
 //		timelineService.createTimeline(createdDiary);
 		

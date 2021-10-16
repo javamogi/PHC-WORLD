@@ -51,7 +51,8 @@ public class BasicBoard {
 	@LastModifiedDate
 	private LocalDateTime updateDate;
 
-	public BasicBoard(User writer, String title, String contents) {
+	public BasicBoard(Long id, User writer, String title, String contents) {
+		this.id = id;
 		this.writer = writer;
 		this.title = title;
 		this.contents = contents;

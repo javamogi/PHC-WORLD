@@ -20,13 +20,9 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.phcworld.domain.answer.DiaryAnswer;
-import com.phcworld.domain.api.model.response.SuccessResponse;
-import com.phcworld.domain.board.Diary;
 import com.phcworld.domain.board.TempDiary;
 import com.phcworld.domain.board.TempDiaryRequest;
 import com.phcworld.domain.board.TempDiaryResponse;
-import com.phcworld.domain.good.Good;
 import com.phcworld.domain.user.User;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -119,7 +115,7 @@ public class TempDiaryServiceImplTest {
 				.createDate(LocalDateTime.now())
 				.build();
 		TempDiary diary = TempDiary.builder()
-//				.id(1L)
+				.id(1L)
 				.writer(user)
 				.title("title")
 				.contents("content")
@@ -195,7 +191,7 @@ public class TempDiaryServiceImplTest {
 				.createDate(LocalDateTime.now())
 				.build();
 		TempDiary diary = TempDiary.builder()
-//				.id(1L)
+				.id(1L)
 				.writer(user)
 				.title("title")
 				.contents("content")
@@ -217,7 +213,7 @@ public class TempDiaryServiceImplTest {
 				.createDate(LocalDateTime.now())
 				.build();
 		TempDiary diary = TempDiary.builder()
-//				.id(1L)
+				.id(1L)
 				.writer(user)
 				.title("title")
 				.contents("content")
@@ -321,7 +317,7 @@ public class TempDiaryServiceImplTest {
 				.createDate(LocalDateTime.now())
 				.build();
 		TempDiary diary = TempDiary.builder()
-//				.id(1L)
+				.id(1L)
 				.writer(user)
 				.title("title")
 				.contents("content")
