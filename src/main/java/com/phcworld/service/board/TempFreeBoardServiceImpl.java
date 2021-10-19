@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.phcworld.domain.answer.FreeBoardAnswer;
+import com.phcworld.domain.answer.TempFreeBoardAnswer;
 import com.phcworld.domain.api.model.response.FreeBoardAnswerApiResponse;
 import com.phcworld.domain.board.TempFreeBoard;
 import com.phcworld.domain.board.TempFreeBoardRequest;
@@ -133,15 +133,15 @@ public class TempFreeBoardServiceImpl implements TempFreeBoardService {
 				.count(freeBoard.getCount())
 				.countOfAnswer(freeBoard.getCountOfAnswer())
 				.build();
-		List<FreeBoardAnswer> answerList = freeBoard.getFreeBoardAnswers();
+		List<TempFreeBoardAnswer> answerList = freeBoard.getTempFreeBoardAnswers();
 		if(answerList != null) {
 			List<FreeBoardAnswerApiResponse> freeBoardAnswerApiResponseList = answerList.stream()
 					.map(answer -> {
 						FreeBoardAnswerApiResponse freeBoardAnswerApiResponse = FreeBoardAnswerApiResponse.builder()
 								.id(answer.getId())
 								.contents(answer.getContents())
-								.countOfAnswers(answer.getFreeBoard().getCountOfAnswer())
-								.freeBoardId(answer.getFreeBoard().getId())
+								.countOfAnswers(answer.getTempFreeBoard().getCountOfAnswer())
+								.freeBoardId(answer.getTempFreeBoard().getId())
 								.writer(answer.getWriter())
 								.updateDate(answer.getFormattedUpdateDate())
 								.build();

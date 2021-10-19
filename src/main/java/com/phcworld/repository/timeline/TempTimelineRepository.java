@@ -4,7 +4,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.phcworld.domain.board.BasicBoard;
+import com.phcworld.domain.parent.BasicBoardAndAnswer;
 import com.phcworld.domain.timeline.TempTimeline;
 import com.phcworld.domain.timeline.Timeline;
 import com.phcworld.domain.user.User;

@@ -18,6 +18,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.phcworld.domain.answer.TempFreeBoardAnswer;
 import com.phcworld.domain.board.TempFreeBoard;
 import com.phcworld.domain.board.TempFreeBoardRequest;
 import com.phcworld.domain.board.TempFreeBoardResponse;
@@ -204,14 +205,14 @@ public class TempFreeBoardServiceImplTest {
 				.badge("new")
 				.count(0)
 				.build();
-//		TempFreeBoardAnswer answer = TempFreeBoardAnswer.builder()
-//				.writer(user)
-//				.freeBoard(board)
-//				.contents("content")
-//				.build();
-//		List<FreeBoardAnswer> list = new ArrayList<FreeBoardAnswer>();
-//		list.add(answer);
-//		board.setFreeBoardAnswers(list);
+		TempFreeBoardAnswer answer = TempFreeBoardAnswer.builder()
+				.writer(user)
+				.tempFreeBoard(board)
+				.contents("content")
+				.build();
+		List<TempFreeBoardAnswer> list = new ArrayList<TempFreeBoardAnswer>();
+		list.add(answer);
+		board.setTempFreeBoardAnswers(list);
 		freeBoardService.deleteFreeBoard(board.getId());
 		verify(freeBoardService, times(1)).deleteFreeBoard(board.getId());
 	}

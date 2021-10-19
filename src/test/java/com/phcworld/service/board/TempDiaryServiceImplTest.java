@@ -20,6 +20,8 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.phcworld.domain.answer.DiaryAnswer;
+import com.phcworld.domain.answer.TempDiaryAnswer;
 import com.phcworld.domain.board.TempDiary;
 import com.phcworld.domain.board.TempDiaryRequest;
 import com.phcworld.domain.board.TempDiaryResponse;
@@ -219,15 +221,15 @@ public class TempDiaryServiceImplTest {
 				.contents("content")
 				.thumbnail("no-image-icon.gif")
 				.build();
-//		DiaryAnswer answer = DiaryAnswer.builder()
-//				.id(1L)
-//				.writer(user)
-//				.diary(diary)
-//				.contents("diary answer content")
-//				.build();
-//		List<DiaryAnswer> list = new ArrayList<DiaryAnswer>();
-//		list.add(answer);
-//		diary.setDiaryAnswers(list);
+		TempDiaryAnswer answer = TempDiaryAnswer.builder()
+				.id(1L)
+				.writer(user)
+				.tempDiary(diary)
+				.contents("diary answer content")
+				.build();
+		List<TempDiaryAnswer> list = new ArrayList<TempDiaryAnswer>();
+		list.add(answer);
+		diary.setTempDiaryAnswers(list);
 		diaryService.deleteDiary(diary.getId());
 		verify(diaryService, times(1)).deleteDiary(diary.getId());
 	}
@@ -243,7 +245,7 @@ public class TempDiaryServiceImplTest {
 //				.authority("ROLE_USER")
 //				.createDate(LocalDateTime.now())
 //				.build();
-//		TempDiary diary = Diary.builder()
+//		TempDiary diary = TempDiary.builder()
 //				.id(1L)
 //				.writer(user)
 //				.title("title")

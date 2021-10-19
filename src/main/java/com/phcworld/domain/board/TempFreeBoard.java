@@ -8,6 +8,8 @@ import javax.persistence.OneToMany;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.phcworld.domain.answer.FreeBoardAnswer;
+import com.phcworld.domain.answer.TempFreeBoardAnswer;
+import com.phcworld.domain.parent.BasicBoardAndAnswer;
 import com.phcworld.domain.user.User;
 
 import lombok.Builder;
@@ -19,7 +21,9 @@ import lombok.Setter;
 @Setter
 @RequiredArgsConstructor
 @Entity
-public class TempFreeBoard extends BasicBoard {
+public class TempFreeBoard extends BasicBoardAndAnswer {
+	
+	private String title;
 
 	private String icon;
 
@@ -27,25 +31,26 @@ public class TempFreeBoard extends BasicBoard {
 
 	private Integer count;
 
-	@OneToMany(mappedBy = "freeBoard", cascade = CascadeType.REMOVE)
+	@OneToMany(mappedBy = "tempFreeBoard", cascade = CascadeType.REMOVE)
 	@JsonBackReference
-	private List<FreeBoardAnswer> freeBoardAnswers;
+	private List<TempFreeBoardAnswer> tempFreeBoardAnswers;
 
 	@Builder
-	public TempFreeBoard(Long id, User writer, String title, String contents, String icon, String badge, Integer count,
-			List<FreeBoardAnswer> freeBoardAnswers) {
-		super(id, writer, title, contents);
+	public TempFreeBoard(Long id, User writer, String contents, String title, String icon, String badge, Integer count,
+			List<TempFreeBoardAnswer> freeBoardAnswers) {
+		super(id, writer, contents);
+		this.title = title;
 		this.icon = icon;
 		this.badge = badge;
 		this.count = count;
-		this.freeBoardAnswers = freeBoardAnswers;
+		this.tempFreeBoardAnswers = freeBoardAnswers;
 	}
 
 	public String getCountOfAnswer() {
-		if (this.freeBoardAnswers == null || this.freeBoardAnswers.size() == 0) {
+		if (this.tempFreeBoardAnswers == null || this.tempFreeBoardAnswers.size() == 0) {
 			return "";
 		}
-		return "[" + freeBoardAnswers.size() + "]";
+		return "[" + tempFreeBoardAnswers.size() + "]";
 	}
 
 	public void addCount() {
@@ -66,10 +71,10 @@ public class TempFreeBoard extends BasicBoard {
 
 	@Override
 	public String toString() {
-		return "TempFreeBoard [id=" + super.getId() + ", writer=" + super.getWriter() + ", title=" + super.getTitle()
+		return "TempFreeBoard [id=" + super.getId() + ", writer=" + super.getWriter() + ", title=" + this.title
 				+ ", contents=" + super.getContents() + ", createDate=" + super.getCreateDate() + ", updateDate="
 				+ super.getUpdateDate() + ", icon=" + icon + ", badge=" + badge + ", count=" + count
-				+ ", freeBoardAnswers=" + freeBoardAnswers + "]";
+				+ ", freeBoardAnswers=" + tempFreeBoardAnswers + "]";
 	}
 
 }

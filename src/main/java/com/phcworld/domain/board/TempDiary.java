@@ -7,8 +7,9 @@ import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.phcworld.domain.answer.DiaryAnswer;
-import com.phcworld.domain.good.Good;
+import com.phcworld.domain.answer.TempDiaryAnswer;
+import com.phcworld.domain.good.TempGood;
+import com.phcworld.domain.parent.BasicBoardAndAnswer;
 import com.phcworld.domain.user.User;
 
 import lombok.Builder;
@@ -20,37 +21,39 @@ import lombok.Setter;
 @Setter
 @RequiredArgsConstructor
 @Entity
-public class TempDiary extends BasicBoard {
+public class TempDiary extends BasicBoardAndAnswer {
 
+	private String title;
+	
 	private String thumbnail;
 
-	@OneToMany(mappedBy = "diary", cascade = CascadeType.REMOVE)
-	// @JsonManagedReference
+	@OneToMany(mappedBy = "tempDiary", cascade = CascadeType.REMOVE)
 	@JsonBackReference
-	private List<DiaryAnswer> diaryAnswers;
+	private List<TempDiaryAnswer> tempDiaryAnswers;
 
-	@OneToMany(mappedBy = "diary", cascade = CascadeType.REMOVE)
+	@OneToMany(mappedBy = "tempDiary", cascade = CascadeType.REMOVE)
 	@JsonBackReference
-	private List<Good> goodPushedUser;
+	private List<TempGood> tempGoodPushedUser;
 
 	@Builder
-	public TempDiary(Long id, User writer, String title, String contents, String thumbnail) {
-		super(id, writer, title, contents);
+	public TempDiary(Long id, User writer, String contents, String title, String thumbnail) {
+		super(id, writer, contents);
+		this.title = title;
 		this.thumbnail = thumbnail;
 	}
 
 	public String getCountOfAnswer() {
-		if (this.diaryAnswers == null || this.diaryAnswers.size() == 0) {
+		if (this.tempDiaryAnswers == null || this.tempDiaryAnswers.size() == 0) {
 			return "";
 		}
-		return "[" + diaryAnswers.size() + "]";
+		return "[" + tempDiaryAnswers.size() + "]";
 	}
 
 	public Integer getCountOfGood() {
-		if (goodPushedUser == null) {
+		if (tempGoodPushedUser == null) {
 			return 0;
 		}
-		return goodPushedUser.size();
+		return tempGoodPushedUser.size();
 	}
 
 	public boolean matchUser(User loginUser) {
@@ -74,10 +77,10 @@ public class TempDiary extends BasicBoard {
 
 	@Override
 	public String toString() {
-		return "TempDiary [id=" + super.getId() + ", writer=" + super.getWriter() + ", title=" + super.getTitle()
+		return "TempDiary [id=" + super.getId() + ", writer=" + super.getWriter() + ", title=" + this.title
 				+ ", contents=" + super.getContents() + ", createDate=" + super.getCreateDate() + ", updateDate="
-				+ super.getUpdateDate() + ", thumbnail=" + thumbnail + ", diaryAnswers=" + diaryAnswers
-				+ ", goodPushedUser=" + goodPushedUser + "]";
+				+ super.getUpdateDate() + ", thumbnail=" + thumbnail + ", diaryAnswers=" + tempDiaryAnswers
+				+ ", goodPushedUser=" + tempGoodPushedUser + "]";
 	}
 
 }

@@ -1,4 +1,4 @@
-package com.phcworld.domain.board;
+package com.phcworld.domain.parent;
 
 import java.time.LocalDateTime;
 
@@ -30,7 +30,7 @@ import lombok.experimental.Accessors;
 @AllArgsConstructor
 @Accessors(chain = true)
 @EntityListeners(AuditingEntityListener.class)
-public class BasicBoard {
+public class BasicBoardAndAnswer {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -39,8 +39,6 @@ public class BasicBoard {
 	@ManyToOne
 	@JoinColumn(foreignKey = @ForeignKey(name = "fk_writer"))
 	private User writer;
-
-	private String title;
 
 	@Lob
 	private String contents;
@@ -51,10 +49,9 @@ public class BasicBoard {
 	@LastModifiedDate
 	private LocalDateTime updateDate;
 
-	public BasicBoard(Long id, User writer, String title, String contents) {
+	public BasicBoardAndAnswer(Long id, User writer, String contents) {
 		this.id = id;
 		this.writer = writer;
-		this.title = title;
 		this.contents = contents;
 	}
 	

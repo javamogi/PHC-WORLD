@@ -2,12 +2,12 @@ package com.phcworld.domain.timeline;
 
 import org.springframework.stereotype.Component;
 
-import com.phcworld.domain.board.BasicBoard;
+import com.phcworld.domain.parent.BasicBoardAndAnswer;
 
 @Component
 public class TempTimelineFactory {
 	
-	public TempTimeline createTimeline(String type, BasicBoard board) {
+	public TempTimeline createTimeline(String type, BasicBoardAndAnswer board) {
 		TempTimeline timeline = null;
 		if(type.equals("board")) {
 			timeline = TempTimeline.builder()

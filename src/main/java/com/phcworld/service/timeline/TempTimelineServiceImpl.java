@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.phcworld.domain.board.BasicBoard;
+import com.phcworld.domain.parent.BasicBoardAndAnswer;
 import com.phcworld.domain.timeline.TempTimeline;
 import com.phcworld.domain.timeline.TempTimelineFactory;
 import com.phcworld.repository.timeline.TempTimelineRepository;
@@ -17,7 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 public class TempTimelineServiceImpl {
 
 	@Autowired
-	private TempTimelineRepository temp2TimelineRepository;
+	private TempTimelineRepository tempTimelineRepository;
 
 	@Autowired
 	private TempTimelineFactory factory;
@@ -34,9 +34,9 @@ public class TempTimelineServiceImpl {
 //		return timelineRepository.getOne(id);
 //	}
 
-	public TempTimeline createTimeline(String type, BasicBoard board) {
+	public TempTimeline createTimeline(String type, BasicBoardAndAnswer board) {
 		TempTimeline timeline = factory.createTimeline(type, board);
-		return temp2TimelineRepository.save(timeline);
+		return tempTimelineRepository.save(timeline);
 	}
 
 //	public Timeline createTimeline(DiaryAnswer diaryAnswer) {

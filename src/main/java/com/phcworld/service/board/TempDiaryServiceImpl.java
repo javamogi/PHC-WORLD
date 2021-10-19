@@ -12,17 +12,16 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.phcworld.domain.answer.DiaryAnswer;
+import com.phcworld.domain.answer.TempDiaryAnswer;
 import com.phcworld.domain.api.model.response.DiaryAnswerApiResponse;
-import com.phcworld.domain.board.Diary;
-import com.phcworld.domain.board.DiaryResponse;
 import com.phcworld.domain.board.TempDiary;
 import com.phcworld.domain.board.TempDiaryRequest;
 import com.phcworld.domain.board.TempDiaryResponse;
-import com.phcworld.domain.good.Good;
+import com.phcworld.domain.good.TempGood;
 import com.phcworld.domain.user.User;
 import com.phcworld.repository.board.TempDiaryRepository;
 import com.phcworld.service.alert.AlertServiceImpl;
-import com.phcworld.service.good.GoodService;
+import com.phcworld.service.good.TempGoodService;
 
 
 @Service
@@ -39,7 +38,7 @@ public class TempDiaryServiceImpl implements TempDiaryService {
 //	private TimelineServiceImpl timelineService;
 	
 	@Autowired
-	private GoodService goodService;
+	private TempGoodService goodService;
 	
 	public List<TempDiaryResponse> getDiaryResponseList(List<TempDiary> diaries) {
 		List<TempDiaryResponse> diaryResponseList = diaries.stream()
@@ -105,16 +104,16 @@ public class TempDiaryServiceImpl implements TempDiaryService {
 	public void deleteDiary(Long id) {
 		TempDiary diary = diaryRepository.getOne(id);
 //		timelineService.deleteTimeline(diary);
-		List<Good> goodList = diary.getGoodPushedUser();
+		List<TempGood> goodList = diary.getTempGoodPushedUser();
 		for(int i = 0; i < goodList.size(); i++) {
 //			timelineService.deleteTimeline(goodList.get(i));
-			alertService.deleteAlert(goodList.get(i));
+//			alertService.deleteAlert(goodList.get(i));
 		}
-		List<DiaryAnswer> answerList = diary.getDiaryAnswers();
+		List<TempDiaryAnswer> answerList = diary.getTempDiaryAnswers();
 		for(int i = 0; i < answerList.size(); i++) {
-			DiaryAnswer diaryAnswer = answerList.get(i);
+			TempDiaryAnswer diaryAnswer = answerList.get(i);
 //			timelineService.deleteTimeline(diaryAnswer);
-			alertService.deleteAlert(diaryAnswer);
+//			alertService.deleteAlert(diaryAnswer);
 		}
 		diaryRepository.delete(diary);
 	}
@@ -145,7 +144,7 @@ public class TempDiaryServiceImpl implements TempDiaryService {
 				.countOfGood(diary.getCountOfGood())
 				.updateDate(diary.getFormattedUpdateDate())
 				.build();
-		List<DiaryAnswer> answerList = diary.getDiaryAnswers();
+		List<TempDiaryAnswer> answerList = diary.getTempDiaryAnswers();
 		if(answerList != null) {
 			List<DiaryAnswerApiResponse> diaryAnswerApiResponseList = answerList.stream()
 					.map(answer -> {
@@ -153,8 +152,8 @@ public class TempDiaryServiceImpl implements TempDiaryService {
 								.id(answer.getId())
 								.writer(answer.getWriter())
 								.contents(answer.getContents())
-								.diaryId(answer.getDiary().getId())
-								.countOfAnswers(answer.getDiary().getCountOfAnswer())
+								.diaryId(answer.getTempDiary().getId())
+								.countOfAnswers(answer.getTempDiary().getCountOfAnswer())
 								.updateDate(answer.getFormattedUpdateDate())
 								.build();
 						return diaryAnswerApiResponse;
