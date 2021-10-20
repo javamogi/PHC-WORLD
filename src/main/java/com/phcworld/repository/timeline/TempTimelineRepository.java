@@ -6,13 +6,12 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.phcworld.domain.parent.BasicBoardAndAnswer;
 import com.phcworld.domain.timeline.TempTimeline;
-import com.phcworld.domain.timeline.Timeline;
 import com.phcworld.domain.user.User;
 
 public interface TempTimelineRepository extends JpaRepository<TempTimeline, Long> {
 	Page<TempTimeline> findByUser(User user, Pageable Pageable);
 	
-//	Timeline findByBoard(BasicBoard board);
+//	TempTimeline findByBoardAndAnswer(BasicBoardAndAnswer board);
 	
 //	Timeline findByDiary(Diary diary);
 //	

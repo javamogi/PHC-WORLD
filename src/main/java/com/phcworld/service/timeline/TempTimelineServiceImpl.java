@@ -34,55 +34,16 @@ public class TempTimelineServiceImpl {
 //		return timelineRepository.getOne(id);
 //	}
 
-	public TempTimeline createTimeline(String type, BasicBoardAndAnswer board) {
-		TempTimeline timeline = factory.createTimeline(type, board);
+	public TempTimeline createTimeline(String type, BasicBoardAndAnswer board, Long id) {
+		TempTimeline timeline = factory.createTimeline(type, board, id);
 		return tempTimelineRepository.save(timeline);
 	}
-
-//	public Timeline createTimeline(DiaryAnswer diaryAnswer) {
-//		Timeline diaryAnswerTimeline = Timeline.builder()
-//				.type("diary answer")
-//				.icon("comment")
-//				.diaryAnswer(diaryAnswer)
-//				.user(diaryAnswer.getWriter())
-//				.saveDate(diaryAnswer.getCreateDate())
-//				.build();
-//		return timelineRepository.save(diaryAnswerTimeline);
+	
+//	public void deleteTimeline(BasicBoardAndAnswer board) {
+////		TempTimeline timeline = tempTimelineRepository.findByBoardAndAnswer(board);
+//		tempTimelineRepository.delete(timeline);
 //	}
 
-//	public Timeline createTimeline(FreeBoard freeBoard) {
-//		Timeline freeBoardTimeline = Timeline.builder()
-//				.type("free board")
-//				.icon("list-alt")
-//				.freeBoard(freeBoard)
-//				.user(freeBoard.getWriter())
-//				.saveDate(freeBoard.getCreateDate())
-//				.build();
-//		return timelineRepository.save(freeBoardTimeline);
-//	}
-
-//	public Timeline createTimeline(FreeBoardAnswer freeBoardAnswer) {
-//		Timeline freeBoardAnswerTimeline = Timeline.builder()
-//				.type("freeBoard answer")
-//				.icon("comment")
-//				.freeBoardAnswer(freeBoardAnswer)
-//				.user(freeBoardAnswer.getWriter())
-//				.saveDate(freeBoardAnswer.getCreateDate())
-//				.build();
-//		return timelineRepository.save(freeBoardAnswerTimeline);
-//	}
-//	
-//	public Timeline createTimeline(Good good) {
-//		Timeline timeline = Timeline.builder()
-//				.type("good")
-//				.icon("thumbs-up")
-//				.good(good)
-//				.user(good.getUser())
-//				.saveDate(LocalDateTime.now())
-//				.build();
-//		return timelineRepository.save(timeline);
-//	}
-//	
 //	public void deleteTimeline(Diary diary) {
 //		Timeline timeline = timelineRepository.findByDiary(diary);
 //		timelineRepository.delete(timeline);

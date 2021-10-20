@@ -2,9 +2,13 @@ package com.phcworld.service.timeline;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -12,6 +16,7 @@ import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import com.phcworld.domain.answer.TempDiaryAnswer;
 import com.phcworld.domain.board.TempDiary;
 import com.phcworld.domain.timeline.TempTimeline;
 import com.phcworld.domain.timeline.Timeline;
@@ -40,6 +45,41 @@ public class TempTimelineServiceTest {
 				.build();
 		
 		TempDiary diary = TempDiary.builder()
+				.id(1L)
+				.writer(user)
+				.title("title")
+				.contents("contents")
+				.thumbnail("thumbnail")
+				.build();
+		TempTimeline diaryTimeline = TempTimeline.builder()
+				.type("diary")
+				.icon("edit")
+				.url("redirect:/diaries/1")
+				.board(diary)
+				.user(user)
+				.saveDate(diary.getCreateDate())
+				.build();
+		when(timelineService.createTimeline("diary", diary, diary.getId()))
+		.thenReturn(diaryTimeline);
+		TempTimeline createdDiaryTimeline = timelineService.createTimeline("diary", diary, diary.getId());
+		log.info("timeline : {}", createdDiaryTimeline);
+		assertThat("diary", is(createdDiaryTimeline.getType()));
+		assertThat("edit", is(createdDiaryTimeline.getIcon()));
+	}
+	
+	@Test
+	public void deleteTimeline() {
+		User user = User.builder()
+				.id(1L)
+				.email("test3@test.test")
+				.password("test3")
+				.name("테스트3")
+				.profileImage("blank-profile-picture.png")
+				.authority("ROLE_USER")
+				.createDate(LocalDateTime.now())
+				.build();
+		
+		TempDiary diary = TempDiary.builder()
 				.writer(user)
 				.title("title")
 				.contents("contents")
@@ -51,12 +91,18 @@ public class TempTimelineServiceTest {
 				.user(user)
 				.saveDate(diary.getCreateDate())
 				.build();
-		when(timelineService.createTimeline("diary", diary))
+		when(timelineService.createTimeline("diary", diary, diary.getId()))
 		.thenReturn(diaryTimeline);
-		TempTimeline createdDiaryTimeline = timelineService.createTimeline("diary", diary);
-		log.info("timeline : {}", createdDiaryTimeline);
+		TempTimeline createdDiaryTimeline = timelineService.createTimeline("diary", diary, diary.getId());
 		assertThat("diary", is(createdDiaryTimeline.getType()));
 		assertThat("edit", is(createdDiaryTimeline.getIcon()));
+		
+		/*
+		 * List<TempDiaryAnswer> list = new ArrayList<TempDiaryAnswer>();
+		 * list.add(answer); diary.setTempDiaryAnswers(list);
+		 * diaryService.deleteDiary(diary.getId()); verify(diaryService,
+		 * times(1)).deleteDiary(diary.getId());
+		 */
 	}
 
 //	@Test

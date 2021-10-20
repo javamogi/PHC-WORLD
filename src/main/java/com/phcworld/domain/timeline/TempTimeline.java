@@ -37,14 +37,10 @@ public class TempTimeline {
 	
 	private String url;
 
-//	@OneToOne
-//	@JoinColumn(foreignKey = @ForeignKey(name = "fk_temptimeline_board"))
-//	private BasicBoard board;
+	@OneToOne
+	@JoinColumn(foreignKey = @ForeignKey(name = "fk_temptimeline_board"))
+	private BasicBoardAndAnswer board;
 
-//	private DiaryAnswer diaryAnswer;
-//
-//	private FreeBoardAnswer freeBoardAnswer;
-//	
 //	private Good good;
 	
 	@ManyToOne
@@ -57,20 +53,4 @@ public class TempTimeline {
 		return LocalDateTimeUtils.getTime(saveDate);
 	}
 	
-//	public String redirectUrl() {
-//		if(this.type.equals("diary")) {
-//			return "redirect:/diaries/"+ this.getDiary().getId();
-//		}
-//		if(this.type.equals("diary answer")) {
-//			return "redirect:/diaries/"+ this.getDiaryAnswer().getDiary().getId();
-//		}
-//		if(this.type.equals("free board")) {
-//			return "redirect:/freeboards/" + this.getFreeBoard().getId();
-//		}
-//		if(this.type.equals("good")) {
-//			return "redirect:/diaries/"+ this.getGood().getDiary().getId();
-//		}
-//		return "redirect:/freeboards/" + this.getFreeBoardAnswer().getFreeBoard().getId();
-//	}
-
 }
