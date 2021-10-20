@@ -10,7 +10,7 @@ public class TempTimelineFactory {
 	public TempTimeline createTimeline(String type, BasicBoardAndAnswer board, Long urlId) {
 		TempTimeline timeline = null;
 		String url = getRedirectUrl(type, urlId);
-		if (type.equals("board")) {
+		if (type.equals("free board")) {
 			timeline = TempTimeline.builder()
 					.type(type)
 					.icon("list-alt")
@@ -28,10 +28,10 @@ public class TempTimelineFactory {
 					.user(board.getWriter())
 					.saveDate(board.getCreateDate())
 					.build();
-		} else if (type.equals("free board")) {
+		} else if (type.equals("freeBoard answer")) {
 			timeline = TempTimeline.builder()
 					.type(type)
-					.icon("list-alt")
+					.icon("comment")
 					.url(url)
 					.board(board)
 					.user(board.getWriter())
@@ -56,7 +56,7 @@ public class TempTimelineFactory {
 		if (type.equals("diary") || type.equals("diary answer")) {
 			sb.append("diaries/");
 		}
-		if (type.equals("free board") || type.equals("free board answer")) {
+		if (type.equals("free board") || type.equals("freeBoard answer")) {
 			sb.append("freeboards/");
 		}
 //		if (type.equals("good")) {
