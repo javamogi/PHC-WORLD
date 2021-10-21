@@ -192,43 +192,113 @@ public class TempTimelineServiceTest {
 		assertThat("comment", is(createdBoardTimeline.getIcon()));
 	}
 	
-//	@Test
-//	public void deleteTimeline() {
-//		User user = User.builder()
-//				.id(1L)
-//				.email("test3@test.test")
-//				.password("test3")
-//				.name("테스트3")
-//				.profileImage("blank-profile-picture.png")
-//				.authority("ROLE_USER")
-//				.createDate(LocalDateTime.now())
-//				.build();
-//		
-//		TempDiary diary = TempDiary.builder()
-//				.writer(user)
-//				.title("title")
-//				.contents("contents")
-//				.thumbnail("thumbnail")
-//				.build();
-//		TempTimeline diaryTimeline = TempTimeline.builder()
-//				.type("diary")
-//				.icon("edit")
-//				.user(user)
-//				.saveDate(diary.getCreateDate())
-//				.build();
-//		when(timelineService.createTimeline("diary", diary, diary.getId()))
-//		.thenReturn(diaryTimeline);
-//		TempTimeline createdDiaryTimeline = timelineService.createTimeline("diary", diary, diary.getId());
-//		assertThat("diary", is(createdDiaryTimeline.getType()));
-//		assertThat("edit", is(createdDiaryTimeline.getIcon()));
-//		
-//		/*
-//		 * List<TempDiaryAnswer> list = new ArrayList<TempDiaryAnswer>();
-//		 * list.add(answer); diary.setTempDiaryAnswers(list);
-//		 * diaryService.deleteDiary(diary.getId()); verify(diaryService,
-//		 * times(1)).deleteDiary(diary.getId());
-//		 */
-//	}
+	@Test
+	public void deleteTempDiaryTimeline() {
+		User user = User.builder()
+				.id(1L)
+				.email("test3@test.test")
+				.password("test3")
+				.name("테스트3")
+				.profileImage("blank-profile-picture.png")
+				.authority("ROLE_USER")
+				.createDate(LocalDateTime.now())
+				.build();
+		
+		TempDiary diary = TempDiary.builder()
+				.writer(user)
+				.title("title")
+				.contents("contents")
+				.thumbnail("thumbnail")
+				.build();
+		timelineService.deleteTimeline(diary);
+		verify(timelineService, times(1)).deleteTimeline(diary);
+	}
+	
+	@Test
+	public void deleteTempDiaryAnswerTimeline() {
+		User user = User.builder()
+				.id(1L)
+				.email("test3@test.test")
+				.password("test3")
+				.name("테스트3")
+				.profileImage("blank-profile-picture.png")
+				.authority("ROLE_USER")
+				.createDate(LocalDateTime.now())
+				.build();
+		
+		TempDiary diary = TempDiary.builder()
+				.writer(user)
+				.title("title")
+				.contents("contents")
+				.thumbnail("thumbnail")
+				.build();
+		
+		TempDiaryAnswer diaryAnswer = TempDiaryAnswer.builder()
+				.id(1L)
+				.writer(user)
+				.contents("contents")
+				.tempDiary(diary)
+				.build();
+		
+		timelineService.deleteTimeline(diaryAnswer);
+		verify(timelineService, times(1)).deleteTimeline(diaryAnswer);
+	}
+	
+	@Test
+	public void deleteTempFreeBoardTimeline() {
+		User user = User.builder()
+				.id(1L)
+				.email("test3@test.test")
+				.password("test3")
+				.name("테스트3")
+				.profileImage("blank-profile-picture.png")
+				.authority("ROLE_USER")
+				.createDate(LocalDateTime.now())
+				.build();
+		
+		TempFreeBoard board = TempFreeBoard.builder()
+				.id(1L)
+				.writer(user)
+				.title("title")
+				.contents("contents")
+				.count(0)
+				.badge("")
+				.build();
+		
+		timelineService.deleteTimeline(board);
+		verify(timelineService, times(1)).deleteTimeline(board);
+	}
+	
+	@Test
+	public void deleteTempFreeBoardAnswerTimeline() {
+		User user = User.builder()
+				.id(1L)
+				.email("test3@test.test")
+				.password("test3")
+				.name("테스트3")
+				.profileImage("blank-profile-picture.png")
+				.authority("ROLE_USER")
+				.createDate(LocalDateTime.now())
+				.build();
+		
+		TempFreeBoard board = TempFreeBoard.builder()
+				.id(1L)
+				.writer(user)
+				.title("title")
+				.contents("contents")
+				.count(0)
+				.badge("")
+				.build();
+		TempFreeBoardAnswer boardAnswer = TempFreeBoardAnswer.builder()
+				.id(1L)
+				.writer(user)
+				.contents("contents")
+				.tempFreeBoard(board)
+				.build();
+		
+		timelineService.deleteTimeline(boardAnswer);
+		verify(timelineService, times(1)).deleteTimeline(boardAnswer);
+	}
 
 //	@Test
 //	public void getTilmelineList() {

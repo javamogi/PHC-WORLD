@@ -11,7 +11,7 @@ import com.phcworld.domain.user.User;
 public interface TempTimelineRepository extends JpaRepository<TempTimeline, Long> {
 	Page<TempTimeline> findByUser(User user, Pageable Pageable);
 	
-//	TempTimeline findByBoardAndAnswer(BasicBoardAndAnswer board);
+	TempTimeline findByBoard(BasicBoardAndAnswer board);
 	
 //	Timeline findByDiary(Diary diary);
 //	
