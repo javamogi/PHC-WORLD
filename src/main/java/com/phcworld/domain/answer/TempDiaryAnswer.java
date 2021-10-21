@@ -1,5 +1,7 @@
 package com.phcworld.domain.answer;
 
+import java.time.LocalDateTime;
+
 import javax.persistence.Entity;
 import javax.persistence.ForeignKey;
 import javax.persistence.JoinColumn;
@@ -22,7 +24,7 @@ import lombok.Setter;
 public class TempDiaryAnswer extends BasicBoardAndAnswer {
 
 	@ManyToOne
-	@JoinColumn(foreignKey = @ForeignKey(name = "fk_tempDiaryAnswer_to_tempDiary"), nullable = false)
+	@JoinColumn(foreignKey = @ForeignKey(name = "fk_tempDiaryAnswers_to_tempDiary"), nullable = false)
 	@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 	private TempDiary tempDiary;
 
@@ -32,8 +34,8 @@ public class TempDiaryAnswer extends BasicBoardAndAnswer {
 //	private Alert alert;
 
 	@Builder
-	public TempDiaryAnswer(Long id, User writer, String contents, TempDiary tempDiary) {
-		super(id, writer, contents);
+	public TempDiaryAnswer(Long id, User writer, String contents, TempDiary tempDiary, LocalDateTime createDate) {
+		super(id, writer, contents, createDate);
 		this.tempDiary = tempDiary;
 	}
 

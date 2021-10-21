@@ -49,10 +49,11 @@ public class BasicBoardAndAnswer {
 	@LastModifiedDate
 	private LocalDateTime updateDate;
 
-	public BasicBoardAndAnswer(Long id, User writer, String contents) {
+	public BasicBoardAndAnswer(Long id, User writer, String contents, LocalDateTime createDate) {
 		this.id = id;
 		this.writer = writer;
 		this.contents = contents;
+		this.createDate = createDate;
 	}
 	
 	public String getFormattedCreateDate() {

@@ -1,5 +1,6 @@
 package com.phcworld.domain.board;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -36,8 +37,8 @@ public class TempDiary extends BasicBoardAndAnswer {
 	private List<TempGood> tempGoodPushedUser;
 
 	@Builder
-	public TempDiary(Long id, User writer, String contents, String title, String thumbnail) {
-		super(id, writer, contents);
+	public TempDiary(Long id, User writer, String contents, String title, String thumbnail, LocalDateTime createDate) {
+		super(id, writer, contents, createDate);
 		this.title = title;
 		this.thumbnail = thumbnail;
 	}

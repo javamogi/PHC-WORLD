@@ -1,5 +1,6 @@
 package com.phcworld.domain.board;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -7,7 +8,6 @@ import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.phcworld.domain.answer.FreeBoardAnswer;
 import com.phcworld.domain.answer.TempFreeBoardAnswer;
 import com.phcworld.domain.parent.BasicBoardAndAnswer;
 import com.phcworld.domain.user.User;
@@ -37,8 +37,8 @@ public class TempFreeBoard extends BasicBoardAndAnswer {
 
 	@Builder
 	public TempFreeBoard(Long id, User writer, String contents, String title, String icon, String badge, Integer count,
-			List<TempFreeBoardAnswer> freeBoardAnswers) {
-		super(id, writer, contents);
+			List<TempFreeBoardAnswer> freeBoardAnswers, LocalDateTime createDate) {
+		super(id, writer, contents, createDate);
 		this.title = title;
 		this.icon = icon;
 		this.badge = badge;

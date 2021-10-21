@@ -1,5 +1,7 @@
 package com.phcworld.domain.answer;
 
+import java.time.LocalDateTime;
+
 import javax.persistence.Entity;
 import javax.persistence.ForeignKey;
 import javax.persistence.JoinColumn;
@@ -22,13 +24,13 @@ import lombok.Setter;
 public class TempFreeBoardAnswer extends BasicBoardAndAnswer{
 
 	@ManyToOne
-	@JoinColumn(foreignKey = @ForeignKey(name = "fk_freeBoardAnswer_to_freeBoard"), nullable = false)
+	@JoinColumn(foreignKey = @ForeignKey(name = "fk_tempFreeBoardAnswers_to_tempFreeBoard"), nullable = false)
 	@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 	private TempFreeBoard tempFreeBoard;
 	
 	@Builder
-	public TempFreeBoardAnswer(Long id, User writer, String contents, TempFreeBoard tempFreeBoard) {
-		super(id, writer, contents);
+	public TempFreeBoardAnswer(Long id, User writer, String contents, TempFreeBoard tempFreeBoard, LocalDateTime createDate) {
+		super(id, writer, contents, createDate);
 		this.tempFreeBoard = tempFreeBoard;
 	}
 
