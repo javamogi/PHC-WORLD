@@ -2,6 +2,7 @@ package com.phcworld.domain.board;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -34,7 +35,7 @@ public class TempDiary extends BasicBoardAndAnswer {
 
 	@OneToMany(mappedBy = "tempDiary", cascade = CascadeType.REMOVE)
 	@JsonBackReference
-	private List<TempGood> tempGoodPushedUser;
+	private Set<TempGood> tempGood;
 
 	@Builder
 	public TempDiary(Long id, User writer, String contents, String title, String thumbnail, LocalDateTime createDate) {
@@ -51,10 +52,10 @@ public class TempDiary extends BasicBoardAndAnswer {
 	}
 
 	public Integer getCountOfGood() {
-		if (tempGoodPushedUser == null) {
+		if (tempGood == null) {
 			return 0;
 		}
-		return tempGoodPushedUser.size();
+		return tempGood.size();
 	}
 
 	public boolean matchUser(User loginUser) {
@@ -76,12 +77,20 @@ public class TempDiary extends BasicBoardAndAnswer {
 		return super.getId().equals(diaryId);
 	}
 
+	public boolean updateGood(TempGood pushedUser) {
+		boolean result = tempGood.add(pushedUser);
+		if(!result) {
+			tempGood.remove(pushedUser);
+		}
+		return result;
+	}
+	
 	@Override
 	public String toString() {
 		return "TempDiary [id=" + super.getId() + ", writer=" + super.getWriter() + ", title=" + this.title
 				+ ", contents=" + super.getContents() + ", createDate=" + super.getCreateDate() + ", updateDate="
 				+ super.getUpdateDate() + ", thumbnail=" + thumbnail + ", diaryAnswers=" + tempDiaryAnswers
-				+ ", goodPushedUser=" + tempGoodPushedUser + "]";
+				+ ", goodPushedUser=" + tempGood + "]";
 	}
 
 }

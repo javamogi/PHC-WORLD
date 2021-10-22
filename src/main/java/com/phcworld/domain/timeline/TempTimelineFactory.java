@@ -2,6 +2,7 @@ package com.phcworld.domain.timeline;
 
 import org.springframework.stereotype.Component;
 
+import com.phcworld.domain.good.TempGood;
 import com.phcworld.domain.parent.BasicBoardAndAnswer;
 
 @Component
@@ -47,6 +48,20 @@ public class TempTimelineFactory {
 					.saveDate(board.getCreateDate())
 					.build();
 		}
+		return timeline;
+	}
+	
+	public TempTimeline createTimeline(String type, TempGood good, Long urlId) {
+		TempTimeline timeline = null;
+		String url = getRedirectUrl(type, urlId);
+		timeline = TempTimeline.builder()
+				.type(type)
+				.icon("thumbs-up")
+				.url(url)
+				.good(good)
+				.user(good.getUser())
+				.saveDate(good.getCreateDate())
+				.build();
 		return timeline;
 	}
 

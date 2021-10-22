@@ -11,17 +11,18 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.phcworld.domain.answer.DiaryAnswer;
 import com.phcworld.domain.answer.TempDiaryAnswer;
 import com.phcworld.domain.api.model.response.DiaryAnswerApiResponse;
+import com.phcworld.domain.api.model.response.SuccessResponse;
+import com.phcworld.domain.board.Diary;
 import com.phcworld.domain.board.TempDiary;
 import com.phcworld.domain.board.TempDiaryRequest;
 import com.phcworld.domain.board.TempDiaryResponse;
-import com.phcworld.domain.good.TempGood;
 import com.phcworld.domain.user.User;
 import com.phcworld.repository.board.TempDiaryRepository;
 import com.phcworld.service.alert.AlertServiceImpl;
 import com.phcworld.service.good.TempGoodService;
+import com.phcworld.service.timeline.TempTimelineServiceImpl;
 
 
 @Service
@@ -34,11 +35,11 @@ public class TempDiaryServiceImpl implements TempDiaryService {
 	@Autowired
 	private AlertServiceImpl alertService;
 	
-//	@Autowired
-//	private TimelineServiceImpl timelineService;
-	
 	@Autowired
 	private TempGoodService goodService;
+	
+	@Autowired
+	private TempTimelineServiceImpl timelineService;
 	
 	public List<TempDiaryResponse> getDiaryResponseList(List<TempDiary> diaries) {
 		List<TempDiaryResponse> diaryResponseList = diaries.stream()
@@ -80,9 +81,9 @@ public class TempDiaryServiceImpl implements TempDiaryService {
 				.contents(request.getContents())
 				.thumbnail(request.getThumbnail())
 				.build();
-//		TempDiary createdDiary = diaryRepository.save(diary);
+		TempDiary createdDiary = diaryRepository.save(diary);
 		
-//		timelineService.createTimeline(createdDiary);
+		timelineService.createTimeline("diary", createdDiary, createdDiary.getId());
 		
 		return response(diary);
 	}
@@ -103,16 +104,16 @@ public class TempDiaryServiceImpl implements TempDiaryService {
 	@Override
 	public void deleteDiary(Long id) {
 		TempDiary diary = diaryRepository.getOne(id);
-//		timelineService.deleteTimeline(diary);
-		List<TempGood> goodList = diary.getTempGoodPushedUser();
-		for(int i = 0; i < goodList.size(); i++) {
+		timelineService.deleteTimeline(diary);
+//		List<TempGood> goodList = diary.getTempGoodPushedUser();
+//		for(int i = 0; i < goodList.size(); i++) {
 //			timelineService.deleteTimeline(goodList.get(i));
 //			alertService.deleteAlert(goodList.get(i));
-		}
+//		}
 		List<TempDiaryAnswer> answerList = diary.getTempDiaryAnswers();
 		for(int i = 0; i < answerList.size(); i++) {
 			TempDiaryAnswer diaryAnswer = answerList.get(i);
-//			timelineService.deleteTimeline(diaryAnswer);
+			timelineService.deleteTimeline(diaryAnswer);
 //			alertService.deleteAlert(diaryAnswer);
 		}
 		diaryRepository.delete(diary);
@@ -123,15 +124,13 @@ public class TempDiaryServiceImpl implements TempDiaryService {
 		return diaryRepository.findByWriter(loginUser);
 	}
 	
-//	public SuccessResponse updateGood(Long diaryId, User loginUser) {
-//		TempDiary diary = diaryRepository.getOne(diaryId);
-//		
-//		TempDiary updatedGoodCount = diaryRepository.save(goodService.pushGood(diary, loginUser));
-//		
-//		return SuccessResponse.builder()
-//				.success(Integer.toString(updatedGoodCount.getCountOfGood()))
-//				.build();
-//	}
+	public SuccessResponse updateGood(Long diaryId, User loginUser) {
+		TempDiary diary = diaryRepository.getOne(diaryId);
+		TempDiary updateDiary = diaryRepository.save(goodService.pushGood(diary, loginUser));
+		return SuccessResponse.builder()
+				.success(Integer.toString(updateDiary.getCountOfGood()))
+				.build();
+	}
 	
 	private TempDiaryResponse response(TempDiary diary) {
 		TempDiaryResponse diaryResponse = TempDiaryResponse.builder()

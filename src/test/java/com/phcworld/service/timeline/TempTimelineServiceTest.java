@@ -22,7 +22,9 @@ import com.phcworld.domain.answer.TempDiaryAnswer;
 import com.phcworld.domain.answer.TempFreeBoardAnswer;
 import com.phcworld.domain.board.TempDiary;
 import com.phcworld.domain.board.TempFreeBoard;
+import com.phcworld.domain.good.TempGood;
 import com.phcworld.domain.timeline.TempTimeline;
+import com.phcworld.domain.timeline.Timeline;
 import com.phcworld.domain.user.User;
 
 import lombok.extern.slf4j.Slf4j;
@@ -194,6 +196,49 @@ public class TempTimelineServiceTest {
 	}
 	
 	@Test
+	public void createTempGoodTimeline() {
+		User user = User.builder()
+				.id(1L)
+				.email("test3@test.test")
+				.password("test3")
+				.name("테스트3")
+				.profileImage("blank-profile-picture.png")
+				.authority("ROLE_USER")
+				.createDate(LocalDateTime.now())
+				.build();
+		
+		TempDiary diary = TempDiary.builder()
+				.id(1L)
+				.writer(user)
+				.title("title")
+				.contents("contents")
+				.thumbnail("thumbnail")
+				.build();
+		
+		TempGood good = TempGood.builder()
+				.tempDiary(diary)
+				.user(user)
+				.build();
+		
+		
+		TempTimeline goodTimeline = TempTimeline.builder()
+				.type("good")
+				.icon("thumbs-up")
+				.url("redirect:/diaries/1")
+				.good(good)
+				.user(good.getUser())
+				.saveDate(good.getCreateDate())
+				.build();
+		
+		when(timelineService.createTimeline("good", good, diary.getId()))
+		.thenReturn(goodTimeline);
+		TempTimeline createdDiaryTimeline = timelineService.createTimeline("good", good, diary.getId());
+		log.info("timeline : {}", createdDiaryTimeline);
+		assertThat("good", is(createdDiaryTimeline.getType()));
+		assertThat("thumbs-up", is(createdDiaryTimeline.getIcon()));
+	}
+	
+	@Test
 	public void deleteTempDiaryTimeline() {
 		User user = User.builder()
 				.id(1L)
@@ -300,6 +345,44 @@ public class TempTimelineServiceTest {
 		timelineService.deleteTimeline(boardAnswer);
 		verify(timelineService, times(1)).deleteTimeline(boardAnswer);
 	}
+	
+	@Test
+	public void deleteTempGoodTimeline() {
+		User user = User.builder()
+				.id(1L)
+				.email("test3@test.test")
+				.password("test3")
+				.name("테스트3")
+				.profileImage("blank-profile-picture.png")
+				.authority("ROLE_USER")
+				.createDate(LocalDateTime.now())
+				.build();
+		TempDiary diary = TempDiary.builder()
+				.id(1L)
+				.writer(user)
+				.title("title")
+				.contents("contents")
+				.thumbnail("thumbnail")
+				.build();
+		
+		TempGood good = TempGood.builder()
+				.tempDiary(diary)
+				.user(user)
+				.build();
+		
+		
+		TempTimeline goodTimeline = TempTimeline.builder()
+				.type("good")
+				.icon("thumbs-up")
+				.url("redirect:/diaries/1")
+				.good(good)
+				.user(good.getUser())
+				.saveDate(good.getCreateDate())
+				.build();
+		
+		timelineService.deleteTimeline(good);
+		verify(timelineService, times(1)).deleteTimeline(good);
+	}
 
 	@Test
 	public void getTilmelineList() {
@@ -381,19 +464,19 @@ public class TempTimelineServiceTest {
 				.build();
 		timelineList.add(freeBoardAnswerTimeline);
 		
-//		Good good = Good.builder()
-//				.diary(diary)
-//				.user(user)
-//				.createDate(LocalDateTime.now())
-//				.build();
-//		TempTimeline goodTimeline = TempTimeline.builder()
-//				.type("good")
-//				.icon("thumbs-up")
-//				.url("/diaries/"+good.getDiary().getId())
-//				.good(good)
-//				.saveDate(good.getCreateDate())
-//				.build();
-//		timelineList.add(goodTimeline);
+		TempGood good = TempGood.builder()
+				.tempDiary(diary)
+				.user(user)
+				.createDate(LocalDateTime.now())
+				.build();
+		TempTimeline goodTimeline = TempTimeline.builder()
+				.type("good")
+				.icon("thumbs-up")
+				.url("/diaries/1")
+				.good(good)
+				.saveDate(good.getCreateDate())
+				.build();
+		timelineList.add(goodTimeline);
 		
 		Comparator<TempTimeline> compTimeline = new Comparator<TempTimeline>() {
 			@Override
@@ -403,15 +486,10 @@ public class TempTimelineServiceTest {
 		};
 		timelineList.sort(compTimeline);
 		assertThat(timelineList, hasItems(diaryTimeline, diaryAnswerTimeline, 
-				freeBoardTimeline, freeBoardAnswerTimeline));
+				freeBoardTimeline, freeBoardAnswerTimeline, goodTimeline));
 		timelineList.stream().forEach(timeline -> {
 			log.info("Timeline : {}", timeline);
 		});
-//		assertThat(timelineList, hasItems(diaryTimeline, diaryAnswerTimeline, 
-//				freeBoardTimeline, freeBoardAnswerTimeline, goodTimeline));
-//		timelineList.stream().forEach(timeline -> {
-//			log.info("Timeline : {}", timeline);
-//		});
 	}
 
 }

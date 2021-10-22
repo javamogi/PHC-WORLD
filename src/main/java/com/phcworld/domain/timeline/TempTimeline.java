@@ -11,6 +11,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 
+import com.phcworld.domain.good.TempGood;
 import com.phcworld.domain.parent.BasicBoardAndAnswer;
 import com.phcworld.domain.user.User;
 import com.phcworld.utils.LocalDateTimeUtils;
@@ -41,7 +42,9 @@ public class TempTimeline {
 	@JoinColumn(foreignKey = @ForeignKey(name = "fk_temptimeline_board"))
 	private BasicBoardAndAnswer board;
 
-//	private Good good;
+	@OneToOne
+	@JoinColumn(foreignKey = @ForeignKey(name = "fk_temptimeline_good"))
+	private TempGood good;
 	
 	@ManyToOne
 	@JoinColumn(foreignKey = @ForeignKey(name = "fk_temptimeline_user"))

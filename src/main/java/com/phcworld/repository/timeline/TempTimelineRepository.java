@@ -4,6 +4,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import com.phcworld.domain.good.TempGood;
 import com.phcworld.domain.parent.BasicBoardAndAnswer;
 import com.phcworld.domain.timeline.TempTimeline;
 import com.phcworld.domain.user.User;
@@ -13,11 +14,6 @@ public interface TempTimelineRepository extends JpaRepository<TempTimeline, Long
 	
 	TempTimeline findByBoard(BasicBoardAndAnswer board);
 	
-//	Timeline findByDiary(Diary diary);
-//	
-//	Timeline findByFreeBoardAnswer(FreeBoardAnswer freeBoardAnswer);
-//	
-//	Timeline findByDiaryAnswer(DiaryAnswer diaryAnswer);
-//	
-//	Timeline findByGood(Good good);
+	TempTimeline findByGood(TempGood good);
+	
 }

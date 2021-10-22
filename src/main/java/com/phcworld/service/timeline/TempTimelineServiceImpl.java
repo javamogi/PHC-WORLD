@@ -4,10 +4,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.phcworld.domain.good.TempGood;
 import com.phcworld.domain.parent.BasicBoardAndAnswer;
 import com.phcworld.domain.timeline.TempTimeline;
 import com.phcworld.domain.timeline.TempTimelineFactory;
-import com.phcworld.domain.user.User;
 import com.phcworld.repository.timeline.TempTimelineRepository;
 
 import lombok.extern.slf4j.Slf4j;
@@ -30,13 +30,13 @@ public class TempTimelineServiceImpl {
 //		return timelineList.getContent();
 //	}
 
-//	@Override
-//	public Timeline getOneTimeline(Long id) {
-//		return timelineRepository.getOne(id);
-//	}
-
 	public TempTimeline createTimeline(String type, BasicBoardAndAnswer board, Long id) {
 		TempTimeline timeline = factory.createTimeline(type, board, id);
+		return tempTimelineRepository.save(timeline);
+	}
+	
+	public TempTimeline createTimeline(String type, TempGood good, Long id) {
+		TempTimeline timeline = factory.createTimeline(type, good, id);
 		return tempTimelineRepository.save(timeline);
 	}
 	
@@ -44,10 +44,10 @@ public class TempTimelineServiceImpl {
 		TempTimeline timeline = tempTimelineRepository.findByBoard(board);
 		tempTimelineRepository.delete(timeline);
 	}
-
-//	public void deleteTimeline(Good good) {
-//		Timeline timeline = timelineRepository.findByGood(good);
-//		timelineRepository.delete(timeline);
-//	}
+	
+	public void deleteTimeline(TempGood good) {
+		TempTimeline timeline = tempTimelineRepository.findByGood(good);
+		tempTimelineRepository.delete(timeline);
+	}
 
 }

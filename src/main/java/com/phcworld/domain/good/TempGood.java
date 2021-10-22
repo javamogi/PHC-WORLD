@@ -31,11 +31,11 @@ public class TempGood {
 	private Long id;
 
 	@ManyToOne
-	@JoinColumn(foreignKey = @ForeignKey(name = "fk_temp_good_diary"))
+	@JoinColumn(foreignKey = @ForeignKey(name = "fk_tempGood_tempDiary"))
 	private TempDiary tempDiary;
 
 	@ManyToOne
-	@JoinColumn(foreignKey = @ForeignKey(name = "fk_temp_good_user"))
+	@JoinColumn(foreignKey = @ForeignKey(name = "fk_tempGood_user"))
 	private User user;
 	
 	private LocalDateTime createDate;

@@ -9,7 +9,9 @@ import static org.mockito.Mockito.when;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -20,11 +22,12 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.phcworld.domain.answer.DiaryAnswer;
 import com.phcworld.domain.answer.TempDiaryAnswer;
+import com.phcworld.domain.api.model.response.SuccessResponse;
 import com.phcworld.domain.board.TempDiary;
 import com.phcworld.domain.board.TempDiaryRequest;
 import com.phcworld.domain.board.TempDiaryResponse;
+import com.phcworld.domain.good.TempGood;
 import com.phcworld.domain.user.User;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -234,78 +237,78 @@ public class TempDiaryServiceImplTest {
 		verify(diaryService, times(1)).deleteDiary(diary.getId());
 	}
 	
-//	@Test
-//	public void addGoodWhenPushGoodButton() throws Exception {
-//		User user = User.builder()
-//				.id(1L)
-//				.email("test3@test.test")
-//				.password("test3")
-//				.name("테스트3")
-//				.profileImage("blank-profile-picture.png")
-//				.authority("ROLE_USER")
-//				.createDate(LocalDateTime.now())
-//				.build();
-//		TempDiary diary = TempDiary.builder()
-//				.id(1L)
-//				.writer(user)
-//				.title("title")
-//				.contents("content")
-//				.thumbnail("no-image-icon.gif")
-//				.build();
-//		Good good = Good.builder()
-//				.diary(diary)
-//				.user(user)
-//				.createDate(LocalDateTime.now())
-//				.build();
-//		List<Good> list = new ArrayList<Good>();
-//		list.add(good);
-//		diary.setGoodPushedUser(list);
-//		
-//		SuccessResponse successResponse = SuccessResponse.builder()
-//				.success(Integer.toString(diary.getCountOfGood()))
-//				.build();
-//		
-//		when(diaryService.updateGood(diary.getId(), user))
-//		.thenReturn(successResponse);
-//		SuccessResponse newSuccessResponse = diaryService.updateGood(diary.getId(), user);
-//		assertThat(successResponse, is(newSuccessResponse));
-//	}
+	@Test
+	public void addGoodWhenPushGoodButton() throws Exception {
+		User user = User.builder()
+				.id(1L)
+				.email("test3@test.test")
+				.password("test3")
+				.name("테스트3")
+				.profileImage("blank-profile-picture.png")
+				.authority("ROLE_USER")
+				.createDate(LocalDateTime.now())
+				.build();
+		TempDiary diary = TempDiary.builder()
+				.id(1L)
+				.writer(user)
+				.title("title")
+				.contents("content")
+				.thumbnail("no-image-icon.gif")
+				.build();
+		TempGood good = TempGood.builder()
+				.id(1L)
+				.tempDiary(diary)
+				.user(user)
+				.build();
+		Set<TempGood> goodUsers = new HashSet<TempGood>();
+		goodUsers.add(good);
+		diary.setTempGood(goodUsers);
+		
+		SuccessResponse successResponse = SuccessResponse.builder()
+				.success(Integer.toString(diary.getCountOfGood()))
+				.build();
+		
+		when(diaryService.updateGood(diary.getId(), user))
+		.thenReturn(successResponse);
+		SuccessResponse newSuccessResponse = diaryService.updateGood(diary.getId(), user);
+		assertThat(successResponse, is(newSuccessResponse));
+	}
 	
-//	@Test
-//	public void declineGoodWhenPushGoodButton() throws Exception {
-//		User user = User.builder()
-//				.id(1L)
-//				.email("test3@test.test")
-//				.password("test3")
-//				.name("테스트3")
-//				.profileImage("blank-profile-picture.png")
-//				.authority("ROLE_USER")
-//				.createDate(LocalDateTime.now())
-//				.build();
-//		Diary diary = Diary.builder()
-//				.id(1L)
-//				.writer(user)
-//				.title("title")
-//				.contents("content")
-//				.thumbnail("no-image-icon.gif")
-//				.build();
-//		Good good = Good.builder()
-//				.diary(diary)
-//				.user(user)
-//				.createDate(LocalDateTime.now())
-//				.build();
-//		List<Good> list = new ArrayList<Good>();
-//		list.add(good);
-//		diary.setGoodPushedUser(list);
-//		diary.getGoodPushedUser().remove(good);
-//		SuccessResponse successResponse = SuccessResponse.builder()
-//				.success(Integer.toString(diary.getCountOfGood()))
-//				.build();
-//		when(diaryService.updateGood(diary.getId(), user))
-//		.thenReturn(successResponse);
-//		SuccessResponse newSuccessResponse = diaryService.updateGood(diary.getId(), user);
-//		assertThat(successResponse, is(newSuccessResponse));
-//	}
+	@Test
+	public void declineGoodWhenPushGoodButton() throws Exception {
+		User user = User.builder()
+				.id(1L)
+				.email("test3@test.test")
+				.password("test3")
+				.name("테스트3")
+				.profileImage("blank-profile-picture.png")
+				.authority("ROLE_USER")
+				.createDate(LocalDateTime.now())
+				.build();
+		TempDiary diary = TempDiary.builder()
+				.id(1L)
+				.writer(user)
+				.title("title")
+				.contents("content")
+				.thumbnail("no-image-icon.gif")
+				.build();
+		TempGood good = TempGood.builder()
+				.tempDiary(diary)
+				.user(user)
+				.createDate(LocalDateTime.now())
+				.build();
+		Set<TempGood> list = new HashSet<TempGood>();
+		list.add(good);
+		diary.setTempGood(list);
+		diary.updateGood(good);
+		SuccessResponse successResponse = SuccessResponse.builder()
+				.success(Integer.toString(diary.getCountOfGood()))
+				.build();
+		when(diaryService.updateGood(diary.getId(), user))
+		.thenReturn(successResponse);
+		SuccessResponse newSuccessResponse = diaryService.updateGood(diary.getId(), user);
+		assertThat(successResponse, is(newSuccessResponse));
+	}
 	
 	@Test
 	public void findDiaryListByWriter() {
