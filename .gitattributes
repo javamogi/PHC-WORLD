@@ -1,5 +1,1 @@
-src/main/resources/static/dist/* linguist-vendored=false
-src/main/resources/static/port/* linguist-vendored=false
-src/main/resources/static/vendor/* linguist-vendored=false
-src/main/resources/static/daumeditor/* linguist-vendored=false
-
+*.js linguist-detectable=false
