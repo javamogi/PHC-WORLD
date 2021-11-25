@@ -391,16 +391,16 @@ public class TimelineRepositoryTest {
 				.authority("ROLE_USER")
 				.createDate(LocalDateTime.now())
 				.build();
-		User user3 = User.builder()
-				.id(3L)
-				.email("test5@test.test")
-				.password("test5")
-				.name("테스트5")
-				.profileImage("blank-profile-picture.png")
-				.authority("ROLE_USER")
-				.createDate(LocalDateTime.now())
-				.build();
-		userRepository.save(user3);
+//		User user3 = User.builder()
+//				.id(3L)
+//				.email("test5@test.test")
+//				.password("test5")
+//				.name("테스트5")
+//				.profileImage("blank-profile-picture.png")
+//				.authority("ROLE_USER")
+//				.createDate(LocalDateTime.now())
+//				.build();
+//		userRepository.save(user3);
 		Diary diary = Diary.builder()
 				.writer(user)
 				.title("test3")
@@ -416,7 +416,7 @@ public class TimelineRepositoryTest {
 				.build();
 		Good good2 = Good.builder()
 				.diary(createdDiary)
-				.user(user3)
+				.user(user)
 				.createDate(LocalDateTime.now())
 				.build();
 		Good createdGood = goodRepository.save(good);
