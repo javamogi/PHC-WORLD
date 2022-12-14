@@ -18,19 +18,19 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.phcworld.domain.answer.FreeBoardAnswer;
-import com.phcworld.domain.board.FreeBoard;
-import com.phcworld.domain.board.FreeBoardRequest;
-import com.phcworld.domain.board.FreeBoardResponse;
+import com.phcworld.domain.answer.TempFreeBoardAnswer;
+import com.phcworld.domain.board.TempFreeBoard;
+import com.phcworld.domain.board.TempFreeBoardRequest;
+import com.phcworld.domain.board.TempFreeBoardResponse;
 import com.phcworld.domain.user.User;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest
 @Transactional
-public class FreeBoardServiceImplTest {
+public class TempFreeBoardServiceImplTest {
 
 	@Mock
-	private FreeBoardServiceImpl freeBoardService;
+	private TempFreeBoardServiceImpl freeBoardService;
 		
 	@Test
 	public void createFreeBoard() {
@@ -43,12 +43,12 @@ public class FreeBoardServiceImplTest {
 				.authority("ROLE_USER")
 				.createDate(LocalDateTime.now())
 				.build();
-		FreeBoardRequest request = FreeBoardRequest.builder()
+		TempFreeBoardRequest request = TempFreeBoardRequest.builder()
 				.title("title")
 				.contents("contents")
 				.icon("")
 				.build();
-		FreeBoard board = FreeBoard.builder()
+		TempFreeBoard board = TempFreeBoard.builder()
 				.id(1L)
 				.writer(user)
 				.title(request.getTitle())
@@ -57,7 +57,7 @@ public class FreeBoardServiceImplTest {
 				.badge("new")
 				.count(0)
 				.build();
-		FreeBoardResponse response = FreeBoardResponse.builder()
+		TempFreeBoardResponse response = TempFreeBoardResponse.builder()
 				.id(1L)
 				.writer(user)
 				.title(board.getTitle())
@@ -67,7 +67,7 @@ public class FreeBoardServiceImplTest {
 				.count(board.getCount())
 				.build();
 		when(freeBoardService.createFreeBoard(user, request)).thenReturn(response);
-		FreeBoardResponse freeBoardResponse = freeBoardService.createFreeBoard(user, request);
+		TempFreeBoardResponse freeBoardResponse = freeBoardService.createFreeBoard(user, request);
 		assertThat(response, is(freeBoardResponse));
 	}
 		
@@ -83,12 +83,12 @@ public class FreeBoardServiceImplTest {
 				.authority("ROLE_USER")
 				.createDate(LocalDateTime.now())
 				.build();
-		FreeBoardRequest request = FreeBoardRequest.builder()
+		TempFreeBoardRequest request = TempFreeBoardRequest.builder()
 				.title("title")
 				.contents("contents")
 				.icon("")
 				.build();
-		FreeBoard board = FreeBoard.builder()
+		TempFreeBoard board = TempFreeBoard.builder()
 				.id(1L)
 				.writer(user)
 				.title(request.getTitle())
@@ -97,7 +97,7 @@ public class FreeBoardServiceImplTest {
 				.badge("new")
 				.count(0)
 				.build();
-		FreeBoardResponse response = FreeBoardResponse.builder()
+		TempFreeBoardResponse response = TempFreeBoardResponse.builder()
 				.id(1L)
 				.writer(user)
 				.title(board.getTitle())
@@ -107,10 +107,10 @@ public class FreeBoardServiceImplTest {
 				.count(board.getCount())
 				.build();
 		when(freeBoardService.createFreeBoard(user, request)).thenReturn(response);
-		FreeBoardResponse freeBoardResponse = freeBoardService.createFreeBoard(user, request);
+		TempFreeBoardResponse freeBoardResponse = freeBoardService.createFreeBoard(user, request);
 		
 		when(freeBoardService.getOneFreeBoard(response.getId())).thenReturn(response);
-		FreeBoardResponse actual = freeBoardService.getOneFreeBoard(response.getId());
+		TempFreeBoardResponse actual = freeBoardService.getOneFreeBoard(response.getId());
 		
 		assertThat(actual, is(freeBoardResponse));
 	}
@@ -126,7 +126,7 @@ public class FreeBoardServiceImplTest {
 				.authority("ROLE_USER")
 				.createDate(LocalDateTime.now())
 				.build();
-		FreeBoard board = FreeBoard.builder()
+		TempFreeBoard board = TempFreeBoard.builder()
 				.id(1L)
 				.writer(user)
 				.title("title")
@@ -136,14 +136,14 @@ public class FreeBoardServiceImplTest {
 				.count(0)
 				.build();
 		
-		FreeBoardRequest request = FreeBoardRequest.builder()
+		TempFreeBoardRequest request = TempFreeBoardRequest.builder()
 				.id(1L)
 				.contents("new contents")
 				.icon("")
 				.build();
 		board.update(request);
 		
-		FreeBoardResponse response = FreeBoardResponse.builder()
+		TempFreeBoardResponse response = TempFreeBoardResponse.builder()
 				.id(1L)
 				.writer(board.getWriter())
 				.title(board.getTitle())
@@ -156,7 +156,7 @@ public class FreeBoardServiceImplTest {
 				.build();
 		
 		when(freeBoardService.updateFreeBoard(request)).thenReturn(response);
-		FreeBoardResponse updatedfreeBoard = freeBoardService.updateFreeBoard(request);
+		TempFreeBoardResponse updatedfreeBoard = freeBoardService.updateFreeBoard(request);
 		
 		assertThat(request.getContents(), is(updatedfreeBoard.getContents()));		
 	}
@@ -172,7 +172,7 @@ public class FreeBoardServiceImplTest {
 				.authority("ROLE_USER")
 				.createDate(LocalDateTime.now())
 				.build();
-		FreeBoard board = FreeBoard.builder()
+		TempFreeBoard board = TempFreeBoard.builder()
 				.id(1L)
 				.writer(user)
 				.title("title")
@@ -196,7 +196,7 @@ public class FreeBoardServiceImplTest {
 				.authority("ROLE_USER")
 				.createDate(LocalDateTime.now())
 				.build();
-		FreeBoard board = FreeBoard.builder()
+		TempFreeBoard board = TempFreeBoard.builder()
 				.id(1L)
 				.writer(user)
 				.title("title")
@@ -205,14 +205,14 @@ public class FreeBoardServiceImplTest {
 				.badge("new")
 				.count(0)
 				.build();
-		FreeBoardAnswer answer = FreeBoardAnswer.builder()
+		TempFreeBoardAnswer answer = TempFreeBoardAnswer.builder()
 				.writer(user)
-				.freeBoard(board)
+				.tempFreeBoard(board)
 				.contents("content")
 				.build();
-		List<FreeBoardAnswer> list = new ArrayList<FreeBoardAnswer>();
+		List<TempFreeBoardAnswer> list = new ArrayList<TempFreeBoardAnswer>();
 		list.add(answer);
-		board.setFreeBoardAnswers(list);
+		board.setTempFreeBoardAnswers(list);
 		freeBoardService.deleteFreeBoard(board.getId());
 		verify(freeBoardService, times(1)).deleteFreeBoard(board.getId());
 	}
@@ -228,7 +228,7 @@ public class FreeBoardServiceImplTest {
 				.authority("ROLE_USER")
 				.createDate(LocalDateTime.now())
 				.build();
-		FreeBoard board = FreeBoard.builder()
+		TempFreeBoard board = TempFreeBoard.builder()
 				.id(1L)
 				.writer(user)
 				.title("title")
@@ -238,7 +238,7 @@ public class FreeBoardServiceImplTest {
 				.count(0)
 				.build();
 		board.addCount();
-		FreeBoardResponse response = FreeBoardResponse.builder()
+		TempFreeBoardResponse response = TempFreeBoardResponse.builder()
 				.id(1L)
 				.writer(board.getWriter())
 				.title(board.getTitle())
@@ -250,7 +250,7 @@ public class FreeBoardServiceImplTest {
 				.createDate(board.getFormattedCreateDate())
 				.build();
 		when(freeBoardService.addFreeBoardCount(board.getId())).thenReturn(response);
-		FreeBoardResponse addedFreeBoardAnswer = freeBoardService.addFreeBoardCount(board.getId());
+		TempFreeBoardResponse addedFreeBoardAnswer = freeBoardService.addFreeBoardCount(board.getId());
 		assertThat(1, is(addedFreeBoardAnswer.getCount()));
 	}
 	
@@ -265,7 +265,7 @@ public class FreeBoardServiceImplTest {
 				.authority("ROLE_USER")
 				.createDate(LocalDateTime.now())
 				.build();
-		FreeBoard board = FreeBoard.builder()
+		TempFreeBoard board = TempFreeBoard.builder()
 				.id(1L)
 				.writer(user)
 				.title("title")
@@ -274,7 +274,7 @@ public class FreeBoardServiceImplTest {
 				.badge("new")
 				.count(0)
 				.build();
-		FreeBoard board2 = FreeBoard.builder()
+		TempFreeBoard board2 = TempFreeBoard.builder()
 				.id(2L)
 				.writer(user)
 				.title("title2")
@@ -283,12 +283,12 @@ public class FreeBoardServiceImplTest {
 				.badge("new")
 				.count(0)
 				.build();
-		List<FreeBoard> freeBoardList = new ArrayList<FreeBoard>();
+		List<TempFreeBoard> freeBoardList = new ArrayList<TempFreeBoard>();
 		freeBoardList.add(board);
 		freeBoardList.add(board2);
 		
 		when(freeBoardService.findFreeBoardListByWriter(user)).thenReturn(freeBoardList);
-		List<FreeBoard> findFreeBoardList = freeBoardService.findFreeBoardListByWriter(user);
+		List<TempFreeBoard> findFreeBoardList = freeBoardService.findFreeBoardListByWriter(user);
 		assertThat(findFreeBoardList, hasItems(board, board2));
 	}
 	
@@ -311,7 +311,7 @@ public class FreeBoardServiceImplTest {
 				.authority("ROLE_USER")
 				.createDate(LocalDateTime.now())
 				.build();
-		FreeBoardResponse response = FreeBoardResponse.builder()
+		TempFreeBoardResponse response = TempFreeBoardResponse.builder()
 				.id(1L)
 				.writer(user)
 				.title("title")
@@ -320,7 +320,7 @@ public class FreeBoardServiceImplTest {
 				.badge("new")
 				.count(0)
 				.build();
-		FreeBoardResponse response2 = FreeBoardResponse.builder()
+		TempFreeBoardResponse response2 = TempFreeBoardResponse.builder()
 				.id(2L)
 				.writer(user2)
 				.title("title2")
@@ -329,11 +329,11 @@ public class FreeBoardServiceImplTest {
 				.badge("new")
 				.count(0)
 				.build();
-		List<FreeBoardResponse> list = new ArrayList<FreeBoardResponse>();
+		List<TempFreeBoardResponse> list = new ArrayList<TempFreeBoardResponse>();
 		list.add(response);
 		list.add(response2);
 		when(freeBoardService.findFreeBoardAllListAndSetNewBadge()).thenReturn(list);
-		List<FreeBoardResponse> findAllfreeBoardList =  freeBoardService.findFreeBoardAllListAndSetNewBadge();
+		List<TempFreeBoardResponse> findAllfreeBoardList =  freeBoardService.findFreeBoardAllListAndSetNewBadge();
 		assertThat(findAllfreeBoardList, hasItems(response, response2));
 	}
 	

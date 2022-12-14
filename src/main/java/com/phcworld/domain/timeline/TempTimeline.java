@@ -2,11 +2,18 @@ package com.phcworld.domain.timeline;
 
 import java.time.LocalDateTime;
 
-import com.phcworld.domain.answer.DiaryAnswer;
-import com.phcworld.domain.answer.FreeBoardAnswer;
-import com.phcworld.domain.board.Diary;
-import com.phcworld.domain.board.FreeBoard;
-import com.phcworld.domain.good.Good;
+import javax.persistence.Entity;
+import javax.persistence.ForeignKey;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
+
+import com.phcworld.domain.good.TempGood;
+import com.phcworld.domain.parent.BasicBoardAndAnswer;
+import com.phcworld.domain.user.User;
 import com.phcworld.utils.LocalDateTimeUtils;
 
 import lombok.AllArgsConstructor;
@@ -14,11 +21,16 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+@Entity
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class TempTimeline {
+	
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 
 	private String type;
 
@@ -26,20 +38,22 @@ public class TempTimeline {
 	
 	private String url;
 
-	private Diary diary;
+	@OneToOne
+	@JoinColumn(foreignKey = @ForeignKey(name = "fk_temptimeline_board"))
+	private BasicBoardAndAnswer board;
 
-	private DiaryAnswer diaryAnswer;
-
-	private FreeBoard freeBoard;
-
-	private FreeBoardAnswer freeBoardAnswer;
+	@OneToOne
+	@JoinColumn(foreignKey = @ForeignKey(name = "fk_temptimeline_good"))
+	private TempGood good;
 	
-	private Good good;
+	@ManyToOne
+	@JoinColumn(foreignKey = @ForeignKey(name = "fk_temptimeline_user"))
+	private User user;                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
 	
 	private LocalDateTime saveDate;
 
 	public String getFormattedSaveDate() {
 		return LocalDateTimeUtils.getTime(saveDate);
 	}
-
+	
 }

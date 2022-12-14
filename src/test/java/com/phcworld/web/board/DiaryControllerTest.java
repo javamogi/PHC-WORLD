@@ -15,6 +15,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -31,6 +32,8 @@ import com.phcworld.domain.api.model.response.SuccessResponse;
 import com.phcworld.domain.board.Diary;
 import com.phcworld.domain.board.DiaryRequest;
 import com.phcworld.domain.board.DiaryResponse;
+import com.phcworld.domain.board.FreeBoardRequest;
+import com.phcworld.domain.board.FreeBoardResponse;
 import com.phcworld.domain.good.Good;
 import com.phcworld.domain.user.User;
 import com.phcworld.service.board.DiaryServiceImpl;
@@ -100,16 +103,36 @@ public class DiaryControllerTest {
 		List<Integer> pageNations = new ArrayList<Integer>();
 		pageNations.add(1);
 		
+		
 		when(diaryService.findPageDiary(user, 1, requestUser))
 		.thenReturn(page);
 		Page<Diary> diaryPage = diaryService.findPageDiary(user, 1, requestUser);
+		
+		List<DiaryResponse> diaryResponseList = diaryPage.getContent().stream()
+				.map(tempDiary -> {
+					DiaryResponse diaryResponse = DiaryResponse.builder()
+							.id(tempDiary.getId())
+							.writer(tempDiary.getWriter())
+							.title(tempDiary.getTitle())
+							.contents(tempDiary.getContents())
+							.thumbnail(tempDiary.getThumbnail())
+							.countOfAnswers(tempDiary.getCountOfAnswer())
+							.countOfGood(tempDiary.getCountOfGood())
+							.updateDate(tempDiary.getFormattedUpdateDate())
+							.build();
+					return diaryResponse;
+				})
+				.collect(Collectors.toList());
+		
+		when(diaryService.getDiaryResponseList(diaryList))
+		.thenReturn(diaryResponseList);
 		
 		this.mvc.perform(get("/diaries/list/{email}", "test@test.test")
 				.session(mockSession))
 		.andDo(print())
 		.andExpect(view().name(containsString("/board/diary/diary")))
 		.andExpect(status().isOk())
-		.andExpect(model().attribute("diaries", diaryPage.getContent()))
+		.andExpect(model().attribute("diaries", diaryResponseList))
 		.andExpect(model().attribute("pageNations", pageNations))
 		.andExpect(model().attribute("requestUser", requestUser))
 		.andExpect(model().size(3));
@@ -161,12 +184,30 @@ public class DiaryControllerTest {
 		mockSession.setAttribute("messages", null);
 		mockSession.setAttribute("countMessages", "");
 		mockSession.setAttribute("alerts", null);
+		
+		DiaryRequest request = DiaryRequest.builder()
+				.title("test")
+				.contents("test")
+				.thumbnail("no-image-icon.gif")
+				.build();
+		DiaryResponse response = DiaryResponse.builder()
+				.id(1L)
+				.writer(user)
+				.title("test")
+				.contents("test")
+				.thumbnail("no-image-icon.gif")
+				.build();
+		
+		when(this.diaryService.createDiary(user, request))
+		.thenReturn(response);
+		
 		this.mvc.perform(post("/diaries")
 				.param("title", "test")
 				.param("contents", "test")
 				.param("thumbnail", "no-image-icon.gif")
 				.session(mockSession))
-		.andExpect(redirectedUrl("/diaries/list/" + user.getEmail()));
+//		.andExpect(redirectedUrl("/diaries/list/" + user.getEmail()));
+		.andExpect(redirectedUrl("/diaries/" + 1L));
 	}
 	
 	@Test

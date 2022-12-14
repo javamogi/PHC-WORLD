@@ -32,6 +32,7 @@ import com.phcworld.domain.user.User;
 import com.phcworld.service.board.FreeBoardServiceImpl;
 import com.phcworld.utils.HttpSessionUtils;
 
+
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebMvcTest(FreeBoardController.class)
 public class FreeBoardControllerTest {
@@ -44,6 +45,7 @@ public class FreeBoardControllerTest {
 	
 	@Test
 	public void getAllList() throws Exception{
+		MockHttpSession mockSession = new MockHttpSession();
 		User user = User.builder()
 				.id(1L)
 				.email("test3@test.test")
@@ -53,6 +55,7 @@ public class FreeBoardControllerTest {
 				.authority("ROLE_USER")
 				.createDate(LocalDateTime.now())
 				.build();
+		mockSession.setAttribute(HttpSessionUtils.USER_SESSION_KEY, user);
 		FreeBoardResponse response = FreeBoardResponse.builder()
 				.id(1L)
 				.writer(user)
@@ -62,7 +65,7 @@ public class FreeBoardControllerTest {
 				.badge("new")
 				.count(0)
 				.countOfAnswer("")
-				.updateDate("방금전")
+				.createDate("방금전")
 				.build();
 		FreeBoardResponse response2 = FreeBoardResponse.builder()
 				.id(2L)
@@ -73,7 +76,7 @@ public class FreeBoardControllerTest {
 				.badge("new")
 				.count(0)
 				.countOfAnswer("")
-				.updateDate("방금전")
+				.createDate("방금전")
 				.build();
 		List<FreeBoardResponse> list = new ArrayList<FreeBoardResponse>();
 		list.add(response);
@@ -134,12 +137,34 @@ public class FreeBoardControllerTest {
 		mockSession.setAttribute("messages", null);
 		mockSession.setAttribute("countMessages", "");
 		mockSession.setAttribute("alerts", null);
+		
+		FreeBoardRequest request = FreeBoardRequest.builder()
+				.title("test")
+				.contents("test")
+				.icon("")
+				.build();
+		
+		FreeBoardResponse response = FreeBoardResponse.builder()
+				.id(1L)
+				.writer(user)
+				.title("title")
+				.contents("content")
+				.icon("")
+				.badge("new")
+				.count(0)
+				.countOfAnswer("")
+				.createDate("방금전")
+				.build();
+		
+		when(this.freeBoardService.createFreeBoard(user, request))
+		.thenReturn(response);
+		
 		this.mvc.perform(post("/freeboards")
 				.param("title", "test")
 				.param("contents", "test")
 				.param("icon", "")
 				.session(mockSession))
-		.andExpect(redirectedUrl("/freeboards"));
+		.andExpect(redirectedUrl("/freeboards/"+response.getId()));
 	}
 	
 	@Test

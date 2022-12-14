@@ -10,7 +10,7 @@ import lombok.Data;
 
 @Data
 @Builder
-public class FreeBoardResponse {
+public class TempFreeBoardResponse {
 	
 	private Long id;
 	

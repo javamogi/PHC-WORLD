@@ -6,7 +6,7 @@
 
 	<groupId>com.phcworld</groupId>
 	<artifactId>portfolio</artifactId>
-	<version>2.1</version>
+	<version>2.2-SNAPSHOT</version>
 	<packaging>war</packaging>
 
 	<name>portfolio</name>
@@ -83,7 +83,7 @@
 		<dependency>
 			<groupId>commons-io</groupId>
 			<artifactId>commons-io</artifactId>
-			<version>2.6</version>
+			<version>2.11.0</version>
 		</dependency>
 
 		<dependency>

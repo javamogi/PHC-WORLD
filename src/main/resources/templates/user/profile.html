@@ -79,12 +79,12 @@
 									{{#diaryAnswer}}
 										<li>
 											<div class="title">
-												<a href="/diaries/{{diaryAnswer.diary.id}}" title="{{freeBoard.title}}">{{freeBoard.title}}</a>
+												<a href="/diaries/{{diaryAnswer.diary.id}}" title="{{diary.title}}">{{diary.title}}</a>
 											</div>
 											<div class="info">{{formattedSaveDate}}</div>
 											<p>{{type}}</p>
 											<div class="share">
-												<a href="/diaries/{{diaryAnswer.diary.id}}" title="#"><i class="fa fa-comments"></i> {{freeBoard.countOfAnswer}}</a>
+												<a href="/diaries/{{diaryAnswer.diary.id}}" title="#"><i class="fa fa-comments"></i> {{diary.countOfAnswer}}</a>
 											</div>
 										</li>									
 									{{/diaryAnswer}}
@@ -112,6 +112,18 @@
 											</div>
 										</li>									
 									{{/freeBoardAnswer}}
+									{{#good}}
+									<li>
+											<div class="title">
+												<a href="/diaries/{{diary.id}}" title="{{diary.title}}">{{diary.title}}</a>
+											</div>
+											<div class="info">{{formattedSaveDate}}</div>
+											<p>{{type}}</p>
+											<div class="share">
+												<a href="/diaries/{{diary.id}}" title="#"><i class="fa fa-comments"></i> {{diary.countOfAnswer}}</a>
+											</div>
+										</li>		
+									{{/good}}
 									</ul>
 
 								</div>
