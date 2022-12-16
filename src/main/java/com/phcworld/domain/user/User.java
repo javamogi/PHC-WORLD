@@ -100,9 +100,11 @@ public class User {
 		return this.authority.equals("ROLE_ADMIN");
 	}
 
-	public void ifMeSetAdmin(User user) {
-		if (user.getEmail().equals("pakoh200@naver.com")) {
-			user.setAuthority("ROLE_ADMIN");
+	public void ifMeSetAdmin() {
+//		if (user.getEmail().equals("pakoh200@naver.com")) {
+		if (this.email.equals("pakoh200@naver.com")) {
+//			user.setAuthority("ROLE_ADMIN");
+			this.authority = "ROLE_ADMIN";
 		}
 	}
 	

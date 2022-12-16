@@ -9,6 +9,7 @@ plugins {
 }
 
 repositories {
+    mavenCentral()
     mavenLocal()
     maven {
         url = uri('https://repo.maven.apache.org/maven2/')
@@ -29,8 +30,14 @@ dependencies {
     runtimeOnly 'com.h2database:h2:1.4.199'
     testImplementation 'org.springframework.boot:spring-boot-starter-test:2.1.13.RELEASE'
     providedCompile 'org.springframework.boot:spring-boot-starter-tomcat:2.1.13.RELEASE'
-    providedCompile 'org.projectlombok:lombok:1.18.12'
+//    implementation 'org.projectlombok:lombok:1.18.12'
     providedCompile 'com.querydsl:querydsl-apt:4.2.2'
+
+    compileOnly 'org.projectlombok:lombok:1.18.24'
+    annotationProcessor 'org.projectlombok:lombok:1.18.24'
+
+    testCompileOnly 'org.projectlombok:lombok:1.18.24'
+    testAnnotationProcessor 'org.projectlombok:lombok:1.18.24'
 }
 
 group = 'com.phcworld'
