@@ -62,7 +62,8 @@ public class DiaryServiceImpl implements DiaryService {
 	
 	@Override
 	public Page<Diary> findPageDiary(User loginUser, Integer pageNum, User requestUser) {
-		PageRequest pageRequest = PageRequest.of(pageNum - 1, 6, new Sort(Direction.DESC, "id"));
+//		PageRequest pageRequest = PageRequest.of(pageNum - 1, 6, new Sort(Direction.DESC, "id"));
+		PageRequest pageRequest = PageRequest.of(pageNum - 1, 6, Sort.by("id").descending());
 		if(isLoginUser(loginUser, requestUser)) {
 			return diaryRepository.findByWriter(requestUser, pageRequest);
 		}

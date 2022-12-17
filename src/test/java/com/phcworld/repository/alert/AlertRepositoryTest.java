@@ -225,7 +225,8 @@ public class AlertRepositoryTest {
 				.createDate(LocalDateTime.now())
 				.build();
 		Alert createdAlert2 = alertRepository.save(alert2);
-		PageRequest pageRequest = PageRequest.of(0, 5, new Sort(Direction.DESC, "id"));
+//		PageRequest pageRequest = PageRequest.of(0, 5, new Sort(Direction.DESC, "id"));
+		PageRequest pageRequest = PageRequest.of(0, 5, Sort.by("id").descending());
 		Page<Alert> page = alertRepository.findByPostWriter(user, pageRequest);
 		List<Alert> list = page.getContent();
 		assertThat(list, hasItems(createdAlert, createdAlert2));

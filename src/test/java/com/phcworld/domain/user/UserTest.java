@@ -58,7 +58,7 @@ public class UserTest {
 		for (ConstraintViolation<User> constraintViolation : constraintViolations) {
 			log.debug("violation error message : {}", constraintViolation.getMessage());
 		}
-		assertThat(constraintViolations.size(), is(2));
+		assertThat(constraintViolations.size(), is(1));
 	}
 
 	@Test
@@ -106,7 +106,7 @@ public class UserTest {
 		for (ConstraintViolation<User> constraintViolation : constraintViolations) {
 			log.debug("violation error message : {}", constraintViolation.getMessage());
 		}
-		assertThat(constraintViolations.size(), is(2));
+		assertThat(constraintViolations.size(), is(1));
 	}
 	
 	@Test
@@ -134,7 +134,7 @@ public class UserTest {
 		for (ConstraintViolation<User> constraintViolation : constraintViolations) {
 			log.debug("violation error message : {}", constraintViolation.getMessage());
 		}
-		assertThat(constraintViolations.size(), is(2));
+		assertThat(constraintViolations.size(), is(1));
 	}
 	@Test
 	public void createWhenIsNotSizeName() throws Exception {

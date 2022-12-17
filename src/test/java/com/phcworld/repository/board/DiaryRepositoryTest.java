@@ -64,7 +64,8 @@ public class DiaryRepositoryTest {
 				.thumbnail("no-image-icon.gif")
 				.build();
 		diaryRepository.save(diary);
-		PageRequest pageRequest = PageRequest.of(0, 6, new Sort(Direction.DESC, "id"));
+//		PageRequest pageRequest = PageRequest.of(0, 6, new Sort(Direction.DESC, "id"));
+		PageRequest pageRequest = PageRequest.of(0, 6, Sort.by("id").descending());
 		Page<Diary> diaryPage = diaryRepository.findByWriter(writer, pageRequest);
 		List<Diary> diaryList = diaryPage.getContent();
 		assertThat(diaryList, hasItems(diary));

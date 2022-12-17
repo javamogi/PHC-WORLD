@@ -2,6 +2,7 @@ package com.phcworld.domain.image;
 
 import java.time.LocalDateTime;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -10,10 +11,11 @@ import com.phcworld.domain.user.User;
 
 @Service
 @Transactional
+@RequiredArgsConstructor
 public class ImageServiceImpl implements ImageService {
 	
-	@Autowired
-	private ImageRepository imageRepository;
+//	@Autowired
+	private final ImageRepository imageRepository;
 	
 	@Override
 	public Image createImage(User user, String originalName, String randName, Long size) {
