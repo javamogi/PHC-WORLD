@@ -124,4 +124,25 @@ public class DiaryRepositoryTest {
 		assertFalse(findDiary.isPresent());
 	}
 
+	@Test
+	public void findAllByQuerydsl(){
+		User writer = User.builder()
+				.id(1L)
+				.email("user@test.test")
+				.password("user")
+				.name("user")
+				.build();
+		Diary diary = Diary.builder()
+				.writer(writer)
+				.title("title")
+				.contents("content")
+				.thumbnail("no-image-icon.gif")
+				.build();
+		diaryRepository.save(diary);
+		PageRequest pageRequest = PageRequest.of(0, 10, Sort.by("createDate").descending());
+		Page<Diary> diaryPage = diaryRepository.findAllPage(pageRequest);
+		List<Diary> diaryList = diaryPage.getContent();
+		assertThat(diaryList, hasItems(diary));
+	}
+
 }
