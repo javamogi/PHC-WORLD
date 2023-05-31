@@ -18,11 +18,11 @@ import com.phcworld.service.timeline.TimelineServiceImpl;
 @RequiredArgsConstructor
 public class GoodService {
 
-	private GoodRepository goodRepository;
+	private final GoodRepository goodRepository;
 	
-	private TimelineServiceImpl timelineService;
+	private final TimelineServiceImpl timelineService;
 	
-	private AlertServiceImpl alertService;
+	private final AlertServiceImpl alertService;
 	
 	public Diary pushGood(Diary diary, User loginUser) {
 		Good good = goodRepository.findByDiaryAndUser(diary, loginUser);

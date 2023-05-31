@@ -18,9 +18,9 @@ import com.phcworld.service.user.UserService;
 @RequiredArgsConstructor
 public class UserRestController {
 	
-	private UserService userService;
+	private final UserService userService;
 	
-	private TimelineServiceImpl timelineService;
+	private final TimelineServiceImpl timelineService;
 
 	@RequestMapping("/users/{id}/timelineList")
 	public List<Timeline> listTimeline(@PathVariable Long id, @RequestParam(defaultValue = "1") Integer timelinePageNum) {

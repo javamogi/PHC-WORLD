@@ -17,9 +17,9 @@ import com.phcworld.repository.emailAuth.EmailAuthRepository;
 @RequiredArgsConstructor
 public class EmailAuthService {
 
-	private JavaMailSender emailSender;
+	private final JavaMailSender emailSender;
 	
-	private EmailAuthRepository emailAuthRepository;
+	private final EmailAuthRepository emailAuthRepository;
 	
 	public void sendEmail(String email) throws Exception {
 		String authKey = UUID.randomUUID().toString().replaceAll("-", "");

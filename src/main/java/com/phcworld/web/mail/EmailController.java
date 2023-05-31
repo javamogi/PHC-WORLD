@@ -15,7 +15,7 @@ import com.phcworld.repository.emailAuth.EmailAuthRepository;
 @RequiredArgsConstructor
 public class EmailController {
 	
-	private EmailAuthRepository emailAuthRepository;
+	private final EmailAuthRepository emailAuthRepository;
 	
 	@RequestMapping("/emailConfirm")
 	public String authKeyConfirm(@RequestParam String email, @RequestParam String authKey, Model model) {

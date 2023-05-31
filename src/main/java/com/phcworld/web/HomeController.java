@@ -1,5 +1,6 @@
 package com.phcworld.web;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,10 +12,10 @@ import com.phcworld.service.alert.AlertService;
 import com.phcworld.service.alert.AlertServiceImpl;
 
 @Controller
+@RequiredArgsConstructor
 public class HomeController {
 	
-	@Autowired
-	private AlertService alertService;
+	private final AlertService alertService;
 	
 	@GetMapping("")
 	public String home() {

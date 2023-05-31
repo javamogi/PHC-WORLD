@@ -23,9 +23,9 @@ import com.phcworld.utils.HttpSessionUtils;
 @RequiredArgsConstructor
 public class DashboardController {
 	
-	private TimelineServiceImpl timelineService;
+	private final TimelineServiceImpl timelineService;
 	
-	private DashboardService dashboardService;
+	private final DashboardService dashboardService;
 	
 //	@Autowired
 //	private TempTimelineService tempTimelineService;

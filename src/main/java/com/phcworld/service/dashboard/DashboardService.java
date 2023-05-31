@@ -24,17 +24,17 @@ import com.phcworld.service.timeline.TimelineServiceImpl;
 @Service
 @RequiredArgsConstructor
 public class DashboardService {
-	private FreeBoardServiceImpl freeBoardService;
+	private final FreeBoardServiceImpl freeBoardService;
 
-	private FreeBoardAnswerServiceImpl freeBoardAnswerService;
+	private final FreeBoardAnswerServiceImpl freeBoardAnswerService;
 	
-	private DiaryServiceImpl diaryService;
+	private final DiaryServiceImpl diaryService;
 	
-	private DiaryAnswerServiceImpl diaryAnswerService;
+	private final DiaryAnswerServiceImpl diaryAnswerService;
 	
-	private TimelineServiceImpl timelineService;
+	private final TimelineServiceImpl timelineService;
 	
-	private AlertServiceImpl alertService;
+	private final AlertServiceImpl alertService;
 	
 	public DashBoardUser getDashBoardUser(User user) {
 		List<FreeBoard> freeBoardList = freeBoardService.findFreeBoardListByWriter(user);

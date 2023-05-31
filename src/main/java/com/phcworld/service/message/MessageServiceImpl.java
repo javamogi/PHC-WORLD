@@ -22,7 +22,7 @@ import com.phcworld.repository.message.MessageRepository;
 @RequiredArgsConstructor
 public class MessageServiceImpl implements MessageService {
 	
-	private MessageRepository messageRepository;
+	private final MessageRepository messageRepository;
 
 	@Override
 	public MessageResponse createMessage(User loginUser, User receiveUser, String contents) {

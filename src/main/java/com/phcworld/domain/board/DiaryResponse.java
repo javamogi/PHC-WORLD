@@ -29,4 +29,17 @@ public class DiaryResponse {
 	private String updateDate;
 	
 	private List<DiaryAnswerApiResponse> diaryAnswerList;
+
+	public static DiaryResponse of(Diary diary){
+		return DiaryResponse.builder()
+				.id(diary.getId())
+				.writer(diary.getWriter())
+				.title(diary.getTitle())
+				.contents(diary.getContents())
+				.thumbnail(diary.getThumbnail())
+				.countOfAnswers(diary.getCountOfAnswer())
+				.countOfGood(diary.getCountOfGood())
+				.updateDate(diary.getFormattedUpdateDate())
+				.build();
+	}
 }

@@ -31,30 +31,31 @@ import com.phcworld.service.timeline.TimelineServiceImpl;
 @RequiredArgsConstructor
 public class DiaryServiceImpl implements DiaryService {
 	
-	private DiaryRepository diaryRepository;
+	private final DiaryRepository diaryRepository;
 	
-	private AlertServiceImpl alertService;
+	private final AlertServiceImpl alertService;
 	
-	private TimelineServiceImpl timelineService;
+	private final TimelineServiceImpl timelineService;
 	
-	private GoodService goodService;
+	private final GoodService goodService;
 	
 	public List<DiaryResponse> getDiaryResponseList(List<Diary> diaries) {
-		List<DiaryResponse> diaryResponseList = diaries.stream()
-				.map(diary -> {
-					DiaryResponse diaryResponse = DiaryResponse.builder()
-							.id(diary.getId())
-							.writer(diary.getWriter())
-							.title(diary.getTitle())
-							.contents(diary.getContents())
-							.thumbnail(diary.getThumbnail())
-							.countOfAnswers(diary.getCountOfAnswer())
-							.countOfGood(diary.getCountOfGood())
-							.updateDate(diary.getFormattedUpdateDate())
-							.build();
-					return diaryResponse;
-				})
-				.collect(Collectors.toList());
+//		List<DiaryResponse> diaryResponseList = diaries.stream()
+//				.map(diary -> {
+//					DiaryResponse diaryResponse = DiaryResponse.builder()
+//							.id(diary.getId())
+//							.writer(diary.getWriter())
+//							.title(diary.getTitle())
+//							.contents(diary.getContents())
+//							.thumbnail(diary.getThumbnail())
+//							.countOfAnswers(diary.getCountOfAnswer())
+//							.countOfGood(diary.getCountOfGood())
+//							.updateDate(diary.getFormattedUpdateDate())
+//							.build();
+//					return diaryResponse;
+//				})
+//				.collect(Collectors.toList());
+		List<DiaryResponse> diaryResponseList = diaries.stream().map(DiaryResponse::of).collect(Collectors.toList());
 		return diaryResponseList;
 	}
 	

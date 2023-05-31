@@ -32,9 +32,9 @@ public class UploadController {
 	
 	private static final Logger log = LoggerFactory.getLogger(UploadController.class);
 	
-	private ImageServiceImpl imageService;
+	private final ImageServiceImpl imageService;
 	
-	private UserService userService;
+	private final UserService userService;
 	
 	@PostMapping("/imageUpload")
 	public Image create(@RequestParam("imageFile") MultipartFile multipartFile, HttpServletRequest request, HttpSession session, Exception exception) {

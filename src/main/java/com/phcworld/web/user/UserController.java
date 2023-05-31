@@ -44,15 +44,15 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class UserController {
 
-	private UserService userService;
+	private final UserService userService;
 	
-	private TimelineServiceImpl timelineService;
+	private final TimelineServiceImpl timelineService;
 	
-	private MessageServiceImpl messageService;
+	private final MessageServiceImpl messageService;
 	
-	private AlertServiceImpl alertService;
+	private final AlertServiceImpl alertService;
 	
-	private EmailAuthService emailService;
+	private final EmailAuthService emailService;
 	
 	@PostMapping("")
 	public String create(@Valid User user, BindingResult bindingResult, Model model) throws NoSuchAlgorithmException {
