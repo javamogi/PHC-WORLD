@@ -1,0 +1,12 @@
+spring:
+  mail:
+    host: ENC(UjhPBeY6eaHnw0mr+R7yKPkHkhjomtHK)
+    port: 587
+    username: ENC(ltOMVMdJXrZELApjAKVc2YVR1z4I8Fei)
+    password: ENC(+t29naUaVtD5U9mNvp1HXUzpQh+jNuUSk/iKiSr74Ws=)
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
