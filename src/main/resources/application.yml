@@ -1,0 +1,59 @@
+spring:
+  servlet:
+    multipart:
+      max-file-size: 5MB
+      max-request-size: 5MB
+
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+  #spring.datasource.url=jdbc:h2:~/portfolio;
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:mem:portfolio;DB_CLOSE_DELAY=-1
+    username: sa
+    password:
+
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: create
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+
+  mustache:
+    servlet:
+      expose-request-attributes: true
+      expose-session-attributes: true
+    suffix: .html
+
+  mail:
+    host: ENC(UjhPBeY6eaHnw0mr+R7yKPkHkhjomtHK)
+    port: 587
+    username: ENC(ltOMVMdJXrZELApjAKVc2YVR1z4I8Fei)
+    password: ENC(+t29naUaVtD5U9mNvp1HXUzpQh+jNuUSk/iKiSr74Ws=)
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
+logging:
+  level:
+    com.phcworld.web: debug
+    com.phcworld.domain: debug
+
+server:
+  servlet:
+    encoding:
+      charset: UTF-8
+      force-request: true
+      force: true
+
+jasypt:
+  encryptor:
+    bean: jasyptStringEncryptor
