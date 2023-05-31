@@ -3,6 +3,7 @@ package com.phcworld.service.good;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,15 +15,13 @@ import com.phcworld.service.alert.AlertServiceImpl;
 import com.phcworld.service.timeline.TimelineServiceImpl;
 
 @Service
+@RequiredArgsConstructor
 public class GoodService {
 
-	@Autowired
 	private GoodRepository goodRepository;
 	
-	@Autowired
 	private TimelineServiceImpl timelineService;
 	
-	@Autowired
 	private AlertServiceImpl alertService;
 	
 	public Diary pushGood(Diary diary, User loginUser) {

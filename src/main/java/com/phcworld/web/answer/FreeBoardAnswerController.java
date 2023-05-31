@@ -2,6 +2,7 @@ package com.phcworld.web.answer;
 
 import javax.servlet.http.HttpSession;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -26,9 +27,9 @@ import com.phcworld.utils.HttpSessionUtils;
 
 @RestController
 @RequestMapping("/freeboards/{freeboardId}/answers")
+@RequiredArgsConstructor
 public class FreeBoardAnswerController {
 	
-	@Autowired
 	private FreeBoardAnswerServiceImpl freeBoardAnswerService;
 	
 	@PostMapping("")

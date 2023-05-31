@@ -8,6 +8,7 @@ import java.util.UUID;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,14 +27,13 @@ import com.phcworld.utils.HttpSessionUtils;
 
 @RestController
 @RequestMapping("/upload")
+@RequiredArgsConstructor
 public class UploadController {
 	
 	private static final Logger log = LoggerFactory.getLogger(UploadController.class);
 	
-	@Autowired
 	private ImageServiceImpl imageService;
 	
-	@Autowired
 	private UserService userService;
 	
 	@PostMapping("/imageUpload")

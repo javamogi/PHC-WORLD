@@ -3,6 +3,7 @@ package com.phcworld.service.user;
 import java.security.NoSuchAlgorithmException;
 import java.time.LocalDateTime;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,9 +14,9 @@ import com.phcworld.utils.SecurityUtils;
 
 @Service
 @Transactional
+@RequiredArgsConstructor
 public class UserService {
 
-	@Autowired
 	private UserRepository userRepository;
 
 	public User createUser(User user) throws NoSuchAlgorithmException {

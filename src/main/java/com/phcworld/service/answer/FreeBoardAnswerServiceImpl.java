@@ -2,6 +2,7 @@ package com.phcworld.service.answer;
 
 import java.util.List;
 
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,20 +24,17 @@ import com.phcworld.service.timeline.TimelineServiceImpl;
 
 @Service
 @Transactional
+@RequiredArgsConstructor
 public class FreeBoardAnswerServiceImpl implements CrudInterface<FreeBoardAnswerRequest, FreeBoardAnswerApiResponse, SuccessResponse> {
 	
 	private static final Logger log = LoggerFactory.getLogger(FreeBoardAnswerServiceImpl.class);
 	
-	@Autowired
 	private FreeBoardRepository freeBoardRepository;
 
-	@Autowired
 	private FreeBoardAnswerRepository freeBoardAnswerRepository;
 	
-	@Autowired
 	private AlertServiceImpl alertService;
 	
-	@Autowired
 	private TimelineServiceImpl timelineService;
 	
 	@Override

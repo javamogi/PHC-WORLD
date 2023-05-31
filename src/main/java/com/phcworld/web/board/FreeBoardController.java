@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpSession;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,9 +23,9 @@ import com.phcworld.utils.HttpSessionUtils;
 
 @Controller
 @RequestMapping("/freeboards")
+@RequiredArgsConstructor
 public class FreeBoardController {
 
-	@Autowired
 	private FreeBoardService freeBoardService;
 	
 	@GetMapping("")

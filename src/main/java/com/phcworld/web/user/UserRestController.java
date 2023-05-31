@@ -2,6 +2,7 @@ package com.phcworld.web.user;
 
 import java.util.List;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,12 +15,11 @@ import com.phcworld.service.timeline.TimelineServiceImpl;
 import com.phcworld.service.user.UserService;
 
 @RestController
+@RequiredArgsConstructor
 public class UserRestController {
 	
-	@Autowired
 	private UserService userService;
 	
-	@Autowired
 	private TimelineServiceImpl timelineService;
 
 	@RequestMapping("/users/{id}/timelineList")

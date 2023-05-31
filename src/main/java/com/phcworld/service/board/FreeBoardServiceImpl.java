@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,14 +22,12 @@ import com.phcworld.service.timeline.TimelineServiceImpl;
 
 @Service
 @Transactional
+@RequiredArgsConstructor
 public class FreeBoardServiceImpl implements FreeBoardService {
-	@Autowired
 	private FreeBoardRepository freeBoardRepository;
 	
-	@Autowired
 	private TimelineServiceImpl timelineService;
 	
-	@Autowired
 	private AlertServiceImpl alertService;
 
 	@Override

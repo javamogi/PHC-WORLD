@@ -2,6 +2,7 @@ package com.phcworld.web.dashboard;
 
 import javax.servlet.http.HttpSession;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,12 +20,11 @@ import com.phcworld.utils.HttpSessionUtils;
 
 @Controller
 @RequestMapping("/dashboard")
+@RequiredArgsConstructor
 public class DashboardController {
 	
-	@Autowired
 	private TimelineServiceImpl timelineService;
 	
-	@Autowired
 	private DashboardService dashboardService;
 	
 //	@Autowired

@@ -1,5 +1,6 @@
 package com.phcworld.web.mail;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -11,9 +12,9 @@ import com.phcworld.repository.emailAuth.EmailAuthRepository;
 
 @Controller
 @RequestMapping("/email")
+@RequiredArgsConstructor
 public class EmailController {
 	
-	@Autowired
 	private EmailAuthRepository emailAuthRepository;
 	
 	@RequestMapping("/emailConfirm")

@@ -2,6 +2,7 @@ package com.phcworld.service.answer;
 
 import java.util.List;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,18 +22,15 @@ import com.phcworld.service.timeline.TimelineServiceImpl;
 
 @Service
 @Transactional
+@RequiredArgsConstructor
 public class DiaryAnswerServiceImpl implements CrudInterface<DiaryAnswerRequest, DiaryAnswerApiResponse, SuccessResponse> {
 	
-	@Autowired
 	private DiaryRepository diaryRepository;
 
-	@Autowired
 	private DiaryAnswerRepository diaryAnswerRepository;
 	
-	@Autowired
 	private AlertServiceImpl alertService;
 	
-	@Autowired
 	private TimelineServiceImpl timelineService;
 	
 	@Override

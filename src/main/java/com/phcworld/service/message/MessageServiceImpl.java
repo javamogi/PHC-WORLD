@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -18,9 +19,9 @@ import com.phcworld.domain.user.User;
 import com.phcworld.repository.message.MessageRepository;
 
 @Service
+@RequiredArgsConstructor
 public class MessageServiceImpl implements MessageService {
 	
-	@Autowired
 	private MessageRepository messageRepository;
 
 	@Override

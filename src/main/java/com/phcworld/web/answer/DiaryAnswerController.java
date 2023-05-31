@@ -2,6 +2,7 @@ package com.phcworld.web.answer;
 
 import javax.servlet.http.HttpSession;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.ui.Model;
@@ -26,9 +27,9 @@ import com.phcworld.utils.HttpSessionUtils;
 
 @RestController
 @RequestMapping("/diaries/{diaryId}/answer")
+@RequiredArgsConstructor
 public class DiaryAnswerController {
 	
-	@Autowired
 	private DiaryAnswerServiceImpl diaryAnswerService;
 	
 	@PostMapping("")

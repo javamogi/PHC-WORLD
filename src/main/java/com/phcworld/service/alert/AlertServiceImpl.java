@@ -6,6 +6,7 @@ import com.phcworld.domain.answer.FreeBoardAnswer;
 import com.phcworld.domain.good.Good;
 import com.phcworld.domain.user.User;
 import com.phcworld.repository.alert.AlertRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -19,9 +20,9 @@ import java.util.List;
 
 @Service
 @Transactional
+@RequiredArgsConstructor
 public class AlertServiceImpl implements AlertService {
 	
-	@Autowired
 	private AlertRepository alertRepository;
 	
 	@Override

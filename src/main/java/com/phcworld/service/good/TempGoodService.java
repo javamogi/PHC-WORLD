@@ -3,6 +3,7 @@ package com.phcworld.service.good;
 import java.time.LocalDateTime;
 import java.util.Set;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,12 +14,11 @@ import com.phcworld.repository.good.TempGoodRepository;
 import com.phcworld.service.timeline.TempTimelineServiceImpl;
 
 @Service
+@RequiredArgsConstructor
 public class TempGoodService {
 
-	@Autowired
 	private TempGoodRepository goodRepository;
 	
-	@Autowired
 	private TempTimelineServiceImpl timelineService;
 	
 //	@Autowired

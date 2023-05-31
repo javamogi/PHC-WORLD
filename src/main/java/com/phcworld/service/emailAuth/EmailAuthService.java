@@ -4,6 +4,7 @@ import java.util.UUID;
 
 import javax.mail.internet.MimeMessage;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -13,12 +14,11 @@ import com.phcworld.domain.emailAuth.EmailAuth;
 import com.phcworld.repository.emailAuth.EmailAuthRepository;
 
 @Component
+@RequiredArgsConstructor
 public class EmailAuthService {
 
-	@Autowired
 	private JavaMailSender emailSender;
 	
-	@Autowired
 	private EmailAuthRepository emailAuthRepository;
 	
 	public void sendEmail(String email) throws Exception {

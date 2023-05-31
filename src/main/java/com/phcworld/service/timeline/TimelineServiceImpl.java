@@ -3,6 +3,7 @@ package com.phcworld.service.timeline;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -22,9 +23,9 @@ import com.phcworld.repository.timeline.TimelineRepository;
 
 @Service
 @Transactional
+@RequiredArgsConstructor
 public class TimelineServiceImpl implements TimelineService {
 	
-	@Autowired
 	private TimelineRepository timelineRepository;
 
 	@Override

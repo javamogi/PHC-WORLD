@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpSession;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
@@ -31,12 +32,11 @@ import com.phcworld.utils.PageNationsUtil;
 
 @Controller
 @RequestMapping("/diaries")
+@RequiredArgsConstructor
 public class DiaryController {
 
-	@Autowired
 	private UserService userService;
 
-	@Autowired
 	private DiaryServiceImpl diaryService;
 
 	@GetMapping("/list/{email}")

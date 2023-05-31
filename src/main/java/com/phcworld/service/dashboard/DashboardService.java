@@ -2,6 +2,7 @@ package com.phcworld.service.dashboard;
 
 import java.util.List;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,23 +22,18 @@ import com.phcworld.service.board.FreeBoardServiceImpl;
 import com.phcworld.service.timeline.TimelineServiceImpl;
 
 @Service
+@RequiredArgsConstructor
 public class DashboardService {
-	@Autowired
 	private FreeBoardServiceImpl freeBoardService;
 
-	@Autowired
 	private FreeBoardAnswerServiceImpl freeBoardAnswerService;
 	
-	@Autowired
 	private DiaryServiceImpl diaryService;
 	
-	@Autowired
 	private DiaryAnswerServiceImpl diaryAnswerService;
 	
-	@Autowired
 	private TimelineServiceImpl timelineService;
 	
-	@Autowired
 	private AlertServiceImpl alertService;
 	
 	public DashBoardUser getDashBoardUser(User user) {

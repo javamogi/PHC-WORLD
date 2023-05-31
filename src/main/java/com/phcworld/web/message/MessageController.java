@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpSession;
 
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,14 +27,13 @@ import com.phcworld.utils.HttpSessionUtils;
 
 @RestController
 @RequestMapping("/message")
+@RequiredArgsConstructor
 public class MessageController {
 	
 	private static final Logger log = LoggerFactory.getLogger(MessageController.class);
 	
-	@Autowired
 	private UserService userService;
 
-	@Autowired
 	private MessageServiceImpl messageService;
 	
 	@PostMapping("")

@@ -3,6 +3,7 @@ package com.phcworld.service.board;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -27,18 +28,15 @@ import com.phcworld.service.timeline.TempTimelineServiceImpl;
 
 @Service
 @Transactional
+@RequiredArgsConstructor
 public class TempDiaryServiceImpl implements TempDiaryService {
 	
-	@Autowired
 	private TempDiaryRepository diaryRepository;
 	
-	@Autowired
 	private AlertServiceImpl alertService;
 	
-	@Autowired
 	private TempGoodService goodService;
 	
-	@Autowired
 	private TempTimelineServiceImpl timelineService;
 	
 	public List<TempDiaryResponse> getDiaryResponseList(List<TempDiary> diaries) {
