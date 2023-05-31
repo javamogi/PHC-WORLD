@@ -95,10 +95,10 @@ public class DashboardControllerTest {
 		mockSession.setAttribute("alerts", null);
 		DashBoardUser dashboardUser = DashBoardUser.builder()
 				.user(user)
-				.countOfAnswer(0)
-				.countOfFreeBoard(0)
-				.countOfDiary(0)
-				.countOfAlert(0)
+				.countOfAnswer(0L)
+				.countOfFreeBoard(0L)
+				.countOfDiary(0L)
+				.countOfAlert(0L)
 				.timelineList(null)
 				.build();
 		when(this.dashboardService.getDashBoardUser(user))

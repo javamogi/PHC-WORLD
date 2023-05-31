@@ -13,13 +13,13 @@ public class DashBoardUser {
 	
 	private User user;
 	
-	private Integer countOfAnswer;
+	private Long countOfAnswer;
 	
-	private Integer countOfFreeBoard;
+	private Long countOfFreeBoard;
 	
-	private Integer countOfDiary;
+	private Long countOfDiary;
 	
-	private Integer countOfAlert;
+	private Long countOfAlert;
 	
 	private List<Timeline> timelineList;
 }

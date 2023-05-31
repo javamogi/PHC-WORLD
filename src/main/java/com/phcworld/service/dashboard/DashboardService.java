@@ -2,6 +2,8 @@ package com.phcworld.service.dashboard;
 
 import java.util.List;
 
+import com.phcworld.domain.dashboard.DashBoardSelectDto;
+import com.phcworld.repository.dashboard.DashBoardRepositoryCustom;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,37 +26,21 @@ import com.phcworld.service.timeline.TimelineServiceImpl;
 @Service
 @RequiredArgsConstructor
 public class DashboardService {
-	private final FreeBoardServiceImpl freeBoardService;
-
-	private final FreeBoardAnswerServiceImpl freeBoardAnswerService;
-	
-	private final DiaryServiceImpl diaryService;
-	
-	private final DiaryAnswerServiceImpl diaryAnswerService;
-	
 	private final TimelineServiceImpl timelineService;
 	
-	private final AlertServiceImpl alertService;
+	private final DashBoardRepositoryCustom dashBoardRepository;
 	
 	public DashBoardUser getDashBoardUser(User user) {
-		List<FreeBoard> freeBoardList = freeBoardService.findFreeBoardListByWriter(user);
-		List<FreeBoardAnswer> freeBoardAnswerList = freeBoardAnswerService.findFreeBoardAnswerListByWriter(user);
+		DashBoardSelectDto count = dashBoardRepository.findActiveCountByUser(user);
 
-		List<Diary> diaryList = diaryService.findDiaryListByWriter(user);
-		List<DiaryAnswer> diaryAnswerList = diaryAnswerService.findDiaryAnswerListByWriter(user);
-		
-		List<Alert> alertList = alertService.findListAlertByPostUser(user);
-		
 		List<Timeline> timelineList = timelineService.findTimelineList(0, user);
 		
-		Integer countOfAnswers = freeBoardAnswerList.size() + diaryAnswerList.size();
-
 		DashBoardUser dashboardUser = DashBoardUser.builder()
 				.user(user)
-				.countOfAnswer(countOfAnswers)
-				.countOfFreeBoard(freeBoardList.size())
-				.countOfDiary(diaryList.size())
-				.countOfAlert(alertList.size())
+				.countOfAnswer(count.getAnswerCount())
+				.countOfFreeBoard(count.getFreeBoardCount())
+				.countOfDiary(count.getDiaryCount())
+				.countOfAlert(count.getAlertCount())
 				.timelineList(timelineList)
 				.build();
 		return dashboardUser;
