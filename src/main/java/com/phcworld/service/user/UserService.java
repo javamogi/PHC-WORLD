@@ -17,7 +17,7 @@ import com.phcworld.utils.SecurityUtils;
 @RequiredArgsConstructor
 public class UserService {
 
-	private UserRepository userRepository;
+	private final UserRepository userRepository;
 
 	public User createUser(User user) throws NoSuchAlgorithmException {
 		String password = SecurityUtils.getEncSHA256(user.getPassword());

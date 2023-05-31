@@ -31,13 +31,13 @@ import com.phcworld.service.timeline.TempTimelineServiceImpl;
 @RequiredArgsConstructor
 public class TempDiaryServiceImpl implements TempDiaryService {
 	
-	private TempDiaryRepository diaryRepository;
+	private final TempDiaryRepository diaryRepository;
 	
-	private AlertServiceImpl alertService;
+	private final AlertServiceImpl alertService;
 	
-	private TempGoodService goodService;
+	private final TempGoodService goodService;
 	
-	private TempTimelineServiceImpl timelineService;
+	private final TempTimelineServiceImpl timelineService;
 	
 	public List<TempDiaryResponse> getDiaryResponseList(List<TempDiary> diaries) {
 		List<TempDiaryResponse> diaryResponseList = diaries.stream()

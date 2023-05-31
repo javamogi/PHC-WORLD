@@ -23,7 +23,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class AlertServiceImpl implements AlertService {
 	
-	private AlertRepository alertRepository;
+	private final AlertRepository alertRepository;
 	
 	@Override
 	public Alert getOneAlert(Long id) {

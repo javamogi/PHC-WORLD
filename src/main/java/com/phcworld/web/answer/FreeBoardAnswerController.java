@@ -30,7 +30,7 @@ import com.phcworld.utils.HttpSessionUtils;
 @RequiredArgsConstructor
 public class FreeBoardAnswerController {
 	
-	private FreeBoardAnswerServiceImpl freeBoardAnswerService;
+	private final FreeBoardAnswerServiceImpl freeBoardAnswerService;
 	
 	@PostMapping("")
 	@ResponseStatus(value = HttpStatus.CREATED)

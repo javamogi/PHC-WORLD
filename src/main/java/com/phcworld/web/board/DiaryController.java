@@ -35,9 +35,9 @@ import com.phcworld.utils.PageNationsUtil;
 @RequiredArgsConstructor
 public class DiaryController {
 
-	private UserService userService;
+	private final UserService userService;
 
-	private DiaryServiceImpl diaryService;
+	private final DiaryServiceImpl diaryService;
 
 	@GetMapping("/list/{email}")
 	public String getDairyList(@PathVariable String email, @RequestParam(defaultValue = "1") Integer pageNum, 

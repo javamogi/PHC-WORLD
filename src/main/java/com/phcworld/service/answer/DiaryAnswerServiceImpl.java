@@ -25,13 +25,13 @@ import com.phcworld.service.timeline.TimelineServiceImpl;
 @RequiredArgsConstructor
 public class DiaryAnswerServiceImpl implements CrudInterface<DiaryAnswerRequest, DiaryAnswerApiResponse, SuccessResponse> {
 	
-	private DiaryRepository diaryRepository;
+	private final DiaryRepository diaryRepository;
 
-	private DiaryAnswerRepository diaryAnswerRepository;
+	private final DiaryAnswerRepository diaryAnswerRepository;
 	
-	private AlertServiceImpl alertService;
+	private final AlertServiceImpl alertService;
 	
-	private TimelineServiceImpl timelineService;
+	private final TimelineServiceImpl timelineService;
 	
 	@Override
 	public DiaryAnswerApiResponse create(User loginUser, Long diaryId, DiaryAnswerRequest request) {

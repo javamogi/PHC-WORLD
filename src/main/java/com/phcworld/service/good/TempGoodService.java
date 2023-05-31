@@ -17,9 +17,9 @@ import com.phcworld.service.timeline.TempTimelineServiceImpl;
 @RequiredArgsConstructor
 public class TempGoodService {
 
-	private TempGoodRepository goodRepository;
+	private final TempGoodRepository goodRepository;
 	
-	private TempTimelineServiceImpl timelineService;
+	private final TempTimelineServiceImpl timelineService;
 	
 //	@Autowired
 //	private AlertServiceImpl alertService;

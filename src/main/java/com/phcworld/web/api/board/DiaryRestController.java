@@ -2,6 +2,7 @@ package com.phcworld.web.api.board;
 
 import javax.servlet.http.HttpSession;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -17,10 +18,10 @@ import com.phcworld.utils.HttpSessionUtils;
 
 @RestController
 @RequestMapping("/api/diaries")
+@RequiredArgsConstructor
 public class DiaryRestController {
 	
-	@Autowired
-	private DiaryServiceImpl diaryService;
+	private final DiaryServiceImpl diaryService;
 	
 	@PutMapping("/{diaryId}/good")
 	public SuccessResponse updateGoodCount(@PathVariable Long diaryId, HttpSession session) 

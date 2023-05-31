@@ -19,9 +19,9 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class TempTimelineServiceImpl {
 
-	private TempTimelineRepository tempTimelineRepository;
+	private final TempTimelineRepository tempTimelineRepository;
 
-	private TempTimelineFactory factory;
+	private final TempTimelineFactory factory;
 
 //	@Override
 //	public List<Timeline> findTimelineList(Integer timelinePageNum, User user) {

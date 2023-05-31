@@ -29,13 +29,13 @@ public class FreeBoardAnswerServiceImpl implements CrudInterface<FreeBoardAnswer
 	
 	private static final Logger log = LoggerFactory.getLogger(FreeBoardAnswerServiceImpl.class);
 	
-	private FreeBoardRepository freeBoardRepository;
+	private final FreeBoardRepository freeBoardRepository;
 
-	private FreeBoardAnswerRepository freeBoardAnswerRepository;
+	private final FreeBoardAnswerRepository freeBoardAnswerRepository;
 	
-	private AlertServiceImpl alertService;
+	private final AlertServiceImpl alertService;
 	
-	private TimelineServiceImpl timelineService;
+	private final TimelineServiceImpl timelineService;
 	
 	@Override
 	public FreeBoardAnswerApiResponse create(User loginUser, Long freeboardId, FreeBoardAnswerRequest request) {

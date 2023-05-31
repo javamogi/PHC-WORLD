@@ -26,7 +26,7 @@ import com.phcworld.repository.timeline.TimelineRepository;
 @RequiredArgsConstructor
 public class TimelineServiceImpl implements TimelineService {
 	
-	private TimelineRepository timelineRepository;
+	private final TimelineRepository timelineRepository;
 
 	@Override
 	public List<Timeline> findTimelineList(Integer timelinePageNum, User user) {

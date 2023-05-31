@@ -30,7 +30,7 @@ import com.phcworld.utils.HttpSessionUtils;
 @RequiredArgsConstructor
 public class DiaryAnswerController {
 	
-	private DiaryAnswerServiceImpl diaryAnswerService;
+	private final DiaryAnswerServiceImpl diaryAnswerService;
 	
 	@PostMapping("")
 	@ResponseStatus(value = HttpStatus.CREATED)

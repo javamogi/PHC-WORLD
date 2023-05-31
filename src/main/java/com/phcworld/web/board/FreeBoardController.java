@@ -26,7 +26,7 @@ import com.phcworld.utils.HttpSessionUtils;
 @RequiredArgsConstructor
 public class FreeBoardController {
 
-	private FreeBoardService freeBoardService;
+	private final FreeBoardService freeBoardService;
 	
 	@GetMapping("")
 	public String getFreeBoardAllList(Model model) {

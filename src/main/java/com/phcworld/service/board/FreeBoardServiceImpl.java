@@ -24,11 +24,11 @@ import com.phcworld.service.timeline.TimelineServiceImpl;
 @Transactional
 @RequiredArgsConstructor
 public class FreeBoardServiceImpl implements FreeBoardService {
-	private FreeBoardRepository freeBoardRepository;
+	private final FreeBoardRepository freeBoardRepository;
 	
-	private TimelineServiceImpl timelineService;
+	private final TimelineServiceImpl timelineService;
 	
-	private AlertServiceImpl alertService;
+	private final AlertServiceImpl alertService;
 
 	@Override
 	public List<FreeBoardResponse> findFreeBoardAllListAndSetNewBadge() {

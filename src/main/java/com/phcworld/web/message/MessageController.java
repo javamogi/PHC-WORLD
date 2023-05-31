@@ -32,9 +32,9 @@ public class MessageController {
 	
 	private static final Logger log = LoggerFactory.getLogger(MessageController.class);
 	
-	private UserService userService;
+	private final UserService userService;
 
-	private MessageServiceImpl messageService;
+	private final MessageServiceImpl messageService;
 	
 	@PostMapping("")
 	public MessageResponse sendMessage(MessageRequest request, HttpSession session) 
