@@ -655,7 +655,8 @@ public class TimelineRepositoryTest {
 				.saveDate(freeBoard.getCreateDate())
 				.build();
 		Timeline createdFreeBoardTimeline = timelineRepository.save(freeBoardTimeline);
-		PageRequest pageRequest = PageRequest.of(0, 5, new Sort(Direction.DESC, "id"));
+//		PageRequest pageRequest = PageRequest.of(0, 5, new Sort(Direction.DESC, "id"));
+		PageRequest pageRequest = PageRequest.of(0, 5, Sort.by("id").descending());
 		Page<Timeline> timelinePage = timelineRepository.findByUser(user, pageRequest);
 		List<Timeline> timelineList = timelinePage.getContent();
 		assertThat(timelineList, hasItems(createdFreeBoardTimeline));

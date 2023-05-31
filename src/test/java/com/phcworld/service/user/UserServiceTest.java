@@ -51,7 +51,7 @@ public class UserServiceTest {
 				.build();
 		when(userService.createUser(user)).thenReturn(user);
 		User adminUser = userService.createUser(user);
-		adminUser.ifMeSetAdmin(user);
+		adminUser.ifMeSetAdmin();
 		assertThat(adminUser.getAuthority(), is("ROLE_ADMIN"));
 	}
 	

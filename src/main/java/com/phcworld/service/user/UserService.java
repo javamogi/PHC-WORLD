@@ -24,7 +24,7 @@ public class UserService {
 		user.setAuthority("ROLE_USER");
 		user.setCreateDate(LocalDateTime.now());
 		user.setProfileImage("blank-profile-picture.png");
-		user.ifMeSetAdmin(user);
+		user.ifMeSetAdmin();
 		
 		return userRepository.save(user);
 	}

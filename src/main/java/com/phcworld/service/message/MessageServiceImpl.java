@@ -66,7 +66,8 @@ public class MessageServiceImpl implements MessageService {
 	
 	@Override
 	public List<MessageResponse> findMessageBySenderAndConfirmUseMenu(User loginUser, String confirm) {
-		PageRequest pageRequest = PageRequest.of(0, 5, new Sort(Direction.DESC, "id"));
+//		PageRequest pageRequest = PageRequest.of(0, 5, new Sort(Direction.DESC, "id"));
+		PageRequest pageRequest = PageRequest.of(0, 5, Sort.by("id").descending());
 		Page<Message> pageMessage = messageRepository.findByReceiverAndConfirm(loginUser, "읽지 않음", pageRequest);
 		List<Message> messageList = pageMessage.getContent();
 		if(messageList != null) {
@@ -82,18 +83,18 @@ public class MessageServiceImpl implements MessageService {
 	
 	@Override
 	public Page<Message> findMessageByReceiverMessages(Integer receivePageNum, User user) {
-		PageRequest pageRequest = PageRequest.of(0, 10, new Sort(Direction.DESC, "id"));
+		PageRequest pageRequest = PageRequest.of(0, 10, Sort.by("id").descending());
 		if(receivePageNum > 1) {
-			pageRequest = PageRequest.of(receivePageNum - 1, 10, new Sort(Direction.DESC, "id"));
+			pageRequest = PageRequest.of(receivePageNum - 1, 10, Sort.by("id").descending());
 		}
 		return messageRepository.findByReceiver(user, pageRequest);
 	}
 	
 	@Override
 	public Page<Message> findMessageBySenderMessage(Integer sendPageNum, User user) {
-		PageRequest pageRequest = PageRequest.of(0, 10, new Sort(Direction.DESC, "id"));
+		PageRequest pageRequest = PageRequest.of(0, 10, Sort.by("id").descending());
 		if(sendPageNum > 1) {
-			pageRequest = PageRequest.of(sendPageNum - 1, 10, new Sort(Direction.DESC, "id"));
+			pageRequest = PageRequest.of(sendPageNum - 1, 10, Sort.by("id").descending());
 		}
 		return messageRepository.findBySender(user, pageRequest);
 	}

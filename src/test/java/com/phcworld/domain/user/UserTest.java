@@ -55,10 +55,10 @@ public class UserTest {
 				.name("테스트")
 				.build();
 		Set<ConstraintViolation<User>> constraintViolations = validator.validate(user);
-		assertThat(constraintViolations.size(), is(1));
 		for (ConstraintViolation<User> constraintViolation : constraintViolations) {
 			log.debug("violation error message : {}", constraintViolation.getMessage());
 		}
+		assertThat(constraintViolations.size(), is(1));
 	}
 
 	@Test
@@ -103,10 +103,10 @@ public class UserTest {
 				.name("테스트")
 				.build();
 		Set<ConstraintViolation<User>> constraintViolations = validator.validate(user);
-		assertThat(constraintViolations.size(), is(1));
 		for (ConstraintViolation<User> constraintViolation : constraintViolations) {
 			log.debug("violation error message : {}", constraintViolation.getMessage());
 		}
+		assertThat(constraintViolations.size(), is(1));
 	}
 	
 	@Test
@@ -131,10 +131,10 @@ public class UserTest {
 				.name(null)
 				.build();
 		Set<ConstraintViolation<User>> constraintViolations = validator.validate(user);
-		assertThat(constraintViolations.size(), is(1));
 		for (ConstraintViolation<User> constraintViolation : constraintViolations) {
 			log.debug("violation error message : {}", constraintViolation.getMessage());
 		}
+		assertThat(constraintViolations.size(), is(1));
 	}
 	@Test
 	public void createWhenIsNotSizeName() throws Exception {
@@ -194,7 +194,7 @@ public class UserTest {
 		User me = User.builder()
 				.email("pakoh200@naver.com")
 				.build();
-		me.ifMeSetAdmin(me);
+		me.ifMeSetAdmin();
 		assertThat(me.getAuthority(), is("ROLE_ADMIN"));
 	}
 }

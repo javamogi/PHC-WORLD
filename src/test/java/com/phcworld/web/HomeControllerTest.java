@@ -47,7 +47,7 @@ public class HomeControllerTest {
 	
 	@Test
 	public void index() throws Exception {
-		this.mvc.perform(get(""))
+		this.mvc.perform(get("/"))
 		.andExpect(view().name(containsString("index")))
 		.andExpect(status().isOk());
 	}

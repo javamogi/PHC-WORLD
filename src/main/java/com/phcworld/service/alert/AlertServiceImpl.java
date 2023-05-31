@@ -1,7 +1,11 @@
 package com.phcworld.service.alert;
 
-import java.util.List;
-
+import com.phcworld.domain.alert.Alert;
+import com.phcworld.domain.answer.DiaryAnswer;
+import com.phcworld.domain.answer.FreeBoardAnswer;
+import com.phcworld.domain.good.Good;
+import com.phcworld.domain.user.User;
+import com.phcworld.repository.alert.AlertRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -10,12 +14,8 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.phcworld.domain.alert.Alert;
-import com.phcworld.domain.answer.DiaryAnswer;
-import com.phcworld.domain.answer.FreeBoardAnswer;
-import com.phcworld.domain.good.Good;
-import com.phcworld.domain.user.User;
-import com.phcworld.repository.alert.AlertRepository;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @Transactional
@@ -31,7 +31,8 @@ public class AlertServiceImpl implements AlertService {
 	
 	@Override
 	public List<Alert> findListAlertByPostUser(User loginUser) {
-		PageRequest pageRequest = PageRequest.of(0, 5, new Sort(Direction.DESC, "id"));
+//		PageRequest pageRequest = PageRequest.of(0, 5, new Sort(Direction.DESC, "id"));
+		PageRequest pageRequest = PageRequest.of(0, 5, Sort.by("id").descending());
 		Page<Alert> pageAlert = alertRepository.findByPostWriter(loginUser, pageRequest);
 		return pageAlert.getContent();
 	}
