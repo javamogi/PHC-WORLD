@@ -2,12 +2,18 @@ package com.phcworld.service.user;
 
 import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.*;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.when;
 
 import java.time.LocalDateTime;
 
+import com.phcworld.repository.user.UserRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -17,12 +23,18 @@ import com.phcworld.service.user.UserService;
 
 
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@SpringBootTest
+//@RunWith(SpringJUnit4ClassRunner.class)
+//@SpringBootTest
+@RunWith(MockitoJUnitRunner.class)
+//@Slf4j
 public class UserServiceTest {
 	
-	@MockBean
+	@Mock
+//	@Autowired
 	private UserService userService;
+
+//	@MockBean
+//	private UserRepository userRepository;
 	
 	@Test
 	public void createUser() throws Exception {
@@ -34,9 +46,10 @@ public class UserServiceTest {
 				.authority("ROLE_USER")
 				.createDate(LocalDateTime.now())
 				.build();
+//		given(userRepository.save(user)).willReturn(user);
 		when(userService.createUser(user)).thenReturn(user);
 		User createUser = userService.createUser(user);
-		assertThat(createUser.getEmail(), is(user.getEmail()));
+		assertEquals(createUser, user);
 	}
 	
 	@Test

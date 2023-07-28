@@ -1,32 +1,26 @@
 package com.phcworld.service.board;
 
-import static org.hamcrest.CoreMatchers.hasItems;
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.Mock;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.phcworld.domain.answer.FreeBoardAnswer;
 import com.phcworld.domain.board.FreeBoard;
 import com.phcworld.domain.board.FreeBoardRequest;
 import com.phcworld.domain.board.FreeBoardResponse;
 import com.phcworld.domain.user.User;
+import com.phcworld.exception.model.CustomException;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.junit.MockitoJUnitRunner;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@SpringBootTest
-@Transactional
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.hamcrest.CoreMatchers.hasItems;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.*;
+
+@RunWith(MockitoJUnitRunner.class)
 public class FreeBoardServiceImplTest {
 
 	@Mock
@@ -56,6 +50,7 @@ public class FreeBoardServiceImplTest {
 				.icon(request.getIcon())
 				.badge("new")
 				.count(0)
+				.createDate(LocalDateTime.now())
 				.build();
 		FreeBoardResponse response = FreeBoardResponse.builder()
 				.id(1L)
@@ -96,6 +91,7 @@ public class FreeBoardServiceImplTest {
 				.icon(request.getIcon())
 				.badge("new")
 				.count(0)
+				.createDate(LocalDateTime.now())
 				.build();
 		FreeBoardResponse response = FreeBoardResponse.builder()
 				.id(1L)
@@ -113,6 +109,12 @@ public class FreeBoardServiceImplTest {
 		FreeBoardResponse actual = freeBoardService.getOneFreeBoard(response.getId());
 		
 		assertThat(actual, is(freeBoardResponse));
+	}
+
+	@Test(expected = CustomException.class)
+	public void getEmptyFreeBoard() {
+		when(freeBoardService.getOneFreeBoard(1L)).thenThrow(new CustomException("400", "게시글이 없습니다."));
+		freeBoardService.getOneFreeBoard(1L);
 	}
 	
 	@Test
@@ -134,6 +136,7 @@ public class FreeBoardServiceImplTest {
 				.icon("")
 				.badge("new")
 				.count(0)
+				.createDate(LocalDateTime.now())
 				.build();
 		
 		FreeBoardRequest request = FreeBoardRequest.builder()
@@ -236,6 +239,7 @@ public class FreeBoardServiceImplTest {
 				.icon("")
 				.badge("new")
 				.count(0)
+				.createDate(LocalDateTime.now())
 				.build();
 		board.addCount();
 		FreeBoardResponse response = FreeBoardResponse.builder()
