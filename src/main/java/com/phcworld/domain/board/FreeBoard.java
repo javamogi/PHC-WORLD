@@ -1,5 +1,6 @@
 package com.phcworld.domain.board;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -99,6 +100,20 @@ public class FreeBoard {
 			return false;
 		}
 		return this.writer.equals(loginUser);
+	}
+
+	public String getBadge(){
+		final int HOUR_OF_DAY = 24;
+		final int MINUTES_OF_HOUR = 60;
+
+		long createdDateAndNowDifferenceMinutes =
+				Duration.between(createDate, LocalDateTime.now()).toMinutes();
+		if (createdDateAndNowDifferenceMinutes / MINUTES_OF_HOUR < HOUR_OF_DAY) {
+			badge = "New";
+		} else {
+			badge = "";
+		}
+		return badge;
 	}
 	
 }

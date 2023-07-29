@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.phcworld.exception.model.CustomException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,36 +33,9 @@ public class FreeBoardServiceImpl implements FreeBoardService {
 
 	@Override
 	public List<FreeBoardResponse> findFreeBoardAllListAndSetNewBadge() {
-		int hourOfDay = 24;
-		int minutesOfHour = 60;
 		List<FreeBoard> list = freeBoardRepository.findAll();
-		for (int i = list.size()-1; i >= 0; i--) {
-			long createdDateAndNowDifferenceMinutes = 
-					Duration.between(list.get(i).getCreateDate(), LocalDateTime.now()).toMinutes();
-			if (createdDateAndNowDifferenceMinutes / minutesOfHour < hourOfDay) {
-				list.get(i).setBadge("New");
-			} else {
-				if(list.get(i).getBadge().equals("")) {
-					break;
-				}
-				list.get(i).setBadge("");
-			}
-		}
 		List<FreeBoardResponse> freeBoardAnswerApiResponseList = list.stream()
-				.map(freeBoard -> {
-					FreeBoardResponse freeBoardResponse = FreeBoardResponse.builder()
-							.id(freeBoard.getId())
-							.writer(freeBoard.getWriter())
-							.title(freeBoard.getTitle())
-							.contents(freeBoard.getContents())
-							.icon(freeBoard.getIcon())
-							.badge(freeBoard.getBadge())
-							.createDate(freeBoard.getFormattedCreateDate())
-							.count(freeBoard.getCount())
-							.countOfAnswer(freeBoard.getCountOfAnswer())
-							.build();
-					return freeBoardResponse;
-				})
+				.map(FreeBoardResponse::of)
 				.collect(Collectors.toList());
 		return freeBoardAnswerApiResponseList;
 	}
@@ -84,27 +58,31 @@ public class FreeBoardServiceImpl implements FreeBoardService {
 
 	@Override
 	public FreeBoardResponse getOneFreeBoard(Long id) {
-		FreeBoard freeBoard = freeBoardRepository.getOne(id);
+		FreeBoard freeBoard = freeBoardRepository.findById(id)
+				.orElseThrow(() -> new CustomException("400", "게시글이 없습니다."));
 		return response(freeBoard);
 	}
 
 	@Override
 	public FreeBoardResponse addFreeBoardCount(Long id) {
-		FreeBoard freeBoard = freeBoardRepository.getOne(id);
+		FreeBoard freeBoard = freeBoardRepository.findById(id)
+				.orElseThrow(() -> new CustomException("400", "게시글이 없습니다."));
 		freeBoard.addCount();
 		return response(freeBoardRepository.save(freeBoard));
 	}
 
 	@Override
 	public FreeBoardResponse updateFreeBoard(FreeBoardRequest request) {
-		FreeBoard freeBoard = freeBoardRepository.getOne(request.getId());
+		FreeBoard freeBoard = freeBoardRepository.findById(request.getId())
+				.orElseThrow(() -> new CustomException("400", "게시글이 없습니다."));
 		freeBoard.update(request);
 		return response(freeBoardRepository.save(freeBoard));
 	}
 
 	@Override
 	public void deleteFreeBoard(Long id) {
-		FreeBoard freeBoard = freeBoardRepository.getOne(id);
+		FreeBoard freeBoard = freeBoardRepository.findById(id)
+				.orElseThrow(() -> new CustomException("400", "게시글이 없습니다."));
 		timelineService.deleteTimeline(freeBoard);
 		List<FreeBoardAnswer> answerList = freeBoard.getFreeBoardAnswers();
 		for(int i = 0; i < answerList.size(); i++) {
@@ -121,31 +99,11 @@ public class FreeBoardServiceImpl implements FreeBoardService {
 	}
 	
 	private FreeBoardResponse response(FreeBoard freeBoard) {
-		FreeBoardResponse freeBoardResponse = FreeBoardResponse.builder()
-				.id(freeBoard.getId())
-				.writer(freeBoard.getWriter())
-				.title(freeBoard.getTitle())
-				.contents(freeBoard.getContents())
-				.icon(freeBoard.getIcon())
-				.badge(freeBoard.getBadge())
-				.createDate(freeBoard.getFormattedCreateDate())
-				.count(freeBoard.getCount())
-				.countOfAnswer(freeBoard.getCountOfAnswer())
-				.build();
+		FreeBoardResponse freeBoardResponse = FreeBoardResponse.of(freeBoard);
 		List<FreeBoardAnswer> answerList = freeBoard.getFreeBoardAnswers();
 		if(answerList != null) {
 			List<FreeBoardAnswerApiResponse> freeBoardAnswerApiResponseList = answerList.stream()
-					.map(answer -> {
-						FreeBoardAnswerApiResponse freeBoardAnswerApiResponse = FreeBoardAnswerApiResponse.builder()
-								.id(answer.getId())
-								.contents(answer.getContents())
-								.countOfAnswers(answer.getFreeBoard().getCountOfAnswer())
-								.freeBoardId(answer.getFreeBoard().getId())
-								.writer(answer.getWriter())
-								.updateDate(answer.getFormattedUpdateDate())
-								.build();
-						return freeBoardAnswerApiResponse;
-					})
+					.map(FreeBoardAnswerApiResponse::of)
 					.collect(Collectors.toList());
 			freeBoardResponse.setFreeBoardAnswerList(freeBoardAnswerApiResponseList);
 		}
