@@ -491,6 +491,7 @@ public class FreeBoardControllerTest {
 				.icon("")
 				.badge("new")
 				.count(0)
+				.createDate(LocalDateTime.now())
 				.build();
 		FreeBoardResponse response = FreeBoardResponse.builder()
 				.id(board.getId())

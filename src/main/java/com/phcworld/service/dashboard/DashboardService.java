@@ -29,11 +29,33 @@ public class DashboardService {
 	private final TimelineServiceImpl timelineService;
 	
 	private final DashBoardRepositoryCustom dashBoardRepository;
-	
+
+//	private final FreeBoardServiceImpl freeBoardService;
+//
+//	private final FreeBoardAnswerServiceImpl freeBoardAnswerService;
+//
+//	private final DiaryServiceImpl diaryService;
+//
+//	private final DiaryAnswerServiceImpl diaryAnswerService;
+//
+//	private final AlertServiceImpl alertService;
+
 	public DashBoardUser getDashBoardUser(User user) {
 		DashBoardSelectDto count = dashBoardRepository.findActiveCountByUser(user);
 
 		List<Timeline> timelineList = timelineService.findTimelineList(0, user);
+
+//		List<FreeBoard> freeBoardList = freeBoardService.findFreeBoardListByWriter(user);
+//		List<FreeBoardAnswer> freeBoardAnswerList = freeBoardAnswerService.findFreeBoardAnswerListByWriter(user);
+//
+//		List<Diary> diaryList = diaryService.findDiaryListByWriter(user);
+//		List<DiaryAnswer> diaryAnswerList = diaryAnswerService.findDiaryAnswerListByWriter(user);
+//
+//		List<Alert> alertList = alertService.findListAlertByPostUser(user);
+//
+//		List<Timeline> timelineList = timelineService.findTimelineList(0, user);
+//
+//		Integer countOfAnswers = freeBoardAnswerList.size() + diaryAnswerList.size();
 		
 		DashBoardUser dashboardUser = DashBoardUser.builder()
 				.user(user)
@@ -41,6 +63,10 @@ public class DashboardService {
 				.countOfFreeBoard(count.getFreeBoardCount())
 				.countOfDiary(count.getDiaryCount())
 				.countOfAlert(count.getAlertCount())
+//				.countOfAnswer(countOfAnswers.longValue())
+//				.countOfFreeBoard(Long.valueOf(freeBoardList.size()))
+//				.countOfDiary(Long.valueOf(diaryList.size()))
+//				.countOfAlert(Long.valueOf(alertList.size()))
 				.timelineList(timelineList)
 				.build();
 		return dashboardUser;

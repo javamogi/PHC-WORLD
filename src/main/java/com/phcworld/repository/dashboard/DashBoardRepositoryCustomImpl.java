@@ -6,6 +6,7 @@ import com.phcworld.domain.answer.QFreeBoardAnswer;
 import com.phcworld.domain.board.QDiary;
 import com.phcworld.domain.board.QFreeBoard;
 import com.phcworld.domain.dashboard.DashBoardSelectDto;
+import com.phcworld.domain.timeline.QTimeline;
 import com.phcworld.domain.user.QUser;
 import com.phcworld.domain.user.User;
 import com.querydsl.core.types.ExpressionUtils;
@@ -27,6 +28,7 @@ public class DashBoardRepositoryCustomImpl implements DashBoardRepositoryCustom 
     QDiaryAnswer diaryAnswer = QDiaryAnswer.diaryAnswer;
     QAlert alert = QAlert.alert;
     QUser quser = QUser.user;
+    QTimeline timeline = QTimeline.timeline;
 
     public DashBoardSelectDto findActiveCountByUser(User user){
         return queryFactory
@@ -51,14 +53,10 @@ public class DashBoardRepositoryCustomImpl implements DashBoardRepositoryCustom 
                                         .select(diaryAnswer.count())
                                         .from(diaryAnswer)
                                         .where(diaryAnswer.writer.eq(user)), "diaryAnswerCount"),
-                        ExpressionUtils.as(
-                                JPAExpressions
-                                        .select(alert.count())
-                                        .from(alert)
-                                        .where(alert.postWriter.eq(user)), "alertCount")
+                        alert.count().as("alertCount")
                         ))
-                .from(quser)
-                .where(quser.eq(user))
+                .from(alert)
+                .where(alert.postWriter.eq(user))
                 .fetchOne();
     }
 }
