@@ -62,6 +62,8 @@ dependencies {
 //    annotationProcessor("jakarta.annotation:jakarta.annotation-api")
     implementation "com.querydsl:querydsl-jpa:${queryDslVersion}"
     implementation "com.querydsl:querydsl-apt:${queryDslVersion}"
+    testImplementation 'org.jeasy:easy-random-core:4.3.0'
+    implementation 'org.springframework.boot:spring-boot-starter-jdbc'
 }
 
 group = 'com.phcworld'

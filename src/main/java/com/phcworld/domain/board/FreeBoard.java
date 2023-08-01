@@ -16,6 +16,7 @@ import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -25,10 +26,6 @@ import com.phcworld.domain.answer.FreeBoardAnswer;
 import com.phcworld.domain.user.User;
 import com.phcworld.utils.LocalDateTimeUtils;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
 @Entity
@@ -38,6 +35,7 @@ import lombok.experimental.Accessors;
 @Builder
 @Accessors(chain = true)
 @EntityListeners(AuditingEntityListener.class)
+@ToString(exclude = {"writer", "freeBoardAnswers"})
 public class FreeBoard {
 
 	@Id
