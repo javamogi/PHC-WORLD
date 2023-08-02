@@ -105,7 +105,7 @@ public class FreeBoard {
 		final int MINUTES_OF_HOUR = 60;
 
 		long createdDateAndNowDifferenceMinutes =
-				Duration.between(createDate, LocalDateTime.now()).toMinutes();
+				Duration.between(createDate == null ? LocalDateTime.now() : createDate, LocalDateTime.now()).toMinutes();
 		if (createdDateAndNowDifferenceMinutes / MINUTES_OF_HOUR < HOUR_OF_DAY) {
 			badge = "New";
 		} else {

@@ -19,6 +19,7 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import com.phcworld.domain.board.FreeBoardInsertDto;
+import com.phcworld.util.FreeBoardFactory;
 import org.jeasy.random.EasyRandomParameters;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -40,7 +41,7 @@ import org.springframework.util.StopWatch;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest
-@Transactional
+//@Transactional
 @Slf4j
 public class FreeBoardRepositoryTest {
 	
@@ -52,6 +53,7 @@ public class FreeBoardRepositoryTest {
 
 	
 	@Test
+	@Transactional
 	public void create() {
 		User user = User.builder()
 				.id(1L)
@@ -73,30 +75,8 @@ public class FreeBoardRepositoryTest {
 
 	@Test
 	public void bulkInsert(){
-		User user = User.builder()
-				.id(1L)
-				.email("user@test.test")
-				.password("user")
-				.name("user")
-				.build();
-		Predicate<Field> idPredicate = named("id")
-				.and(ofType(Long.class))
-				.and(inClass(FreeBoard.class));
 
-		Predicate<Field> memberIdPredicate = named("writer")
-				.and(ofType(User.class))
-				.and(inClass(FreeBoard.class));
-		LocalDate firstDate = LocalDate.of(2010, 1, 1);
-		LocalDate lastDate = LocalDate.now();
-		EasyRandomParameters param = new EasyRandomParameters()
-				.excludeField(idPredicate)
-				.dateRange(firstDate, lastDate)
-				.randomize(memberIdPredicate, () -> user);
-
-		EasyRandom generator = new EasyRandom(param);
-//		User user = generator.nextObject(User.class);
-//		FreeBoard freeBoard = generator.nextObject(FreeBoard.class);
-//		freeBoardRepository.save(freeBoard);
+		EasyRandom generator = FreeBoardFactory.getFreeBoardEntity();
 
 		StopWatch stopWatch = new StopWatch();
 		stopWatch.start();
@@ -105,17 +85,13 @@ public class FreeBoardRepositoryTest {
 				.mapToObj(i -> generator.nextObject(FreeBoard.class))
 				.map(FreeBoardInsertDto::of)
 				.collect(Collectors.toList());
-//		List<FreeBoard> list = new ArrayList<>();
-//		for (int i = 0; i < 10000 * 10; i++){
-//			FreeBoard freeBoard = generator.nextObject(FreeBoard.class);
-//			list.add(freeBoard);
-//		}
 		stopWatch.stop();
 		log.info("객체 생성 시간 : {}", stopWatch.getTotalTimeSeconds());
+
 		StopWatch queryStopWatch = new StopWatch();
 		queryStopWatch.start();
-//		freeBoardRepository.saveAll(list);
-		String sql = String.format("INSERT INTO %s (writer_id, title, contents, icon, badge, count) VALUES (:writerId, :title, :contents, :icon, :badge, :count)", "FREE_BOARD");
+
+		String sql = String.format("INSERT INTO %s (writer_id, title, contents, icon, badge, count) VALUES (:writerId, :title, :contents, :icon, :badge, :count)", "free_board");
 
 		SqlParameterSource[] params = list
 				.stream()
@@ -127,6 +103,7 @@ public class FreeBoardRepositoryTest {
 	}
 	
 	@Test
+	@Transactional(readOnly = true)
 	public void read() {
 		User user = User.builder()
 				.id(1L)
@@ -150,6 +127,7 @@ public class FreeBoardRepositoryTest {
 	}
 	
 	@Test
+	@Transactional
 	public void update() {
 		User user = User.builder()
 				.id(1L)
@@ -177,6 +155,7 @@ public class FreeBoardRepositoryTest {
 	}
 	
 	@Test
+	@Transactional
 	public void delete() {
 		User user = User.builder()
 				.id(1L)
