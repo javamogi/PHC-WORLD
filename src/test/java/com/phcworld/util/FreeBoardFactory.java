@@ -1,5 +1,6 @@
 package com.phcworld.util;
 
+import com.phcworld.domain.board.Diary;
 import com.phcworld.domain.board.FreeBoard;
 import com.phcworld.domain.user.User;
 import org.jeasy.random.EasyRandom;
@@ -26,17 +27,23 @@ public class FreeBoardFactory {
                 .and(ofType(Long.class))
                 .and(inClass(FreeBoard.class));
 
-        Predicate<Field> memberIdPredicate = named("writer")
+        Predicate<Field> writerIdPredicate = named("writer")
                 .and(ofType(User.class))
                 .and(inClass(FreeBoard.class));
+        Predicate<Field> countPredicate = named("count")
+                .and(ofType(Integer.class))
+                .and(inClass(FreeBoard.class));
+
         LocalDate firstDate = LocalDate.of(2010, 1, 1);
         LocalDate lastDate = LocalDate.now();
         EasyRandomParameters param = new EasyRandomParameters()
                 .excludeField(idPredicate)
                 .dateRange(firstDate, lastDate)
 //                .randomize(Integer.class, new IntegerRandomizer(0, 1000))
-                .randomize(memberIdPredicate, () -> user);
+                .randomize(writerIdPredicate, () -> user)
+                .randomize(countPredicate, () -> (int) (Math.random() * 100000));
 
         return new EasyRandom(param);
     }
+
 }
