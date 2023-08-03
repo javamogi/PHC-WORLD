@@ -22,7 +22,7 @@ import com.phcworld.service.alert.AlertServiceImpl;
 import com.phcworld.service.timeline.TimelineServiceImpl;
 
 @Service
-@Transactional
+//@Transactional
 @RequiredArgsConstructor
 public class FreeBoardServiceImpl implements FreeBoardService {
 	private final FreeBoardRepository freeBoardRepository;
@@ -31,6 +31,7 @@ public class FreeBoardServiceImpl implements FreeBoardService {
 	
 	private final AlertServiceImpl alertService;
 
+	@Transactional(readOnly = true)
 	@Override
 	public List<FreeBoardResponse> findFreeBoardAllListAndSetNewBadge() {
 		List<FreeBoard> list = freeBoardRepository.findAll();
@@ -40,6 +41,7 @@ public class FreeBoardServiceImpl implements FreeBoardService {
 		return freeBoardAnswerApiResponseList;
 	}
 
+	@Transactional
 	@Override
 	public FreeBoardResponse createFreeBoard(User user, FreeBoardRequest request) {
 		FreeBoard freeBoard = FreeBoard.builder()
@@ -56,6 +58,7 @@ public class FreeBoardServiceImpl implements FreeBoardService {
 		return response(createdFreeBoard);
 	}
 
+	@Transactional
 	@Override
 	public FreeBoardResponse getOneFreeBoard(Long id) {
 		FreeBoard freeBoard = freeBoardRepository.findById(id)
@@ -63,6 +66,7 @@ public class FreeBoardServiceImpl implements FreeBoardService {
 		return response(freeBoard);
 	}
 
+	@Transactional
 	@Override
 	public FreeBoardResponse addFreeBoardCount(Long id) {
 		FreeBoard freeBoard = freeBoardRepository.findById(id)
@@ -71,6 +75,7 @@ public class FreeBoardServiceImpl implements FreeBoardService {
 		return response(freeBoardRepository.save(freeBoard));
 	}
 
+	@Transactional
 	@Override
 	public FreeBoardResponse updateFreeBoard(FreeBoardRequest request) {
 		FreeBoard freeBoard = freeBoardRepository.findById(request.getId())
@@ -79,6 +84,7 @@ public class FreeBoardServiceImpl implements FreeBoardService {
 		return response(freeBoardRepository.save(freeBoard));
 	}
 
+	@Transactional
 	@Override
 	public void deleteFreeBoard(Long id) {
 		FreeBoard freeBoard = freeBoardRepository.findById(id)
@@ -92,12 +98,13 @@ public class FreeBoardServiceImpl implements FreeBoardService {
 		}
 		freeBoardRepository.delete(freeBoard);
 	}
-	
+
+	@Transactional
 	@Override
 	public List<FreeBoard> findFreeBoardListByWriter(User loginUser) {
 		return freeBoardRepository.findByWriter(loginUser);
 	}
-	
+
 	private FreeBoardResponse response(FreeBoard freeBoard) {
 		FreeBoardResponse freeBoardResponse = FreeBoardResponse.of(freeBoard);
 		List<FreeBoardAnswer> answerList = freeBoard.getFreeBoardAnswers();

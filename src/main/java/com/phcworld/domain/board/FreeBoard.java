@@ -4,17 +4,7 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.EntityListeners;
-import javax.persistence.ForeignKey;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.Lob;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
@@ -36,10 +26,16 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 @EntityListeners(AuditingEntityListener.class)
 @ToString(exclude = {"writer", "freeBoardAnswers"})
+@SequenceGenerator(
+		name = "BOARD_SEQ_GENERATOR",
+		sequenceName = "BOARD_SEQ",
+		initialValue = 1, allocationSize = 10000
+)
 public class FreeBoard {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+//	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "BOARD_SEQ_GENERATOR")
 	private Long id;
 
 	@ManyToOne
@@ -49,7 +45,8 @@ public class FreeBoard {
 
 	private String title;
 
-	@Lob
+//	@Lob
+	@Column(nullable = true, columnDefinition = "TEXT")
 	private String contents;
 
 	private String icon;

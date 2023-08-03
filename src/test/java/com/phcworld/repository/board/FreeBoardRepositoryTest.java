@@ -53,7 +53,7 @@ public class FreeBoardRepositoryTest {
 
 	
 	@Test
-	@Transactional
+//	@Transactional
 	public void create() {
 		User user = User.builder()
 				.id(1L)
@@ -74,7 +74,7 @@ public class FreeBoardRepositoryTest {
 	}
 
 	@Test
-	public void bulkInsert(){
+	public void bulkInsertByJDBC(){
 
 		EasyRandom generator = FreeBoardFactory.getFreeBoardEntity();
 
@@ -91,7 +91,8 @@ public class FreeBoardRepositoryTest {
 		StopWatch queryStopWatch = new StopWatch();
 		queryStopWatch.start();
 
-		String sql = String.format("INSERT INTO %s (writer_id, title, contents, icon, badge, count) VALUES (:writerId, :title, :contents, :icon, :badge, :count)", "free_board");
+//		String sql = String.format("INSERT INTO %s (writer_id, title, contents, icon, badge, count, create_date, update_date) VALUES (:writerId, :title, :contents, :icon, :badge, :count, :createDate, :updateDate)", "free_board");
+		String sql = String.format("INSERT INTO %s (id, writer_id, title, contents, icon, badge, count) VALUES (nextval('BOARD_SEQ'), :writerId, :title, :contents, :icon, :badge, :count)", "free_board");
 
 		SqlParameterSource[] params = list
 				.stream()
@@ -101,9 +102,30 @@ public class FreeBoardRepositoryTest {
 		queryStopWatch.stop();
 		log.info("DB 인서트 시간 : {}", queryStopWatch.getTotalTimeSeconds());
 	}
+
+	@Test
+	public void bulkInsertByJPA(){
+
+		EasyRandom generator = FreeBoardFactory.getFreeBoardEntity();
+
+		StopWatch stopWatch = new StopWatch();
+		stopWatch.start();
+		List<FreeBoard> list = IntStream.range(0, 10000 * 100)
+				.parallel()
+				.mapToObj(i -> generator.nextObject(FreeBoard.class))
+				.collect(Collectors.toList());
+		stopWatch.stop();
+		log.info("객체 생성 시간 : {}", stopWatch.getTotalTimeSeconds());
+
+		StopWatch queryStopWatch = new StopWatch();
+		queryStopWatch.start();
+		freeBoardRepository.saveAll(list);
+		queryStopWatch.stop();
+		log.info("DB 인서트 시간 : {}", queryStopWatch.getTotalTimeSeconds());
+	}
 	
 	@Test
-	@Transactional(readOnly = true)
+	@Transactional
 	public void read() {
 		User user = User.builder()
 				.id(1L)
