@@ -5,26 +5,26 @@ spring:
       path: /h2-console
   #spring.datasource.url=jdbc:h2:~/portfolio;
   datasource:
-    driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/test?rewriteBatchedStatements=true
-    username: postgres
-    password: root
-  #    driver-class-name: org.h2.Driver
+#    driver-class-name: org.h2.Driver
 #    url: jdbc:h2:mem:portfolio;DB_CLOSE_DELAY=-1
 #    username: sa
 #    password:
-#    driver-class-name: com.mysql.cj.jdbc.Driver
-#    url: jdbc:mysql://localhost:3306/test?rewriteBatchedStatements=true&profileSQL=true&logger=Slf4JLogger&maxQuerySizeToLog=999999&useSSL=false&serverTimezone=Asia/Seoul&characterEncoding=UTF-8
-#    username: root
+#    driver-class-name: org.postgresql.Driver
+#    url: jdbc:postgresql://localhost:5432/test?rewriteBatchedInserts=true
+#    username: postgres
 #    password: root
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/test?rewriteBatchedStatements=true&profileSQL=true&logger=Slf4JLogger&maxQuerySizeToLog=999999&useSSL=false&serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+    username: root
+    password: root
 
   jpa:
 #    database-platform: org.hibernate.dialect.H2Dialect
-#    database-platform: org.hibernate.dialect.MySQL8Dialect
-    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    database-platform: org.hibernate.dialect.MySQL8Dialect
+#    database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
-#      ddl-auto: update
-      ddl-auto: create
+      ddl-auto: update
+#      ddl-auto: create
     show-sql: true
     properties:
       hibernate.default_batch_fetch_size: 1000
