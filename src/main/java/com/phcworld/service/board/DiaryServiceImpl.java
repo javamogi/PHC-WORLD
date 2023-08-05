@@ -3,6 +3,10 @@ package com.phcworld.service.board;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.phcworld.domain.board.DiaryResponseDto;
+import com.phcworld.service.user.UserService;
+import com.phcworld.utils.HttpSessionUtils;
+import com.phcworld.utils.PageNationsUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -38,25 +42,30 @@ public class DiaryServiceImpl implements DiaryService {
 	private final TimelineServiceImpl timelineService;
 	
 	private final GoodService goodService;
+
+	private final UserService userService;
 	
 	public List<DiaryResponse> getDiaryResponseList(List<Diary> diaries) {
-//		List<DiaryResponse> diaryResponseList = diaries.stream()
-//				.map(diary -> {
-//					DiaryResponse diaryResponse = DiaryResponse.builder()
-//							.id(diary.getId())
-//							.writer(diary.getWriter())
-//							.title(diary.getTitle())
-//							.contents(diary.getContents())
-//							.thumbnail(diary.getThumbnail())
-//							.countOfAnswers(diary.getCountOfAnswer())
-//							.countOfGood(diary.getCountOfGood())
-//							.updateDate(diary.getFormattedUpdateDate())
-//							.build();
-//					return diaryResponse;
-//				})
-//				.collect(Collectors.toList());
-		List<DiaryResponse> diaryResponseList = diaries.stream().map(DiaryResponse::of).collect(Collectors.toList());
+		List<DiaryResponse> diaryResponseList = diaries.stream()
+				.map(DiaryResponse::of)
+				.collect(Collectors.toList());
 		return diaryResponseList;
+	}
+
+	@Transactional(readOnly = true)
+	public DiaryResponseDto getDiaryResponseListTemp(User loginUser, String email, int pageNum) {
+		User requestUser = userService.findUserByEmail(email);
+
+		Page<Diary> diaryPage = findPageDiary(loginUser, pageNum, requestUser);
+
+		List<DiaryResponse> diaryResponseList = diaryPage.getContent().stream()
+				.map(DiaryResponse::of)
+				.collect(Collectors.toList());
+		DiaryResponseDto diaryResponseDto = DiaryResponseDto.builder()
+				.totalPages(diaryPage.getTotalPages())
+				.diaries(diaryResponseList)
+				.build();
+		return diaryResponseDto;
 	}
 	
 	@Override

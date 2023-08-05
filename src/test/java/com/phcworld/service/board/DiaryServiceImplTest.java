@@ -10,10 +10,14 @@ import static org.mockito.Mockito.when;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
+import com.phcworld.domain.board.DiaryResponseDto;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -29,9 +33,11 @@ import com.phcworld.domain.good.Good;
 import com.phcworld.domain.user.User;
 import com.phcworld.service.board.DiaryServiceImpl;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@SpringBootTest
+//@RunWith(SpringJUnit4ClassRunner.class)
+//@SpringBootTest
+@RunWith(MockitoJUnitRunner.class)
 @Transactional
+@Slf4j
 public class DiaryServiceImplTest {
 	
 	@Mock
@@ -68,6 +74,45 @@ public class DiaryServiceImplTest {
 		Page<Diary> pageDiary = diaryService.findPageDiary(user, 0, user);
 		List<Diary> diaryList = pageDiary.getContent();
 		assertThat(diaryList, hasItems(diary, diary2));
+	}
+
+	@Test
+	public void getDiaryResponseDto() throws Exception {
+		User user = User.builder()
+				.id(1L)
+				.email("test3@test.test")
+				.password("test3")
+				.name("테스트3")
+				.profileImage("blank-profile-picture.png")
+				.authority("ROLE_USER")
+				.createDate(LocalDateTime.now())
+				.build();
+		Diary diary = Diary.builder()
+				.writer(user)
+				.title("title")
+				.contents("content")
+				.thumbnail("no-image-icon.gif")
+				.build();
+		Diary diary2 = Diary.builder()
+				.writer(user)
+				.title("title2")
+				.contents("content2")
+				.thumbnail("no-image-icon.gif")
+				.build();
+		List<Diary> list = new ArrayList<Diary>();
+		list.add(diary);
+		list.add(diary2);
+		Page<Diary> page = new PageImpl<Diary>(list);
+		List<DiaryResponse> diaryResponseList = page.getContent().stream()
+				.map(DiaryResponse::of)
+				.collect(Collectors.toList());
+		DiaryResponseDto diaryResponseDto = DiaryResponseDto.builder()
+				.totalPages(page.getTotalPages())
+				.diaries(diaryResponseList)
+				.build();
+		when(diaryService.getDiaryResponseListTemp(user, user.getEmail(), 1)).thenReturn(diaryResponseDto);
+		DiaryResponseDto dto = diaryService.getDiaryResponseListTemp(user, user.getEmail(), 1);
+		assertThat(dto.getDiaries(), hasItems(DiaryResponse.of(diary), DiaryResponse.of(diary2)));
 	}
 	
 	@Test

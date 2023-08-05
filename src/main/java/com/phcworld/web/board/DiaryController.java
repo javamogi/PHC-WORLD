@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpSession;
 
+import com.phcworld.domain.board.DiaryResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -52,6 +53,24 @@ public class DiaryController {
 			List<Diary> diaries = diaryPage.getContent();
 			List<DiaryResponse> diaryResponseList = diaryService.getDiaryResponseList(diaries);
 			model.addAttribute("diaries", diaryResponseList);
+		}
+
+		model.addAttribute("requestUser", requestUser);
+
+		return "/board/diary/diary";
+	}
+
+	@GetMapping("/list/{email}/temp")
+	public String getDairyListTmp(@PathVariable String email, @RequestParam(defaultValue = "1") Integer pageNum,
+							   Model model, HttpSession session) {
+
+		User loginUser = HttpSessionUtils.getUserFromSession(session);
+		User requestUser = userService.findUserByEmail(email);
+		DiaryResponseDto dto = diaryService.getDiaryResponseListTemp(loginUser, email, pageNum);
+
+		if (dto != null) {
+			PageNationsUtil.viewPageNation("", pageNum, dto.getTotalPages(), model);
+			model.addAttribute("diaries", dto.getDiaries());
 		}
 
 		model.addAttribute("requestUser", requestUser);
