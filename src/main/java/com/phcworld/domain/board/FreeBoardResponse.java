@@ -10,6 +10,7 @@ import com.phcworld.domain.answer.FreeBoardAnswer;
 import com.phcworld.domain.api.model.response.FreeBoardAnswerApiResponse;
 import com.phcworld.domain.user.User;
 
+import com.phcworld.repository.board.dto.FreeBoardSelectDto;
 import lombok.Builder;
 import lombok.Data;
 
@@ -48,6 +49,20 @@ public class FreeBoardResponse {
 				.createDate(freeBoard.getFormattedCreateDate())
 				.count(freeBoard.getCount())
 				.countOfAnswer(freeBoard.getCountOfAnswer())
+				.build();
+	}
+
+	public static FreeBoardResponse of(FreeBoardSelectDto freeBoard){
+		return FreeBoardResponse.builder()
+				.id(freeBoard.getId())
+				.writer(freeBoard.getWriter())
+				.title(freeBoard.getTitle())
+				.contents(freeBoard.getContents())
+				.icon(freeBoard.getIcon())
+				.badge(freeBoard.getBadge())
+				.createDate(freeBoard.getFormattedCreateDate())
+				.count(freeBoard.getCount())
+				.countOfAnswer(freeBoard.getCountOfAnswer().toString())
 				.build();
 	}
 

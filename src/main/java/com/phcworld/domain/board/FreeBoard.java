@@ -26,16 +26,16 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 @EntityListeners(AuditingEntityListener.class)
 @ToString(exclude = {"writer", "freeBoardAnswers"})
-@SequenceGenerator(
-		name = "BOARD_SEQ_GENERATOR",
-		sequenceName = "BOARD_SEQ",
-		initialValue = 1, allocationSize = 10000
-)
+//@SequenceGenerator(
+//		name = "BOARD_SEQ_GENERATOR",
+//		sequenceName = "BOARD_SEQ",
+//		initialValue = 1, allocationSize = 10000
+//)
 public class FreeBoard {
 
 	@Id
-//	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "BOARD_SEQ_GENERATOR")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+//	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "BOARD_SEQ_GENERATOR")
 	private Long id;
 
 	@ManyToOne
@@ -45,8 +45,8 @@ public class FreeBoard {
 
 	private String title;
 
-//	@Lob
-	@Column(nullable = true, columnDefinition = "TEXT")
+	@Lob
+//	@Column(nullable = true, columnDefinition = "TEXT")
 	private String contents;
 
 	private String icon;

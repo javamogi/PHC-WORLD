@@ -8,12 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import com.phcworld.domain.board.FreeBoardRequest;
 import com.phcworld.domain.board.FreeBoardResponse;
@@ -29,8 +24,9 @@ public class FreeBoardController {
 	private final FreeBoardService freeBoardService;
 	
 	@GetMapping("")
-	public String getFreeBoardAllList(Model model) {
-		List<FreeBoardResponse> list = freeBoardService.findFreeBoardAllListAndSetNewBadge();
+	public String getFreeBoardAllList(@RequestParam(defaultValue = "1") int pageNum, @RequestParam(defaultValue = "10") int pageSize, Model model) {
+//		List<FreeBoardResponse> list = freeBoardService.findFreeBoardAllListAndSetNewBadge();
+		List<FreeBoardResponse> list = freeBoardService.getByQuerydsl(pageNum, pageSize);
 		model.addAttribute("freeboards", list);
 		return "/board/freeboard/freeboard";
 	}

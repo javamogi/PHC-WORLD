@@ -19,12 +19,16 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import com.phcworld.domain.board.FreeBoardInsertDto;
+import com.phcworld.repository.board.dto.FreeBoardSelectDto;
 import com.phcworld.util.FreeBoardFactory;
 import org.jeasy.random.EasyRandomParameters;
 import org.junit.Test;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
@@ -91,8 +95,8 @@ public class FreeBoardRepositoryTest {
 		StopWatch queryStopWatch = new StopWatch();
 		queryStopWatch.start();
 
-//		String sql = String.format("INSERT INTO %s (writer_id, title, contents, icon, badge, count, create_date, update_date) VALUES (:writerId, :title, :contents, :icon, :badge, :count, :createDate, :updateDate)", "free_board");
-		String sql = String.format("INSERT INTO %s (id, writer_id, title, contents, icon, badge, count) VALUES (nextval('BOARD_SEQ'), :writerId, :title, :contents, :icon, :badge, :count)", "free_board");
+		String sql = String.format("INSERT INTO %s (writer_id, title, contents, icon, badge, count, create_date, update_date) VALUES (:writerId, :title, :contents, :icon, :badge, :count, :createDate, :updateDate)", "free_board");
+//		String sql = String.format("INSERT INTO %s (id, writer_id, title, contents, icon, badge, count) VALUES (nextval('BOARD_SEQ'), :writerId, :title, :contents, :icon, :badge, :count)", "free_board");
 
 		SqlParameterSource[] params = list
 				.stream()
@@ -104,6 +108,7 @@ public class FreeBoardRepositoryTest {
 	}
 
 	@Test
+	@DisplayName("ID생성 전략이 IDENTITY에서는 사용하면 성능저하")
 	public void bulkInsertByJPA(){
 
 		EasyRandom generator = FreeBoardFactory.getFreeBoardEntity();
@@ -146,6 +151,20 @@ public class FreeBoardRepositoryTest {
 			log.info("freeBoard title : {}", board.getTitle());
 		});
 		assertThat(freeBoardList, hasItems(freeBoard));
+	}
+
+	@Test
+	@Transactional
+	public void readByQuerydsl() {
+		PageRequest pageRequest = PageRequest.of(0, 10, Sort.by("createDate").descending());
+		StopWatch queryStopWatch = new StopWatch();
+		queryStopWatch.start();
+		List<FreeBoardSelectDto> freeBoardList = freeBoardRepository.findAllOrderByCreateDate(pageRequest);
+		queryStopWatch.stop();
+		log.info("DB querydsl SELECT 시간 : {}", queryStopWatch.getTotalTimeSeconds());
+		freeBoardList.stream().forEach(board -> {
+			log.info("freeBoard title : {}", board.getTitle());
+		});
 	}
 	
 	@Test

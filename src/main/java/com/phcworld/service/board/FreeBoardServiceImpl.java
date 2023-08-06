@@ -6,8 +6,11 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import com.phcworld.exception.model.CustomException;
+import com.phcworld.repository.board.dto.FreeBoardSelectDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,6 +38,17 @@ public class FreeBoardServiceImpl implements FreeBoardService {
 	@Override
 	public List<FreeBoardResponse> findFreeBoardAllListAndSetNewBadge() {
 		List<FreeBoard> list = freeBoardRepository.findAll();
+		List<FreeBoardResponse> freeBoardAnswerApiResponseList = list.stream()
+				.map(FreeBoardResponse::of)
+				.collect(Collectors.toList());
+		return freeBoardAnswerApiResponseList;
+	}
+
+	@Transactional(readOnly = true)
+	@Override
+	public List<FreeBoardResponse> getByQuerydsl(int pageNum, int pageSize) {
+		PageRequest pageRequest = PageRequest.of(pageNum - 1, pageSize, Sort.by("createDate").descending());
+		List<FreeBoardSelectDto> list = freeBoardRepository.findAllOrderByCreateDate(pageRequest);
 		List<FreeBoardResponse> freeBoardAnswerApiResponseList = list.stream()
 				.map(FreeBoardResponse::of)
 				.collect(Collectors.toList());
