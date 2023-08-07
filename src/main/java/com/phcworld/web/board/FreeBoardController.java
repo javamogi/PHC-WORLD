@@ -24,9 +24,9 @@ public class FreeBoardController {
 	private final FreeBoardService freeBoardService;
 	
 	@GetMapping("")
-	public String getFreeBoardAllList(@RequestParam(defaultValue = "1") int pageNum, @RequestParam(defaultValue = "10") int pageSize, Model model) {
+	public String getFreeBoardAllList(@RequestParam(defaultValue = "1") int pageNum, @RequestParam(defaultValue = "10") int pageSize, @RequestParam(defaultValue = "") String keyword, Model model) {
 //		List<FreeBoardResponse> list = freeBoardService.findFreeBoardAllListAndSetNewBadge();
-		List<FreeBoardResponse> list = freeBoardService.getByQuerydsl(pageNum, pageSize);
+		List<FreeBoardResponse> list = freeBoardService.getByQuerydsl(pageNum, pageSize, keyword);
 		model.addAttribute("freeboards", list);
 		return "/board/freeboard/freeboard";
 	}

@@ -46,9 +46,9 @@ public class FreeBoardServiceImpl implements FreeBoardService {
 
 	@Transactional(readOnly = true)
 	@Override
-	public List<FreeBoardResponse> getByQuerydsl(int pageNum, int pageSize) {
+	public List<FreeBoardResponse> getByQuerydsl(int pageNum, int pageSize, String keyword) {
 		PageRequest pageRequest = PageRequest.of(pageNum - 1, pageSize, Sort.by("createDate").descending());
-		List<FreeBoardSelectDto> list = freeBoardRepository.findAllOrderByCreateDate(pageRequest);
+		List<FreeBoardSelectDto> list = freeBoardRepository.findAllOrderByCreateDate(keyword, pageRequest);
 		List<FreeBoardResponse> freeBoardAnswerApiResponseList = list.stream()
 				.map(FreeBoardResponse::of)
 				.collect(Collectors.toList());

@@ -159,7 +159,7 @@ public class FreeBoardRepositoryTest {
 		PageRequest pageRequest = PageRequest.of(0, 10, Sort.by("createDate").descending());
 		StopWatch queryStopWatch = new StopWatch();
 		queryStopWatch.start();
-		List<FreeBoardSelectDto> freeBoardList = freeBoardRepository.findAllOrderByCreateDate(pageRequest);
+		List<FreeBoardSelectDto> freeBoardList = freeBoardRepository.findAllOrderByCreateDate("x", pageRequest);
 		queryStopWatch.stop();
 		log.info("DB querydsl SELECT 시간 : {}", queryStopWatch.getTotalTimeSeconds());
 		freeBoardList.stream().forEach(board -> {

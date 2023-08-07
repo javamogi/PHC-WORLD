@@ -49,7 +49,7 @@ public class FreeBoardServiceImplTest {
 	public void findFreeBoardAllListByQuerydsl() throws Exception {
 		StopWatch queryStopWatch = new StopWatch();
 		queryStopWatch.start();
-		List<FreeBoardResponse> list = service.getByQuerydsl(1, 20);
+		List<FreeBoardResponse> list = service.getByQuerydsl(1, 20, "x");
 		queryStopWatch.stop();
 		log.info("DB querydsl SELECT 시간 : {}", queryStopWatch.getTotalTimeSeconds());
 		for (FreeBoardResponse f : list) {

@@ -24,5 +24,5 @@ public interface FreeBoardService {
 	
 	List<FreeBoard> findFreeBoardListByWriter(User loginUser);
 
-	List<FreeBoardResponse> getByQuerydsl(int pageNum, int pageSize);
+	List<FreeBoardResponse> getByQuerydsl(int pageNum, int pageSize, String keyword);
 }
