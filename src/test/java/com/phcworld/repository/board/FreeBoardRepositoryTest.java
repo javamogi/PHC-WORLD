@@ -2,26 +2,18 @@ package com.phcworld.repository.board;
 
 import static org.hamcrest.CoreMatchers.hasItems;
 import static org.hamcrest.CoreMatchers.is;
-import static org.jeasy.random.FieldPredicates.*;
-import static org.jeasy.random.FieldPredicates.inClass;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
 
-import java.lang.reflect.Field;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import com.phcworld.domain.board.FreeBoardInsertDto;
 import com.phcworld.repository.board.dto.FreeBoardSelectDto;
 import com.phcworld.util.FreeBoardFactory;
-import org.jeasy.random.EasyRandomParameters;
 import org.junit.Test;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.runner.RunWith;
@@ -159,7 +151,7 @@ public class FreeBoardRepositoryTest {
 		PageRequest pageRequest = PageRequest.of(0, 10, Sort.by("createDate").descending());
 		StopWatch queryStopWatch = new StopWatch();
 		queryStopWatch.start();
-		List<FreeBoardSelectDto> freeBoardList = freeBoardRepository.findAllOrderByCreateDate("x", pageRequest);
+		List<FreeBoardSelectDto> freeBoardList = freeBoardRepository.findByKeywordOrderById("x", pageRequest);
 		queryStopWatch.stop();
 		log.info("DB querydsl SELECT 시간 : {}", queryStopWatch.getTotalTimeSeconds());
 		freeBoardList.stream().forEach(board -> {

@@ -1,14 +1,11 @@
 package com.phcworld.service.board;
 
-import java.time.Duration;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import com.phcworld.exception.model.CustomException;
 import com.phcworld.repository.board.dto.FreeBoardSelectDto;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -46,9 +43,9 @@ public class FreeBoardServiceImpl implements FreeBoardService {
 
 	@Transactional(readOnly = true)
 	@Override
-	public List<FreeBoardResponse> getByQuerydsl(int pageNum, int pageSize, String keyword) {
+	public List<FreeBoardResponse> getSearchResult(int pageNum, int pageSize, String keyword) {
 		PageRequest pageRequest = PageRequest.of(pageNum - 1, pageSize, Sort.by("createDate").descending());
-		List<FreeBoardSelectDto> list = freeBoardRepository.findAllOrderByCreateDate(keyword, pageRequest);
+		List<FreeBoardSelectDto> list = freeBoardRepository.findByKeywordOrderById(keyword, pageRequest);
 		List<FreeBoardResponse> freeBoardAnswerApiResponseList = list.stream()
 				.map(FreeBoardResponse::of)
 				.collect(Collectors.toList());
