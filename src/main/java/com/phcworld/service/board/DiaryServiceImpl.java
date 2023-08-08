@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import com.phcworld.domain.board.DiaryResponseDto;
+import com.phcworld.exception.model.CustomException;
 import com.phcworld.service.user.UserService;
 import com.phcworld.utils.HttpSessionUtils;
 import com.phcworld.utils.PageNationsUtil;
@@ -31,7 +32,6 @@ import com.phcworld.service.timeline.TimelineServiceImpl;
 
 
 @Service
-@Transactional
 @RequiredArgsConstructor
 public class DiaryServiceImpl implements DiaryService {
 	
@@ -44,7 +44,8 @@ public class DiaryServiceImpl implements DiaryService {
 	private final GoodService goodService;
 
 	private final UserService userService;
-	
+
+	@Transactional(readOnly = true)
 	public List<DiaryResponse> getDiaryResponseList(List<Diary> diaries) {
 		List<DiaryResponse> diaryResponseList = diaries.stream()
 				.map(DiaryResponse::of)
@@ -67,7 +68,8 @@ public class DiaryServiceImpl implements DiaryService {
 				.build();
 		return diaryResponseDto;
 	}
-	
+
+	@Transactional(readOnly = true)
 	@Override
 	public Page<Diary> findPageDiary(User loginUser, Integer pageNum, User requestUser) {
 //		PageRequest pageRequest = PageRequest.of(pageNum - 1, 6, new Sort(Direction.DESC, "id"));
@@ -82,6 +84,7 @@ public class DiaryServiceImpl implements DiaryService {
 		return loginUser == null || !requestUser.matchId(loginUser.getId());
 	}
 
+	@Transactional
 	@Override
 	public DiaryResponse createDiary(User user, DiaryRequest request) {
 		Diary diary = Diary.builder()
@@ -97,22 +100,28 @@ public class DiaryServiceImpl implements DiaryService {
 		return response(diary);
 	}
 
+	@Transactional
 	@Override
 	public DiaryResponse getOneDiary(Long id) {
-		Diary diary = diaryRepository.getOne(id);
+		Diary diary = diaryRepository.findById(id)
+				.orElseThrow(() -> new CustomException("400", "게시물이 존재하지 않습니다."));
 		return response(diary);
 	}
 
+	@Transactional
 	@Override
 	public DiaryResponse updateDiary(DiaryRequest request) {
-		Diary diary = diaryRepository.getOne(request.getId());
+		Diary diary = diaryRepository.findById(request.getId())
+				.orElseThrow(() -> new CustomException("400", "게시물이 존재하지 않습니다."));
 		diary.update(request);
 		return response(diaryRepository.save(diary));
 	}
 
+	@Transactional
 	@Override
 	public void deleteDiary(Long id) {
-		Diary diary = diaryRepository.getOne(id);
+		Diary diary = diaryRepository.findById(id)
+				.orElseThrow(() -> new CustomException("400", "게시물이 존재하지 않습니다."));
 		timelineService.deleteTimeline(diary);
 		List<Good> goodList = diary.getGoodPushedUser();
 		for(int i = 0; i < goodList.size(); i++) {
@@ -127,14 +136,17 @@ public class DiaryServiceImpl implements DiaryService {
 		}
 		diaryRepository.delete(diary);
 	}
-	
+
+	@Transactional(readOnly = true)
 	@Override
 	public List<Diary> findDiaryListByWriter(User loginUser) {
 		return diaryRepository.findByWriter(loginUser);
 	}
-	
+
+	@Transactional
 	public SuccessResponse updateGood(Long diaryId, User loginUser) {
-		Diary diary = diaryRepository.getOne(diaryId);
+		Diary diary = diaryRepository.findById(diaryId)
+				.orElseThrow(() -> new CustomException("400", "게시물이 존재하지 않습니다."));
 		
 		Diary updatedGoodCount = diaryRepository.save(goodService.pushGood(diary, loginUser));
 		
