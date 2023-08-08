@@ -5,6 +5,7 @@ import java.util.List;
 import com.phcworld.domain.board.FreeBoard;
 import com.phcworld.domain.board.FreeBoardRequest;
 import com.phcworld.domain.board.FreeBoardResponse;
+import com.phcworld.domain.board.FreeBoardSearchDto;
 import com.phcworld.domain.user.User;
 
 public interface FreeBoardService {
@@ -23,5 +24,5 @@ public interface FreeBoardService {
 	
 	List<FreeBoard> findFreeBoardListByWriter(User loginUser);
 
-	List<FreeBoardResponse> getSearchResult(int pageNum, int pageSize, String keyword);
+	List<FreeBoardResponse> getSearchResult(FreeBoardSearchDto search);
 }

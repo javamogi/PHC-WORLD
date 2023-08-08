@@ -1,6 +1,7 @@
 package com.phcworld.service.spring;
 
 import com.phcworld.domain.board.FreeBoardResponse;
+import com.phcworld.domain.board.FreeBoardSearchDto;
 import com.phcworld.service.board.FreeBoardService;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
@@ -36,9 +37,13 @@ public class FreeBoardServiceImplTest {
 
 	@Test
 	public void findFreeBoardAllListByQuerydsl() throws Exception {
+		FreeBoardSearchDto search = new FreeBoardSearchDto();
+		search.setPageNum(1);
+		search.setPageSize(30);
+		search.setKeyword("");
 		StopWatch queryStopWatch = new StopWatch();
 		queryStopWatch.start();
-		List<FreeBoardResponse> list = service.getSearchResult(1, 20, "");
+		List<FreeBoardResponse> list = service.getSearchResult(search);
 		queryStopWatch.stop();
 		log.info("DB querydsl SELECT 시간 : {}", queryStopWatch.getTotalTimeSeconds());
 		for (FreeBoardResponse f : list) {

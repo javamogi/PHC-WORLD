@@ -3,6 +3,7 @@ package com.phcworld.service.board;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.phcworld.domain.board.FreeBoardSearchDto;
 import com.phcworld.exception.model.CustomException;
 import com.phcworld.repository.board.dto.FreeBoardSelectDto;
 import lombok.RequiredArgsConstructor;
@@ -43,9 +44,9 @@ public class FreeBoardServiceImpl implements FreeBoardService {
 
 	@Transactional(readOnly = true)
 	@Override
-	public List<FreeBoardResponse> getSearchResult(int pageNum, int pageSize, String keyword) {
-		PageRequest pageRequest = PageRequest.of(pageNum - 1, pageSize, Sort.by("createDate").descending());
-		List<FreeBoardSelectDto> list = freeBoardRepository.findByKeywordOrderById(keyword, pageRequest);
+	public List<FreeBoardResponse> getSearchResult(FreeBoardSearchDto search) {
+		PageRequest pageRequest = PageRequest.of(search.getPageNum() - 1, search.getPageSize(), Sort.by("createDate").descending());
+		List<FreeBoardSelectDto> list = freeBoardRepository.findByKeywordOrderById(search.getKeyword(), pageRequest);
 		List<FreeBoardResponse> freeBoardAnswerApiResponseList = list.stream()
 				.map(FreeBoardResponse::of)
 				.collect(Collectors.toList());

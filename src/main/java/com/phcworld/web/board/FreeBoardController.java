@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpSession;
 
+import com.phcworld.domain.board.FreeBoardSearchDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -27,6 +28,13 @@ public class FreeBoardController {
 	public String getFreeBoardAllList(@RequestParam(defaultValue = "1") int pageNum, @RequestParam(defaultValue = "10") int pageSize, @RequestParam(defaultValue = "") String keyword, Model model) {
 		List<FreeBoardResponse> list = freeBoardService.findFreeBoardAllListAndSetNewBadge();
 //		List<FreeBoardResponse> list = freeBoardService.getByQuerydsl(pageNum, pageSize, keyword);
+		model.addAttribute("freeboards", list);
+		return "/board/freeboard/freeboard";
+	}
+
+	@GetMapping("/temp/test")
+	public String getSearchResult(FreeBoardSearchDto search, Model model) {
+		List<FreeBoardResponse> list = freeBoardService.getSearchResult(search);
 		model.addAttribute("freeboards", list);
 		return "/board/freeboard/freeboard";
 	}
