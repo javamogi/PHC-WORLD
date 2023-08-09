@@ -5,6 +5,7 @@ import java.util.List;
 import javax.servlet.http.HttpSession;
 
 import com.phcworld.domain.board.DiaryResponseDto;
+import com.phcworld.repository.board.dto.DiarySelectDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -46,11 +47,11 @@ public class DiaryController {
 		User loginUser = HttpSessionUtils.getUserFromSession(session);
 		User requestUser = userService.findUserByEmail(email);
 
-		Page<Diary> diaryPage = diaryService.findPageDiary(loginUser, pageNum, requestUser);
+		Page<DiarySelectDto> diaryPage = diaryService.findPageDiary(loginUser, pageNum, requestUser);
 
 		if (diaryPage != null) {
 			PageNationsUtil.viewPageNation("", pageNum, diaryPage.getTotalPages(), model);
-			List<Diary> diaries = diaryPage.getContent();
+			List<DiarySelectDto> diaries = diaryPage.getContent();
 			List<DiaryResponse> diaryResponseList = diaryService.getDiaryResponseList(diaries);
 			model.addAttribute("diaries", diaryResponseList);
 		}

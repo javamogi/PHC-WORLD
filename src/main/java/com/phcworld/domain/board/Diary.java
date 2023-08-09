@@ -3,18 +3,9 @@ package com.phcworld.domain.board;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.EntityListeners;
-import javax.persistence.ForeignKey;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.Lob;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 
+import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -25,10 +16,6 @@ import com.phcworld.domain.good.Good;
 import com.phcworld.domain.user.User;
 import com.phcworld.utils.LocalDateTimeUtils;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
 @Entity
@@ -37,8 +24,9 @@ import lombok.experimental.Accessors;
 @AllArgsConstructor
 @Builder
 @Accessors(chain = true)
-//@ToString(exclude = {"goodPushedUser"})
 @EntityListeners(AuditingEntityListener.class)
+@ToString(exclude = {"writer", "diaryAnswers", "goodPushedUser"})
+@Table(indexes = @Index(name = "idx__create_date", columnList = "createDate"))
 public class Diary {
 
 	@Id

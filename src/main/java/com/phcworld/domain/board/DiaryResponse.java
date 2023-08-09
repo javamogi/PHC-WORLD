@@ -5,6 +5,7 @@ import java.util.List;
 import com.phcworld.domain.api.model.response.DiaryAnswerApiResponse;
 import com.phcworld.domain.user.User;
 
+import com.phcworld.repository.board.dto.DiarySelectDto;
 import lombok.Builder;
 import lombok.Data;
 
@@ -27,7 +28,9 @@ public class DiaryResponse {
 	private Integer countOfGood;
 
 	private String updateDate;
-	
+
+	private String createDate;
+
 	private List<DiaryAnswerApiResponse> diaryAnswerList;
 
 	public static DiaryResponse of(Diary diary){
@@ -40,6 +43,19 @@ public class DiaryResponse {
 				.countOfAnswers(diary.getCountOfAnswer())
 				.countOfGood(diary.getCountOfGood())
 				.updateDate(diary.getFormattedUpdateDate())
+				.build();
+	}
+
+	public static DiaryResponse of(DiarySelectDto diary){
+		return DiaryResponse.builder()
+				.id(diary.getId())
+				.writer(diary.getWriter())
+				.title(diary.getTitle())
+				.thumbnail(diary.getThumbnail())
+				.countOfAnswers(diary.getCountOfAnswers().toString())
+				.countOfGood(diary.getCountOfGood().intValue())
+				.updateDate(diary.getFormattedUpdateDate())
+				.createDate(diary.getFormattedCreateDate())
 				.build();
 	}
 }

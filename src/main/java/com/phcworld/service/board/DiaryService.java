@@ -3,6 +3,7 @@ package com.phcworld.service.board;
 
 import java.util.List;
 
+import com.phcworld.repository.board.dto.DiarySelectDto;
 import org.springframework.data.domain.Page;
 
 import com.phcworld.domain.board.Diary;
@@ -11,7 +12,7 @@ import com.phcworld.domain.board.DiaryResponse;
 import com.phcworld.domain.user.User;
 
 public interface DiaryService {
-	Page<Diary> findPageDiary(User loginUser, Integer pageNum, User requestUser);
+	Page<DiarySelectDto> findPageDiary(User loginUser, Integer pageNum, User requestUser);
 	
 	DiaryResponse createDiary(User user, DiaryRequest diaryRequest);
 	

@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.phcworld.repository.board.dto.DiarySelectDto;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -95,18 +96,18 @@ public class DiaryControllerTest {
 				.contents("test2")
 				.thumbnail("no-image-icon.gif")
 				.build();
-		List<Diary> diaryList = new ArrayList<Diary>();
-		diaryList.add(diary);
-		diaryList.add(diary2);
+		List<DiarySelectDto> diaryList = new ArrayList<DiarySelectDto>();
+		diaryList.add(DiarySelectDto.of(diary));
+		diaryList.add(DiarySelectDto.of(diary2));
 		
-		Page<Diary> page = new PageImpl<Diary>(diaryList);
+		Page<DiarySelectDto> page = new PageImpl<DiarySelectDto>(diaryList);
 		List<Integer> pageNations = new ArrayList<Integer>();
 		pageNations.add(1);
 		
 		
 		when(diaryService.findPageDiary(user, 1, requestUser))
 		.thenReturn(page);
-		Page<Diary> diaryPage = diaryService.findPageDiary(user, 1, requestUser);
+		Page<DiarySelectDto> diaryPage = diaryService.findPageDiary(user, 1, requestUser);
 		
 		List<DiaryResponse> diaryResponseList = diaryPage.getContent().stream()
 				.map(tempDiary -> {
@@ -114,10 +115,9 @@ public class DiaryControllerTest {
 							.id(tempDiary.getId())
 							.writer(tempDiary.getWriter())
 							.title(tempDiary.getTitle())
-							.contents(tempDiary.getContents())
 							.thumbnail(tempDiary.getThumbnail())
-							.countOfAnswers(tempDiary.getCountOfAnswer())
-							.countOfGood(tempDiary.getCountOfGood())
+							.countOfAnswers(tempDiary.getCountOfAnswers() == null ? "0" : tempDiary.getCountOfAnswers().toString())
+							.countOfGood(tempDiary.getCountOfGood().intValue())
 							.updateDate(tempDiary.getFormattedUpdateDate())
 							.build();
 					return diaryResponse;

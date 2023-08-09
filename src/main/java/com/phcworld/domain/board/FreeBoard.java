@@ -26,7 +26,7 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 @EntityListeners(AuditingEntityListener.class)
 @ToString(exclude = {"writer", "freeBoardAnswers"})
-//@Table(name = "free_board", indexes = @Index(name = "idx__create_date", columnList = "createDate"))
+@Table(name = "free_board", indexes = @Index(name = "idx__create_date", columnList = "createDate"))
 //@SequenceGenerator(
 //		name = "BOARD_SEQ_GENERATOR",
 //		sequenceName = "BOARD_SEQ",

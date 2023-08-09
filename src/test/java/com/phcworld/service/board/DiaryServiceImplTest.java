@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import com.phcworld.domain.board.DiaryResponseDto;
+import com.phcworld.repository.board.dto.DiarySelectDto;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -66,14 +67,19 @@ public class DiaryServiceImplTest {
 				.contents("content2")
 				.thumbnail("no-image-icon.gif")
 				.build();
-		List<Diary> list = new ArrayList<Diary>();
-		list.add(diary);
-		list.add(diary2);
-		Page<Diary> page = new PageImpl<Diary>(list);
+//		List<Diary> list = new ArrayList<Diary>();
+//		list.add(diary);
+//		list.add(diary2);
+//		Page<Diary> page = new PageImpl<Diary>(list);
+		List<DiarySelectDto> list = new ArrayList<DiarySelectDto>();
+		list.add(DiarySelectDto.of(diary));
+		list.add(DiarySelectDto.of(diary2));
+
+		Page<DiarySelectDto> page = new PageImpl<DiarySelectDto>(list);
 		when(diaryService.findPageDiary(user, 0, user)).thenReturn(page);
-		Page<Diary> pageDiary = diaryService.findPageDiary(user, 0, user);
-		List<Diary> diaryList = pageDiary.getContent();
-		assertThat(diaryList, hasItems(diary, diary2));
+		Page<DiarySelectDto> pageDiary = diaryService.findPageDiary(user, 0, user);
+		List<DiarySelectDto> diaryList = pageDiary.getContent();
+		assertThat(diaryList, hasItems(DiarySelectDto.of(diary), DiarySelectDto.of(diary2)));
 	}
 
 	@Test

@@ -36,6 +36,7 @@ public class FreeBoardRepositoryCustomImpl implements FreeBoardRepositoryCustom{
                         user.name.contains(keyword))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
+                .orderBy(freeBoard.createDate.desc())
 //                .orderBy(freeBoard.id.desc())
                 .fetch();
 

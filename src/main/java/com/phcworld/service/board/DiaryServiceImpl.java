@@ -5,6 +5,7 @@ import java.util.stream.Collectors;
 
 import com.phcworld.domain.board.DiaryResponseDto;
 import com.phcworld.exception.model.CustomException;
+import com.phcworld.repository.board.dto.DiarySelectDto;
 import com.phcworld.service.user.UserService;
 import com.phcworld.utils.HttpSessionUtils;
 import com.phcworld.utils.PageNationsUtil;
@@ -45,8 +46,7 @@ public class DiaryServiceImpl implements DiaryService {
 
 	private final UserService userService;
 
-	@Transactional(readOnly = true)
-	public List<DiaryResponse> getDiaryResponseList(List<Diary> diaries) {
+	public List<DiaryResponse> getDiaryResponseList(List<DiarySelectDto> diaries) {
 		List<DiaryResponse> diaryResponseList = diaries.stream()
 				.map(DiaryResponse::of)
 				.collect(Collectors.toList());
@@ -57,7 +57,7 @@ public class DiaryServiceImpl implements DiaryService {
 	public DiaryResponseDto getDiaryResponseListTemp(User loginUser, String email, int pageNum) {
 		User requestUser = userService.findUserByEmail(email);
 
-		Page<Diary> diaryPage = findPageDiary(loginUser, pageNum, requestUser);
+		Page<DiarySelectDto> diaryPage = findPageDiary(loginUser, pageNum, requestUser);
 
 		List<DiaryResponse> diaryResponseList = diaryPage.getContent().stream()
 				.map(DiaryResponse::of)
@@ -71,13 +71,13 @@ public class DiaryServiceImpl implements DiaryService {
 
 	@Transactional(readOnly = true)
 	@Override
-	public Page<Diary> findPageDiary(User loginUser, Integer pageNum, User requestUser) {
+	public Page<DiarySelectDto> findPageDiary(User loginUser, Integer pageNum, User requestUser) {
 //		PageRequest pageRequest = PageRequest.of(pageNum - 1, 6, new Sort(Direction.DESC, "id"));
 		PageRequest pageRequest = PageRequest.of(pageNum - 1, 6, Sort.by("id").descending());
 		if(isLoginUser(loginUser, requestUser)) {
-			return diaryRepository.findByWriter(requestUser, pageRequest);
+			return diaryRepository.findAllPage(requestUser, pageRequest);
 		}
-		return diaryRepository.findByWriter(loginUser, pageRequest);
+		return diaryRepository.findAllPage(loginUser, pageRequest);
 	}
 
 	private boolean isLoginUser(User loginUser, User requestUser) {
