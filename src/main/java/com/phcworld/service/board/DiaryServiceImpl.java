@@ -46,13 +46,6 @@ public class DiaryServiceImpl implements DiaryService {
 
 	private final UserService userService;
 
-	public List<DiaryResponse> getDiaryResponseList(List<DiarySelectDto> diaries) {
-		List<DiaryResponse> diaryResponseList = diaries.stream()
-				.map(DiaryResponse::of)
-				.collect(Collectors.toList());
-		return diaryResponseList;
-	}
-
 	@Transactional(readOnly = true)
 	public DiaryResponseDto getDiaryResponseListTemp(User loginUser, String email, int pageNum) {
 		User requestUser = userService.findUserByEmail(email);

@@ -1,6 +1,7 @@
 package com.phcworld.web.board;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpSession;
 
@@ -52,7 +53,9 @@ public class DiaryController {
 		if (diaryPage != null) {
 			PageNationsUtil.viewPageNation("", pageNum, diaryPage.getTotalPages(), model);
 			List<DiarySelectDto> diaries = diaryPage.getContent();
-			List<DiaryResponse> diaryResponseList = diaryService.getDiaryResponseList(diaries);
+			List<DiaryResponse> diaryResponseList = diaries.stream()
+					.map(DiaryResponse::of)
+					.collect(Collectors.toList());
 			model.addAttribute("diaries", diaryResponseList);
 		}
 

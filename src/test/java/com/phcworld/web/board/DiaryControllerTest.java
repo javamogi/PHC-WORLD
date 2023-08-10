@@ -88,6 +88,8 @@ public class DiaryControllerTest {
 				.title("test")
 				.contents("test")
 				.thumbnail("no-image-icon.gif")
+				.createDate(LocalDateTime.now())
+				.updateDate(LocalDateTime.now())
 				.build();
 		Diary diary2 = Diary.builder()
 				.id(2L)
@@ -95,6 +97,8 @@ public class DiaryControllerTest {
 				.title("test2")
 				.contents("test2")
 				.thumbnail("no-image-icon.gif")
+				.createDate(LocalDateTime.now())
+				.updateDate(LocalDateTime.now())
 				.build();
 		List<DiarySelectDto> diaryList = new ArrayList<DiarySelectDto>();
 		diaryList.add(DiarySelectDto.of(diary));
@@ -110,23 +114,10 @@ public class DiaryControllerTest {
 		Page<DiarySelectDto> diaryPage = diaryService.findPageDiary(user, 1, requestUser);
 		
 		List<DiaryResponse> diaryResponseList = diaryPage.getContent().stream()
-				.map(tempDiary -> {
-					DiaryResponse diaryResponse = DiaryResponse.builder()
-							.id(tempDiary.getId())
-							.writer(tempDiary.getWriter())
-							.title(tempDiary.getTitle())
-							.thumbnail(tempDiary.getThumbnail())
-							.countOfAnswers(tempDiary.getCountOfAnswers() == null ? "0" : tempDiary.getCountOfAnswers().toString())
-							.countOfGood(tempDiary.getCountOfGood().intValue())
-							.updateDate(tempDiary.getFormattedUpdateDate())
-							.build();
-					return diaryResponse;
-				})
+				.map(DiaryResponse::of)
 				.collect(Collectors.toList());
 		
-		when(diaryService.getDiaryResponseList(diaryList))
-		.thenReturn(diaryResponseList);
-		
+
 		this.mvc.perform(get("/diaries/list/{email}", "test@test.test")
 				.session(mockSession))
 		.andDo(print())

@@ -52,8 +52,8 @@ public class DiaryResponse {
 				.writer(diary.getWriter())
 				.title(diary.getTitle())
 				.thumbnail(diary.getThumbnail())
-				.countOfAnswers(diary.getCountOfAnswers().toString())
-				.countOfGood(diary.getCountOfGood().intValue())
+				.countOfAnswers(diary.getCountOfAnswers() != null ? diary.getCountOfAnswers().toString() : "0")
+				.countOfGood(diary.getCountOfGood() != null ? diary.getCountOfGood().intValue() : 0)
 				.updateDate(diary.getFormattedUpdateDate())
 				.createDate(diary.getFormattedCreateDate())
 				.build();
