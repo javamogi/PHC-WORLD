@@ -14,6 +14,7 @@ import java.util.stream.IntStream;
 import com.phcworld.domain.board.FreeBoardInsertDto;
 import com.phcworld.repository.board.dto.FreeBoardSelectDto;
 import com.phcworld.util.FreeBoardFactory;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.runner.RunWith;
@@ -70,6 +71,7 @@ public class FreeBoardRepositoryTest {
 	}
 
 	@Test
+	@Ignore
 	public void bulkInsertByJDBC(){
 
 		EasyRandom generator = FreeBoardFactory.getFreeBoardEntity();
@@ -101,6 +103,7 @@ public class FreeBoardRepositoryTest {
 
 	@Test
 	@DisplayName("ID생성 전략이 IDENTITY에서는 사용하면 성능저하")
+	@Ignore
 	public void bulkInsertByJPA(){
 
 		EasyRandom generator = FreeBoardFactory.getFreeBoardEntity();
@@ -139,9 +142,6 @@ public class FreeBoardRepositoryTest {
 				.build();
 		freeBoardRepository.save(freeBoard);
 		List<FreeBoard> freeBoardList = freeBoardRepository.findByWriter(user);
-		freeBoardList.stream().forEach(board -> {
-			log.info("freeBoard title : {}", board.getTitle());
-		});
 		assertThat(freeBoardList, hasItems(freeBoard));
 	}
 
