@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 import com.phcworld.domain.board.DiaryResponseDto;
 import com.phcworld.exception.model.CustomException;
 import com.phcworld.repository.board.dto.DiarySelectDto;
+import com.phcworld.repository.user.UserRepository;
 import com.phcworld.service.user.UserService;
 import com.phcworld.utils.HttpSessionUtils;
 import com.phcworld.utils.PageNationsUtil;
@@ -46,6 +47,8 @@ public class DiaryServiceImpl implements DiaryService {
 
 	private final UserService userService;
 
+	private final UserRepository userRepository;
+
 	@Transactional(readOnly = true)
 	public DiaryResponseDto getDiaryResponseListTemp(User loginUser, String email, int pageNum) {
 		User requestUser = userService.findUserByEmail(email);
@@ -71,6 +74,19 @@ public class DiaryServiceImpl implements DiaryService {
 			return diaryRepository.findAllPage(requestUser, pageRequest);
 		}
 		return diaryRepository.findAllPage(loginUser, pageRequest);
+	}
+
+	@Transactional(readOnly = true)
+	public DiaryResponseDto findPageDiaryTemp2(User requestUser, Integer pageNum) {
+		PageRequest pageRequest = PageRequest.of(pageNum - 1, 6, Sort.by("id").descending());
+		Page<DiarySelectDto> page = diaryRepository.findAllPage(requestUser, pageRequest);
+		List<DiaryResponse> list = page.getContent().stream()
+				.map(DiaryResponse::of)
+				.collect(Collectors.toList());
+		return DiaryResponseDto.builder()
+				.diaries(list)
+				.totalPages(page.getTotalPages())
+				.build();
 	}
 
 	private boolean isLoginUser(User loginUser, User requestUser) {

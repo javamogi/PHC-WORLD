@@ -82,6 +82,22 @@ public class DiaryController {
 		return "/board/diary/diary";
 	}
 
+	@GetMapping("/list/{email}/temp2")
+	public String getDairyListTmp2(@PathVariable String email, @RequestParam(defaultValue = "1") Integer pageNum,
+							   Model model, HttpSession session) {
+		User requestUser = userService.findUserByEmail(email);
+		DiaryResponseDto dto = diaryService.findPageDiaryTemp2(requestUser, pageNum);
+
+		if (!dto.getDiaries().isEmpty()) {
+			PageNationsUtil.viewPageNation("", pageNum, dto.getTotalPages(), model);
+			model.addAttribute("diaries", dto.getDiaries());
+		}
+
+		model.addAttribute("requestUser", requestUser);
+
+		return "/board/diary/diary";
+	}
+
 	@GetMapping("/form")
 	public String form(HttpSession session, Model model) {
 		if (!HttpSessionUtils.isLoginUser(session)) {
