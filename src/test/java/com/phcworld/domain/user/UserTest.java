@@ -1,8 +1,8 @@
 package com.phcworld.domain.user;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 import java.util.Set;
@@ -45,7 +45,8 @@ public class UserTest {
 				.name("lombok")
 				.authority("ROLE_USER")
 				.build();
-		assertThat(user, is(test));
+		assertThat(user)
+				.isEqualTo(test);
 	}
 
 	@Test
@@ -58,7 +59,7 @@ public class UserTest {
 		for (ConstraintViolation<User> constraintViolation : constraintViolations) {
 			log.debug("violation error message : {}", constraintViolation.getMessage());
 		}
-		assertThat(constraintViolations.size(), is(1));
+		assertThat(constraintViolations.size()).isEqualTo(1);
 	}
 
 	@Test
@@ -69,7 +70,7 @@ public class UserTest {
 				.name("테스트")
 				.build();
 		Set<ConstraintViolation<User>> constraintViolations = validator.validate(user);
-		assertThat(constraintViolations.size(), is(1));
+		assertThat(constraintViolations.size()).isEqualTo(1);
 		for (ConstraintViolation<User> constraintViolation : constraintViolations) {
 			log.debug("violation error message : {}", constraintViolation.getMessage());
 		}
@@ -106,7 +107,7 @@ public class UserTest {
 		for (ConstraintViolation<User> constraintViolation : constraintViolations) {
 			log.debug("violation error message : {}", constraintViolation.getMessage());
 		}
-		assertThat(constraintViolations.size(), is(1));
+		assertThat(constraintViolations.size()).isEqualTo(1);
 	}
 	
 	@Test
@@ -117,7 +118,7 @@ public class UserTest {
 				.name("테스트")
 				.build();
 		Set<ConstraintViolation<User>> constraintViolations = validator.validate(user);
-		assertThat(constraintViolations.size(), is(1));
+		assertThat(constraintViolations.size()).isEqualTo(1);
 		for (ConstraintViolation<User> constraintViolation : constraintViolations) {
 			log.debug("violation error message : {}", constraintViolation.getMessage());
 		}
@@ -134,7 +135,7 @@ public class UserTest {
 		for (ConstraintViolation<User> constraintViolation : constraintViolations) {
 			log.debug("violation error message : {}", constraintViolation.getMessage());
 		}
-		assertThat(constraintViolations.size(), is(1));
+		assertThat(constraintViolations.size()).isEqualTo(1);
 	}
 	@Test
 	public void createWhenIsNotSizeName() throws Exception {
@@ -144,7 +145,7 @@ public class UserTest {
 				.name("테")
 				.build();
 		Set<ConstraintViolation<User>> constraintViolations = validator.validate(shortNameUser);
-		assertThat(constraintViolations.size(), is(1));
+		assertThat(constraintViolations.size()).isEqualTo(1);
 		for (ConstraintViolation<User> constraintViolation : constraintViolations) {
 			log.debug("violation error message : {}", constraintViolation.getMessage());
 		}
@@ -155,7 +156,7 @@ public class UserTest {
 				.name("테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트")
 				.build(); 
 		constraintViolations = validator.validate(longNameUser);
-		assertThat(constraintViolations.size(), is(1));
+		assertThat(constraintViolations.size()).isEqualTo(1);
 		for (ConstraintViolation<User> constraintViolation : constraintViolations) {
 			log.debug("violation error message : {}", constraintViolation.getMessage());
 		}
@@ -170,7 +171,7 @@ public class UserTest {
 				.name("alert('dgdg')")
 				.build();
 		Set<ConstraintViolation<User>> constraintViolations = validator.validate(user);
-		assertThat(constraintViolations.size(), is(1));
+		assertThat(constraintViolations.size()).isEqualTo(1);
 		for (ConstraintViolation<User> constraintViolation : constraintViolations) {
 			log.debug("violation error message : {}", constraintViolation.getMessage());
 		}
@@ -195,6 +196,6 @@ public class UserTest {
 				.email("pakoh200@naver.com")
 				.build();
 		me.ifMeSetAdmin();
-		assertThat(me.getAuthority(), is("ROLE_ADMIN"));
+		assertThat(me.getAuthority()).isEqualTo("ROLE_ADMIN");
 	}
 }
