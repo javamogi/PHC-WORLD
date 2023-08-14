@@ -12,7 +12,6 @@ import java.util.stream.IntStream;
 import com.phcworld.domain.board.*;
 import com.phcworld.repository.board.dto.DiarySelectDto;
 import com.phcworld.util.DiaryFactory;
-import com.phcworld.util.FreeBoardFactory;
 import lombok.extern.slf4j.Slf4j;
 import org.jeasy.random.EasyRandom;
 import org.junit.Ignore;
@@ -23,12 +22,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.domain.Sort.Direction;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.phcworld.domain.user.User;
 import org.springframework.util.StopWatch;
@@ -68,7 +65,7 @@ public class DiaryRepositoryTest {
 	@Ignore
 	public void bulkInsert(){
 
-		EasyRandom generator = DiaryFactory.getDiaryEntity();
+		EasyRandom generator = DiaryFactory.getDiaryRandomEntity();
 
 		StopWatch stopWatch = new StopWatch();
 		stopWatch.start();

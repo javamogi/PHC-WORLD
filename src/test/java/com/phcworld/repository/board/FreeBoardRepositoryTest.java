@@ -74,7 +74,7 @@ public class FreeBoardRepositoryTest {
 	@Ignore
 	public void bulkInsertByJDBC(){
 
-		EasyRandom generator = FreeBoardFactory.getFreeBoardEntity();
+		EasyRandom generator = FreeBoardFactory.getFreeBoardRandomEntity();
 
 		StopWatch stopWatch = new StopWatch();
 		stopWatch.start();
@@ -106,7 +106,7 @@ public class FreeBoardRepositoryTest {
 	@Ignore
 	public void bulkInsertByJPA(){
 
-		EasyRandom generator = FreeBoardFactory.getFreeBoardEntity();
+		EasyRandom generator = FreeBoardFactory.getFreeBoardRandomEntity();
 
 		StopWatch stopWatch = new StopWatch();
 		stopWatch.start();
