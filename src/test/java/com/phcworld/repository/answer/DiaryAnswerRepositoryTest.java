@@ -1,11 +1,13 @@
 package com.phcworld.repository.answer;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.*;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
 
+import com.phcworld.exception.model.CustomException;
+import com.phcworld.util.DiaryFactory;
+import lombok.extern.slf4j.Slf4j;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,10 +20,14 @@ import com.phcworld.domain.board.Diary;
 import com.phcworld.domain.user.User;
 import com.phcworld.repository.board.DiaryRepository;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.*;
+
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest
 @Transactional
+@Slf4j
 public class DiaryAnswerRepositoryTest {
 	
 	@Autowired
@@ -30,25 +36,22 @@ public class DiaryAnswerRepositoryTest {
 	@Autowired
 	private DiaryAnswerRepository diaryAnswerRepository;
 
+	private User user;
+	private Diary diary;
+
+	@Before
+	public void setup(){
+		user = User.builder()
+				.id(1L)
+				.build();
+		diary = diaryRepository.save(DiaryFactory.getDiaryEntity(user));
+	}
+
 	@Test
 	public void create() {
-		User writer = User.builder()
-				.id(1L)
-				.email("user@test.test")
-				.password("user")
-				.name("user")
-				.build();
-		Diary diary = Diary.builder()
-				.writer(writer)
-				.title("title")
-				.contents("content")
-				.thumbnail("no-image-icon.gif")
-				.createDate(LocalDateTime.now())
-				.build();
-		Diary createdDiary = diaryRepository.save(diary);
 		DiaryAnswer answer = DiaryAnswer.builder()
-				.writer(writer)
-				.diary(createdDiary)
+				.writer(user)
+				.diary(diary)
 				.contents("diary answer content")
 				.build();
 		DiaryAnswer createdAnswer = diaryAnswerRepository.save(answer);
@@ -57,76 +60,41 @@ public class DiaryAnswerRepositoryTest {
 	
 	@Test
 	public void read() {
-		User writer = User.builder()
-				.id(1L)
-				.email("user@test.test")
-				.password("user")
-				.name("user")
-				.build();
-		Diary diary = Diary.builder()
-				.writer(writer)
-				.title("title")
-				.contents("content")
-				.thumbnail("no-image-icon.gif")
-				.createDate(LocalDateTime.now())
-				.build();
-		Diary createdDiary = diaryRepository.save(diary);
 		DiaryAnswer answer = DiaryAnswer.builder()
-				.writer(writer)
-				.diary(createdDiary)
+				.writer(user)
+				.diary(diary)
 				.contents("diary answer content")
 				.build();
 		DiaryAnswer createdAnswer = diaryAnswerRepository.save(answer);
-		DiaryAnswer actual = diaryAnswerRepository.getOne(createdAnswer.getId());
-		assertThat(actual, is(createdAnswer));
+		DiaryAnswer actual = diaryAnswerRepository.findById(createdAnswer.getId())
+				.orElseThrow(() -> new CustomException("400", "게시물이 존재하지 않습니다."));
+		assertThat(actual).isEqualTo(createdAnswer);
+	}
+
+	@Test(expected = CustomException.class)
+	public void read_throw_exception() {
+		diaryAnswerRepository.findById(1L)
+				.orElseThrow(() -> new CustomException("400", "게시물이 존재하지 않습니다."));
 	}
 	
 	@Test
 	public void update() {
-		User writer = User.builder()
-				.id(1L)
-				.email("user@test.test")
-				.password("user")
-				.name("user")
-				.build();
-		Diary diary = Diary.builder()
-				.writer(writer)
-				.title("title")
-				.contents("content")
-				.thumbnail("no-image-icon.gif")
-				.createDate(LocalDateTime.now())
-				.build();
-		Diary createdDiary = diaryRepository.save(diary);
 		DiaryAnswer answer = DiaryAnswer.builder()
-				.writer(writer)
-				.diary(createdDiary)
+				.writer(user)
+				.diary(diary)
 				.contents("diary answer content")
 				.build();
 		DiaryAnswer createdAnswer = diaryAnswerRepository.save(answer);
 		createdAnswer.setContents("update content");
 		DiaryAnswer updatedAnswer = diaryAnswerRepository.save(createdAnswer);
-		assertThat("update content", is(updatedAnswer.getContents()));
+		assertThat("update content").isEqualTo(updatedAnswer.getContents());
 	}
 	
 	@Test
 	public void delete() {
-		User writer = User.builder()
-				.id(1L)
-				.email("user@test.test")
-				.password("user")
-				.name("user")
-				.build();
-		Diary diary = Diary.builder()
-				.writer(writer)
-				.title("title")
-				.contents("content")
-				.thumbnail("no-image-icon.gif")
-				.createDate(LocalDateTime.now())
-				.build();
-		Diary createdDiary = diaryRepository.save(diary);
 		DiaryAnswer answer = DiaryAnswer.builder()
-				.writer(writer)
-				.diary(createdDiary)
+				.writer(user)
+				.diary(diary)
 				.contents("diary answer content")
 				.build();
 		DiaryAnswer createdAnswer = diaryAnswerRepository.save(answer);
