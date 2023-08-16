@@ -1,10 +1,5 @@
 package com.phcworld.repository.board;
 
-import static org.hamcrest.CoreMatchers.hasItems;
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertThat;
 
 import java.util.List;
 import java.util.Optional;
@@ -12,6 +7,7 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import com.phcworld.domain.board.FreeBoardInsertDto;
+import com.phcworld.exception.model.CustomException;
 import com.phcworld.repository.board.dto.FreeBoardSelectDto;
 import com.phcworld.util.FreeBoardFactory;
 import org.junit.Ignore;
@@ -36,6 +32,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.jeasy.random.EasyRandom;
 import org.springframework.util.StopWatch;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest
 //@Transactional
@@ -48,16 +48,17 @@ public class FreeBoardRepositoryTest {
 	@Autowired
 	private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
+	private User user;
+
+	public void setup(){
+		user = User.builder()
+				.id(1L)
+				.build();
+	}
 	
 	@Test
-//	@Transactional
+	@Transactional
 	public void create() {
-		User user = User.builder()
-				.id(1L)
-				.email("user@test.test")
-				.password("user")
-				.name("user")
-				.build();
 		FreeBoard freeBoard = FreeBoard.builder()
 				.writer(user)
 				.title("title")
@@ -65,7 +66,6 @@ public class FreeBoardRepositoryTest {
 				.icon("")
 				.count(0)
 				.build();
-		log.info("freeBoard : {}", freeBoard);
 		FreeBoard newFreeBoard =  freeBoardRepository.save(freeBoard);
 		assertNotNull(newFreeBoard);
 	}
@@ -127,12 +127,6 @@ public class FreeBoardRepositoryTest {
 	@Test
 	@Transactional
 	public void read() {
-		User user = User.builder()
-				.id(1L)
-				.email("user@test.test")
-				.password("user")
-				.name("user")
-				.build();
 		FreeBoard freeBoard = FreeBoard.builder()
 				.writer(user)
 				.title("title")
@@ -142,11 +136,10 @@ public class FreeBoardRepositoryTest {
 				.build();
 		freeBoardRepository.save(freeBoard);
 		List<FreeBoard> freeBoardList = freeBoardRepository.findByWriter(user);
-		assertThat(freeBoardList, hasItems(freeBoard));
+		assertThat(freeBoardList).contains(freeBoard);
 	}
 
 	@Test
-	@Transactional
 	public void readByQuerydsl() {
 		PageRequest pageRequest = PageRequest.of(0, 10, Sort.by("createDate").descending());
 		StopWatch queryStopWatch = new StopWatch();
@@ -158,16 +151,16 @@ public class FreeBoardRepositoryTest {
 			log.info("freeBoard title : {}", board.getTitle());
 		});
 	}
+
+	@Test(expected = CustomException.class)
+	public void read_throw_exception(){
+		freeBoardRepository.findById(5L)
+				.orElseThrow(() -> new CustomException("400", "게시물이 존재하지 않습니다."));
+	}
 	
 	@Test
 	@Transactional
 	public void update() {
-		User user = User.builder()
-				.id(1L)
-				.email("user@test.test")
-				.password("user")
-				.name("user")
-				.build();
 		FreeBoard freeBoard = FreeBoard.builder()
 				.writer(user)
 				.title("title")
@@ -181,21 +174,16 @@ public class FreeBoardRepositoryTest {
 				.icon("")
 				.build();
 		FreeBoard newBoard = freeBoardRepository.save(freeBoard);
-		FreeBoard regitBoard = freeBoardRepository.getOne(newBoard.getId());
-		regitBoard.update(request);
-		FreeBoard updatedBoard = freeBoardRepository.save(regitBoard);
-		assertThat(request.getContents(), is(updatedBoard.getContents()));
+		FreeBoard register = freeBoardRepository.findById(newBoard.getId())
+				.orElseThrow(() -> new CustomException("400", "게시물이 존재하지 않습니다."));
+		register.update(request);
+		FreeBoard updatedBoard = freeBoardRepository.save(register);
+		assertThat(request.getContents()).isEqualTo(updatedBoard.getContents());
 	}
 	
 	@Test
 	@Transactional
 	public void delete() {
-		User user = User.builder()
-				.id(1L)
-				.email("user@test.test")
-				.password("user")
-				.name("user")
-				.build();
 		FreeBoard freeBoard = FreeBoard.builder()
 				.writer(user)
 				.title("title")
