@@ -1,15 +1,11 @@
 package com.phcworld.repository.board;
 
-import static org.hamcrest.CoreMatchers.hasItems;
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.*;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
-
-import com.phcworld.domain.board.*;
+import com.phcworld.domain.board.Diary;
+import com.phcworld.domain.board.DiaryInsertDto;
+import com.phcworld.domain.board.DiaryRequest;
+import com.phcworld.domain.board.DiaryResponse;
+import com.phcworld.domain.user.User;
 import com.phcworld.repository.board.dto.DiarySelectDto;
 import com.phcworld.util.DiaryFactory;
 import lombok.extern.slf4j.Slf4j;
@@ -26,9 +22,17 @@ import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-
-import com.phcworld.domain.user.User;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StopWatch;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -43,16 +47,19 @@ public class DiaryRepositoryTest {
 	@Autowired
 	private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
-	@Test
-	public void create() {
-		User writer = User.builder()
+	private User user;
+
+	public void setup(){
+		user = User.builder()
 				.id(1L)
-				.email("user@test.test")
-				.password("user")
-				.name("user")
 				.build();
+	}
+
+	@Test
+	@Transactional
+	public void create() {
 		Diary diary = Diary.builder()
-				.writer(writer)
+				.writer(user)
 				.title("title")
 				.contents("content")
 				.thumbnail("no-image-icon.gif")
@@ -92,15 +99,10 @@ public class DiaryRepositoryTest {
 	}
 	
 	@Test
+	@Transactional
 	public void read() {
-		User writer = User.builder()
-				.id(1L)
-				.email("user@test.test")
-				.password("user")
-				.name("user")
-				.build();
 		Diary diary = Diary.builder()
-				.writer(writer)
+				.writer(user)
 				.title("title")
 				.contents("content")
 				.thumbnail("no-image-icon.gif")
@@ -108,27 +110,22 @@ public class DiaryRepositoryTest {
 		diaryRepository.save(diary);
 //		PageRequest pageRequest = PageRequest.of(0, 6, new Sort(Direction.DESC, "id"));
 		PageRequest pageRequest = PageRequest.of(0, 6, Sort.by("id").descending());
-		Page<Diary> diaryPage = diaryRepository.findByWriter(writer, pageRequest);
+		Page<Diary> diaryPage = diaryRepository.findByWriter(user, pageRequest);
 		List<Diary> diaryList = diaryPage.getContent();
-//		assertThat(diaryList, hasItems(diary));
+		assertThat(diaryList).contains(diary);
 	}
 	
 	@Test
+	@Transactional
 	public void update() {
-		User writer = User.builder()
-				.id(1L)
-				.email("user@test.test")
-				.password("user")
-				.name("user")
-				.build();
 		Diary diary = Diary.builder()
-				.writer(writer)
+				.writer(user)
 				.title("title")
 				.contents("content")
 				.thumbnail("no-image-icon.gif")
 				.build();
 		Diary newDiary = Diary.builder()
-				.writer(writer)
+				.writer(user)
 				.title("title")
 				.contents("update content")
 				.thumbnail("test.jpg")
@@ -142,20 +139,15 @@ public class DiaryRepositoryTest {
 		
 		diary.update(request);
 		Diary updatedDiary = diaryRepository.save(diary);
-		assertThat("update content", is(updatedDiary.getContents()));
-		assertThat("test.jpg", is(updatedDiary.getThumbnail()));
+		assertThat("update content").isEqualTo(updatedDiary.getContents());
+		assertThat("test.jpg").isEqualTo(updatedDiary.getThumbnail());
 	}
 	
 	@Test
+	@Transactional
 	public void delete() {
-		User writer = User.builder()
-				.id(1L)
-				.email("user@test.test")
-				.password("user")
-				.name("user")
-				.build();
 		Diary diary = Diary.builder()
-				.writer(writer)
+				.writer(user)
 				.title("title")
 				.contents("content")
 				.thumbnail("no-image-icon.gif")
@@ -168,14 +160,8 @@ public class DiaryRepositoryTest {
 
 	@Test
 	public void findAllByQuerydsl(){
-		User writer = User.builder()
-				.id(1L)
-				.email("user@test.test")
-				.password("user")
-				.name("user")
-				.build();
 		Diary diary = Diary.builder()
-				.writer(writer)
+				.writer(user)
 				.title("title")
 				.contents("content")
 				.thumbnail("no-image-icon.gif")
@@ -184,13 +170,16 @@ public class DiaryRepositoryTest {
 		PageRequest pageRequest = PageRequest.of(0, 10, Sort.by("createDate").descending());
 		StopWatch queryStopWatch = new StopWatch();
 		queryStopWatch.start();
-		Page<DiarySelectDto> diaryPage = diaryRepository.findAllPage(writer, pageRequest);
+		Page<DiarySelectDto> diaryPage = diaryRepository.findAllPage(user, pageRequest);
 		queryStopWatch.stop();
 		log.info("DB querydsl SELECT 시간 : {}", queryStopWatch.getTotalTimeSeconds());
-//		List<DiaryResponse> diaryList = diaryPage.getContent().stream()
-//				.map(DiaryResponse::of)
-//				.collect(Collectors.toList());
-//		log.info("list : {}", diaryList);
+
+		List<DiarySelectDto> list = diaryPage.getContent();
+		List<DiaryResponse> responseList = list.stream()
+						.map(DiaryResponse::of)
+						.collect(Collectors.toList());
+		assertThat(responseList.get(0).getTitle())
+				.isEqualTo(diary.getTitle());
 	}
 
 }
