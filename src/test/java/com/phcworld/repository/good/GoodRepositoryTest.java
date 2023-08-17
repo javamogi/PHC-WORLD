@@ -1,13 +1,12 @@
 package com.phcworld.repository.good;
 
-import static org.hamcrest.CoreMatchers.hasItem;
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.*;
 
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Optional;
-
+import com.phcworld.domain.board.Diary;
+import com.phcworld.domain.good.Good;
+import com.phcworld.domain.user.User;
+import com.phcworld.repository.board.DiaryRepository;
+import com.phcworld.util.DiaryFactory;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,11 +14,12 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.phcworld.domain.board.Diary;
-import com.phcworld.domain.good.Good;
-import com.phcworld.domain.user.User;
-import com.phcworld.repository.board.DiaryRepository;
-import com.phcworld.repository.good.GoodRepository;
+import java.util.List;
+import java.util.Optional;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest
@@ -32,25 +32,22 @@ public class GoodRepositoryTest {
 	@Autowired
 	private DiaryRepository diaryRepository;
 
+	private User user;
+	private Diary diary;
+
+	@Before
+	public void setup(){
+		user = User.builder()
+				.id(1L)
+				.build();
+		diary = diaryRepository.save(DiaryFactory.getDiaryEntity(user));
+	}
+
 	@Test
 	public void create() {
-		User writer = User.builder()
-				.id(1L)
-				.email("user@test.test")
-				.password("user")
-				.name("user")
-				.build();
-		Diary diary = Diary.builder()
-				.writer(writer)
-				.title("title")
-				.contents("content")
-				.thumbnail("no-image-icon.gif")
-				.createDate(LocalDateTime.now())
-				.build();
-		Diary newDiary = diaryRepository.save(diary);
 		Good good = Good.builder()
-				.diary(newDiary)
-				.user(writer)
+				.diary(diary)
+				.user(user)
 				.build();
 		Good newGood = goodRepository.save(good);
 		assertNotNull(newGood);
@@ -58,73 +55,31 @@ public class GoodRepositoryTest {
 	
 	@Test
 	public void readByDiaryAndUser() {
-		User writer = User.builder()
-				.id(1L)
-				.email("user@test.test")
-				.password("user")
-				.name("user")
-				.build();
-		Diary diary = Diary.builder()
-				.writer(writer)
-				.title("title")
-				.contents("content")
-				.thumbnail("no-image-icon.gif")
-				.createDate(LocalDateTime.now())
-				.build();
-		Diary newDiary = diaryRepository.save(diary);
 		Good good = Good.builder()
-				.diary(newDiary)
-				.user(writer)
+				.diary(diary)
+				.user(user)
 				.build();
 		Good newGood = goodRepository.save(good);
-		Good findGood = goodRepository.findByDiaryAndUser(newDiary, writer);
-		assertThat(newGood, is(findGood));
+		Good findGood = goodRepository.findByDiaryAndUser(diary, user);
+		assertThat(newGood).isEqualTo(findGood);
 	}
-	
+
 	@Test
 	public void readByUser() {
-		User writer = User.builder()
-				.id(1L)
-				.email("user@test.test")
-				.password("user")
-				.name("user")
-				.build();
-		Diary diary = Diary.builder()
-				.writer(writer)
-				.title("title")
-				.contents("content")
-				.thumbnail("no-image-icon.gif")
-				.createDate(LocalDateTime.now())
-				.build();
-		Diary newDiary = diaryRepository.save(diary);
 		Good good = Good.builder()
-				.diary(newDiary)
-				.user(writer)
+				.diary(diary)
+				.user(user)
 				.build();
 		Good newGood = goodRepository.save(good);
-		List<Good> goodList = goodRepository.findByUser(writer);
-		assertThat(goodList, hasItem(newGood));
+		List<Good> goodList = goodRepository.findByUser(user);
+		assertThat(goodList).contains(newGood);
 	}
 	
 	@Test
 	public void delete() {
-		User writer = User.builder()
-				.id(1L)
-				.email("user@test.test")
-				.password("user")
-				.name("user")
-				.build();
-		Diary diary = Diary.builder()
-				.writer(writer)
-				.title("title")
-				.contents("content")
-				.thumbnail("no-image-icon.gif")
-				.createDate(LocalDateTime.now())
-				.build();
-		Diary newDiary = diaryRepository.save(diary);
 		Good good = Good.builder()
-				.diary(newDiary)
-				.user(writer)
+				.diary(diary)
+				.user(user)
 				.build();
 		Good newGood = goodRepository.save(good);
 		goodRepository.delete(newGood);
