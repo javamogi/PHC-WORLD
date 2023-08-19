@@ -1,22 +1,5 @@
 package com.phcworld.service.alert;
 
-import static org.hamcrest.CoreMatchers.hasItems;
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-
 import com.phcworld.domain.alert.Alert;
 import com.phcworld.domain.answer.DiaryAnswer;
 import com.phcworld.domain.answer.FreeBoardAnswer;
@@ -24,18 +7,38 @@ import com.phcworld.domain.board.Diary;
 import com.phcworld.domain.board.FreeBoard;
 import com.phcworld.domain.good.Good;
 import com.phcworld.domain.user.User;
-import com.phcworld.service.alert.AlertServiceImpl;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.junit.MockitoJUnitRunner;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@SpringBootTest
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.*;
+
+//@RunWith(SpringJUnit4ClassRunner.class)
+//@SpringBootTest
+@RunWith(MockitoJUnitRunner.class)
 public class AlertServiceImplTest {
 	
-	@MockBean
+	@Mock
 	private AlertServiceImpl alertService;
-	
-	@Test
-	public void createDiaryAnswerAlert() {
-		User writer = User.builder()
+
+	private User user;
+	private Diary diary;
+
+	private DiaryAnswer diaryAnswer;
+
+	private FreeBoard freeBoard;
+	private FreeBoardAnswer freeBoardAnswer;
+
+	@Before
+	public void setup(){
+		user = User.builder()
 				.id(1L)
 				.email("test@test.test")
 				.password("test")
@@ -44,20 +47,39 @@ public class AlertServiceImplTest {
 				.authority("ROLE_USER")
 				.createDate(LocalDateTime.now())
 				.build();
-		Diary diary = Diary.builder()
+		diary = Diary.builder()
 				.id(1L)
-				.writer(writer)
+				.writer(user)
 				.title("test")
 				.contents("test")
 				.thumbnail("no-image-icon.gif")
 				.createDate(LocalDateTime.now())
 				.build();
-		DiaryAnswer diaryAnswer = DiaryAnswer.builder()
+		diaryAnswer = DiaryAnswer.builder()
 				.id(1L)
-				.writer(writer)
+				.writer(user)
 				.diary(diary)
 				.contents("diaryAnswer")
 				.build();
+		freeBoard = FreeBoard.builder()
+				.id(1L)
+				.writer(user)
+				.title("test")
+				.contents("test")
+				.count(0)
+				.badge("")
+				.createDate(LocalDateTime.now())
+				.build();
+		freeBoardAnswer = FreeBoardAnswer.builder()
+				.id(1L)
+				.writer(user)
+				.freeBoard(freeBoard)
+				.contents("test")
+				.build();
+	}
+	
+	@Test
+	public void createDiaryAnswerAlert() {
 		Alert alert = Alert.builder()
 				.type("Diary")
 				.diaryAnswer(diaryAnswer)
@@ -67,35 +89,11 @@ public class AlertServiceImplTest {
 		when(alertService.createAlert(diaryAnswer))
 		.thenReturn(alert);
 		Alert alertCreated = alertService.createAlert(diaryAnswer);
-		assertThat(diaryAnswer, is(alertCreated.getDiaryAnswer()));
+		assertThat(diaryAnswer).isEqualTo(alertCreated.getDiaryAnswer());
 	}
 	
 	@Test
 	public void createFreeBoardAnswerAlert() {
-		User user = User.builder()
-				.id(1L)
-				.email("test3@test.test")
-				.password("test3")
-				.name("테스트3")
-				.profileImage("blank-profile-picture.png")
-				.authority("ROLE_USER")
-				.createDate(LocalDateTime.now())
-				.build();
-		FreeBoard freeBoard = FreeBoard.builder()
-				.id(1L)
-				.writer(user)
-				.title("test")
-				.contents("test")
-				.count(0)
-				.badge("")
-				.createDate(LocalDateTime.now())
-				.build();
-		FreeBoardAnswer freeBoardAnswer = FreeBoardAnswer.builder()
-				.id(1L)
-				.writer(user)
-				.freeBoard(freeBoard)
-				.contents("test")
-				.build();
 		Alert alert = Alert.builder()
 				.type("FreeBoard")
 				.freeBoardAnswer(freeBoardAnswer)
@@ -105,20 +103,11 @@ public class AlertServiceImplTest {
 		when(alertService.createAlert(freeBoardAnswer))
 		.thenReturn(alert);
 		Alert alertCreated = alertService.createAlert(freeBoardAnswer);
-		assertThat(freeBoardAnswer, is(alertCreated.getFreeBoardAnswer()));
+		assertThat(freeBoardAnswer).isEqualTo(alertCreated.getFreeBoardAnswer());
 	}
 	
 	@Test
 	public void createGoodAlert() {
-		User user = User.builder()
-				.id(1L)
-				.email("test3@test.test")
-				.password("test3")
-				.name("테스트3")
-				.profileImage("blank-profile-picture.png")
-				.authority("ROLE_USER")
-				.createDate(LocalDateTime.now())
-				.build();
 		User user2 = User.builder()
 				.id(2L)
 				.email("test4@test.test")
@@ -126,14 +115,6 @@ public class AlertServiceImplTest {
 				.name("테스트4")
 				.profileImage("blank-profile-picture.png")
 				.authority("ROLE_USER")
-				.createDate(LocalDateTime.now())
-				.build();
-		Diary diary = Diary.builder()
-				.id(1L)
-				.writer(user)
-				.title("test3")
-				.contents("test3")
-				.thumbnail("no-image-icon.gif")
 				.createDate(LocalDateTime.now())
 				.build();
 		Good good = Good.builder()
@@ -150,35 +131,11 @@ public class AlertServiceImplTest {
 		when(alertService.createAlert(good))
 		.thenReturn(alert);
 		Alert alertCreated = alertService.createAlert(good);
-		assertThat(good, is(alertCreated.getGood()));
+		assertThat(good).isEqualTo(alertCreated.getGood());
 	}
 	
 	@Test
 	public void getOneAlert() {
-		User user = User.builder()
-				.id(1L)
-				.email("test3@test.test")
-				.password("test3")
-				.name("테스트3")
-				.profileImage("blank-profile-picture.png")
-				.authority("ROLE_USER")
-				.createDate(LocalDateTime.now())
-				.build();
-		FreeBoard freeBoard = FreeBoard.builder()
-				.id(1L)
-				.writer(user)
-				.title("test")
-				.contents("test")
-				.count(0)
-				.badge("")
-				.createDate(LocalDateTime.now())
-				.build();
-		FreeBoardAnswer freeBoardAnswer = FreeBoardAnswer.builder()
-				.id(1L)
-				.writer(user)
-				.freeBoard(freeBoard)
-				.contents("test")
-				.build();
 		Alert alert = Alert.builder()
 				.id(1L)
 				.type("FreeBoard")
@@ -189,81 +146,36 @@ public class AlertServiceImplTest {
 		when(alertService.getOneAlert(alert.getId()))
 		.thenReturn(alert);
 		Alert alertCreated = alertService.getOneAlert(alert.getId());
-		assertThat(alert, is(alertCreated));
+		assertThat(alert).isEqualTo(alertCreated);
 	}
 	
 	@Test
 	public void findPageRequestAlertByPostUser() throws Exception {
-		User writer = User.builder()
-				.id(1L)
-				.email("test@test.test")
-				.password("test")
-				.name("테스트")
-				.profileImage("blank-profile-picture.png")
-				.authority("ROLE_USER")
-				.createDate(LocalDateTime.now())
-				.build();
-		Diary diary = Diary.builder()
-				.id(1L)
-				.writer(writer)
-				.title("test")
-				.contents("test")
-				.thumbnail("no-image-icon.gif")
-				.createDate(LocalDateTime.now())
-				.build();
-		DiaryAnswer diaryAnswer = DiaryAnswer.builder()
-				.id(1L)
-				.writer(writer)
-				.diary(diary)
-				.contents("diaryAnswer")
-				.build();
 		Alert diaryAnswerAlert = Alert.builder()
 				.type("Diary")
 				.diaryAnswer(diaryAnswer)
 				.postWriter(diary.getWriter())
 				.createDate(LocalDateTime.now())
 				.build();
-		FreeBoard freeBoard = FreeBoard.builder()
-				.id(1L)
-				.title("title")
-				.contents("content")
-				.icon("")
-				.writer(writer)
-				.createDate(LocalDateTime.now())
-				.count(0)
-				.build();
-		FreeBoardAnswer freeBoardAnswer = FreeBoardAnswer.builder()
-				.id(1L)
-				.writer(writer)
-				.freeBoard(freeBoard)
-				.contents("test")
-				.build();
 		Alert freeBoardAnswerAlert = Alert.builder()
 				.type("Free Board")
 				.freeBoardAnswer(freeBoardAnswer)
-				.postWriter(writer)
+				.postWriter(user)
 				.createDate(LocalDateTime.now())
 				.build();
 		List<Alert> list = new ArrayList<Alert>();
 		list.add(diaryAnswerAlert);
 		list.add(freeBoardAnswerAlert);
-		when(alertService.findListAlertByPostUser(writer))
+		when(alertService.findListAlertByPostUser(user))
 		.thenReturn(list);
-		List<Alert> alertList = alertService.findListAlertByPostUser(writer);
-		assertThat(alertList, hasItems(diaryAnswerAlert, freeBoardAnswerAlert));
+		List<Alert> alertList = alertService.findListAlertByPostUser(user);
+		assertThat(alertList)
+				.contains(diaryAnswerAlert)
+				.contains(freeBoardAnswerAlert);
 	}
 	
 	@Test
 	public void deleteGoodAlert() {
-		User user = User.builder()
-				.id(1L)
-				.email("test3@test.test")
-				.password("test3")
-				.name("테스트3")
-				.profileImage("blank-profile-picture.png")
-				.authority("ROLE_USER")
-				.createDate(LocalDateTime.now())
-				.build();
 		User user2 = User.builder()
 				.id(2L)
 				.email("test4@test.test")
@@ -271,14 +183,6 @@ public class AlertServiceImplTest {
 				.name("테스트4")
 				.profileImage("blank-profile-picture.png")
 				.authority("ROLE_USER")
-				.createDate(LocalDateTime.now())
-				.build();
-		Diary diary = Diary.builder()
-				.id(1L)
-				.writer(user)
-				.title("test3")
-				.contents("test3")
-				.thumbnail("no-image-icon.gif")
 				.createDate(LocalDateTime.now())
 				.build();
 		Good good = Good.builder()
@@ -292,59 +196,12 @@ public class AlertServiceImplTest {
 	
 	@Test
 	public void deleteDiaryAnswerAlert() {
-		User user = User.builder()
-				.id(1L)
-				.email("test3@test.test")
-				.password("test3")
-				.name("테스트3")
-				.profileImage("blank-profile-picture.png")
-				.authority("ROLE_USER")
-				.createDate(LocalDateTime.now())
-				.build();
-		Diary diary = Diary.builder()
-				.id(1L)
-				.writer(user)
-				.title("test3")
-				.contents("test3")
-				.thumbnail("no-image-icon.gif")
-				.createDate(LocalDateTime.now())
-				.build();
-		DiaryAnswer diaryAnswer = DiaryAnswer.builder()
-				.id(1L)
-				.writer(user)
-				.diary(diary)
-				.contents("diaryAnswer")
-				.build();
 		alertService.deleteAlert(diaryAnswer);
 		verify(alertService, times(1)).deleteAlert(diaryAnswer);
 	}
 	
 	@Test
 	public void deleteFreeBoardAnswer() {
-		User user = User.builder()
-				.id(1L)
-				.email("test3@test.test")
-				.password("test3")
-				.name("테스트3")
-				.profileImage("blank-profile-picture.png")
-				.authority("ROLE_USER")
-				.createDate(LocalDateTime.now())
-				.build();
-		FreeBoard freeBoard = FreeBoard.builder()
-				.id(1L)
-				.writer(user)
-				.title("test")
-				.contents("test")
-				.count(0)
-				.badge("")
-				.createDate(LocalDateTime.now())
-				.build();
-		FreeBoardAnswer freeBoardAnswer = FreeBoardAnswer.builder()
-				.id(1L)
-				.writer(user)
-				.freeBoard(freeBoard)
-				.contents("test")
-				.build();
 		alertService.deleteAlert(freeBoardAnswer);
 		verify(alertService, times(1)).deleteAlert(freeBoardAnswer);
 	}
