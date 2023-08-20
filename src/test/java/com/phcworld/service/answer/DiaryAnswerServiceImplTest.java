@@ -1,8 +1,6 @@
 package com.phcworld.service.answer;
 
-import static org.hamcrest.CoreMatchers.hasItems;
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 
@@ -10,9 +8,11 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,19 +24,22 @@ import com.phcworld.domain.api.model.response.SuccessResponse;
 import com.phcworld.domain.board.Diary;
 import com.phcworld.domain.exception.MatchNotUserExceptioin;
 import com.phcworld.domain.user.User;
-import com.phcworld.service.answer.DiaryAnswerServiceImpl;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@SpringBootTest
-@Transactional
+//@RunWith(SpringJUnit4ClassRunner.class)
+//@SpringBootTest
+//@Transactional
+@RunWith(MockitoJUnitRunner.class)
 public class DiaryAnswerServiceImplTest {
 	
 	@Mock
 	private DiaryAnswerServiceImpl diaryAnswerService;
-	
-	@Test
-	public void createDiaryAnswer() {
-		User writer = User.builder()
+
+	private User writer;
+	private Diary diary;
+
+	@Before
+	public void setup(){
+		writer = User.builder()
 				.id(1L)
 				.email("test@test.test")
 				.password("test")
@@ -45,7 +48,8 @@ public class DiaryAnswerServiceImplTest {
 				.authority("ROLE_USER")
 				.createDate(LocalDateTime.now())
 				.build();
-		Diary diary = Diary.builder()
+
+		diary = Diary.builder()
 				.id(1L)
 				.writer(writer)
 				.title("title")
@@ -53,6 +57,10 @@ public class DiaryAnswerServiceImplTest {
 				.thumbnail("no-image-icon.gif")
 				.createDate(LocalDateTime.now())
 				.build();
+	}
+	
+	@Test
+	public void createDiaryAnswer() {
 		DiaryAnswerRequest request = DiaryAnswerRequest.builder()
 				.contents("diary answer contents")
 				.build();
@@ -81,35 +89,18 @@ public class DiaryAnswerServiceImplTest {
 		.thenReturn(diaryAnswerApiResponse);
 		DiaryAnswerApiResponse createdDiaryAnswerApiResponse = 
 				diaryAnswerService.create(writer, diary.getId(), request);
-		assertThat(diaryAnswerApiResponse, is(createdDiaryAnswerApiResponse));
+		assertThat(diaryAnswerApiResponse).isEqualTo(createdDiaryAnswerApiResponse);
 	}
 
 	@Test(expected = MatchNotUserExceptioin.class)
 	public void deleteDiaryAnswerWhenWriterNotMatchUser() throws Exception {
-		User writer = User.builder()
-				.id(1L)
-				.email("test@test.test")
-				.password("test")
-				.name("테스트")
-				.profileImage("blank-profile-picture.png")
-				.authority("ROLE_USER")
-				.createDate(LocalDateTime.now())
-				.build();
-		User user= User.builder()
+		User user = User.builder()
 				.id(2L)
 				.email("test3@test.test")
 				.password("test3")
 				.name("테스트3")
 				.profileImage("blank-profile-picture.png")
 				.authority("ROLE_USER")
-				.createDate(LocalDateTime.now())
-				.build();
-		Diary diary = Diary.builder()
-				.id(1L)
-				.writer(writer)
-				.title("title")
-				.contents("content")
-				.thumbnail("no-image-icon.gif")
 				.createDate(LocalDateTime.now())
 				.build();
 		DiaryAnswer answer = DiaryAnswer.builder()
@@ -126,23 +117,6 @@ public class DiaryAnswerServiceImplTest {
 	
 	@Test
 	public void deleteDiaryAnswer() {
-		User writer = User.builder()
-				.id(1L)
-				.email("test@test.test")
-				.password("test")
-				.name("테스트")
-				.profileImage("blank-profile-picture.png")
-				.authority("ROLE_USER")
-				.createDate(LocalDateTime.now())
-				.build();
-		Diary diary = Diary.builder()
-				.id(1L)
-				.writer(writer)
-				.title("title")
-				.contents("content")
-				.thumbnail("no-image-icon.gif")
-				.createDate(LocalDateTime.now())
-				.build();
 		DiaryAnswer answer = DiaryAnswer.builder()
 				.writer(writer)
 				.diary(diary)
@@ -159,28 +133,11 @@ public class DiaryAnswerServiceImplTest {
 		when(diaryAnswerService.delete(answer.getId(), writer))
 		.thenReturn(response);
 		SuccessResponse success = diaryAnswerService.delete(answer.getId(), writer);
-		assertThat(response, is(success));
+		assertThat(response).isEqualTo(success);
 	}
 
 	@Test
 	public void findDiaryAnswerListByWriter() throws Exception {
-		User writer = User.builder()
-				.id(1L)
-				.email("test@test.test")
-				.password("test")
-				.name("테스트")
-				.profileImage("blank-profile-picture.png")
-				.authority("ROLE_USER")
-				.createDate(LocalDateTime.now())
-				.build();
-		Diary diary = Diary.builder()
-				.id(1L)
-				.writer(writer)
-				.title("title")
-				.contents("content")
-				.thumbnail("no-image-icon.gif")
-				.createDate(LocalDateTime.now())
-				.build();
 		DiaryAnswer answer = DiaryAnswer.builder()
 				.writer(writer)
 				.diary(diary)
@@ -197,28 +154,13 @@ public class DiaryAnswerServiceImplTest {
 		when(diaryAnswerService.findDiaryAnswerListByWriter(writer))
 		.thenReturn(list);
 		List<DiaryAnswer> diaryAnswerList = diaryAnswerService.findDiaryAnswerListByWriter(writer);
-		assertThat(diaryAnswerList, hasItems(answer, answer2));
+		assertThat(diaryAnswerList)
+				.contains(answer)
+				.contains(answer2);
 	}
 	
 	@Test
 	public void readDiaryAnswer() {
-		User writer = User.builder()
-				.id(1L)
-				.email("test@test.test")
-				.password("test")
-				.name("테스트")
-				.profileImage("blank-profile-picture.png")
-				.authority("ROLE_USER")
-				.createDate(LocalDateTime.now())
-				.build();
-		Diary diary = Diary.builder()
-				.id(1L)
-				.writer(writer)
-				.title("title")
-				.contents("content")
-				.thumbnail("no-image-icon.gif")
-				.createDate(LocalDateTime.now())
-				.build();
 		DiaryAnswer answer = DiaryAnswer.builder()
 				.writer(writer)
 				.diary(diary)
@@ -241,28 +183,11 @@ public class DiaryAnswerServiceImplTest {
 		.thenReturn(diaryAnswerApiResponse);
 		DiaryAnswerApiResponse createdDiaryAnswerApiResponse = 
 				diaryAnswerService.read(answer.getId(), writer);
-		assertThat(diaryAnswerApiResponse, is(createdDiaryAnswerApiResponse));
+		assertThat(diaryAnswerApiResponse).isEqualTo(createdDiaryAnswerApiResponse);
 	}
 	
 	@Test
 	public void update() {
-		User writer = User.builder()
-				.id(1L)
-				.email("test@test.test")
-				.password("test")
-				.name("테스트")
-				.profileImage("blank-profile-picture.png")
-				.authority("ROLE_USER")
-				.createDate(LocalDateTime.now())
-				.build();
-		Diary diary = Diary.builder()
-				.id(1L)
-				.writer(writer)
-				.title("title")
-				.contents("content")
-				.thumbnail("no-image-icon.gif")
-				.createDate(LocalDateTime.now())
-				.build();
 		DiaryAnswer answer = DiaryAnswer.builder()
 				.writer(writer)
 				.diary(diary)
@@ -292,7 +217,7 @@ public class DiaryAnswerServiceImplTest {
 		.thenReturn(diaryAnswerApiResponse);
 		DiaryAnswerApiResponse updatedDiaryAnswerApiResponse = 
 				diaryAnswerService.update(request, writer);
-		assertThat(diaryAnswerApiResponse, is(updatedDiaryAnswerApiResponse));
+		assertThat(diaryAnswerApiResponse).isEqualTo(updatedDiaryAnswerApiResponse);
 	}
 	
 }
