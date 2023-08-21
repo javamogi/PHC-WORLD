@@ -1,22 +1,5 @@
 package com.phcworld.service.answer;
 
-import static org.hamcrest.CoreMatchers.hasItems;
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.when;
-
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.Mock;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.phcworld.domain.answer.FreeBoardAnswer;
 import com.phcworld.domain.api.model.request.FreeBoardAnswerRequest;
 import com.phcworld.domain.api.model.response.FreeBoardAnswerApiResponse;
@@ -24,18 +7,35 @@ import com.phcworld.domain.api.model.response.SuccessResponse;
 import com.phcworld.domain.board.FreeBoard;
 import com.phcworld.domain.exception.MatchNotUserExceptioin;
 import com.phcworld.domain.user.User;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.transaction.annotation.Transactional;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@SpringBootTest
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.when;
+
+//@RunWith(SpringJUnit4ClassRunner.class)
+//@SpringBootTest
+@RunWith(MockitoJUnitRunner.class)
 public class FreeBoardAnswerServiceImplTest {
 	
 	@Mock
 	private FreeBoardAnswerServiceImpl freeBoardAnswerService;
 
-	@Test
-	@Transactional
-	public void createFreeBoardAnswer() {
-		User writer = User.builder()
+	private User writer;
+	private FreeBoard freeBoard;
+
+	@Before
+	public void setup(){
+		writer = User.builder()
 				.id(1L)
 				.email("test@test.test")
 				.password("test")
@@ -44,7 +44,8 @@ public class FreeBoardAnswerServiceImplTest {
 				.authority("ROLE_USER")
 				.createDate(LocalDateTime.now())
 				.build();
-		FreeBoard freeBoard = FreeBoard.builder()
+
+		freeBoard = FreeBoard.builder()
 				.id(1L)
 				.writer(writer)
 				.title("title")
@@ -53,6 +54,11 @@ public class FreeBoardAnswerServiceImplTest {
 				.createDate(LocalDateTime.now())
 				.count(0)
 				.build();
+	}
+
+	@Test
+	@Transactional
+	public void createFreeBoardAnswer() {
 		FreeBoardAnswerRequest request = FreeBoardAnswerRequest.builder()
 				.contents("contents")
 				.build();
@@ -79,31 +85,13 @@ public class FreeBoardAnswerServiceImplTest {
 		.thenReturn(freeBoardAnswerApiResponse);
 		FreeBoardAnswerApiResponse createdFreeBoardAnswerApiResponse = 
 				freeBoardAnswerService.create(writer, freeBoard.getId(), request);
-		assertThat(request.getContents(), is(createdFreeBoardAnswerApiResponse.getContents()));
-		assertThat("[1]", is(createdFreeBoardAnswerApiResponse.getCountOfAnswers()));
-		assertThat(freeBoard.getId(), is(createdFreeBoardAnswerApiResponse.getFreeBoardId()));
+		assertThat(request.getContents()).isEqualTo(createdFreeBoardAnswerApiResponse.getContents());
+		assertThat("[1]").isEqualTo(createdFreeBoardAnswerApiResponse.getCountOfAnswers());
+		assertThat(freeBoard.getId()).isEqualTo(createdFreeBoardAnswerApiResponse.getFreeBoardId());
 	}
 	
 	@Test
 	public void successDelete() {
-		User writer = User.builder()
-				.id(1L)
-				.email("test@test.test")
-				.password("test")
-				.name("테스트")
-				.profileImage("blank-profile-picture.png")
-				.authority("ROLE_USER")
-				.createDate(LocalDateTime.now())
-				.build();
-		FreeBoard freeBoard = FreeBoard.builder()
-				.id(1L)
-				.writer(writer)
-				.title("title")
-				.contents("content")
-				.icon("")
-				.createDate(LocalDateTime.now())
-				.count(0)
-				.build();
 		FreeBoardAnswer answer = FreeBoardAnswer.builder()
 				.id(1L)
 				.writer(writer)
@@ -121,21 +109,12 @@ public class FreeBoardAnswerServiceImplTest {
 		when(freeBoardAnswerService.delete(answer.getId(), writer))
 		.thenReturn(response);
 		SuccessResponse success = freeBoardAnswerService.delete(answer.getId(), writer);
-		assertThat(response, is(success));
+		assertThat(response).isEqualTo(success);
 	}
 	
 	@Test(expected = MatchNotUserExceptioin.class)
 	@Transactional
 	public void deleteFreeBoardAnswerWhenWriterNotMatchUser() throws Exception {
-		User writer = User.builder()
-				.id(1L)
-				.email("test@test.test")
-				.password("test")
-				.name("테스트")
-				.profileImage("blank-profile-picture.png")
-				.authority("ROLE_USER")
-				.createDate(LocalDateTime.now())
-				.build();
 		User user= User.builder()
 				.id(2L)
 				.email("test3@test.test")
@@ -144,15 +123,6 @@ public class FreeBoardAnswerServiceImplTest {
 				.profileImage("blank-profile-picture.png")
 				.authority("ROLE_USER")
 				.createDate(LocalDateTime.now())
-				.build();
-		FreeBoard freeBoard = FreeBoard.builder()
-				.id(1L)
-				.writer(writer)
-				.title("title")
-				.contents("content")
-				.icon("")
-				.createDate(LocalDateTime.now())
-				.count(0)
 				.build();
 		FreeBoardAnswer answer = FreeBoardAnswer.builder()
 				.id(1L)
@@ -169,24 +139,6 @@ public class FreeBoardAnswerServiceImplTest {
 	@Test
 	@Transactional
 	public void findFreeBoardAnswerListByWriter() throws Exception {
-		User writer = User.builder()
-				.id(1L)
-				.email("test@test.test")
-				.password("test")
-				.name("테스트")
-				.profileImage("blank-profile-picture.png")
-				.authority("ROLE_USER")
-				.createDate(LocalDateTime.now())
-				.build();
-		FreeBoard freeBoard = FreeBoard.builder()
-				.id(1L)
-				.writer(writer)
-				.title("title")
-				.contents("content")
-				.icon("")
-				.createDate(LocalDateTime.now())
-				.count(0)
-				.build();
 		FreeBoardAnswer answer = FreeBoardAnswer.builder()
 				.id(1L)
 				.writer(writer)
@@ -206,29 +158,13 @@ public class FreeBoardAnswerServiceImplTest {
 		when(freeBoardAnswerService.findFreeBoardAnswerListByWriter(writer)).thenReturn(answerList);
 		List<FreeBoardAnswer> findFreeBoardAnswerList = 
 				freeBoardAnswerService.findFreeBoardAnswerListByWriter(writer);
-		assertThat(findFreeBoardAnswerList, hasItems(answer, answer2));
+		assertThat(findFreeBoardAnswerList)
+				.contains(answer)
+				.contains(answer2);
 	}
 	
 	@Test
 	public void readFreeBoardAnswer() {
-		User writer = User.builder()
-				.id(1L)
-				.email("test@test.test")
-				.password("test")
-				.name("테스트")
-				.profileImage("blank-profile-picture.png")
-				.authority("ROLE_USER")
-				.createDate(LocalDateTime.now())
-				.build();
-		FreeBoard freeBoard = FreeBoard.builder()
-				.id(1L)
-				.writer(writer)
-				.title("title")
-				.contents("content")
-				.icon("")
-				.createDate(LocalDateTime.now())
-				.count(0)
-				.build();
 		FreeBoardAnswer answer = FreeBoardAnswer.builder()
 				.id(1L)
 				.writer(writer)
@@ -252,29 +188,11 @@ public class FreeBoardAnswerServiceImplTest {
 		.thenReturn(freeBoardAnswerApiResponse);
 		FreeBoardAnswerApiResponse createdFreeBoardAnswerApiResponse = 
 				freeBoardAnswerService.read(answer.getId(), writer);
-		assertThat(freeBoardAnswerApiResponse, is(createdFreeBoardAnswerApiResponse));
+		assertThat(freeBoardAnswerApiResponse).isEqualTo(createdFreeBoardAnswerApiResponse);
 	}
 	
 	@Test
 	public void update() {
-		User writer = User.builder()
-				.id(1L)
-				.email("test@test.test")
-				.password("test")
-				.name("테스트")
-				.profileImage("blank-profile-picture.png")
-				.authority("ROLE_USER")
-				.createDate(LocalDateTime.now())
-				.build();
-		FreeBoard freeBoard = FreeBoard.builder()
-				.id(1L)
-				.writer(writer)
-				.title("title")
-				.contents("content")
-				.icon("")
-				.createDate(LocalDateTime.now())
-				.count(0)
-				.build();
 		FreeBoardAnswer answer = FreeBoardAnswer.builder()
 				.id(1L)
 				.writer(writer)
@@ -305,7 +223,7 @@ public class FreeBoardAnswerServiceImplTest {
 		.thenReturn(freeBoardAnswerApiResponse);
 		FreeBoardAnswerApiResponse updatedFreeBoardAnswerApiResponse = 
 				freeBoardAnswerService.update(request, writer);
-		assertThat(freeBoardAnswerApiResponse, is(updatedFreeBoardAnswerApiResponse));
+		assertThat(freeBoardAnswerApiResponse).isEqualTo(updatedFreeBoardAnswerApiResponse);
 	}
 
 }
