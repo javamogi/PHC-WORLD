@@ -1,21 +1,12 @@
 package com.phcworld.web.board;
 
-import static org.hamcrest.Matchers.containsString;
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
-
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-
+import com.phcworld.domain.board.FreeBoard;
+import com.phcworld.domain.board.FreeBoardRequest;
+import com.phcworld.domain.board.FreeBoardResponse;
+import com.phcworld.domain.user.User;
+import com.phcworld.service.board.FreeBoardServiceImpl;
+import com.phcworld.service.timeline.TimelineServiceImpl;
+import com.phcworld.utils.HttpSessionUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,12 +16,15 @@ import org.springframework.mock.web.MockHttpSession;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
-import com.phcworld.domain.board.FreeBoard;
-import com.phcworld.domain.board.FreeBoardRequest;
-import com.phcworld.domain.board.FreeBoardResponse;
-import com.phcworld.domain.user.User;
-import com.phcworld.service.board.FreeBoardServiceImpl;
-import com.phcworld.utils.HttpSessionUtils;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.hamcrest.Matchers.containsString;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -42,7 +36,10 @@ public class FreeBoardControllerTest {
 	
 	@MockBean
 	private FreeBoardServiceImpl freeBoardService;
-	
+
+	@MockBean
+	private TimelineServiceImpl timelineService;
+
 	@Test
 	public void getAllList() throws Exception{
 		MockHttpSession mockSession = new MockHttpSession();
@@ -158,7 +155,7 @@ public class FreeBoardControllerTest {
 		
 		when(this.freeBoardService.createFreeBoard(user, request))
 		.thenReturn(response);
-		
+
 		this.mvc.perform(post("/freeboards")
 				.param("title", "test")
 				.param("contents", "test")

@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.phcworld.domain.timeline.Timeline;
 
+import com.phcworld.domain.timeline.dto.TimelineResponseDto;
 import lombok.Builder;
 import lombok.Data;
 
@@ -21,5 +22,7 @@ public class DashBoardUser {
 	
 	private Long countOfAlert;
 	
-	private List<Timeline> timelineList;
+//	private List<Timeline> timelineList;
+
+	private List<TimelineResponseDto> timelineList;
 }

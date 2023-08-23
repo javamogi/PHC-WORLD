@@ -1,37 +1,25 @@
 package com.phcworld.web.board;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
-import javax.servlet.http.HttpSession;
-
-import com.phcworld.domain.board.DiaryResponseDto;
-import com.phcworld.repository.board.dto.DiarySelectDto;
-import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-
 import com.phcworld.domain.api.model.response.SuccessResponse;
-import com.phcworld.domain.board.Diary;
 import com.phcworld.domain.board.DiaryRequest;
 import com.phcworld.domain.board.DiaryResponse;
+import com.phcworld.domain.board.DiaryResponseDto;
 import com.phcworld.domain.exception.LoginNotUserException;
 import com.phcworld.domain.user.User;
+import com.phcworld.repository.board.dto.DiarySelectDto;
 import com.phcworld.service.board.DiaryServiceImpl;
 import com.phcworld.service.user.UserService;
 import com.phcworld.utils.HttpSessionUtils;
 import com.phcworld.utils.PageNationsUtil;
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpSession;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/diaries")

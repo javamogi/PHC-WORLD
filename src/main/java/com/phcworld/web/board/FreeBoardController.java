@@ -5,6 +5,7 @@ import java.util.List;
 import javax.servlet.http.HttpSession;
 
 import com.phcworld.domain.board.FreeBoardSearchDto;
+import com.phcworld.service.timeline.TimelineServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -23,6 +24,7 @@ import com.phcworld.utils.HttpSessionUtils;
 public class FreeBoardController {
 
 	private final FreeBoardService freeBoardService;
+	private final TimelineServiceImpl timelineService;
 	
 	@GetMapping("")
 	public String getFreeBoardAllList(Model model) {
@@ -55,7 +57,7 @@ public class FreeBoardController {
 		User sessionUser = HttpSessionUtils.getUserFromSession(session);
 		
 		FreeBoardResponse response = freeBoardService.createFreeBoard(sessionUser, request);
-		
+
 		return "redirect:/freeboards/"+ response.getId();
 	}
 

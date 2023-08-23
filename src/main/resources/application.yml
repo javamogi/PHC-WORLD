@@ -5,7 +5,7 @@ spring:
       max-request-size: 5MB
 
   profiles:
-    active: mysql
+    active: dev
     include: mail
 
   mustache:

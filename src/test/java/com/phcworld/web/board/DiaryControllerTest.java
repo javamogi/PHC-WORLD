@@ -1,23 +1,15 @@
 package com.phcworld.web.board;
 
-import static org.hamcrest.CoreMatchers.*;
-import static org.hamcrest.Matchers.containsString;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
-
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
-
+import com.phcworld.domain.api.model.response.SuccessResponse;
+import com.phcworld.domain.board.Diary;
+import com.phcworld.domain.board.DiaryRequest;
+import com.phcworld.domain.board.DiaryResponse;
+import com.phcworld.domain.good.Good;
+import com.phcworld.domain.user.User;
 import com.phcworld.repository.board.dto.DiarySelectDto;
+import com.phcworld.service.board.DiaryServiceImpl;
+import com.phcworld.service.user.UserService;
+import com.phcworld.utils.HttpSessionUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,17 +21,17 @@ import org.springframework.mock.web.MockHttpSession;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
-import com.phcworld.domain.api.model.response.SuccessResponse;
-import com.phcworld.domain.board.Diary;
-import com.phcworld.domain.board.DiaryRequest;
-import com.phcworld.domain.board.DiaryResponse;
-import com.phcworld.domain.board.FreeBoardRequest;
-import com.phcworld.domain.board.FreeBoardResponse;
-import com.phcworld.domain.good.Good;
-import com.phcworld.domain.user.User;
-import com.phcworld.service.board.DiaryServiceImpl;
-import com.phcworld.service.user.UserService;
-import com.phcworld.utils.HttpSessionUtils;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import static org.hamcrest.Matchers.containsString;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -54,7 +46,7 @@ public class DiaryControllerTest {
 	
 	@MockBean
 	private DiaryServiceImpl diaryService;
-	
+
 	@Test
 	public void requestEmailDiaryList() throws Exception {
 		MockHttpSession mockSession = new MockHttpSession();
@@ -191,7 +183,7 @@ public class DiaryControllerTest {
 		
 		when(this.diaryService.createDiary(user, request))
 		.thenReturn(response);
-		
+
 		this.mvc.perform(post("/diaries")
 				.param("title", "test")
 				.param("contents", "test")

@@ -5,8 +5,10 @@ import com.phcworld.domain.answer.FreeBoardAnswer;
 import com.phcworld.domain.board.Diary;
 import com.phcworld.domain.board.FreeBoard;
 import com.phcworld.domain.good.Good;
+import com.phcworld.domain.timeline.SaveType;
 import com.phcworld.domain.timeline.Timeline;
 import com.phcworld.domain.user.User;
+import com.phcworld.exception.model.CustomException;
 import com.phcworld.repository.answer.DiaryAnswerRepository;
 import com.phcworld.repository.answer.FreeBoardAnswerRepository;
 import com.phcworld.repository.board.DiaryRepository;
@@ -77,9 +79,12 @@ public class TimelineRepositoryTest {
 	@Test
 	public void createDiaryTimeline() {
 		Timeline diaryTimeline = Timeline.builder()
-				.type("diary")
-				.icon("edit")
-				.diary(diary)
+//				.type("diary")
+//				.icon("edit")
+//				.diary(diary)
+				.saveType(SaveType.DIARY)
+				.postId(diary.getId())
+				.redirectId(diary.getId())
 				.user(user)
 				.saveDate(diary.getCreateDate())
 				.build();
@@ -90,9 +95,12 @@ public class TimelineRepositoryTest {
 	@Test
 	public void createDiaryAnswerTimeline() {
 		Timeline diaryAnswerTimeline = Timeline.builder()
-				.type("diary answer")
-				.icon("comment")
-				.diaryAnswer(diaryAnswer)
+//				.type("diary answer")
+//				.icon("comment")
+//				.diaryAnswer(diaryAnswer)
+				.saveType(SaveType.DIARY_ANSWER)
+				.postId(diaryAnswer.getId())
+				.redirectId(diaryAnswer.getDiary().getId())
 				.user(user)
 				.saveDate(diaryAnswer.getCreateDate())
 				.build();
@@ -103,9 +111,12 @@ public class TimelineRepositoryTest {
 	@Test
 	public void createFreeBoardTimeline() {
 		Timeline freeBoardTimeline = Timeline.builder()
-				.type("free board")
-				.icon("list-alt")
-				.freeBoard(freeBoard)
+//				.type("free board")
+//				.icon("list-alt")
+//				.freeBoard(freeBoard)
+				.saveType(SaveType.FREE_BOARD)
+				.postId(freeBoard.getId())
+				.redirectId(freeBoard.getId())
 				.user(user)
 				.saveDate(freeBoard.getCreateDate())
 				.build();
@@ -116,9 +127,12 @@ public class TimelineRepositoryTest {
 	@Test
 	public void createFreeBoardAnswerTimeline() {
 		Timeline freeBoardAnswerTimeline = Timeline.builder()
-				.type("freeBoard answer")
-				.icon("comment")
-				.freeBoardAnswer(freeBoardAnswer)
+//				.type("freeBoard answer")
+//				.icon("comment")
+//				.freeBoardAnswer(freeBoardAnswer)
+				.saveType(SaveType.FREE_BOARD_ANSWER)
+				.postId(freeBoardAnswer.getId())
+				.redirectId(freeBoardAnswer.getFreeBoard().getId())
 				.user(user)
 				.saveDate(freeBoardAnswer.getCreateDate())
 				.build();
@@ -135,70 +149,90 @@ public class TimelineRepositoryTest {
 				.build();
 		Good newGood = goodRepository.save(good);
 		Timeline diaryTimeline = Timeline.builder()
-				.type("good")
-				.icon("thumbs-up")
-				.good(newGood)
+//				.type("good")
+//				.icon("thumbs-up")
+//				.good(newGood)
+				.saveType(SaveType.GOOD)
+				.postId(newGood.getId())
+				.redirectId(newGood.getDiary().getId())
 				.user(newGood.getUser())
 				.saveDate(diary.getCreateDate())
 				.build();
 		Timeline createdTimeline = timelineRepository.save(diaryTimeline);
-		Timeline readTimeline = timelineRepository.findByGood(newGood);
+		Timeline readTimeline = timelineRepository.findById(createdTimeline.getId())
+				.orElseThrow(() -> new CustomException("400", "게시물 정보가 없습니다."));
 		assertThat(createdTimeline).isEqualTo(readTimeline);
 	}
 	
 	@Test
 	public void readDiaryTimeline() {
 		Timeline diaryTimeline = Timeline.builder()
-				.type("diary")
-				.icon("edit")
-				.diary(diary)
+//				.type("diary")
+//				.icon("edit")
+//				.diary(diary)
+				.saveType(SaveType.DIARY)
+				.postId(diary.getId())
+				.redirectId(diary.getId())
 				.user(user)
 				.saveDate(diary.getCreateDate())
 				.build();
 		Timeline createdTimeline = timelineRepository.save(diaryTimeline);
-		Timeline readTimeline = timelineRepository.findByDiary(diary);
+		Timeline readTimeline = timelineRepository.findById(createdTimeline.getId())
+				.orElseThrow(() -> new CustomException("400", "게시물 정보가 없습니다."));
 		assertThat(createdTimeline).isEqualTo(readTimeline);
 	}
 	
 	@Test
 	public void readDiaryAnswerTimeline() {
 		Timeline diaryAnswerTimeline = Timeline.builder()
-				.type("diary answer")
-				.icon("comment")
-				.diaryAnswer(diaryAnswer)
+//				.type("diary answer")
+//				.icon("comment")
+//				.diaryAnswer(diaryAnswer)
+				.saveType(SaveType.DIARY_ANSWER)
+				.postId(diaryAnswer.getId())
+				.redirectId(diaryAnswer.getDiary().getId())
 				.user(user)
 				.saveDate(diaryAnswer.getCreateDate())
 				.build();
 		Timeline createdDiaryAnswerTimeline = timelineRepository.save(diaryAnswerTimeline);
-		Timeline readTimeline = timelineRepository.findByDiaryAnswer(diaryAnswer);
+		Timeline readTimeline = timelineRepository.findById(createdDiaryAnswerTimeline.getId())
+				.orElseThrow(() -> new CustomException("400", "게시물 정보가 없습니다."));
 		assertThat(createdDiaryAnswerTimeline).isEqualTo(readTimeline);
 	}
 	
 	@Test
 	public void readFreeBoardTimeline() {
 		Timeline freeBoardTimeline = Timeline.builder()
-				.type("free board")
-				.icon("list-alt")
-				.freeBoard(freeBoard)
+//				.type("free board")
+//				.icon("list-alt")
+//				.freeBoard(freeBoard)
+				.saveType(SaveType.FREE_BOARD)
+				.postId(freeBoard.getId())
+				.redirectId(freeBoard.getId())
 				.user(user)
 				.saveDate(freeBoard.getCreateDate())
 				.build();
 		Timeline createdFreeBoardTimeline = timelineRepository.save(freeBoardTimeline);
-		Timeline readTimeline = timelineRepository.findByFreeBoard(freeBoard);
+		Timeline readTimeline = timelineRepository.findById(createdFreeBoardTimeline.getId())
+				.orElseThrow(() -> new CustomException("400", "게시물 정보가 없습니다."));
 		assertThat(createdFreeBoardTimeline).isEqualTo(readTimeline);
 	}
 	
 	@Test
 	public void readFreeBoardAnswerTimeline() {
 		Timeline freeBoardAnswerTimeline = Timeline.builder()
-				.type("freeBoard answer")
-				.icon("comment")
-				.freeBoardAnswer(freeBoardAnswer)
+//				.type("freeBoard answer")
+//				.icon("comment")
+//				.freeBoardAnswer(freeBoardAnswer)
+				.saveType(SaveType.FREE_BOARD_ANSWER)
+				.postId(freeBoardAnswer.getId())
+				.redirectId(freeBoardAnswer.getFreeBoard().getId())
 				.user(user)
 				.saveDate(freeBoardAnswer.getCreateDate())
 				.build();
 		Timeline createdFreeBoardAnswerTimeline = timelineRepository.save(freeBoardAnswerTimeline);
-		Timeline readTimeline = timelineRepository.findByFreeBoardAnswer(freeBoardAnswer);
+		Timeline readTimeline = timelineRepository.findById(createdFreeBoardAnswerTimeline.getId())
+				.orElseThrow(() -> new CustomException("400", "게시물 정보가 없습니다."));
 		assertThat(createdFreeBoardAnswerTimeline).isEqualTo(readTimeline);
 	}
 	
@@ -224,31 +258,41 @@ public class TimelineRepositoryTest {
 //		list.add(createdGood2);
 //		diary.setGoodPushedUser(list);
 		Timeline diaryTimeline = Timeline.builder()
-				.type("good")
-				.icon("thumbs-up")
-				.good(good)
+//				.type("good")
+//				.icon("thumbs-up")
+//				.good(good)
+				.saveType(SaveType.GOOD)
+				.postId(createdGood.getId())
+				.redirectId(createdGood.getDiary().getId())
 				.user(good.getUser())
 				.saveDate(diary.getCreateDate())
 				.build();
 		Timeline createdTimeline = timelineRepository.save(diaryTimeline);
 		Timeline diaryTimeline2 = Timeline.builder()
-				.type("good")
-				.icon("thumbs-up")
-				.good(good2)
-				.user(good2.getUser())
+//				.type("good")
+//				.icon("thumbs-up")
+//				.good(good2)
+				.saveType(SaveType.GOOD)
+				.postId(createdGood2.getId())
+				.redirectId(createdGood2.getDiary().getId())
+				.user(createdGood2.getUser())
 				.saveDate(diary.getCreateDate())
 				.build();
-		timelineRepository.save(diaryTimeline2);
-		Timeline readTimeline = timelineRepository.findByGood(good);
-		assertThat(createdTimeline).isEqualTo(readTimeline);
+		Timeline createdTimeline2 = timelineRepository.save(diaryTimeline2);
+		Timeline readTimeline = timelineRepository.findById(createdTimeline2.getId())
+				.orElseThrow(() -> new CustomException("400", "게시물 정보가 없습니다."));
+		assertThat(createdTimeline2).isEqualTo(readTimeline);
 	}
 	
 	@Test
 	public void deleteDiaryTimeline() {
 		Timeline diaryTimeline = Timeline.builder()
-				.type("diary")
-				.icon("edit")
-				.diary(diary)
+//				.type("diary")
+//				.icon("edit")
+//				.diary(diary)
+				.saveType(SaveType.DIARY)
+				.postId(diary.getId())
+				.redirectId(diary.getId())
 				.user(user)
 				.saveDate(diary.getCreateDate())
 				.build();
@@ -261,9 +305,12 @@ public class TimelineRepositoryTest {
 	@Test
 	public void deleteDiaryAnswerTimeline() {
 		Timeline diaryAnswerTimeline = Timeline.builder()
-				.type("diary answer")
-				.icon("comment")
-				.diaryAnswer(diaryAnswer)
+//				.type("diary answer")
+//				.icon("comment")
+//				.diaryAnswer(diaryAnswer)
+				.saveType(SaveType.DIARY_ANSWER)
+				.postId(diaryAnswer.getId())
+				.redirectId(diaryAnswer.getDiary().getId())
 				.user(user)
 				.saveDate(diaryAnswer.getCreateDate())
 				.build();
@@ -276,9 +323,12 @@ public class TimelineRepositoryTest {
 	@Test
 	public void deleteFreeBoardTimeline() {
 		Timeline freeBoardTimeline = Timeline.builder()
-				.type("free board")
-				.icon("list-alt")
-				.freeBoard(freeBoard)
+//				.type("free board")
+//				.icon("list-alt")
+//				.freeBoard(freeBoard)
+				.saveType(SaveType.FREE_BOARD)
+				.postId(freeBoard.getId())
+				.redirectId(freeBoard.getId())
 				.user(user)
 				.saveDate(freeBoard.getCreateDate())
 				.build();
@@ -291,9 +341,12 @@ public class TimelineRepositoryTest {
 	@Test
 	public void deleteFreeBoardAnswerTimeline() {
 		Timeline freeBoardAnswerTimeline = Timeline.builder()
-				.type("freeBoard answer")
-				.icon("comment")
-				.freeBoardAnswer(freeBoardAnswer)
+//				.type("freeBoard answer")
+//				.icon("comment")
+//				.freeBoardAnswer(freeBoardAnswer)
+				.saveType(SaveType.FREE_BOARD_ANSWER)
+				.postId(freeBoardAnswer.getId())
+				.redirectId(freeBoardAnswer.getFreeBoard().getId())
 				.user(user)
 				.saveDate(freeBoardAnswer.getCreateDate())
 				.build();
@@ -315,23 +368,30 @@ public class TimelineRepositoryTest {
 		list.add(createdGood);
 		diary.setGoodPushedUser(list);
 		Timeline diaryTimeline = Timeline.builder()
-				.type("good")
-				.icon("thumbs-up")
-				.good(good)
+//				.type("good")
+//				.icon("thumbs-up")
+//				.good(good)
+				.saveType(SaveType.GOOD)
+				.postId(good.getId())
+				.redirectId(good.getDiary().getId())
 				.user(good.getUser())
 				.saveDate(diary.getCreateDate())
 				.build();
 		Timeline createdTimeline = timelineRepository.save(diaryTimeline);
-		Timeline readTimeline = timelineRepository.findByGood(good);
+		Timeline readTimeline = timelineRepository.findById(createdTimeline.getId())
+				.orElseThrow(() -> new CustomException("400", "게시물 정보가 없습니다."));
 		assertThat(createdTimeline).isEqualTo(readTimeline);
 	}
 	
 	@Test
 	public void findByUserPage() {
 		Timeline freeBoardTimeline = Timeline.builder()
-				.type("free board")
-				.icon("list-alt")
-				.freeBoard(freeBoard)
+//				.type("free board")
+//				.icon("list-alt")
+//				.freeBoard(freeBoard)
+				.saveType(SaveType.FREE_BOARD)
+				.postId(freeBoard.getId())
+				.redirectId(freeBoard.getId())
 				.user(user)
 				.saveDate(freeBoard.getCreateDate())
 				.build();

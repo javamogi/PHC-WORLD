@@ -102,20 +102,20 @@ public class TempDiaryServiceImpl implements TempDiaryService {
 
 	@Override
 	public void deleteDiary(Long id) {
-		TempDiary diary = diaryRepository.getOne(id);
-		timelineService.deleteTimeline(diary);
-//		List<TempGood> goodList = diary.getTempGoodPushedUser();
-//		for(int i = 0; i < goodList.size(); i++) {
-//			timelineService.deleteTimeline(goodList.get(i));
-//			alertService.deleteAlert(goodList.get(i));
+//		TempDiary diary = diaryRepository.getOne(id);
+//		timelineService.deleteTimeline(diary);
+////		List<TempGood> goodList = diary.getTempGoodPushedUser();
+////		for(int i = 0; i < goodList.size(); i++) {
+////			timelineService.deleteTimeline(goodList.get(i));
+////			alertService.deleteAlert(goodList.get(i));
+////		}
+//		List<TempDiaryAnswer> answerList = diary.getTempDiaryAnswers();
+//		for(int i = 0; i < answerList.size(); i++) {
+//			TempDiaryAnswer diaryAnswer = answerList.get(i);
+//			timelineService.deleteTimeline(diaryAnswer);
+////			alertService.deleteAlert(diaryAnswer);
 //		}
-		List<TempDiaryAnswer> answerList = diary.getTempDiaryAnswers();
-		for(int i = 0; i < answerList.size(); i++) {
-			TempDiaryAnswer diaryAnswer = answerList.get(i);
-			timelineService.deleteTimeline(diaryAnswer);
-//			alertService.deleteAlert(diaryAnswer);
-		}
-		diaryRepository.delete(diary);
+//		diaryRepository.delete(diary);
 	}
 	
 	@Override

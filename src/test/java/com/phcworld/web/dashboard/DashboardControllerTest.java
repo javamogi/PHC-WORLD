@@ -11,6 +11,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import java.time.LocalDateTime;
 
+import com.phcworld.domain.timeline.SaveType;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -137,16 +138,18 @@ public class DashboardControllerTest {
 				.build();
 		Timeline timeline = Timeline.builder()
 				.id(1L)
-				.type("free board")
-				.icon("")
-				.freeBoard(freeBoard)
+//				.type("free board")
+//				.icon("")
+//				.freeBoard(freeBoard)
+				.saveType(SaveType.FREE_BOARD)
+				.postId(freeBoard.getId())
 				.user(user)
 				.saveDate(freeBoard.getCreateDate())
 				.build();
 		when(this.timelineService.getOneTimeline(1L))
 		.thenReturn(timeline);
 		this.mvc.perform(get("/dashboard/timeline/{id}", 1L))
-		.andExpect(redirectedUrl("/freeboards/" + timeline.getFreeBoard().getId()));
+		.andExpect(redirectedUrl("/freeboards/" + timeline.getRedirectId()));
 	}
 	
 	@Test
@@ -177,16 +180,18 @@ public class DashboardControllerTest {
 				.build();
 		Timeline timeline = Timeline.builder()
 				.id(1L)
-				.type("free board answer")
-				.icon("")
-				.freeBoardAnswer(freeBoardAnswer)
+//				.type("free board answer")
+//				.icon("")
+//				.freeBoardAnswer(freeBoardAnswer)
+				.saveType(SaveType.FREE_BOARD_ANSWER)
+				.postId(freeBoardAnswer.getFreeBoard().getId())
 				.user(user)
 				.saveDate(freeBoardAnswer.getCreateDate())
 				.build();
 		when(this.timelineService.getOneTimeline(1L))
 		.thenReturn(timeline);
 		this.mvc.perform(get("/dashboard/timeline/{id}", 1L))
-		.andExpect(redirectedUrl("/freeboards/" + timeline.getFreeBoardAnswer().getFreeBoard().getId()));
+		.andExpect(redirectedUrl("/freeboards/" + timeline.getRedirectId()));
 	}
 	
 	@Test
@@ -210,16 +215,18 @@ public class DashboardControllerTest {
 				.build();
 		Timeline timeline = Timeline.builder()
 				.id(1L)
-				.type("diary")
-				.icon("")
-				.diary(diary)
+//				.type("diary")
+//				.icon("")
+//				.diary(diary)
+				.saveType(SaveType.DIARY)
+				.postId(diary.getId())
 				.user(user)
 				.saveDate(diary.getCreateDate())
 				.build();
 		when(this.timelineService.getOneTimeline(1L))
 		.thenReturn(timeline);
 		this.mvc.perform(get("/dashboard/timeline/{id}", 1L))
-		.andExpect(redirectedUrl("/diaries/" + timeline.getDiary().getId()));
+		.andExpect(redirectedUrl("/diaries/" + timeline.getRedirectId()));
 	}
 	
 	@Test
@@ -248,16 +255,18 @@ public class DashboardControllerTest {
 				.contents("test")
 				.build();
 		Timeline timeline = Timeline.builder()
-				.type("diary answer")
-				.icon("")
-				.diaryAnswer(diaryAnswer)
+//				.type("diary answer")
+//				.icon("")
+//				.diaryAnswer(diaryAnswer)
+				.saveType(SaveType.DIARY_ANSWER)
+				.postId(diaryAnswer.getDiary().getId())
 				.user(user)
 				.saveDate(diaryAnswer.getCreateDate())
 				.build();
 		when(this.timelineService.getOneTimeline(1L))
 		.thenReturn(timeline);
 		this.mvc.perform(get("/dashboard/timeline/{id}", 1L))
-		.andExpect(redirectedUrl("/diaries/" + timeline.getDiaryAnswer().getDiary().getId()));
+		.andExpect(redirectedUrl("/diaries/" + timeline.getRedirectId()));
 	}
 	
 	@Test
@@ -286,16 +295,18 @@ public class DashboardControllerTest {
 				.createDate(LocalDateTime.now())
 				.build();
 		Timeline timeline = Timeline.builder()
-				.type("good")
-				.icon("")
-				.good(good)
+//				.type("good")
+//				.icon("")
+//				.good(good)
+				.saveType(SaveType.GOOD)
+				.postId(good.getDiary().getId())
 				.user(good.getUser())
 				.saveDate(good.getCreateDate())
 				.build();
 		when(this.timelineService.getOneTimeline(1L))
 		.thenReturn(timeline);
 		this.mvc.perform(get("/dashboard/timeline/{id}", 1L))
-		.andExpect(redirectedUrl("/diaries/" + timeline.getGood().getDiary().getId()));
+		.andExpect(redirectedUrl("/diaries/" + timeline.getRedirectId()));
 	}
 
 }

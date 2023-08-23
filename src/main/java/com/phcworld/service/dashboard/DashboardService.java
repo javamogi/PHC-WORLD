@@ -1,8 +1,10 @@
 package com.phcworld.service.dashboard;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import com.phcworld.domain.dashboard.DashBoardSelectDto;
+import com.phcworld.domain.timeline.dto.TimelineResponseDto;
 import com.phcworld.repository.dashboard.DashBoardRepositoryCustom;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,7 +45,11 @@ public class DashboardService {
 	public DashBoardUser getDashBoardUser(User user) {
 		DashBoardSelectDto count = dashBoardRepository.findActiveCountByUser(user);
 
-		List<Timeline> timelineList = timelineService.findTimelineList(0, user);
+//		List<Timeline> timelineList = timelineService.findTimelineList(0, user);
+		List<TimelineResponseDto> timelineList = timelineService.findTimelineList(0, user)
+				.stream()
+				.map(TimelineResponseDto::of)
+				.collect(Collectors.toList());
 
 //		List<FreeBoard> freeBoardList = freeBoardService.findFreeBoardListByWriter(user);
 //		List<FreeBoardAnswer> freeBoardAnswerList = freeBoardAnswerService.findFreeBoardAnswerListByWriter(user);
