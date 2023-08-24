@@ -1,34 +1,25 @@
 package com.phcworld.service.timeline;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
-import com.phcworld.domain.timeline.SaveType;
+import com.phcworld.domain.common.SaveType;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.transaction.annotation.Transactional;
 
-import com.phcworld.domain.answer.DiaryAnswer;
-import com.phcworld.domain.answer.FreeBoardAnswer;
 import com.phcworld.domain.board.Diary;
-import com.phcworld.domain.board.FreeBoard;
-import com.phcworld.domain.good.Good;
 import com.phcworld.domain.timeline.Timeline;
 import com.phcworld.domain.user.User;
 import com.phcworld.service.answer.DiaryAnswerServiceImpl;
 import com.phcworld.service.answer.FreeBoardAnswerServiceImpl;
 import com.phcworld.service.board.DiaryServiceImpl;
 import com.phcworld.service.board.FreeBoardServiceImpl;
-import com.phcworld.service.timeline.TimelineServiceImpl;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest

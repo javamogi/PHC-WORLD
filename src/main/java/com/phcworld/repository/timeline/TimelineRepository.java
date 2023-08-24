@@ -1,15 +1,10 @@
 package com.phcworld.repository.timeline;
 
-import com.phcworld.domain.timeline.SaveType;
+import com.phcworld.domain.common.SaveType;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.phcworld.domain.answer.DiaryAnswer;
-import com.phcworld.domain.answer.FreeBoardAnswer;
-import com.phcworld.domain.board.Diary;
-import com.phcworld.domain.board.FreeBoard;
-import com.phcworld.domain.good.Good;
 import com.phcworld.domain.timeline.Timeline;
 import com.phcworld.domain.user.User;
 

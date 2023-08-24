@@ -5,6 +5,7 @@ import com.phcworld.domain.answer.DiaryAnswer;
 import com.phcworld.domain.answer.FreeBoardAnswer;
 import com.phcworld.domain.board.Diary;
 import com.phcworld.domain.board.FreeBoard;
+import com.phcworld.domain.common.SaveType;
 import com.phcworld.domain.good.Good;
 import com.phcworld.domain.user.User;
 import org.junit.Before;
@@ -81,29 +82,37 @@ public class AlertServiceImplTest {
 	@Test
 	public void createDiaryAnswerAlert() {
 		Alert alert = Alert.builder()
-				.type("Diary")
-				.diaryAnswer(diaryAnswer)
-				.postWriter(diary.getWriter())
+//				.type("Diary")
+//				.diaryAnswer(diaryAnswer)
+				.saveType(SaveType.DIARY_ANSWER)
+				.postId(diaryAnswer.getId())
+				.redirectId(diaryAnswer.getDiary().getId())
+				.registerUser(diaryAnswer.getWriter())
+				.postWriter(diaryAnswer.getDiary().getWriter())
 				.createDate(LocalDateTime.now())
 				.build();
 		when(alertService.createAlert(diaryAnswer))
 		.thenReturn(alert);
 		Alert alertCreated = alertService.createAlert(diaryAnswer);
-		assertThat(diaryAnswer).isEqualTo(alertCreated.getDiaryAnswer());
+		assertThat(diaryAnswer.getId()).isEqualTo(alertCreated.getPostId());
 	}
 	
 	@Test
 	public void createFreeBoardAnswerAlert() {
 		Alert alert = Alert.builder()
-				.type("FreeBoard")
-				.freeBoardAnswer(freeBoardAnswer)
-				.postWriter(freeBoard.getWriter())
+//				.type("FreeBoard")
+//				.freeBoardAnswer(freeBoardAnswer)
+				.saveType(SaveType.FREE_BOARD_ANSWER)
+				.postId(freeBoardAnswer.getId())
+				.redirectId(freeBoardAnswer.getFreeBoard().getId())
+				.registerUser(freeBoardAnswer.getWriter())
+				.postWriter(freeBoardAnswer.getFreeBoard().getWriter())
 				.createDate(LocalDateTime.now())
 				.build();
 		when(alertService.createAlert(freeBoardAnswer))
 		.thenReturn(alert);
 		Alert alertCreated = alertService.createAlert(freeBoardAnswer);
-		assertThat(freeBoardAnswer).isEqualTo(alertCreated.getFreeBoardAnswer());
+		assertThat(freeBoardAnswer.getId()).isEqualTo(alertCreated.getPostId());
 	}
 	
 	@Test
@@ -123,24 +132,32 @@ public class AlertServiceImplTest {
 				.createDate(LocalDateTime.now())
 				.build();
 		Alert alert = Alert.builder()
-				.type("Diary")
-				.good(good)
+//				.type("Diary")
+//				.good(good)
+				.saveType(SaveType.GOOD)
+				.postId(good.getId())
+				.redirectId(good.getDiary().getId())
+				.registerUser(good.getUser())
 				.postWriter(good.getDiary().getWriter())
 				.createDate(LocalDateTime.now())
 				.build();
 		when(alertService.createAlert(good))
 		.thenReturn(alert);
 		Alert alertCreated = alertService.createAlert(good);
-		assertThat(good).isEqualTo(alertCreated.getGood());
+		assertThat(good.getId()).isEqualTo(alertCreated.getPostId());
 	}
 	
 	@Test
 	public void getOneAlert() {
 		Alert alert = Alert.builder()
 				.id(1L)
-				.type("FreeBoard")
-				.freeBoardAnswer(freeBoardAnswer)
-				.postWriter(freeBoard.getWriter())
+//				.type("FreeBoard")
+//				.freeBoardAnswer(freeBoardAnswer)
+				.saveType(SaveType.FREE_BOARD_ANSWER)
+				.postId(freeBoardAnswer.getId())
+				.redirectId(freeBoardAnswer.getFreeBoard().getId())
+				.registerUser(freeBoardAnswer.getWriter())
+				.postWriter(freeBoardAnswer.getFreeBoard().getWriter())
 				.createDate(LocalDateTime.now())
 				.build();
 		when(alertService.getOneAlert(alert.getId()))
@@ -152,15 +169,23 @@ public class AlertServiceImplTest {
 	@Test
 	public void findPageRequestAlertByPostUser() throws Exception {
 		Alert diaryAnswerAlert = Alert.builder()
-				.type("Diary")
-				.diaryAnswer(diaryAnswer)
-				.postWriter(diary.getWriter())
+//				.type("Diary")
+//				.diaryAnswer(diaryAnswer)
+				.saveType(SaveType.DIARY_ANSWER)
+				.postId(diaryAnswer.getId())
+				.redirectId(diaryAnswer.getDiary().getId())
+				.registerUser(diaryAnswer.getWriter())
+				.postWriter(diaryAnswer.getDiary().getWriter())
 				.createDate(LocalDateTime.now())
 				.build();
 		Alert freeBoardAnswerAlert = Alert.builder()
-				.type("Free Board")
-				.freeBoardAnswer(freeBoardAnswer)
-				.postWriter(user)
+//				.type("Free Board")
+//				.freeBoardAnswer(freeBoardAnswer)
+				.saveType(SaveType.FREE_BOARD_ANSWER)
+				.postId(freeBoardAnswer.getId())
+				.redirectId(freeBoardAnswer.getFreeBoard().getId())
+				.registerUser(freeBoardAnswer.getWriter())
+				.postWriter(freeBoardAnswer.getFreeBoard().getWriter())
 				.createDate(LocalDateTime.now())
 				.build();
 		List<Alert> list = new ArrayList<Alert>();

@@ -2,17 +2,11 @@ package com.phcworld.domain.alert;
 
 import java.time.LocalDateTime;
 
-import javax.persistence.Entity;
-import javax.persistence.ForeignKey;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
+import javax.persistence.*;
 
 import com.phcworld.domain.answer.DiaryAnswer;
 import com.phcworld.domain.answer.FreeBoardAnswer;
+import com.phcworld.domain.common.SaveType;
 import com.phcworld.domain.good.Good;
 import com.phcworld.domain.user.User;
 import com.phcworld.utils.LocalDateTimeUtils;
@@ -32,19 +26,28 @@ public class Alert {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	private String type;
+	@Enumerated(EnumType.STRING)
+	private SaveType saveType;
 
-	@OneToOne
-	@JoinColumn(foreignKey = @ForeignKey(name = "fk_alert_good"))
-	private Good good;
+	private Long postId;
+	private Long redirectId;
 
-	@OneToOne
-	@JoinColumn(foreignKey = @ForeignKey(name = "fk_alert_diary_answer"))
-	private DiaryAnswer diaryAnswer;
+//	private String type;
 
-	@OneToOne
-	@JoinColumn(foreignKey = @ForeignKey(name = "fk_alert_free_board_answer"))
-	private FreeBoardAnswer freeBoardAnswer;
+//	@OneToOne
+//	@JoinColumn(foreignKey = @ForeignKey(name = "fk_alert_good"))
+//	private Good good;
+//
+//	@OneToOne
+//	@JoinColumn(foreignKey = @ForeignKey(name = "fk_alert_diary_answer"))
+//	private DiaryAnswer diaryAnswer;
+//
+//	@OneToOne
+//	@JoinColumn(foreignKey = @ForeignKey(name = "fk_alert_free_board_answer"))
+//	private FreeBoardAnswer freeBoardAnswer;
+
+	@ManyToOne
+	private User registerUser;
 
 	@ManyToOne
 	@JoinColumn(foreignKey = @ForeignKey(name = "fk_alert_post_writer"))
@@ -52,7 +55,17 @@ public class Alert {
 	
 	private LocalDateTime createDate;
 
+	private Boolean read;
+
 	public String getFormattedCreateDate() {
 		return LocalDateTimeUtils.getTime(createDate);
+	}
+
+	public String getRedirectUrl() {
+		if(this.saveType == SaveType.DIARY_ANSWER
+				|| this.saveType == SaveType.GOOD){
+			return "redirect:/diaries/" + getRedirectId();
+		}
+		return "redirect:/freeboards/" + getRedirectId();
 	}
 }

@@ -2,11 +2,9 @@ package com.phcworld.service.timeline;
 
 import com.phcworld.domain.answer.DiaryAnswer;
 import com.phcworld.domain.answer.FreeBoardAnswer;
-import com.phcworld.domain.api.model.request.DiaryAnswerRequest;
-import com.phcworld.domain.api.model.response.DiaryAnswerApiResponse;
 import com.phcworld.domain.board.*;
 import com.phcworld.domain.good.Good;
-import com.phcworld.domain.timeline.SaveType;
+import com.phcworld.domain.common.SaveType;
 import com.phcworld.domain.timeline.Timeline;
 import com.phcworld.domain.user.User;
 import com.phcworld.exception.model.CustomException;

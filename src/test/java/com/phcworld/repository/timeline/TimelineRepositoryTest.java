@@ -5,7 +5,7 @@ import com.phcworld.domain.answer.FreeBoardAnswer;
 import com.phcworld.domain.board.Diary;
 import com.phcworld.domain.board.FreeBoard;
 import com.phcworld.domain.good.Good;
-import com.phcworld.domain.timeline.SaveType;
+import com.phcworld.domain.common.SaveType;
 import com.phcworld.domain.timeline.Timeline;
 import com.phcworld.domain.user.User;
 import com.phcworld.exception.model.CustomException;

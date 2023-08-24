@@ -55,15 +55,21 @@
                     	<li>
                             <a href="/alert/{{id}}">
                                 <div>
-                                	{{#good}}
-                                		{{good.user.name}} 님이 {{good.diary.title}} 게시물에 좋아요를 눌렀습니다.
-                                	{{/good}}
-                                		{{#freeBoardAnswer}}
-                                    		{{freeBoardAnswer.writer.name}} 님이 {{freeBoardAnswer.freeBoard.title}} 게시물에 댓글을 달았습니다.
-                                    	{{/freeBoardAnswer}}
-                                    	{{#diaryAnswer}}
-                                    		{{diaryAnswer.writer.name}} 님이 {{diaryAnswer.diary.title}} 게시물에 댓글을 달았습니다.
-                                    	{{/diaryAnswer}} 
+<!--                                	{{#good}}-->
+<!--                                		{{good.user.name}} 님이 {{good.diary.title}} 게시물에 좋아요를 눌렀습니다.-->
+<!--                                	{{/good}}-->
+<!--                                		{{#freeBoardAnswer}}-->
+<!--                                    		{{freeBoardAnswer.writer.name}} 님이 {{freeBoardAnswer.freeBoard.title}} 게시물에 댓글을 달았습니다.-->
+<!--                                    	{{/freeBoardAnswer}}-->
+<!--                                    	{{#diaryAnswer}}-->
+<!--                                    		{{diaryAnswer.writer.name}} 님이 {{diaryAnswer.diary.title}} 게시물에 댓글을 달았습니다.-->
+<!--                                    	{{/diaryAnswer}} -->
+                                    {{#isGood}}
+                                        {{userName}} 님이 {{postTitle}} 게시물에 좋아요를 눌렀습니다.
+                                    {{/isGood}}
+                                    {{^isGood}}
+                                        {{userName}} 님이 {{postTitle}} 게시물에 댓글을 달았습니다.
+                                    {{/isGood}}
                                     <span class="pull-right text-muted small">{{formattedCreateDate}}</span>
                                 </div>
                             </a>
