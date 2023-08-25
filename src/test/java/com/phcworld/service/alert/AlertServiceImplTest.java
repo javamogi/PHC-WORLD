@@ -1,6 +1,7 @@
 package com.phcworld.service.alert;
 
 import com.phcworld.domain.alert.Alert;
+import com.phcworld.domain.alert.dto.AlertResponseDto;
 import com.phcworld.domain.answer.DiaryAnswer;
 import com.phcworld.domain.answer.FreeBoardAnswer;
 import com.phcworld.domain.board.Diary;
@@ -194,6 +195,35 @@ public class AlertServiceImplTest {
 		when(alertService.findListAlertByPostUser(user))
 		.thenReturn(list);
 		List<Alert> alertList = alertService.findListAlertByPostUser(user);
+		assertThat(alertList)
+				.contains(diaryAnswerAlert)
+				.contains(freeBoardAnswerAlert);
+	}
+
+	@Test
+	public void findAlertListByPostUser() throws Exception {
+
+		AlertResponseDto diaryAnswerAlert = AlertResponseDto.builder()
+				.userName(diaryAnswer.getWriter().getName())
+				.isGood(false)
+				.postTitle(diaryAnswer.getDiary().getTitle())
+				.formattedCreateDate(diaryAnswer.getFormattedCreateDate())
+				.build();
+
+		AlertResponseDto freeBoardAnswerAlert = AlertResponseDto.builder()
+				.userName(freeBoardAnswer.getWriter().getName())
+				.isGood(false)
+				.postTitle(freeBoardAnswer.getFreeBoard().getTitle())
+				.formattedCreateDate(freeBoardAnswer.getFormattedCreateDate())
+				.build();
+
+		List<AlertResponseDto> list = new ArrayList<>();
+		list.add(diaryAnswerAlert);
+		list.add(freeBoardAnswerAlert);
+
+		when(alertService.findByAlertListByPostUser(user))
+				.thenReturn(list);
+		List<AlertResponseDto> alertList = alertService.findByAlertListByPostUser(user);
 		assertThat(alertList)
 				.contains(diaryAnswerAlert)
 				.contains(freeBoardAnswerAlert);

@@ -168,16 +168,40 @@ public class AlertRepositoryTest {
 				.build();
 		Alert createdAlert2 = alertRepository.save(alert2);
 
-		List<AlertResponseDto> tmp = alertRepository.findAlertListByPostWriter(user)
-				.stream()
-				.map(AlertResponseDto::of)
-				.collect(Collectors.toList());
-		log.info("tmp : {}", tmp);
 //		PageRequest pageRequest = PageRequest.of(0, 5, new Sort(Direction.DESC, "id"));
 		PageRequest pageRequest = PageRequest.of(0, 5, Sort.by("id").descending());
 		Page<Alert> page = alertRepository.findByPostWriter(user, pageRequest);
 		List<Alert> list = page.getContent();
 		assertThat(list).contains(createdAlert).contains(createdAlert2);
+	}
+
+	@Test
+	public void findByPostWriter() {
+		Alert alert = Alert.builder()
+				.saveType(SaveType.FREE_BOARD_ANSWER)
+				.postId(freeBoardAnswer.getId())
+				.redirectId(freeBoardAnswer.getFreeBoard().getId())
+				.registerUser(freeBoardAnswer.getWriter())
+				.postWriter(freeBoardAnswer.getFreeBoard().getWriter())
+				.createDate(LocalDateTime.now())
+				.build();
+		alertRepository.save(alert);
+		Alert alert2 = Alert.builder()
+				.saveType(SaveType.DIARY_ANSWER)
+				.postId(diaryAnswer.getId())
+				.redirectId(diaryAnswer.getDiary().getId())
+				.registerUser(diaryAnswer.getWriter())
+				.postWriter(diaryAnswer.getDiary().getWriter())
+				.createDate(LocalDateTime.now())
+				.build();
+		alertRepository.save(alert2);
+
+		List<AlertResponseDto> list = alertRepository.findAlertListByPostWriter(user)
+				.stream()
+				.map(AlertResponseDto::of)
+				.collect(Collectors.toList());
+		assertThat(list.get(0).getPostTitle()).isEqualTo(diary.getTitle());
+		assertThat(list.get(1).getPostTitle()).isEqualTo(freeBoard.getTitle());
 	}
 	
 	@Test
