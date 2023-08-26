@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import javax.persistence.*;
 
 import com.phcworld.domain.common.SaveType;
+import com.phcworld.domain.embedded.PostInfo;
 import com.phcworld.domain.user.User;
 import com.phcworld.utils.LocalDateTimeUtils;
 
@@ -25,8 +26,13 @@ public class Timeline {
 	private Long id;
 
 //	private String type;
-	@Enumerated(EnumType.STRING)
-	private SaveType saveType;
+
+//	@Enumerated(EnumType.STRING)
+//	private SaveType saveType;
+//
+//	private Long postId;
+//
+//	private Long redirectId;
 
 //	private String icon;
 
@@ -50,9 +56,8 @@ public class Timeline {
 //	@JoinColumn(foreignKey = @ForeignKey(name = "fk_timeline_good"))
 //	private Good good;
 
-	private Long postId;
-
-	private Long redirectId;
+	@Embedded
+	private PostInfo postInfo;
 
 	@ManyToOne
 	@JoinColumn(foreignKey = @ForeignKey(name = "fk_timeline_user"))
@@ -82,12 +87,12 @@ public class Timeline {
 //	}
 
 	public String redirectUrl() {
-		if (this.saveType == SaveType.DIARY
-				|| this.saveType == SaveType.DIARY_ANSWER
-				|| this.saveType == SaveType.GOOD){
-			return "redirect:/diaries/"+ this.redirectId;
+		if (postInfo.getSaveType() == SaveType.DIARY
+				|| postInfo.getSaveType() == SaveType.DIARY_ANSWER
+				|| postInfo.getSaveType() == SaveType.GOOD){
+			return "redirect:/diaries/"+ postInfo.getRedirectId();
 		}
-		return "redirect:/freeboards/" + this.redirectId;
+		return "redirect:/freeboards/" + postInfo.getRedirectId();
 	}
 
 }

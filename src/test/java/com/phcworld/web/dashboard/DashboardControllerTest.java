@@ -12,6 +12,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import java.time.LocalDateTime;
 
 import com.phcworld.domain.common.SaveType;
+import com.phcworld.domain.embedded.PostInfo;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -136,20 +137,24 @@ public class DashboardControllerTest {
 				.createDate(LocalDateTime.now())
 				.count(0)
 				.build();
+		PostInfo postInfo = PostInfo.builder()
+				.saveType(SaveType.FREE_BOARD)
+				.postId(freeBoard.getId())
+				.redirectId(freeBoard.getId())
+				.build();
 		Timeline timeline = Timeline.builder()
 				.id(1L)
 //				.type("free board")
 //				.icon("")
 //				.freeBoard(freeBoard)
-				.saveType(SaveType.FREE_BOARD)
-				.postId(freeBoard.getId())
+				.postInfo(postInfo)
 				.user(user)
 				.saveDate(freeBoard.getCreateDate())
 				.build();
 		when(this.timelineService.getOneTimeline(1L))
 		.thenReturn(timeline);
 		this.mvc.perform(get("/dashboard/timeline/{id}", 1L))
-		.andExpect(redirectedUrl("/freeboards/" + timeline.getRedirectId()));
+		.andExpect(redirectedUrl("/freeboards/" + timeline.getPostInfo().getRedirectId()));
 	}
 	
 	@Test
@@ -178,20 +183,24 @@ public class DashboardControllerTest {
 				.freeBoard(freeBoard)
 				.contents("test")
 				.build();
+		PostInfo postInfo = PostInfo.builder()
+				.saveType(SaveType.FREE_BOARD_ANSWER)
+				.postId(freeBoardAnswer.getId())
+				.redirectId(freeBoardAnswer.getFreeBoard().getId())
+				.build();
 		Timeline timeline = Timeline.builder()
 				.id(1L)
 //				.type("free board answer")
 //				.icon("")
 //				.freeBoardAnswer(freeBoardAnswer)
-				.saveType(SaveType.FREE_BOARD_ANSWER)
-				.postId(freeBoardAnswer.getFreeBoard().getId())
+				.postInfo(postInfo)
 				.user(user)
 				.saveDate(freeBoardAnswer.getCreateDate())
 				.build();
 		when(this.timelineService.getOneTimeline(1L))
 		.thenReturn(timeline);
 		this.mvc.perform(get("/dashboard/timeline/{id}", 1L))
-		.andExpect(redirectedUrl("/freeboards/" + timeline.getRedirectId()));
+		.andExpect(redirectedUrl("/freeboards/" + timeline.getPostInfo().getRedirectId()));
 	}
 	
 	@Test
@@ -213,20 +222,24 @@ public class DashboardControllerTest {
 				.thumbnail("")
 				.createDate(LocalDateTime.now())
 				.build();
+		PostInfo postInfo = PostInfo.builder()
+				.saveType(SaveType.DIARY)
+				.postId(diary.getId())
+				.redirectId(diary.getId())
+				.build();
 		Timeline timeline = Timeline.builder()
 				.id(1L)
 //				.type("diary")
 //				.icon("")
 //				.diary(diary)
-				.saveType(SaveType.DIARY)
-				.postId(diary.getId())
+				.postInfo(postInfo)
 				.user(user)
 				.saveDate(diary.getCreateDate())
 				.build();
 		when(this.timelineService.getOneTimeline(1L))
 		.thenReturn(timeline);
 		this.mvc.perform(get("/dashboard/timeline/{id}", 1L))
-		.andExpect(redirectedUrl("/diaries/" + timeline.getRedirectId()));
+		.andExpect(redirectedUrl("/diaries/" + timeline.getPostInfo().getRedirectId()));
 	}
 	
 	@Test
@@ -254,19 +267,23 @@ public class DashboardControllerTest {
 				.diary(diary)
 				.contents("test")
 				.build();
+		PostInfo postInfo = PostInfo.builder()
+				.saveType(SaveType.DIARY_ANSWER)
+				.postId(diaryAnswer.getId())
+				.redirectId(diaryAnswer.getDiary().getId())
+				.build();
 		Timeline timeline = Timeline.builder()
 //				.type("diary answer")
 //				.icon("")
 //				.diaryAnswer(diaryAnswer)
-				.saveType(SaveType.DIARY_ANSWER)
-				.postId(diaryAnswer.getDiary().getId())
+				.postInfo(postInfo)
 				.user(user)
 				.saveDate(diaryAnswer.getCreateDate())
 				.build();
 		when(this.timelineService.getOneTimeline(1L))
 		.thenReturn(timeline);
 		this.mvc.perform(get("/dashboard/timeline/{id}", 1L))
-		.andExpect(redirectedUrl("/diaries/" + timeline.getRedirectId()));
+		.andExpect(redirectedUrl("/diaries/" + timeline.getPostInfo().getRedirectId()));
 	}
 	
 	@Test
@@ -294,19 +311,23 @@ public class DashboardControllerTest {
 				.user(user)
 				.createDate(LocalDateTime.now())
 				.build();
+		PostInfo postInfo = PostInfo.builder()
+				.saveType(SaveType.GOOD)
+				.postId(good.getId())
+				.redirectId(good.getDiary().getId())
+				.build();
 		Timeline timeline = Timeline.builder()
 //				.type("good")
 //				.icon("")
 //				.good(good)
-				.saveType(SaveType.GOOD)
-				.postId(good.getDiary().getId())
+				.postInfo(postInfo)
 				.user(good.getUser())
 				.saveDate(good.getCreateDate())
 				.build();
 		when(this.timelineService.getOneTimeline(1L))
 		.thenReturn(timeline);
 		this.mvc.perform(get("/dashboard/timeline/{id}", 1L))
-		.andExpect(redirectedUrl("/diaries/" + timeline.getRedirectId()));
+		.andExpect(redirectedUrl("/diaries/" + timeline.getPostInfo().getRedirectId()));
 	}
 
 }

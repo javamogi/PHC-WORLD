@@ -4,6 +4,7 @@ import com.phcworld.domain.answer.DiaryAnswer;
 import com.phcworld.domain.answer.FreeBoardAnswer;
 import com.phcworld.domain.board.Diary;
 import com.phcworld.domain.board.FreeBoard;
+import com.phcworld.domain.embedded.PostInfo;
 import com.phcworld.domain.good.Good;
 import com.phcworld.domain.common.SaveType;
 import com.phcworld.domain.timeline.Timeline;
@@ -78,13 +79,16 @@ public class TimelineRepositoryTest {
 
 	@Test
 	public void createDiaryTimeline() {
+		PostInfo postInfo = PostInfo.builder()
+				.saveType(SaveType.DIARY)
+				.postId(diary.getId())
+				.redirectId(diary.getId())
+				.build();
 		Timeline diaryTimeline = Timeline.builder()
 //				.type("diary")
 //				.icon("edit")
 //				.diary(diary)
-				.saveType(SaveType.DIARY)
-				.postId(diary.getId())
-				.redirectId(diary.getId())
+				.postInfo(postInfo)
 				.user(user)
 				.saveDate(diary.getCreateDate())
 				.build();
@@ -94,13 +98,17 @@ public class TimelineRepositoryTest {
 	
 	@Test
 	public void createDiaryAnswerTimeline() {
+		PostInfo postInfo = PostInfo.builder()
+				.saveType(SaveType.DIARY_ANSWER)
+				.postId(diaryAnswer.getId())
+				.redirectId(diaryAnswer.getDiary().getId())
+				.build();
+
 		Timeline diaryAnswerTimeline = Timeline.builder()
 //				.type("diary answer")
 //				.icon("comment")
 //				.diaryAnswer(diaryAnswer)
-				.saveType(SaveType.DIARY_ANSWER)
-				.postId(diaryAnswer.getId())
-				.redirectId(diaryAnswer.getDiary().getId())
+				.postInfo(postInfo)
 				.user(user)
 				.saveDate(diaryAnswer.getCreateDate())
 				.build();
@@ -110,13 +118,16 @@ public class TimelineRepositoryTest {
 	
 	@Test
 	public void createFreeBoardTimeline() {
+		PostInfo postInfo = PostInfo.builder()
+				.saveType(SaveType.FREE_BOARD)
+				.postId(freeBoard.getId())
+				.redirectId(freeBoard.getId())
+				.build();
 		Timeline freeBoardTimeline = Timeline.builder()
 //				.type("free board")
 //				.icon("list-alt")
 //				.freeBoard(freeBoard)
-				.saveType(SaveType.FREE_BOARD)
-				.postId(freeBoard.getId())
-				.redirectId(freeBoard.getId())
+				.postInfo(postInfo)
 				.user(user)
 				.saveDate(freeBoard.getCreateDate())
 				.build();
@@ -126,13 +137,16 @@ public class TimelineRepositoryTest {
 	
 	@Test
 	public void createFreeBoardAnswerTimeline() {
+		PostInfo postInfo = PostInfo.builder()
+				.saveType(SaveType.FREE_BOARD_ANSWER)
+				.postId(freeBoardAnswer.getId())
+				.redirectId(freeBoardAnswer.getFreeBoard().getId())
+				.build();
 		Timeline freeBoardAnswerTimeline = Timeline.builder()
 //				.type("freeBoard answer")
 //				.icon("comment")
 //				.freeBoardAnswer(freeBoardAnswer)
-				.saveType(SaveType.FREE_BOARD_ANSWER)
-				.postId(freeBoardAnswer.getId())
-				.redirectId(freeBoardAnswer.getFreeBoard().getId())
+				.postInfo(postInfo)
 				.user(user)
 				.saveDate(freeBoardAnswer.getCreateDate())
 				.build();
@@ -148,13 +162,16 @@ public class TimelineRepositoryTest {
 				.createDate(LocalDateTime.now())
 				.build();
 		Good newGood = goodRepository.save(good);
+		PostInfo postInfo = PostInfo.builder()
+				.saveType(SaveType.GOOD)
+				.postId(good.getId())
+				.redirectId(good.getDiary().getId())
+				.build();
 		Timeline diaryTimeline = Timeline.builder()
 //				.type("good")
 //				.icon("thumbs-up")
 //				.good(newGood)
-				.saveType(SaveType.GOOD)
-				.postId(newGood.getId())
-				.redirectId(newGood.getDiary().getId())
+				.postInfo(postInfo)
 				.user(newGood.getUser())
 				.saveDate(diary.getCreateDate())
 				.build();
@@ -166,13 +183,16 @@ public class TimelineRepositoryTest {
 	
 	@Test
 	public void readDiaryTimeline() {
+		PostInfo postInfo = PostInfo.builder()
+				.saveType(SaveType.DIARY)
+				.postId(diary.getId())
+				.redirectId(diary.getId())
+				.build();
 		Timeline diaryTimeline = Timeline.builder()
 //				.type("diary")
 //				.icon("edit")
 //				.diary(diary)
-				.saveType(SaveType.DIARY)
-				.postId(diary.getId())
-				.redirectId(diary.getId())
+				.postInfo(postInfo)
 				.user(user)
 				.saveDate(diary.getCreateDate())
 				.build();
@@ -184,13 +204,16 @@ public class TimelineRepositoryTest {
 	
 	@Test
 	public void readDiaryAnswerTimeline() {
+		PostInfo postInfo = PostInfo.builder()
+				.saveType(SaveType.DIARY_ANSWER)
+				.postId(diaryAnswer.getId())
+				.redirectId(diaryAnswer.getDiary().getId())
+				.build();
 		Timeline diaryAnswerTimeline = Timeline.builder()
 //				.type("diary answer")
 //				.icon("comment")
 //				.diaryAnswer(diaryAnswer)
-				.saveType(SaveType.DIARY_ANSWER)
-				.postId(diaryAnswer.getId())
-				.redirectId(diaryAnswer.getDiary().getId())
+				.postInfo(postInfo)
 				.user(user)
 				.saveDate(diaryAnswer.getCreateDate())
 				.build();
@@ -202,13 +225,16 @@ public class TimelineRepositoryTest {
 	
 	@Test
 	public void readFreeBoardTimeline() {
+		PostInfo postInfo = PostInfo.builder()
+				.saveType(SaveType.FREE_BOARD)
+				.postId(freeBoard.getId())
+				.redirectId(freeBoard.getId())
+				.build();
 		Timeline freeBoardTimeline = Timeline.builder()
 //				.type("free board")
 //				.icon("list-alt")
 //				.freeBoard(freeBoard)
-				.saveType(SaveType.FREE_BOARD)
-				.postId(freeBoard.getId())
-				.redirectId(freeBoard.getId())
+				.postInfo(postInfo)
 				.user(user)
 				.saveDate(freeBoard.getCreateDate())
 				.build();
@@ -220,13 +246,16 @@ public class TimelineRepositoryTest {
 	
 	@Test
 	public void readFreeBoardAnswerTimeline() {
+		PostInfo postInfo = PostInfo.builder()
+				.saveType(SaveType.FREE_BOARD_ANSWER)
+				.postId(freeBoardAnswer.getId())
+				.redirectId(freeBoardAnswer.getFreeBoard().getId())
+				.build();
 		Timeline freeBoardAnswerTimeline = Timeline.builder()
 //				.type("freeBoard answer")
 //				.icon("comment")
 //				.freeBoardAnswer(freeBoardAnswer)
-				.saveType(SaveType.FREE_BOARD_ANSWER)
-				.postId(freeBoardAnswer.getId())
-				.redirectId(freeBoardAnswer.getFreeBoard().getId())
+				.postInfo(postInfo)
 				.user(user)
 				.saveDate(freeBoardAnswer.getCreateDate())
 				.build();
@@ -257,24 +286,29 @@ public class TimelineRepositoryTest {
 //		list.add(createdGood);
 //		list.add(createdGood2);
 //		diary.setGoodPushedUser(list);
+		PostInfo postInfo = PostInfo.builder()
+				.saveType(SaveType.GOOD)
+				.postId(createdGood.getId())
+				.redirectId(createdGood.getDiary().getId())
+				.build();
 		Timeline diaryTimeline = Timeline.builder()
 //				.type("good")
 //				.icon("thumbs-up")
 //				.good(good)
-				.saveType(SaveType.GOOD)
-				.postId(createdGood.getId())
-				.redirectId(createdGood.getDiary().getId())
+				.postInfo(postInfo)
 				.user(good.getUser())
 				.saveDate(diary.getCreateDate())
 				.build();
-		Timeline createdTimeline = timelineRepository.save(diaryTimeline);
+		timelineRepository.save(diaryTimeline);
+		PostInfo postInfo2 = PostInfo.builder()
+				.saveType(SaveType.GOOD)
+				.postId(createdGood2.getId())
+				.redirectId(createdGood2.getDiary().getId())
+				.build();
 		Timeline diaryTimeline2 = Timeline.builder()
 //				.type("good")
 //				.icon("thumbs-up")
 //				.good(good2)
-				.saveType(SaveType.GOOD)
-				.postId(createdGood2.getId())
-				.redirectId(createdGood2.getDiary().getId())
 				.user(createdGood2.getUser())
 				.saveDate(diary.getCreateDate())
 				.build();
@@ -286,13 +320,16 @@ public class TimelineRepositoryTest {
 	
 	@Test
 	public void deleteDiaryTimeline() {
+		PostInfo postInfo = PostInfo.builder()
+				.saveType(SaveType.DIARY)
+				.postId(diary.getId())
+				.redirectId(diary.getId())
+				.build();
 		Timeline diaryTimeline = Timeline.builder()
 //				.type("diary")
 //				.icon("edit")
 //				.diary(diary)
-				.saveType(SaveType.DIARY)
-				.postId(diary.getId())
-				.redirectId(diary.getId())
+				.postInfo(postInfo)
 				.user(user)
 				.saveDate(diary.getCreateDate())
 				.build();
@@ -304,13 +341,16 @@ public class TimelineRepositoryTest {
 	
 	@Test
 	public void deleteDiaryAnswerTimeline() {
+		PostInfo postInfo = PostInfo.builder()
+				.saveType(SaveType.DIARY_ANSWER)
+				.postId(diaryAnswer.getId())
+				.redirectId(diaryAnswer.getDiary().getId())
+				.build();
 		Timeline diaryAnswerTimeline = Timeline.builder()
 //				.type("diary answer")
 //				.icon("comment")
 //				.diaryAnswer(diaryAnswer)
-				.saveType(SaveType.DIARY_ANSWER)
-				.postId(diaryAnswer.getId())
-				.redirectId(diaryAnswer.getDiary().getId())
+				.postInfo(postInfo)
 				.user(user)
 				.saveDate(diaryAnswer.getCreateDate())
 				.build();
@@ -322,13 +362,16 @@ public class TimelineRepositoryTest {
 	
 	@Test
 	public void deleteFreeBoardTimeline() {
+		PostInfo postInfo = PostInfo.builder()
+				.saveType(SaveType.FREE_BOARD)
+				.postId(freeBoard.getId())
+				.redirectId(freeBoard.getId())
+				.build();
 		Timeline freeBoardTimeline = Timeline.builder()
 //				.type("free board")
 //				.icon("list-alt")
 //				.freeBoard(freeBoard)
-				.saveType(SaveType.FREE_BOARD)
-				.postId(freeBoard.getId())
-				.redirectId(freeBoard.getId())
+				.postInfo(postInfo)
 				.user(user)
 				.saveDate(freeBoard.getCreateDate())
 				.build();
@@ -340,13 +383,16 @@ public class TimelineRepositoryTest {
 	
 	@Test
 	public void deleteFreeBoardAnswerTimeline() {
+		PostInfo postInfo = PostInfo.builder()
+				.saveType(SaveType.FREE_BOARD_ANSWER)
+				.postId(freeBoardAnswer.getId())
+				.redirectId(freeBoardAnswer.getFreeBoard().getId())
+				.build();
 		Timeline freeBoardAnswerTimeline = Timeline.builder()
 //				.type("freeBoard answer")
 //				.icon("comment")
 //				.freeBoardAnswer(freeBoardAnswer)
-				.saveType(SaveType.FREE_BOARD_ANSWER)
-				.postId(freeBoardAnswer.getId())
-				.redirectId(freeBoardAnswer.getFreeBoard().getId())
+				.postInfo(postInfo)
 				.user(user)
 				.saveDate(freeBoardAnswer.getCreateDate())
 				.build();
@@ -367,13 +413,16 @@ public class TimelineRepositoryTest {
 		List<Good> list = new ArrayList<Good>();
 		list.add(createdGood);
 		diary.setGoodPushedUser(list);
+		PostInfo postInfo = PostInfo.builder()
+				.saveType(SaveType.GOOD)
+				.postId(good.getId())
+				.redirectId(good.getDiary().getId())
+				.build();
 		Timeline diaryTimeline = Timeline.builder()
 //				.type("good")
 //				.icon("thumbs-up")
 //				.good(good)
-				.saveType(SaveType.GOOD)
-				.postId(good.getId())
-				.redirectId(good.getDiary().getId())
+				.postInfo(postInfo)
 				.user(good.getUser())
 				.saveDate(diary.getCreateDate())
 				.build();
@@ -385,13 +434,16 @@ public class TimelineRepositoryTest {
 	
 	@Test
 	public void findByUserPage() {
+		PostInfo postInfo = PostInfo.builder()
+				.saveType(SaveType.FREE_BOARD)
+				.postId(freeBoard.getId())
+				.redirectId(freeBoard.getId())
+				.build();
 		Timeline freeBoardTimeline = Timeline.builder()
 //				.type("free board")
 //				.icon("list-alt")
 //				.freeBoard(freeBoard)
-				.saveType(SaveType.FREE_BOARD)
-				.postId(freeBoard.getId())
-				.redirectId(freeBoard.getId())
+				.postInfo(postInfo)
 				.user(user)
 				.saveDate(freeBoard.getCreateDate())
 				.build();

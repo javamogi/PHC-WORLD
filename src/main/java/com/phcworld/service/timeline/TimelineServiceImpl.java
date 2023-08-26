@@ -2,15 +2,14 @@ package com.phcworld.service.timeline;
 
 import com.phcworld.domain.answer.DiaryAnswer;
 import com.phcworld.domain.answer.FreeBoardAnswer;
-import com.phcworld.domain.board.*;
-import com.phcworld.domain.good.Good;
+import com.phcworld.domain.board.Diary;
+import com.phcworld.domain.board.FreeBoard;
 import com.phcworld.domain.common.SaveType;
+import com.phcworld.domain.embedded.PostInfo;
+import com.phcworld.domain.good.Good;
 import com.phcworld.domain.timeline.Timeline;
 import com.phcworld.domain.user.User;
 import com.phcworld.exception.model.CustomException;
-import com.phcworld.repository.answer.DiaryAnswerRepository;
-import com.phcworld.repository.board.DiaryRepository;
-import com.phcworld.repository.board.FreeBoardRepository;
 import com.phcworld.repository.timeline.TimelineRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -28,9 +27,6 @@ import java.util.List;
 public class TimelineServiceImpl implements TimelineService {
 	
 	private final TimelineRepository timelineRepository;
-	private final DiaryRepository diaryRepository;
-	private final FreeBoardRepository freeBoardRepository;
-	private final DiaryAnswerRepository diaryAnswerRepository;
 
 //	@Override
 //	public List<Timeline> findTimelineList(Integer timelinePageNum, User user) {
@@ -55,10 +51,13 @@ public class TimelineServiceImpl implements TimelineService {
 	}
 	
 	public Timeline createTimeline(Diary diary) {
-		Timeline diaryTimeline = Timeline.builder()
+		PostInfo postInfo = PostInfo.builder()
 				.saveType(SaveType.DIARY)
 				.postId(diary.getId())
 				.redirectId(diary.getId())
+				.build();
+		Timeline diaryTimeline = Timeline.builder()
+				.postInfo(postInfo)
 				.user(diary.getWriter())
 				.saveDate(diary.getCreateDate())
 				.build();
@@ -66,10 +65,13 @@ public class TimelineServiceImpl implements TimelineService {
 	}
 
 	public Timeline createTimeline(DiaryAnswer diaryAnswer) {
-		Timeline diaryAnswerTimeline = Timeline.builder()
+		PostInfo postInfo = PostInfo.builder()
 				.saveType(SaveType.DIARY_ANSWER)
 				.postId(diaryAnswer.getId())
 				.redirectId(diaryAnswer.getDiary().getId())
+				.build();
+		Timeline diaryAnswerTimeline = Timeline.builder()
+				.postInfo(postInfo)
 				.user(diaryAnswer.getWriter())
 				.saveDate(diaryAnswer.getCreateDate())
 				.build();
@@ -77,10 +79,13 @@ public class TimelineServiceImpl implements TimelineService {
 	}
 
 	public Timeline createTimeline(FreeBoard freeBoard) {
-		Timeline freeBoardTimeline = Timeline.builder()
+		PostInfo postInfo = PostInfo.builder()
 				.saveType(SaveType.FREE_BOARD)
 				.postId(freeBoard.getId())
 				.redirectId(freeBoard.getId())
+				.build();
+		Timeline freeBoardTimeline = Timeline.builder()
+				.postInfo(postInfo)
 				.user(freeBoard.getWriter())
 				.saveDate(freeBoard.getCreateDate())
 				.build();
@@ -88,10 +93,13 @@ public class TimelineServiceImpl implements TimelineService {
 	}
 
 	public Timeline createTimeline(FreeBoardAnswer freeBoardAnswer) {
-		Timeline freeBoardAnswerTimeline = Timeline.builder()
+		PostInfo postInfo = PostInfo.builder()
 				.saveType(SaveType.FREE_BOARD_ANSWER)
 				.postId(freeBoardAnswer.getId())
 				.redirectId(freeBoardAnswer.getFreeBoard().getId())
+				.build();
+		Timeline freeBoardAnswerTimeline = Timeline.builder()
+				.postInfo(postInfo)
 				.user(freeBoardAnswer.getWriter())
 				.saveDate(freeBoardAnswer.getCreateDate())
 				.build();
@@ -99,10 +107,13 @@ public class TimelineServiceImpl implements TimelineService {
 	}
 	
 	public Timeline createTimeline(Good good) {
-		Timeline timeline = Timeline.builder()
+		PostInfo postInfo = PostInfo.builder()
 				.saveType(SaveType.GOOD)
 				.postId(good.getId())
 				.redirectId(good.getDiary().getId())
+				.build();
+		Timeline timeline = Timeline.builder()
+				.postInfo(postInfo)
 				.user(good.getUser())
 				.saveDate(LocalDateTime.now())
 				.build();
@@ -110,27 +121,62 @@ public class TimelineServiceImpl implements TimelineService {
 	}
 	
 	public void deleteTimeline(Diary diary) {
-		Timeline timeline = timelineRepository.findBySaveTypeAndPostIdAndRedirectId(SaveType.DIARY, diary.getId(), diary.getId());
+		PostInfo postInfo = PostInfo.builder()
+				.saveType(SaveType.DIARY)
+				.postId(diary.getId())
+				.redirectId(diary.getId())
+				.build();
+//		Timeline timeline = timelineRepository.findBySaveTypeAndPostIdAndRedirectId(SaveType.DIARY, diary.getId(), diary.getId());
+		Timeline timeline = timelineRepository.findByPostInfo(postInfo)
+				.orElseThrow(() -> new CustomException("400", "타임라인이 존재하지 않습니다."));
 		timelineRepository.delete(timeline);
 	}
 
 	public void deleteTimeline(DiaryAnswer diaryAnswer) {
-		Timeline timeline = timelineRepository.findBySaveTypeAndPostIdAndRedirectId(SaveType.DIARY_ANSWER, diaryAnswer.getId(), diaryAnswer.getDiary().getId());
+		PostInfo postInfo = PostInfo.builder()
+				.saveType(SaveType.DIARY_ANSWER)
+				.postId(diaryAnswer.getId())
+				.redirectId(diaryAnswer.getDiary().getId())
+				.build();
+//		Timeline timeline = timelineRepository.findBySaveTypeAndPostIdAndRedirectId(SaveType.DIARY_ANSWER, diaryAnswer.getId(), diaryAnswer.getDiary().getId());
+		Timeline timeline = timelineRepository.findByPostInfo(postInfo)
+				.orElseThrow(() -> new CustomException("400", "타임라인이 존재하지 않습니다."));
 		timelineRepository.delete(timeline);
 	}
 
 	public void deleteTimeline(FreeBoard freeBoard) {
-		Timeline timeline = timelineRepository.findBySaveTypeAndPostIdAndRedirectId(SaveType.FREE_BOARD, freeBoard.getId(), freeBoard.getId());
+		PostInfo postInfo = PostInfo.builder()
+				.saveType(SaveType.FREE_BOARD)
+				.postId(freeBoard.getId())
+				.redirectId(freeBoard.getId())
+				.build();
+//		Timeline timeline = timelineRepository.findBySaveTypeAndPostIdAndRedirectId(SaveType.FREE_BOARD, freeBoard.getId(), freeBoard.getId());
+		Timeline timeline = timelineRepository.findByPostInfo(postInfo)
+				.orElseThrow(() -> new CustomException("400", "타임라인이 존재하지 않습니다."));
 		timelineRepository.delete(timeline);
 	}
 
 	public void deleteTimeline(FreeBoardAnswer freeBoardAnswer) {
-		Timeline timeline = timelineRepository.findBySaveTypeAndPostIdAndRedirectId(SaveType.FREE_BOARD_ANSWER, freeBoardAnswer.getId(), freeBoardAnswer.getFreeBoard().getId());
+		PostInfo postInfo = PostInfo.builder()
+				.saveType(SaveType.FREE_BOARD_ANSWER)
+				.postId(freeBoardAnswer.getId())
+				.redirectId(freeBoardAnswer.getFreeBoard().getId())
+				.build();
+//		Timeline timeline = timelineRepository.findBySaveTypeAndPostIdAndRedirectId(SaveType.FREE_BOARD_ANSWER, freeBoardAnswer.getId(), freeBoardAnswer.getFreeBoard().getId());
+		Timeline timeline = timelineRepository.findByPostInfo(postInfo)
+				.orElseThrow(() -> new CustomException("400", "타임라인이 존재하지 않습니다."));
 		timelineRepository.delete(timeline);
 	}
 
 	public void deleteTimeline(Good good) {
-		Timeline timeline = timelineRepository.findBySaveTypeAndPostIdAndRedirectId(SaveType.GOOD, good.getId(), good.getDiary().getId());
+		PostInfo postInfo = PostInfo.builder()
+				.saveType(SaveType.GOOD)
+				.postId(good.getId())
+				.redirectId(good.getDiary().getId())
+				.build();
+//		Timeline timeline = timelineRepository.findBySaveTypeAndPostIdAndRedirectId(SaveType.GOOD, good.getId(), good.getDiary().getId());
+		Timeline timeline = timelineRepository.findByPostInfo(postInfo)
+				.orElseThrow(() -> new CustomException("400", "타임라인이 존재하지 않습니다."));
 		timelineRepository.delete(timeline);
 	}
 

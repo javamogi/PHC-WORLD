@@ -15,7 +15,7 @@ public class TimelineResponseDto {
     private String formattedSaveDate;
 
     public static TimelineResponseDto of(Timeline timeline){
-        switch (timeline.getSaveType()){
+        switch (timeline.getPostInfo().getSaveType()){
             case DIARY:
                 return TimelineResponseDto.builder()
                         .id(timeline.getId())
