@@ -12,6 +12,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import java.time.LocalDateTime;
 
 import com.phcworld.domain.common.SaveType;
+import com.phcworld.domain.embedded.PostInfo;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -78,12 +79,15 @@ public class HomeControllerTest {
 				.diary(diary)
 				.contents("test")
 				.build();
-		Alert diaryAnswerAlert = Alert.builder()
-//				.type("Diary")
-//				.diaryAnswer(diaryAnswer)
+		PostInfo postInfo = PostInfo.builder()
 				.saveType(SaveType.DIARY_ANSWER)
 				.postId(diaryAnswer.getId())
 				.redirectId(diaryAnswer.getDiary().getId())
+				.build();
+		Alert diaryAnswerAlert = Alert.builder()
+//				.type("Diary")
+//				.diaryAnswer(diaryAnswer)
+				.postInfo(postInfo)
 				.registerUser(diaryAnswer.getWriter())
 				.postWriter(diaryAnswer.getDiary().getWriter())
 				.createDate(LocalDateTime.now())
@@ -95,7 +99,7 @@ public class HomeControllerTest {
 		this.mvc.perform(get("/alert/{id}", 1L)
 				.session(mockSession))
 		.andDo(print())
-		.andExpect(redirectedUrl("/diaries/" + diaryAnswerAlert.getRedirectId()));
+		.andExpect(redirectedUrl("/diaries/" + diaryAnswerAlert.getPostInfo().getRedirectId()));
 	}
 	
 	@Test
@@ -125,12 +129,15 @@ public class HomeControllerTest {
 				.freeBoard(freeBoard)
 				.contents("test")
 				.build();
-		Alert freeBoardAnswerAlert = Alert.builder()
-//				.type("FreeBoard")
-//				.freeBoardAnswer(freeBoardAnswer)
+		PostInfo postInfo = PostInfo.builder()
 				.saveType(SaveType.FREE_BOARD_ANSWER)
 				.postId(freeBoardAnswer.getId())
 				.redirectId(freeBoardAnswer.getFreeBoard().getId())
+				.build();
+		Alert freeBoardAnswerAlert = Alert.builder()
+//				.type("FreeBoard")
+//				.freeBoardAnswer(freeBoardAnswer)
+				.postInfo(postInfo)
 				.registerUser(freeBoardAnswer.getWriter())
 				.postWriter(freeBoardAnswer.getFreeBoard().getWriter())
 				.createDate(LocalDateTime.now())
@@ -141,7 +148,7 @@ public class HomeControllerTest {
 				.session(mockSession))
 		.andDo(print())
 		.andExpect(redirectedUrl("/freeboards/" 
-				+ freeBoardAnswerAlert.getRedirectId()));
+				+ freeBoardAnswerAlert.getPostInfo().getRedirectId()));
 	}
 	
 	@Test
@@ -168,12 +175,15 @@ public class HomeControllerTest {
 				.diary(diary)
 				.user(user)
 				.build();
-		Alert goodAlert = Alert.builder()
-//				.type("good")
-//				.good(good)
+		PostInfo postInfo = PostInfo.builder()
 				.saveType(SaveType.GOOD)
 				.postId(good.getId())
 				.redirectId(good.getDiary().getId())
+				.build();
+		Alert goodAlert = Alert.builder()
+//				.type("good")
+//				.good(good)
+				.postInfo(postInfo)
 				.registerUser(good.getUser())
 				.postWriter(good.getDiary().getWriter())
 				.createDate(LocalDateTime.now())
@@ -183,6 +193,6 @@ public class HomeControllerTest {
 		this.mvc.perform(get("/alert/{id}", 3L)
 				.session(mockSession))
 		.andDo(print())
-		.andExpect(redirectedUrl("/diaries/" + goodAlert.getRedirectId()));
+		.andExpect(redirectedUrl("/diaries/" + goodAlert.getPostInfo().getRedirectId()));
 	}
 }

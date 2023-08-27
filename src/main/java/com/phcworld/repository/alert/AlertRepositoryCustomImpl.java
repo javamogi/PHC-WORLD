@@ -11,6 +11,7 @@ import com.phcworld.domain.common.SaveType;
 import com.phcworld.domain.good.QGood;
 import com.phcworld.domain.user.User;
 import com.querydsl.core.types.Projections;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -31,21 +32,22 @@ public class AlertRepositoryCustomImpl implements AlertRepositoryCustom {
         return queryFactory
                 .select(Projections.fields(AlertSelectDto.class,
                         alert.id,
-                        alert.saveType,
+                        alert.postInfo.saveType,
                         diary.title.as("diaryTitle"),
                         freeBoard.title.as("freeBoardTitle"),
                         alert.registerUser.name.as("userName"),
                         alert.createDate
                         ))
                 .from(alert)
-                .leftJoin(diary).on(diary.id.eq(alert.redirectId)
-                        .and(alert.saveType.eq(SaveType.GOOD).or(alert.saveType.eq(SaveType.DIARY_ANSWER))))
-                .leftJoin(freeBoard).on(freeBoard.id.eq(alert.redirectId)
-                        .and(alert.saveType.eq(SaveType.FREE_BOARD_ANSWER)))
+                .leftJoin(diary).on(diary.id.eq(alert.postInfo.redirectId)
+                        .and(alert.postInfo.saveType.in(SaveType.GOOD, SaveType.DIARY_ANSWER)))
+                .leftJoin(freeBoard).on(freeBoard.id.eq(alert.postInfo.redirectId)
+                        .and(alert.postInfo.saveType.eq(SaveType.FREE_BOARD_ANSWER)))
                 .where(alert.postWriter.eq(user))
                 .limit(5)
                 .offset(0)
                 .orderBy(alert.createDate.desc())
                 .fetch();
     }
+
 }

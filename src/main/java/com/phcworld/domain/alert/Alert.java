@@ -7,6 +7,7 @@ import javax.persistence.*;
 import com.phcworld.domain.answer.DiaryAnswer;
 import com.phcworld.domain.answer.FreeBoardAnswer;
 import com.phcworld.domain.common.SaveType;
+import com.phcworld.domain.embedded.PostInfo;
 import com.phcworld.domain.good.Good;
 import com.phcworld.domain.user.User;
 import com.phcworld.utils.LocalDateTimeUtils;
@@ -26,11 +27,14 @@ public class Alert {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@Enumerated(EnumType.STRING)
-	private SaveType saveType;
+//	@Enumerated(EnumType.STRING)
+//	private SaveType saveType;
+//
+//	private Long postId;
+//	private Long redirectId;
 
-	private Long postId;
-	private Long redirectId;
+	@Embedded
+	private PostInfo postInfo;
 
 //	private String type;
 
@@ -62,10 +66,10 @@ public class Alert {
 	}
 
 	public String getRedirectUrl() {
-		if(this.saveType == SaveType.DIARY_ANSWER
-				|| this.saveType == SaveType.GOOD){
-			return "redirect:/diaries/" + getRedirectId();
+		if(this.postInfo.getSaveType() == SaveType.DIARY_ANSWER
+				|| this.postInfo.getSaveType() == SaveType.GOOD){
+			return "redirect:/diaries/" + this.postInfo.getRedirectId();
 		}
-		return "redirect:/freeboards/" + getRedirectId();
+		return "redirect:/freeboards/" + this.postInfo.getRedirectId();
 	}
 }

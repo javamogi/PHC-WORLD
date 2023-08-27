@@ -8,6 +8,7 @@ import com.phcworld.domain.answer.FreeBoardAnswer;
 import com.phcworld.domain.board.Diary;
 import com.phcworld.domain.board.FreeBoard;
 import com.phcworld.domain.common.SaveType;
+import com.phcworld.domain.embedded.PostInfo;
 import com.phcworld.domain.good.Good;
 import com.phcworld.domain.user.User;
 import com.phcworld.exception.model.CustomException;
@@ -87,12 +88,15 @@ public class AlertRepositoryTest {
 	
 	@Test
 	public void createDiaryAnswerAlert() {
-		Alert alert = Alert.builder()
-//				.type("Diary")
-//				.diaryAnswer(diaryAnswer)
+		PostInfo postInfo = PostInfo.builder()
 				.saveType(SaveType.DIARY_ANSWER)
 				.postId(diaryAnswer.getId())
 				.redirectId(diaryAnswer.getDiary().getId())
+				.build();
+		Alert alert = Alert.builder()
+//				.type("Diary")
+//				.diaryAnswer(diaryAnswer)
+				.postInfo(postInfo)
 				.registerUser(diaryAnswer.getWriter())
 				.postWriter(diaryAnswer.getDiary().getWriter())
 				.createDate(LocalDateTime.now())
@@ -104,12 +108,15 @@ public class AlertRepositoryTest {
 	
 	@Test
 	public void createFreeBoardAnswerAlert() {
-		Alert alert = Alert.builder()
-//				.type("FreeBoard")
-//				.freeBoardAnswer(freeBoardAnswer)
+		PostInfo postInfo = PostInfo.builder()
 				.saveType(SaveType.FREE_BOARD_ANSWER)
 				.postId(freeBoardAnswer.getId())
 				.redirectId(freeBoardAnswer.getFreeBoard().getId())
+				.build();
+		Alert alert = Alert.builder()
+//				.type("FreeBoard")
+//				.freeBoardAnswer(freeBoardAnswer)
+				.postInfo(postInfo)
 				.registerUser(freeBoardAnswer.getWriter())
 				.postWriter(freeBoardAnswer.getFreeBoard().getWriter())
 				.createDate(LocalDateTime.now())
@@ -129,12 +136,15 @@ public class AlertRepositoryTest {
 				.user(user2)
 				.createDate(LocalDateTime.now())
 				.build();
-		Alert alert = Alert.builder()
-//				.type("Diary")
-//				.good(good)
+		PostInfo postInfo = PostInfo.builder()
 				.saveType(SaveType.GOOD)
 				.postId(good.getId())
 				.redirectId(good.getDiary().getId())
+				.build();
+		Alert alert = Alert.builder()
+//				.type("Diary")
+//				.good(good)
+				.postInfo(postInfo)
 				.registerUser(good.getUser())
 				.postWriter(good.getDiary().getWriter())
 				.createDate(LocalDateTime.now())
@@ -145,23 +155,29 @@ public class AlertRepositoryTest {
 	
 	@Test
 	public void findByPostWriterPage() {
-		Alert alert = Alert.builder()
-//				.type("FreeBoard")
-//				.freeBoardAnswer(freeBoardAnswer)
+		PostInfo postInfo = PostInfo.builder()
 				.saveType(SaveType.FREE_BOARD_ANSWER)
 				.postId(freeBoardAnswer.getId())
 				.redirectId(freeBoardAnswer.getFreeBoard().getId())
+				.build();
+		Alert alert = Alert.builder()
+//				.type("FreeBoard")
+//				.freeBoardAnswer(freeBoardAnswer)
+				.postInfo(postInfo)
 				.registerUser(freeBoardAnswer.getWriter())
 				.postWriter(freeBoardAnswer.getFreeBoard().getWriter())
 				.createDate(LocalDateTime.now())
 				.build();
 		Alert createdAlert = alertRepository.save(alert);
-		Alert alert2 = Alert.builder()
-//				.type("Diary")
-//				.diaryAnswer(diaryAnswer)
+		PostInfo postInfo2 = PostInfo.builder()
 				.saveType(SaveType.DIARY_ANSWER)
 				.postId(diaryAnswer.getId())
 				.redirectId(diaryAnswer.getDiary().getId())
+				.build();
+		Alert alert2 = Alert.builder()
+//				.type("Diary")
+//				.diaryAnswer(diaryAnswer)
+				.postInfo(postInfo2)
 				.registerUser(diaryAnswer.getWriter())
 				.postWriter(diaryAnswer.getDiary().getWriter())
 				.createDate(LocalDateTime.now())
@@ -177,19 +193,25 @@ public class AlertRepositoryTest {
 
 	@Test
 	public void findByPostWriter() {
-		Alert alert = Alert.builder()
+		PostInfo postInfo = PostInfo.builder()
 				.saveType(SaveType.FREE_BOARD_ANSWER)
 				.postId(freeBoardAnswer.getId())
 				.redirectId(freeBoardAnswer.getFreeBoard().getId())
+				.build();
+		Alert alert = Alert.builder()
+				.postInfo(postInfo)
 				.registerUser(freeBoardAnswer.getWriter())
 				.postWriter(freeBoardAnswer.getFreeBoard().getWriter())
 				.createDate(LocalDateTime.now())
 				.build();
 		alertRepository.save(alert);
-		Alert alert2 = Alert.builder()
+		PostInfo postInfo2 = PostInfo.builder()
 				.saveType(SaveType.DIARY_ANSWER)
 				.postId(diaryAnswer.getId())
 				.redirectId(diaryAnswer.getDiary().getId())
+				.build();
+		Alert alert2 = Alert.builder()
+				.postInfo(postInfo2)
 				.registerUser(diaryAnswer.getWriter())
 				.postWriter(diaryAnswer.getDiary().getWriter())
 				.createDate(LocalDateTime.now())
@@ -220,12 +242,15 @@ public class AlertRepositoryTest {
 				.user(user2)
 				.createDate(LocalDateTime.now())
 				.build();
-		Alert alert = Alert.builder()
-//				.type("Diary")
-//				.good(good)
+		PostInfo postInfo = PostInfo.builder()
 				.saveType(SaveType.GOOD)
 				.postId(good.getId())
 				.redirectId(good.getDiary().getId())
+				.build();
+		Alert alert = Alert.builder()
+//				.type("Diary")
+//				.good(good)
+				.postInfo(postInfo)
 				.registerUser(good.getUser())
 				.postWriter(good.getDiary().getWriter())
 				.createDate(LocalDateTime.now())
@@ -238,12 +263,15 @@ public class AlertRepositoryTest {
 	
 	@Test
 	public void deleteDiaryAnswerAlert() {
-		Alert alert = Alert.builder()
-//				.type("Diary")
-//				.diaryAnswer(diaryAnswer)
+		PostInfo postInfo = PostInfo.builder()
 				.saveType(SaveType.DIARY_ANSWER)
 				.postId(diaryAnswer.getId())
 				.redirectId(diaryAnswer.getDiary().getId())
+				.build();
+		Alert alert = Alert.builder()
+//				.type("Diary")
+//				.diaryAnswer(diaryAnswer)
+				.postInfo(postInfo)
 				.registerUser(diaryAnswer.getWriter())
 				.postWriter(diaryAnswer.getDiary().getWriter())
 				.createDate(LocalDateTime.now())
@@ -256,12 +284,15 @@ public class AlertRepositoryTest {
 	
 	@Test
 	public void deleteFreeBoardAnswerAlert() {
-		Alert alert = Alert.builder()
-//				.type("FreeBoard")
-//				.freeBoardAnswer(freeBoardAnswer)
+		PostInfo postInfo = PostInfo.builder()
 				.saveType(SaveType.FREE_BOARD_ANSWER)
 				.postId(freeBoardAnswer.getId())
 				.redirectId(freeBoardAnswer.getFreeBoard().getId())
+				.build();
+		Alert alert = Alert.builder()
+//				.type("FreeBoard")
+//				.freeBoardAnswer(freeBoardAnswer)
+				.postInfo(postInfo)
 				.registerUser(freeBoardAnswer.getWriter())
 				.postWriter(freeBoardAnswer.getFreeBoard().getWriter())
 				.createDate(LocalDateTime.now())
@@ -289,54 +320,63 @@ public class AlertRepositoryTest {
 				.createDate(LocalDateTime.now())
 				.build();
 		Good createdGood = goodRepository.save(good);
+		PostInfo postInfo = PostInfo.builder()
+				.saveType(SaveType.GOOD)
+				.postId(createdGood.getId())
+				.redirectId(createdGood.getDiary().getId())
+				.build();
 		Alert alert = Alert.builder()
 //				.type("Diary")
 //				.good(createdGood)
-				.saveType(SaveType.GOOD)
-				.postId(good.getId())
-				.redirectId(good.getDiary().getId())
+				.postInfo(postInfo)
 				.registerUser(good.getUser())
 				.postWriter(createdGood.getDiary().getWriter())
 				.createDate(LocalDateTime.now())
 				.build();
 		Alert createdAlert = alertRepository.save(alert);
-		Alert selectAlert = alertRepository.findBySaveTypeAndPostIdAndRegisterUser(SaveType.GOOD, good.getId(), good.getUser())
+		Alert selectAlert = alertRepository.findByPostInfo(postInfo)
 				.orElseThrow(() -> new CustomException("400", "알림이 존재하지 않습니다."));
 		assertThat(createdAlert).isEqualTo(selectAlert);
 	}
 	
 	@Test
 	public void findDiaryAnswerAlert() {
-		Alert alert = Alert.builder()
-//				.type("Diary")
-//				.diaryAnswer(diaryAnswer)
+		PostInfo postInfo = PostInfo.builder()
 				.saveType(SaveType.DIARY_ANSWER)
 				.postId(diaryAnswer.getId())
 				.redirectId(diaryAnswer.getDiary().getId())
+				.build();
+		Alert alert = Alert.builder()
+//				.type("Diary")
+//				.diaryAnswer(diaryAnswer)
+				.postInfo(postInfo)
 				.registerUser(diaryAnswer.getWriter())
 				.postWriter(diaryAnswer.getDiary().getWriter())
 				.createDate(LocalDateTime.now())
 				.build();
 		Alert createdAlert = alertRepository.save(alert);
-		Alert selectAlert = alertRepository.findBySaveTypeAndPostIdAndRegisterUser(SaveType.DIARY_ANSWER, diaryAnswer.getId(), diaryAnswer.getWriter())
+		Alert selectAlert = alertRepository.findByPostInfo(postInfo)
 				.orElseThrow(() -> new CustomException("400", "알림이 존재하지 않습니다."));
 		assertThat(createdAlert).isEqualTo(selectAlert);
 	}
 	
 	@Test
 	public void findFreeBoardAnswerAlert() {
-		Alert alert = Alert.builder()
-//				.type("FreeBoard")
-//				.freeBoardAnswer(freeBoardAnswer)
+		PostInfo postInfo = PostInfo.builder()
 				.saveType(SaveType.FREE_BOARD_ANSWER)
 				.postId(freeBoardAnswer.getId())
 				.redirectId(freeBoardAnswer.getFreeBoard().getId())
+				.build();
+		Alert alert = Alert.builder()
+//				.type("FreeBoard")
+//				.freeBoardAnswer(freeBoardAnswer)
+				.postInfo(postInfo)
 				.registerUser(freeBoardAnswer.getWriter())
 				.postWriter(freeBoardAnswer.getFreeBoard().getWriter())
 				.createDate(LocalDateTime.now())
 				.build();
 		Alert createdAlert = alertRepository.save(alert);
-		Alert selectAlert = alertRepository.findBySaveTypeAndPostIdAndRegisterUser(SaveType.FREE_BOARD_ANSWER, freeBoardAnswer.getId(), freeBoardAnswer.getWriter())
+		Alert selectAlert = alertRepository.findByPostInfo(postInfo)
 				.orElseThrow(() -> new CustomException("400", "알림이 존재하지 않습니다."));
 		assertThat(createdAlert).isEqualTo(selectAlert);
 	}
