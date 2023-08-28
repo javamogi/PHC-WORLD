@@ -87,12 +87,7 @@ public class Timeline {
 //	}
 
 	public String redirectUrl() {
-		if (postInfo.getSaveType() == SaveType.DIARY
-				|| postInfo.getSaveType() == SaveType.DIARY_ANSWER
-				|| postInfo.getSaveType() == SaveType.GOOD){
-			return "redirect:/diaries/"+ postInfo.getRedirectId();
-		}
-		return "redirect:/freeboards/" + postInfo.getRedirectId();
+		return postInfo.getRedirectUrl();
 	}
 
 }

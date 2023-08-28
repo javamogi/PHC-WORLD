@@ -15,7 +15,15 @@ import javax.persistence.Enumerated;
 public class PostInfo {
     @Enumerated(EnumType.STRING)
     private SaveType saveType;
-
     private Long postId;
     private Long redirectId;
+
+    public String getRedirectUrl(){
+        if(this.saveType == SaveType.DIARY
+                || this.saveType == SaveType.DIARY_ANSWER
+                || this.saveType == SaveType.GOOD){
+            return "redirect:/diaries/" + getRedirectId();
+        }
+        return "redirect:/freeboards/" + getRedirectId();
+    }
 }

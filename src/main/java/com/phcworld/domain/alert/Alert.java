@@ -66,10 +66,6 @@ public class Alert {
 	}
 
 	public String getRedirectUrl() {
-		if(this.postInfo.getSaveType() == SaveType.DIARY_ANSWER
-				|| this.postInfo.getSaveType() == SaveType.GOOD){
-			return "redirect:/diaries/" + this.postInfo.getRedirectId();
-		}
-		return "redirect:/freeboards/" + this.postInfo.getRedirectId();
+		return postInfo.getRedirectUrl();
 	}
 }
