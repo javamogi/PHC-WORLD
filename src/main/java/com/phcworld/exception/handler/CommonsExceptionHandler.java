@@ -1,6 +1,9 @@
 package com.phcworld.exception.handler;
 
+import com.phcworld.exception.model.CustomBaseException;
 import com.phcworld.exception.model.CustomException;
+import com.phcworld.exception.model.ErrorCode;
+import com.phcworld.exception.model.ErrorResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,5 +33,15 @@ public class CommonsExceptionHandler {
         else {
             return new ResponseEntity(map, HttpStatus.NOT_FOUND);
         }
+    }
+
+    @ExceptionHandler(CustomBaseException.class)
+    public ResponseEntity<ErrorResponse> handle(CustomBaseException e){
+        log.error("Exception");
+        return createErrorResponseEntity(e.getErrorCode());
+    }
+
+    private ResponseEntity<ErrorResponse> createErrorResponseEntity(ErrorCode errorCode) {
+        return new ResponseEntity<>(ErrorResponse.of(errorCode), errorCode.getHttpStatus());
     }
 }

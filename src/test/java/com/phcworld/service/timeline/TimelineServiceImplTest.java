@@ -13,6 +13,7 @@ import com.phcworld.domain.board.FreeBoard;
 import com.phcworld.domain.common.SaveType;
 import com.phcworld.domain.embedded.PostInfo;
 import com.phcworld.domain.good.Good;
+import com.phcworld.exception.model.NotFoundException;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -208,6 +209,17 @@ public class TimelineServiceImplTest {
 		.thenReturn(diaryTimeline);
 		Timeline selectedTimeline = timelineService.getOneTimeline(diaryTimeline.getId());
 		assertThat(diaryTimeline).isEqualTo(selectedTimeline);
+	}
+
+	@Test(expected = NotFoundException.class)
+	public void getOneTimeline_exception() {
+		Timeline diaryTimeline = Timeline.builder()
+				.user(user)
+				.saveDate(diary.getCreateDate())
+				.build();
+		when(timelineService.getOneTimeline(diaryTimeline.getId()))
+				.thenThrow(NotFoundException.class);
+		timelineService.getOneTimeline(diaryTimeline.getId());
 	}
 
 	@Test

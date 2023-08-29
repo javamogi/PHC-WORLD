@@ -10,6 +10,8 @@ import com.phcworld.domain.good.Good;
 import com.phcworld.domain.timeline.Timeline;
 import com.phcworld.domain.user.User;
 import com.phcworld.exception.model.CustomException;
+import com.phcworld.exception.model.ErrorCode;
+import com.phcworld.exception.model.NotFoundException;
 import com.phcworld.repository.timeline.TimelineRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -47,7 +49,7 @@ public class TimelineServiceImpl implements TimelineService {
 	@Override
 	public Timeline getOneTimeline(Long id) {
 		return timelineRepository.findById(id)
-				.orElseThrow(() -> new CustomException("400", "타임라인이 존재하지 않습니다."));
+				.orElseThrow(() -> new NotFoundException(ErrorCode.NOT_FOUND));
 	}
 	
 	public Timeline createTimeline(Diary diary) {
