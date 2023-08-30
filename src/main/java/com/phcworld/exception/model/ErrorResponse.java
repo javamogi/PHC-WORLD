@@ -6,16 +6,16 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 public class ErrorResponse {
-    private String message;
+    private String error;
     private Integer statusCode;
 
     public ErrorResponse(ErrorCode code){
-        this.message = code.getMessage();
+        this.error = code.getMessage();
         this.statusCode = code.getHttpStatus().value();
     }
 
     public ErrorResponse(ErrorCode code, String message){
-        this.message = message;
+        this.error = message;
         this.statusCode = code.getHttpStatus().value();
     }
 

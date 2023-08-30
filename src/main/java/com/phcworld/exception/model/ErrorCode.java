@@ -6,7 +6,8 @@ import org.springframework.http.HttpStatus;
 @Getter
 public enum ErrorCode {
     INTERNAL_SERVER_ERROR("서버 에러가 발생했습니다.", HttpStatus.INTERNAL_SERVER_ERROR),
-    NOT_FOUND("존재하지 않는 엔티티입니다.", HttpStatus.NOT_FOUND);
+    NOT_FOUND("존재하지 않는 엔티티입니다.", HttpStatus.NOT_FOUND),
+    UNAUTHORIZED("권한이 없습니다.", HttpStatus.UNAUTHORIZED);
 
     private final String message;
 

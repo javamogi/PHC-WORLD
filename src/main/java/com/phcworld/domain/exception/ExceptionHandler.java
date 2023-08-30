@@ -20,9 +20,9 @@ public class ExceptionHandler {
 				.build();
 	}
 	
-	@org.springframework.web.bind.annotation.ExceptionHandler(value = MatchNotUserExceptioin.class)
+	@org.springframework.web.bind.annotation.ExceptionHandler(value = MatchNotUserException.class)
 	@ResponseStatus(value = HttpStatus.FORBIDDEN)
-	public ErrorResponse handlerMatchNotUserException(MatchNotUserExceptioin e) {
+	public ErrorResponse handlerMatchNotUserException(MatchNotUserException e) {
 		return ErrorResponse.builder()
 				.status("403")
 				.error(e.getMessage())

@@ -12,10 +12,14 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.phcworld.exception.model.NotMatchUserException;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureWebMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpSession;
@@ -27,7 +31,7 @@ import com.phcworld.domain.api.model.request.DiaryAnswerRequest;
 import com.phcworld.domain.api.model.response.DiaryAnswerApiResponse;
 import com.phcworld.domain.api.model.response.SuccessResponse;
 import com.phcworld.domain.board.Diary;
-import com.phcworld.domain.exception.MatchNotUserExceptioin;
+import com.phcworld.domain.exception.MatchNotUserException;
 import com.phcworld.domain.user.User;
 import com.phcworld.service.answer.DiaryAnswerServiceImpl;
 import com.phcworld.service.board.DiaryServiceImpl;
@@ -43,7 +47,7 @@ public class DiaryAnswerControllerTest {
 	
 	@MockBean
 	private DiaryServiceImpl diaryService;
-	
+
 	@MockBean
 	private DiaryAnswerServiceImpl diaryAnswerService;
 	
@@ -80,7 +84,7 @@ public class DiaryAnswerControllerTest {
 		List<DiaryAnswer> list = new ArrayList<DiaryAnswer>();
 		list.add(diaryAnswer);
 		diary.setDiaryAnswers(list);
-		
+
 		DiaryAnswerApiResponse diaryAnswerApiResponse = DiaryAnswerApiResponse.builder()
 				.id(diaryAnswer.getId())
 				.writer(diaryAnswer.getWriter())
@@ -89,7 +93,7 @@ public class DiaryAnswerControllerTest {
 				.countOfAnswers(diaryAnswer.getDiary().getCountOfAnswer())
 				.updateDate(diaryAnswer.getFormattedUpdateDate())
 				.build();
-		
+
 		when(this.diaryAnswerService.create(user, diary.getId(), request))
 		.thenReturn(diaryAnswerApiResponse);
 		this.mvc.perform(post("/diaries/{diaryId}/answer", 1L)
@@ -150,12 +154,12 @@ public class DiaryAnswerControllerTest {
 				.diary(diary)
 				.contents("test")
 				.build();
-		
+
 		SuccessResponse response = SuccessResponse.builder()
 				.success(diaryAnswer.getDiary().getCountOfAnswer())
 				.build();
-		
-		
+
+
 		when(this.diaryAnswerService.delete(diaryAnswer.getId(), user))
 		.thenReturn(response);
 		this.mvc.perform(delete("/diaries/{diaryId}/answer/{id}", 1L, 1L)
@@ -208,12 +212,12 @@ public class DiaryAnswerControllerTest {
 				.diary(diary)
 				.contents("test")
 				.build();
-		
+
 		when(this.diaryAnswerService.delete(diaryAnswer.getId(), user))
-		.thenThrow(new MatchNotUserExceptioin("본인이 작성한 글만 삭제 가능합니다."));
+		.thenThrow(new NotMatchUserException());
 		this.mvc.perform(delete("/diaries/{diaryId}/answer/{id}", 1L, 1L)
 				.session(mockSession))
-		.andExpect(jsonPath("$.error").value("본인이 작성한 글만 삭제 가능합니다."));
+		.andExpect(jsonPath("$.error").value("권한이 없습니다."));
 	}
 	
 	@Test
@@ -246,7 +250,7 @@ public class DiaryAnswerControllerTest {
 		List<DiaryAnswer> list = new ArrayList<DiaryAnswer>();
 		list.add(diaryAnswer);
 		diary.setDiaryAnswers(list);
-		
+
 		DiaryAnswerApiResponse diaryAnswerApiResponse = DiaryAnswerApiResponse.builder()
 				.id(diaryAnswer.getId())
 				.writer(diaryAnswer.getWriter())
@@ -255,10 +259,10 @@ public class DiaryAnswerControllerTest {
 				.countOfAnswers(diaryAnswer.getDiary().getCountOfAnswer())
 				.updateDate(diaryAnswer.getFormattedUpdateDate())
 				.build();
-		
+
 		when(this.diaryAnswerService.read(diaryAnswer.getId(), user))
 		.thenReturn(diaryAnswerApiResponse);
-		
+
 		this.mvc.perform(get("/diaries/{diaryId}/answer/{id}", 1L, 1L)
 				.session(mockSession))
 		.andExpect(status().isOk())
@@ -314,7 +318,7 @@ public class DiaryAnswerControllerTest {
 				.contents("update")
 				.build();
 		diaryAnswer.update(request.getContents());
-		
+
 		DiaryAnswerApiResponse diaryAnswerApiResponse = DiaryAnswerApiResponse.builder()
 				.id(diaryAnswer.getId())
 				.writer(diaryAnswer.getWriter())
@@ -323,7 +327,7 @@ public class DiaryAnswerControllerTest {
 				.countOfAnswers(diaryAnswer.getDiary().getCountOfAnswer())
 				.updateDate(diaryAnswer.getFormattedUpdateDate())
 				.build();
-		
+
 		when(this.diaryAnswerService.update(request, user))
 		.thenReturn(diaryAnswerApiResponse);
 		this.mvc.perform(patch("/diaries/{diaryId}/answer", 1L)
@@ -338,5 +342,5 @@ public class DiaryAnswerControllerTest {
 		.andExpect(jsonPath("$.countOfAnswers").value(diaryAnswerApiResponse.getCountOfAnswers()))
 		.andExpect(jsonPath("$.updateDate").value(diaryAnswerApiResponse.getUpdateDate()));
 	}
-	
+
 }

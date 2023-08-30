@@ -5,14 +5,12 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
-import com.phcworld.domain.exception.MatchNotUserExceptioin;
+import com.phcworld.domain.exception.MatchNotUserException;
 import com.phcworld.domain.message.Message;
 import com.phcworld.domain.message.MessageResponse;
 import com.phcworld.domain.user.User;
@@ -42,7 +40,7 @@ public class MessageServiceImpl implements MessageService {
 	public MessageResponse confirmMessage(Long id, User loginUser) {
 		Message message = messageRepository.getOne(id);
 		if(!loginUser.matchId(message.getReceiver().getId())) {
-			throw new MatchNotUserExceptioin("본인만 확인 가능합니다.");
+			throw new MatchNotUserException("본인만 확인 가능합니다.");
 		}
 		message.setConfirm("읽음");
 		message.setClassName("read");

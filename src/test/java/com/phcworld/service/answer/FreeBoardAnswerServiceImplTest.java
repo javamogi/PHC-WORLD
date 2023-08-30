@@ -5,7 +5,7 @@ import com.phcworld.domain.api.model.request.FreeBoardAnswerRequest;
 import com.phcworld.domain.api.model.response.FreeBoardAnswerApiResponse;
 import com.phcworld.domain.api.model.response.SuccessResponse;
 import com.phcworld.domain.board.FreeBoard;
-import com.phcworld.domain.exception.MatchNotUserExceptioin;
+import com.phcworld.domain.exception.MatchNotUserException;
 import com.phcworld.domain.user.User;
 import org.junit.Before;
 import org.junit.Test;
@@ -112,7 +112,7 @@ public class FreeBoardAnswerServiceImplTest {
 		assertThat(response).isEqualTo(success);
 	}
 	
-	@Test(expected = MatchNotUserExceptioin.class)
+	@Test(expected = MatchNotUserException.class)
 	@Transactional
 	public void deleteFreeBoardAnswerWhenWriterNotMatchUser() throws Exception {
 		User user= User.builder()
@@ -131,7 +131,7 @@ public class FreeBoardAnswerServiceImplTest {
 				.contents("content")
 				.build();
 		
-		doThrow(MatchNotUserExceptioin.class)
+		doThrow(MatchNotUserException.class)
 		.when(freeBoardAnswerService).delete(answer.getId(), user);
 		freeBoardAnswerService.delete(answer.getId(), user);
 	}

@@ -5,7 +5,6 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,7 +13,7 @@ import com.phcworld.domain.api.model.request.FreeBoardAnswerRequest;
 import com.phcworld.domain.api.model.response.FreeBoardAnswerApiResponse;
 import com.phcworld.domain.api.model.response.SuccessResponse;
 import com.phcworld.domain.board.FreeBoard;
-import com.phcworld.domain.exception.MatchNotUserExceptioin;
+import com.phcworld.domain.exception.MatchNotUserException;
 import com.phcworld.domain.user.User;
 import com.phcworld.ifs.CrudInterface;
 import com.phcworld.repository.answer.FreeBoardAnswerRepository;
@@ -70,7 +69,7 @@ public class FreeBoardAnswerServiceImpl implements CrudInterface<FreeBoardAnswer
 	public FreeBoardAnswerApiResponse read(Long id, User loginUser) {
 		FreeBoardAnswer freeBoardAnswer = freeBoardAnswerRepository.getOne(id);
 		if(!freeBoardAnswer.isSameWriter(loginUser)) {
-			throw new MatchNotUserExceptioin("본인이 작성한 글만 수정 가능합니다.");
+			throw new MatchNotUserException("본인이 작성한 글만 수정 가능합니다.");
 		}
 		FreeBoardAnswerApiResponse freeBoardAnswerApiResponse = 
 				FreeBoardAnswerApiResponse.builder()
@@ -88,7 +87,7 @@ public class FreeBoardAnswerServiceImpl implements CrudInterface<FreeBoardAnswer
 	public FreeBoardAnswerApiResponse update(FreeBoardAnswerRequest request, User loginUser) {
 		FreeBoardAnswer answer = freeBoardAnswerRepository.getOne(request.getId());
 		if(!answer.isSameWriter(loginUser)) {
-			throw new MatchNotUserExceptioin("본인이 작성한 글만 수정 가능합니다.");
+			throw new MatchNotUserException("본인이 작성한 글만 수정 가능합니다.");
 		}
 		answer.update(request.getContents().replace("\r\n", "<br>"));
 		FreeBoardAnswer updatedFreeBoardAnswer = freeBoardAnswerRepository.save(answer);
@@ -108,7 +107,7 @@ public class FreeBoardAnswerServiceImpl implements CrudInterface<FreeBoardAnswer
 	public SuccessResponse delete(Long id, User loginUser) {
 		FreeBoardAnswer freeBoardAnswer = freeBoardAnswerRepository.getOne(id);
 		if(!freeBoardAnswer.isSameWriter(loginUser)) {
-			throw new MatchNotUserExceptioin("본인이 작성한 글만 삭제 가능합니다.");
+			throw new MatchNotUserException("본인이 작성한 글만 삭제 가능합니다.");
 		}
 
 		timelineService.deleteTimeline(freeBoardAnswer);

@@ -1,10 +1,10 @@
 package com.phcworld.domain.exception;
 
-public class MatchNotUserExceptioin extends RuntimeException {
+public class MatchNotUserException extends RuntimeException {
 	
 	private String message;
 
-	public MatchNotUserExceptioin(String errorMessage) {
+	public MatchNotUserException(String errorMessage) {
 		this.message = errorMessage;
 	}
 	

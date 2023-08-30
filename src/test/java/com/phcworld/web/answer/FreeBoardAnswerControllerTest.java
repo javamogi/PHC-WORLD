@@ -26,7 +26,7 @@ import com.phcworld.domain.api.model.request.FreeBoardAnswerRequest;
 import com.phcworld.domain.api.model.response.FreeBoardAnswerApiResponse;
 import com.phcworld.domain.api.model.response.SuccessResponse;
 import com.phcworld.domain.board.FreeBoard;
-import com.phcworld.domain.exception.MatchNotUserExceptioin;
+import com.phcworld.domain.exception.MatchNotUserException;
 import com.phcworld.domain.user.User;
 import com.phcworld.service.answer.FreeBoardAnswerServiceImpl;
 import com.phcworld.service.board.FreeBoardServiceImpl;
@@ -208,7 +208,7 @@ public class FreeBoardAnswerControllerTest {
 		
 		
 		when(this.freeBoardAnswerService.delete(freeBoardAnswer.getId(), user))
-		.thenThrow(new MatchNotUserExceptioin("본인이 작성한 글만 삭제 가능합니다."));
+		.thenThrow(new MatchNotUserException("본인이 작성한 글만 삭제 가능합니다."));
 		this.mvc.perform(delete("/freeboards/{freeboardId}/answers/{id}", 1L, 1L)
 				.session(mockSession))
 		.andExpect(jsonPath("$.error").value("본인이 작성한 글만 삭제 가능합니다."));

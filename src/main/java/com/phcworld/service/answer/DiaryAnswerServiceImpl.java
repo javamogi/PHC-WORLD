@@ -2,8 +2,10 @@ package com.phcworld.service.answer;
 
 import java.util.List;
 
+import com.phcworld.exception.model.ErrorCode;
+import com.phcworld.exception.model.NotFoundException;
+import com.phcworld.exception.model.NotMatchUserException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -12,7 +14,7 @@ import com.phcworld.domain.api.model.request.DiaryAnswerRequest;
 import com.phcworld.domain.api.model.response.DiaryAnswerApiResponse;
 import com.phcworld.domain.api.model.response.SuccessResponse;
 import com.phcworld.domain.board.Diary;
-import com.phcworld.domain.exception.MatchNotUserExceptioin;
+import com.phcworld.domain.exception.MatchNotUserException;
 import com.phcworld.domain.user.User;
 import com.phcworld.ifs.CrudInterface;
 import com.phcworld.repository.answer.DiaryAnswerRepository;
@@ -35,7 +37,8 @@ public class DiaryAnswerServiceImpl implements CrudInterface<DiaryAnswerRequest,
 	
 	@Override
 	public DiaryAnswerApiResponse create(User loginUser, Long diaryId, DiaryAnswerRequest request) {
-		Diary diary = diaryRepository.getOne(diaryId);
+		Diary diary = diaryRepository.findById(diaryId)
+				.orElseThrow(() -> new NotFoundException(ErrorCode.NOT_FOUND));
 		DiaryAnswer diaryAnswer = DiaryAnswer.builder()
 				.writer(loginUser)
 				.diary(diary)
@@ -43,14 +46,7 @@ public class DiaryAnswerServiceImpl implements CrudInterface<DiaryAnswerRequest,
 				.build();
 		
 		DiaryAnswer createdDiaryAnswer = diaryAnswerRepository.save(diaryAnswer);
-		DiaryAnswerApiResponse diaryAnswerApiResponse = DiaryAnswerApiResponse.builder()
-				.id(createdDiaryAnswer.getId())
-				.writer(createdDiaryAnswer.getWriter())
-				.contents(createdDiaryAnswer.getContents())
-				.diaryId(createdDiaryAnswer.getDiary().getId())
-				.countOfAnswers(createdDiaryAnswer.getDiary().getCountOfAnswer())
-				.updateDate(createdDiaryAnswer.getFormattedUpdateDate())
-				.build();
+		DiaryAnswerApiResponse diaryAnswerApiResponse = DiaryAnswerApiResponse.of(createdDiaryAnswer);
 		
 		timelineService.createTimeline(createdDiaryAnswer);
 		
@@ -63,47 +59,34 @@ public class DiaryAnswerServiceImpl implements CrudInterface<DiaryAnswerRequest,
 	
 	@Override
 	public DiaryAnswerApiResponse read(Long id, User loginUser) {
-		DiaryAnswer diaryAnswer = diaryAnswerRepository.getOne(id);
+		DiaryAnswer diaryAnswer = diaryAnswerRepository.findById(id)
+				.orElseThrow(() -> new NotFoundException(ErrorCode.NOT_FOUND));
 		if(!diaryAnswer.isSameWriter(loginUser)) {
-			throw new MatchNotUserExceptioin("본인이 작성한 글만 수정 가능합니다.");
+			throw new NotMatchUserException();
 		}
-		DiaryAnswerApiResponse diaryAnswerApiResponse = DiaryAnswerApiResponse.builder()
-				.id(diaryAnswer.getId())
-				.writer(diaryAnswer.getWriter())
-				.contents(diaryAnswer.getContents())
-				.diaryId(diaryAnswer.getDiary().getId())
-				.countOfAnswers(diaryAnswer.getDiary().getCountOfAnswer())
-				.updateDate(diaryAnswer.getFormattedUpdateDate())
-				.build();
-		return diaryAnswerApiResponse;
+		return DiaryAnswerApiResponse.of(diaryAnswer);
 	}
 	
 	@Override
 	public DiaryAnswerApiResponse update(DiaryAnswerRequest request, User loginUser) {
-		DiaryAnswer answer = diaryAnswerRepository.getOne(request.getId());
+		DiaryAnswer answer = diaryAnswerRepository.findById(request.getId())
+				.orElseThrow(() -> new NotFoundException(ErrorCode.NOT_FOUND));
 		if(!answer.isSameWriter(loginUser)) {
-			throw new MatchNotUserExceptioin("본인이 작성한 글만 수정 가능합니다.");
+			throw new NotMatchUserException();
 		}
 		answer.update(request.getContents().replace("\r\n", "<br>"));
 		
 		DiaryAnswer updatedDiaryAnswer = diaryAnswerRepository.save(answer);
-		DiaryAnswerApiResponse diaryAnswerApiResponse = DiaryAnswerApiResponse.builder()
-				.id(updatedDiaryAnswer.getId())
-				.writer(updatedDiaryAnswer.getWriter())
-				.contents(updatedDiaryAnswer.getContents())
-				.diaryId(updatedDiaryAnswer.getDiary().getId())
-				.countOfAnswers(updatedDiaryAnswer.getDiary().getCountOfAnswer())
-				.updateDate(updatedDiaryAnswer.getFormattedUpdateDate())
-				.build();
-		
-		return diaryAnswerApiResponse;
+
+		return DiaryAnswerApiResponse.of(updatedDiaryAnswer);
 	}
 	
 	@Override
 	public SuccessResponse delete(Long id, User loginUser) {
-		DiaryAnswer diaryAnswer = diaryAnswerRepository.getOne(id);
+		DiaryAnswer diaryAnswer = diaryAnswerRepository.findById(id)
+				.orElseThrow(() -> new NotFoundException(ErrorCode.NOT_FOUND));
 		if(!diaryAnswer.isSameWriter(loginUser)) {
-			throw new MatchNotUserExceptioin("본인이 작성한 글만 삭제 가능합니다.");
+			throw new NotMatchUserException();
 		}
 		
 		timelineService.deleteTimeline(diaryAnswer);
@@ -112,7 +95,8 @@ public class DiaryAnswerServiceImpl implements CrudInterface<DiaryAnswerRequest,
 		}
 		
 		diaryAnswerRepository.deleteById(id);
-		Diary diary = diaryRepository.getOne(diaryAnswer.getDiary().getId());
+		Diary diary = diaryRepository.findById(diaryAnswer.getDiary().getId())
+				.orElseThrow(() -> new NotFoundException(ErrorCode.NOT_FOUND));
 		diary.getDiaryAnswers().remove(diaryAnswer);
 		
 		return SuccessResponse.builder()

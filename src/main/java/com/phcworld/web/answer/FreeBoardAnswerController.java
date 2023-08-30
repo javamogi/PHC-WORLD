@@ -3,7 +3,6 @@ package com.phcworld.web.answer;
 import javax.servlet.http.HttpSession;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,7 +18,7 @@ import com.phcworld.domain.api.model.response.FreeBoardAnswerApiResponse;
 import com.phcworld.domain.api.model.response.SuccessResponse;
 import com.phcworld.domain.exception.ContentsEmptyException;
 import com.phcworld.domain.exception.LoginNotUserException;
-import com.phcworld.domain.exception.MatchNotUserExceptioin;
+import com.phcworld.domain.exception.MatchNotUserException;
 import com.phcworld.domain.user.User;
 import com.phcworld.service.answer.FreeBoardAnswerServiceImpl;
 import com.phcworld.utils.HttpSessionUtils;
@@ -49,7 +48,7 @@ public class FreeBoardAnswerController {
 	
 	@GetMapping("/{id}")
 	public FreeBoardAnswerApiResponse read(@PathVariable Long id, HttpSession session) 
-			throws LoginNotUserException, MatchNotUserExceptioin {
+			throws LoginNotUserException, MatchNotUserException {
 		if(!HttpSessionUtils.isLoginUser(session)) {
 			throw new LoginNotUserException("로그인을 해야합니다.");
 		}
@@ -59,7 +58,7 @@ public class FreeBoardAnswerController {
 	
 	@PatchMapping("")
 	public FreeBoardAnswerApiResponse update(FreeBoardAnswerRequest request, HttpSession session) 
-			throws LoginNotUserException, MatchNotUserExceptioin {
+			throws LoginNotUserException, MatchNotUserException {
 		if(request.getContents().equals("")) {
 			throw new ContentsEmptyException("내용을 입력하세요.");
 		}
@@ -72,7 +71,7 @@ public class FreeBoardAnswerController {
 	
 	@DeleteMapping("/{id}")
 	public SuccessResponse delete(@PathVariable Long id, HttpSession session) 
-			throws LoginNotUserException, MatchNotUserExceptioin {
+			throws LoginNotUserException, MatchNotUserException {
 		if(!HttpSessionUtils.isLoginUser(session)) {
 			throw new LoginNotUserException("로그인을 해야합니다.");
 		}

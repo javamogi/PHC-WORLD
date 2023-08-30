@@ -8,21 +8,19 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.phcworld.exception.model.NotMatchUserException;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.phcworld.domain.answer.DiaryAnswer;
 import com.phcworld.domain.api.model.request.DiaryAnswerRequest;
 import com.phcworld.domain.api.model.response.DiaryAnswerApiResponse;
 import com.phcworld.domain.api.model.response.SuccessResponse;
 import com.phcworld.domain.board.Diary;
-import com.phcworld.domain.exception.MatchNotUserExceptioin;
+import com.phcworld.domain.exception.MatchNotUserException;
 import com.phcworld.domain.user.User;
 
 //@RunWith(SpringJUnit4ClassRunner.class)
@@ -92,7 +90,7 @@ public class DiaryAnswerServiceImplTest {
 		assertThat(diaryAnswerApiResponse).isEqualTo(createdDiaryAnswerApiResponse);
 	}
 
-	@Test(expected = MatchNotUserExceptioin.class)
+	@Test(expected = NotMatchUserException.class)
 	public void deleteDiaryAnswerWhenWriterNotMatchUser() throws Exception {
 		User user = User.builder()
 				.id(2L)
@@ -110,8 +108,8 @@ public class DiaryAnswerServiceImplTest {
 				.contents("diary answer content")
 				.build();
 		
-		doThrow(MatchNotUserExceptioin.class)
-		.when(diaryAnswerService).delete(answer.getId(), user);
+		when(diaryAnswerService.delete(answer.getId(), user))
+				.thenThrow(NotMatchUserException.class);
 		diaryAnswerService.delete(answer.getId(), user);
 	}
 	
