@@ -2,6 +2,8 @@ package com.phcworld.web.answer;
 
 import javax.servlet.http.HttpSession;
 
+import com.phcworld.exception.model.BadRequestException;
+import com.phcworld.exception.model.NotMatchUserException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.ui.Model;
@@ -35,11 +37,11 @@ public class DiaryAnswerController {
 	@ResponseStatus(value = HttpStatus.CREATED)
 	public DiaryAnswerApiResponse create(@PathVariable Long diaryId, DiaryAnswerRequest request, HttpSession session) 
 			throws LoginNotUserException, ContentsEmptyException {
-		if(request.getContents().equals("")) {
-			throw new ContentsEmptyException("내용을 입력하세요.");
+		if(request.isContentsEmpty()) {
+			throw new BadRequestException();
 		}
 		if(!HttpSessionUtils.isLoginUser(session)) {
-			throw new LoginNotUserException("로그인을 해야합니다.");
+			throw new NotMatchUserException();
 		}
 		User loginUser = HttpSessionUtils.getUserFromSession(session);
 		
@@ -50,7 +52,7 @@ public class DiaryAnswerController {
 	public DiaryAnswerApiResponse read(@PathVariable Long id, HttpSession session) 
 			throws LoginNotUserException, MatchNotUserException {
 		if(!HttpSessionUtils.isLoginUser(session)) {
-			throw new LoginNotUserException("로그인을 해야합니다.");
+			throw new NotMatchUserException();
 		}
 		User loginUser = HttpSessionUtils.getUserFromSession(session);
 		return diaryAnswerService.read(id, loginUser);
@@ -59,21 +61,21 @@ public class DiaryAnswerController {
 	@PatchMapping("")
 	public DiaryAnswerApiResponse update(DiaryAnswerRequest request, HttpSession session) 
 			throws LoginNotUserException, MatchNotUserException {
-		if(request.getContents().equals("")) {
-			throw new ContentsEmptyException("내용을 입력하세요.");
+		if(request.isContentsEmpty()) {
+			throw new BadRequestException();
 		}
 		if(!HttpSessionUtils.isLoginUser(session)) {
-			throw new LoginNotUserException("로그인을 해야합니다.");
+			throw new NotMatchUserException();
 		}
 		User loginUser = HttpSessionUtils.getUserFromSession(session);
 		return diaryAnswerService.update(request, loginUser);
 	}
 	
 	@DeleteMapping("/{id}")
-	public SuccessResponse delete(@PathVariable Long id, HttpSession session, Model model) 
+	public SuccessResponse delete(@PathVariable Long id, HttpSession session)
 			throws LoginNotUserException, MatchNotUserException {
 		if(!HttpSessionUtils.isLoginUser(session)) {
-			throw new LoginNotUserException("로그인을 해야합니다.");
+			throw new NotMatchUserException();
 		}
 		User loginUser = HttpSessionUtils.getUserFromSession(session);
 		return diaryAnswerService.delete(id, loginUser);

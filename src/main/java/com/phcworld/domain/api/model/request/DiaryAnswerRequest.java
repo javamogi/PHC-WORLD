@@ -15,4 +15,7 @@ public class DiaryAnswerRequest {
 	
 	private String contents;
 
+    public boolean isContentsEmpty() {
+        return this.getContents().isEmpty();
+    }
 }

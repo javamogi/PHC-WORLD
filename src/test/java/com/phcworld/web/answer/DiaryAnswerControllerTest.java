@@ -115,7 +115,7 @@ public class DiaryAnswerControllerTest {
 		this.mvc.perform(post("/diaries/{diaryId}/answer", 1L)
 				.param("contents", "test")
 				.session(mockSession))
-		.andExpect(jsonPath("$.error").value("로그인을 해야합니다."));
+		.andExpect(jsonPath("$.error").value("권한이 없습니다."));
 	}
 	
 	@Test
@@ -124,7 +124,7 @@ public class DiaryAnswerControllerTest {
 		this.mvc.perform(post("/diaries/{diaryId}/answer", 1L)
 				.param("contents", "")
 				.session(mockSession))
-		.andExpect(jsonPath("$.error").value("내용을 입력하세요."));
+		.andExpect(jsonPath("$.error").value("잘못된 요청입니다. 내용을 입력하세요."));
 	}
 	
 	@Test
@@ -173,7 +173,7 @@ public class DiaryAnswerControllerTest {
 		MockHttpSession mockSession = new MockHttpSession();
 		this.mvc.perform(delete("/diaries/{diaryId}/answer/{id}", 1L, 1L)
 				.session(mockSession))
-		.andExpect(jsonPath("$.error").value("로그인을 해야합니다."));
+		.andExpect(jsonPath("$.error").value("권한이 없습니다."));
 	}
 	
 	@Test
@@ -280,7 +280,7 @@ public class DiaryAnswerControllerTest {
 		this.mvc.perform(patch("/diaries/{diaryId}/answer", 1L)
 				.param("contents", "")
 				.session(mockSession))
-		.andExpect(jsonPath("$.error").value("내용을 입력하세요."));
+		.andExpect(jsonPath("$.error").value("잘못된 요청입니다. 내용을 입력하세요."));
 	}
 	
 	@Test
