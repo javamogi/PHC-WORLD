@@ -12,6 +12,9 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.phcworld.exception.model.NotMatchUserException;
+import com.phcworld.util.FreeBoardFactory;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,10 +48,12 @@ public class FreeBoardAnswerControllerTest {
 	@MockBean
 	private FreeBoardAnswerServiceImpl freeBoardAnswerService;
 
-	@Test
-	public void createFreeBoardAnswer() throws Exception {
-		MockHttpSession mockSession = new MockHttpSession();
-		User user = User.builder()
+	private User user;
+	private FreeBoard freeBoard;
+
+	@Before
+	public void setup(){
+		user = User.builder()
 				.id(1L)
 				.email("test3@test.test")
 				.password("test3")
@@ -57,8 +62,7 @@ public class FreeBoardAnswerControllerTest {
 				.authority("ROLE_USER")
 				.createDate(LocalDateTime.now())
 				.build();
-		mockSession.setAttribute(HttpSessionUtils.USER_SESSION_KEY, user);
-		FreeBoard freeBoard = FreeBoard.builder()
+		freeBoard = FreeBoard.builder()
 				.id(1L)
 				.title("title")
 				.contents("content")
@@ -66,6 +70,12 @@ public class FreeBoardAnswerControllerTest {
 				.createDate(LocalDateTime.now())
 				.count(0)
 				.build();
+	}
+
+	@Test
+	public void createFreeBoardAnswer() throws Exception {
+		MockHttpSession mockSession = new MockHttpSession();
+		mockSession.setAttribute(HttpSessionUtils.USER_SESSION_KEY, user);
 		FreeBoardAnswerRequest request = FreeBoardAnswerRequest.builder()
 				.contents("test")
 				.build();
@@ -79,14 +89,7 @@ public class FreeBoardAnswerControllerTest {
 		list.add(freeBoardAnswer);
 		freeBoard.setFreeBoardAnswers(list);
 		
-		FreeBoardAnswerApiResponse freeBoardAnswerApiResponse = FreeBoardAnswerApiResponse.builder()
-				.id(freeBoardAnswer.getId())
-				.writer(freeBoardAnswer.getWriter())
-				.contents(freeBoardAnswer.getContents())
-				.freeBoardId(freeBoardAnswer.getFreeBoard().getId())
-				.countOfAnswers(freeBoardAnswer.getFreeBoard().getCountOfAnswer())
-				.updateDate(freeBoardAnswer.getFormattedUpdateDate())
-				.build();
+		FreeBoardAnswerApiResponse freeBoardAnswerApiResponse = FreeBoardAnswerApiResponse.of(freeBoardAnswer);
 		
 		when(this.freeBoardAnswerService.create(user, freeBoard.getId(), request))
 		.thenReturn(freeBoardAnswerApiResponse);
@@ -108,7 +111,7 @@ public class FreeBoardAnswerControllerTest {
 		this.mvc.perform(post("/freeboards/{freeboardId}/answers", 1L)
 				.param("contents", "test")
 				.session(mockSession))
-		.andExpect(jsonPath("$.error").value("로그인을 해야합니다."));
+		.andExpect(jsonPath("$.error").value("권한이 없습니다."));
 	}
 	
 	@Test
@@ -117,31 +120,13 @@ public class FreeBoardAnswerControllerTest {
 		this.mvc.perform(post("/freeboards/{freeboardId}/answers", 1L)
 				.param("contents", "")
 				.session(mockSession))
-		.andExpect(jsonPath("$.error").value("내용을 입력하세요."));
+		.andExpect(jsonPath("$.error").value("잘못된 요청입니다. 내용을 입력하세요."));
 	}
 	
 	@Test
 	public void deleteSuccessFreeBoardAnswer() throws Exception {
 		MockHttpSession mockSession = new MockHttpSession();
-		User user = User.builder()
-				.id(1L)
-				.email("test3@test.test")
-				.password("test3")
-				.name("테스트3")
-				.profileImage("blank-profile-picture.png")
-				.authority("ROLE_USER")
-				.createDate(LocalDateTime.now())
-				.build();
 		mockSession.setAttribute(HttpSessionUtils.USER_SESSION_KEY, user);
-		FreeBoard freeBoard = FreeBoard.builder()
-				.id(1L)
-				.writer(user)
-				.title("title")
-				.contents("content")
-				.icon("")
-				.createDate(LocalDateTime.now())
-				.count(0)
-				.build();
 		FreeBoardAnswer freeBoardAnswer = FreeBoardAnswer.builder()
 				.id(1L)
 				.writer(user)
@@ -165,21 +150,12 @@ public class FreeBoardAnswerControllerTest {
 		MockHttpSession mockSession = new MockHttpSession();
 		this.mvc.perform(delete("/freeboards/{freeboardId}/answers/{id}", 1L, 1L)
 				.session(mockSession))
-		.andExpect(jsonPath("$.error").value("로그인을 해야합니다."));
+		.andExpect(jsonPath("$.error").value("권한이 없습니다."));
 	}
 	
 	@Test
 	public void deleteFailedFreeBoardAnswerWhenNotMatchUserUser() throws Exception {
 		MockHttpSession mockSession = new MockHttpSession();
-		User user = User.builder()
-				.id(1L)
-				.email("test3@test.test")
-				.password("test3")
-				.name("테스트3")
-				.profileImage("blank-profile-picture.png")
-				.authority("ROLE_USER")
-				.createDate(LocalDateTime.now())
-				.build();
 		User user2 = User.builder()
 				.id(2L)
 				.email("test4@test.test")
@@ -190,15 +166,6 @@ public class FreeBoardAnswerControllerTest {
 				.createDate(LocalDateTime.now())
 				.build();
 		mockSession.setAttribute(HttpSessionUtils.USER_SESSION_KEY, user);
-		FreeBoard freeBoard = FreeBoard.builder()
-				.id(1L)
-				.writer(user)
-				.title("title")
-				.contents("content")
-				.icon("")
-				.createDate(LocalDateTime.now())
-				.count(0)
-				.build();
 		FreeBoardAnswer freeBoardAnswer = FreeBoardAnswer.builder()
 				.id(1L)
 				.writer(user2)
@@ -208,33 +175,16 @@ public class FreeBoardAnswerControllerTest {
 		
 		
 		when(this.freeBoardAnswerService.delete(freeBoardAnswer.getId(), user))
-		.thenThrow(new MatchNotUserException("본인이 작성한 글만 삭제 가능합니다."));
+		.thenThrow(new NotMatchUserException());
 		this.mvc.perform(delete("/freeboards/{freeboardId}/answers/{id}", 1L, 1L)
 				.session(mockSession))
-		.andExpect(jsonPath("$.error").value("본인이 작성한 글만 삭제 가능합니다."));
+		.andExpect(jsonPath("$.error").value("권한이 없습니다."));
 	}
 	
 	@Test
 	public void readFreeBoardAnswer() throws Exception {
 		MockHttpSession mockSession = new MockHttpSession();
-		User user = User.builder()
-				.id(1L)
-				.email("test3@test.test")
-				.password("test3")
-				.name("테스트3")
-				.profileImage("blank-profile-picture.png")
-				.authority("ROLE_USER")
-				.createDate(LocalDateTime.now())
-				.build();
 		mockSession.setAttribute(HttpSessionUtils.USER_SESSION_KEY, user);
-		FreeBoard freeBoard = FreeBoard.builder()
-				.id(1L)
-				.title("title")
-				.contents("content")
-				.icon("")
-				.createDate(LocalDateTime.now())
-				.count(0)
-				.build();
 		FreeBoardAnswer freeBoardAnswer = FreeBoardAnswer.builder()
 				.id(1L)
 				.writer(user)
@@ -245,14 +195,7 @@ public class FreeBoardAnswerControllerTest {
 		list.add(freeBoardAnswer);
 		freeBoard.setFreeBoardAnswers(list);
 		
-		FreeBoardAnswerApiResponse freeBoardAnswerApiResponse = FreeBoardAnswerApiResponse.builder()
-				.id(freeBoardAnswer.getId())
-				.writer(freeBoardAnswer.getWriter())
-				.contents(freeBoardAnswer.getContents())
-				.freeBoardId(freeBoardAnswer.getFreeBoard().getId())
-				.countOfAnswers(freeBoard.getCountOfAnswer())
-				.updateDate(freeBoardAnswer.getFormattedUpdateDate())
-				.build();
+		FreeBoardAnswerApiResponse freeBoardAnswerApiResponse = FreeBoardAnswerApiResponse.of(freeBoardAnswer);
 		
 		when(this.freeBoardAnswerService.read(freeBoardAnswer.getId(), user))
 		.thenReturn(freeBoardAnswerApiResponse);
@@ -273,30 +216,13 @@ public class FreeBoardAnswerControllerTest {
 		this.mvc.perform(patch("/freeboards/{freeboardId}/answers", 1L)
 				.param("contents", "")
 				.session(mockSession))
-		.andExpect(jsonPath("$.error").value("내용을 입력하세요."));
+		.andExpect(jsonPath("$.error").value("잘못된 요청입니다. 내용을 입력하세요."));
 	}
 	
 	@Test
 	public void updateFreeBoardAnswer() throws Exception {
 		MockHttpSession mockSession = new MockHttpSession();
-		User user = User.builder()
-				.id(1L)
-				.email("test3@test.test")
-				.password("test3")
-				.name("테스트3")
-				.profileImage("blank-profile-picture.png")
-				.authority("ROLE_USER")
-				.createDate(LocalDateTime.now())
-				.build();
 		mockSession.setAttribute(HttpSessionUtils.USER_SESSION_KEY, user);
-		FreeBoard freeBoard = FreeBoard.builder()
-				.id(1L)
-				.title("title")
-				.contents("content")
-				.icon("")
-				.createDate(LocalDateTime.now())
-				.count(0)
-				.build();
 		FreeBoardAnswer freeBoardAnswer = FreeBoardAnswer.builder()
 				.id(1L)
 				.writer(user)
@@ -312,14 +238,7 @@ public class FreeBoardAnswerControllerTest {
 				.build();
 		freeBoardAnswer.update(request.getContents());
 		
-		FreeBoardAnswerApiResponse freeBoardAnswerApiResponse = FreeBoardAnswerApiResponse.builder()
-				.id(freeBoardAnswer.getId())
-				.writer(freeBoardAnswer.getWriter())
-				.contents(freeBoardAnswer.getContents())
-				.freeBoardId(freeBoardAnswer.getFreeBoard().getId())
-				.countOfAnswers(freeBoard.getCountOfAnswer())
-				.updateDate(freeBoardAnswer.getFormattedUpdateDate())
-				.build();
+		FreeBoardAnswerApiResponse freeBoardAnswerApiResponse = FreeBoardAnswerApiResponse.of(freeBoardAnswer);
 		
 		when(this.freeBoardAnswerService.update(request, user))
 		.thenReturn(freeBoardAnswerApiResponse);

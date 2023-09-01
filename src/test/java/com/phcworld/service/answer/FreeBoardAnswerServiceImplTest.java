@@ -7,6 +7,7 @@ import com.phcworld.domain.api.model.response.SuccessResponse;
 import com.phcworld.domain.board.FreeBoard;
 import com.phcworld.domain.exception.MatchNotUserException;
 import com.phcworld.domain.user.User;
+import com.phcworld.exception.model.NotMatchUserException;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -72,14 +73,7 @@ public class FreeBoardAnswerServiceImplTest {
 		list.add(answer);
 		freeBoard.setFreeBoardAnswers(list);
 		
-		FreeBoardAnswerApiResponse freeBoardAnswerApiResponse = FreeBoardAnswerApiResponse.builder()
-				.id(answer.getId())
-				.writer(answer.getWriter())
-				.contents(answer.getContents())
-				.freeBoardId(answer.getFreeBoard().getId())
-				.countOfAnswers(answer.getFreeBoard().getCountOfAnswer())
-				.updateDate(answer.getFormattedUpdateDate())
-				.build();
+		FreeBoardAnswerApiResponse freeBoardAnswerApiResponse = FreeBoardAnswerApiResponse.of(answer);
 		
 		when(freeBoardAnswerService.create(writer, freeBoard.getId(), request))
 		.thenReturn(freeBoardAnswerApiResponse);
@@ -112,7 +106,7 @@ public class FreeBoardAnswerServiceImplTest {
 		assertThat(response).isEqualTo(success);
 	}
 	
-	@Test(expected = MatchNotUserException.class)
+	@Test(expected = NotMatchUserException.class)
 	@Transactional
 	public void deleteFreeBoardAnswerWhenWriterNotMatchUser() throws Exception {
 		User user= User.builder()
@@ -131,7 +125,7 @@ public class FreeBoardAnswerServiceImplTest {
 				.contents("content")
 				.build();
 		
-		doThrow(MatchNotUserException.class)
+		doThrow(NotMatchUserException.class)
 		.when(freeBoardAnswerService).delete(answer.getId(), user);
 		freeBoardAnswerService.delete(answer.getId(), user);
 	}
@@ -175,14 +169,7 @@ public class FreeBoardAnswerServiceImplTest {
 		list.add(answer);
 		freeBoard.setFreeBoardAnswers(list);
 
-		FreeBoardAnswerApiResponse freeBoardAnswerApiResponse = FreeBoardAnswerApiResponse.builder()
-				.id(answer.getId())
-				.writer(answer.getWriter())
-				.contents(answer.getContents())
-				.freeBoardId(answer.getFreeBoard().getId())
-				.countOfAnswers(answer.getFreeBoard().getCountOfAnswer())
-				.updateDate(answer.getFormattedUpdateDate())
-				.build();
+		FreeBoardAnswerApiResponse freeBoardAnswerApiResponse = FreeBoardAnswerApiResponse.of(answer);
 		
 		when(freeBoardAnswerService.read(answer.getId(), writer))
 		.thenReturn(freeBoardAnswerApiResponse);
@@ -210,14 +197,7 @@ public class FreeBoardAnswerServiceImplTest {
 		
 		answer.update(request.getContents());
 		
-		FreeBoardAnswerApiResponse freeBoardAnswerApiResponse = FreeBoardAnswerApiResponse.builder()
-				.id(answer.getId())
-				.writer(answer.getWriter())
-				.contents(answer.getContents())
-				.freeBoardId(answer.getFreeBoard().getId())
-				.countOfAnswers(answer.getFreeBoard().getCountOfAnswer())
-				.updateDate(answer.getFormattedUpdateDate())
-				.build();
+		FreeBoardAnswerApiResponse freeBoardAnswerApiResponse = FreeBoardAnswerApiResponse.of(answer);
 		
 		when(freeBoardAnswerService.update(request, writer))
 		.thenReturn(freeBoardAnswerApiResponse);

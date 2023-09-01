@@ -15,4 +15,8 @@ public class FreeBoardAnswerRequest {
 	
 	private String contents;
 
+	public boolean isContentsEmpty() {
+		return this.getContents().isEmpty();
+	}
+
 }

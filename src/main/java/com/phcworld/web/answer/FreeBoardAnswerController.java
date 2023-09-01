@@ -2,6 +2,8 @@ package com.phcworld.web.answer;
 
 import javax.servlet.http.HttpSession;
 
+import com.phcworld.exception.model.BadRequestException;
+import com.phcworld.exception.model.NotMatchUserException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -35,11 +37,11 @@ public class FreeBoardAnswerController {
 	@ResponseStatus(value = HttpStatus.CREATED)
 	public FreeBoardAnswerApiResponse create(@PathVariable Long freeboardId, FreeBoardAnswerRequest request, HttpSession session) 
 			throws LoginNotUserException, ContentsEmptyException {
-		if(request.getContents().equals("")) {
-			throw new ContentsEmptyException("내용을 입력하세요.");
+		if(request.isContentsEmpty()) {
+			throw new BadRequestException();
 		}
 		if(!HttpSessionUtils.isLoginUser(session)) {
-			throw new LoginNotUserException("로그인을 해야합니다.");
+			throw new NotMatchUserException();
 		}
 		User loginUser = HttpSessionUtils.getUserFromSession(session);
 		
@@ -50,7 +52,7 @@ public class FreeBoardAnswerController {
 	public FreeBoardAnswerApiResponse read(@PathVariable Long id, HttpSession session) 
 			throws LoginNotUserException, MatchNotUserException {
 		if(!HttpSessionUtils.isLoginUser(session)) {
-			throw new LoginNotUserException("로그인을 해야합니다.");
+			throw new NotMatchUserException();
 		}
 		User loginUser = HttpSessionUtils.getUserFromSession(session);
 		return freeBoardAnswerService.read(id, loginUser);
@@ -59,11 +61,11 @@ public class FreeBoardAnswerController {
 	@PatchMapping("")
 	public FreeBoardAnswerApiResponse update(FreeBoardAnswerRequest request, HttpSession session) 
 			throws LoginNotUserException, MatchNotUserException {
-		if(request.getContents().equals("")) {
-			throw new ContentsEmptyException("내용을 입력하세요.");
+		if(request.isContentsEmpty()) {
+			throw new BadRequestException();
 		}
 		if(!HttpSessionUtils.isLoginUser(session)) {
-			throw new LoginNotUserException("로그인을 해야합니다.");
+			throw new NotMatchUserException();
 		}
 		User loginUser = HttpSessionUtils.getUserFromSession(session);
 		return freeBoardAnswerService.update(request, loginUser);
@@ -73,7 +75,7 @@ public class FreeBoardAnswerController {
 	public SuccessResponse delete(@PathVariable Long id, HttpSession session) 
 			throws LoginNotUserException, MatchNotUserException {
 		if(!HttpSessionUtils.isLoginUser(session)) {
-			throw new LoginNotUserException("로그인을 해야합니다.");
+			throw new NotMatchUserException();
 		}
 		User loginUser = HttpSessionUtils.getUserFromSession(session);
 		
