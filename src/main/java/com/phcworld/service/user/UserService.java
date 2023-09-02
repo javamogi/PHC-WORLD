@@ -3,6 +3,7 @@ package com.phcworld.service.user;
 import java.security.NoSuchAlgorithmException;
 import java.time.LocalDateTime;
 
+import com.phcworld.exception.model.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -35,7 +36,8 @@ public class UserService {
 	}
 
 	public User findUserById(Long id) {
-		return userRepository.getOne(id);
+		return userRepository.findById(id)
+				.orElseThrow(NotFoundException::new);
 	}
 	
 	public User updateUser(User loginUser, User newUser) {

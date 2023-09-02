@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.phcworld.exception.model.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -84,27 +85,31 @@ public class TempFreeBoardServiceImpl implements TempFreeBoardService {
 
 	@Override
 	public TempFreeBoardResponse getOneFreeBoard(Long id) {
-		TempFreeBoard freeBoard = freeBoardRepository.getOne(id);
+		TempFreeBoard freeBoard = freeBoardRepository.findById(id)
+				.orElseThrow(NotFoundException::new);
 		return response(freeBoard);
 	}
 
 	@Override
 	public TempFreeBoardResponse addFreeBoardCount(Long id) {
-		TempFreeBoard freeBoard = freeBoardRepository.getOne(id);
+		TempFreeBoard freeBoard = freeBoardRepository.findById(id)
+				.orElseThrow(NotFoundException::new);
 		freeBoard.addCount();
 		return response(freeBoardRepository.save(freeBoard));
 	}
 
 	@Override
 	public TempFreeBoardResponse updateFreeBoard(TempFreeBoardRequest request) {
-		TempFreeBoard freeBoard = freeBoardRepository.getOne(request.getId());
+		TempFreeBoard freeBoard = freeBoardRepository.findById(request.getId())
+				.orElseThrow(NotFoundException::new);
 		freeBoard.update(request);
 		return response(freeBoardRepository.save(freeBoard));
 	}
 
 	@Override
 	public void deleteFreeBoard(Long id) {
-		TempFreeBoard freeBoard = freeBoardRepository.getOne(id);
+		TempFreeBoard freeBoard = freeBoardRepository.findById(id)
+				.orElseThrow(NotFoundException::new);
 //		timelineService.deleteTimeline(freeBoard);
 //		List<FreeBoardAnswer> answerList = freeBoard.getFreeBoardAnswers();
 //		for(int i = 0; i < answerList.size(); i++) {

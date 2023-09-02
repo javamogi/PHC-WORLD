@@ -4,6 +4,7 @@ package com.phcworld.repository.answer;
 import com.phcworld.domain.answer.FreeBoardAnswer;
 import com.phcworld.domain.board.FreeBoard;
 import com.phcworld.domain.user.User;
+import com.phcworld.exception.model.NotFoundException;
 import com.phcworld.repository.board.FreeBoardRepository;
 import com.phcworld.util.FreeBoardFactory;
 import lombok.extern.slf4j.Slf4j;
@@ -77,7 +78,8 @@ public class FreeBoardAnswerRepositoryTest {
 				.contents("content")
 				.build();
 		FreeBoardAnswer newAnswer = freeBoardAnswerRepository.save(answer);
-		FreeBoardAnswer registAnswer = freeBoardAnswerRepository.getOne(newAnswer.getId());
+		FreeBoardAnswer registAnswer = freeBoardAnswerRepository.findById(newAnswer.getId())
+				.orElseThrow(NotFoundException::new);
 		registAnswer.update("update content");
 		FreeBoardAnswer updatedAnswer = freeBoardAnswerRepository.save(registAnswer);
 		assertThat("update content").isEqualTo(updatedAnswer.getContents());

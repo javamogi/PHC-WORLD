@@ -2,6 +2,7 @@ package com.phcworld.domain.image;
 
 import java.time.LocalDateTime;
 
+import com.phcworld.exception.model.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -41,6 +42,7 @@ public class ImageServiceImpl implements ImageService {
 	}
 
 	public Image getOneImage(Long id) {
-		return imageRepository.getOne(id);
+		return imageRepository.findById(id)
+				.orElseThrow(NotFoundException::new);
 	}
 }

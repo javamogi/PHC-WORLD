@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.phcworld.exception.model.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -38,7 +39,8 @@ public class MessageServiceImpl implements MessageService {
 	
 	@Override
 	public MessageResponse confirmMessage(Long id, User loginUser) {
-		Message message = messageRepository.getOne(id);
+		Message message = messageRepository.findById(id)
+				.orElseThrow(NotFoundException::new);
 		if(!loginUser.matchId(message.getReceiver().getId())) {
 			throw new MatchNotUserException("본인만 확인 가능합니다.");
 		}
@@ -99,7 +101,8 @@ public class MessageServiceImpl implements MessageService {
 	}
 
 	public MessageResponse getOneMessage(Long id) {
-		Message message = messageRepository.getOne(id);
+		Message message = messageRepository.findById(id)
+				.orElseThrow(NotFoundException::new);
 		return response(message);
 	}
 	

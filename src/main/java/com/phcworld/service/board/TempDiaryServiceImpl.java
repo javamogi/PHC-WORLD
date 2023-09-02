@@ -3,6 +3,7 @@ package com.phcworld.service.board;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.phcworld.exception.model.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -89,13 +90,15 @@ public class TempDiaryServiceImpl implements TempDiaryService {
 
 	@Override
 	public TempDiaryResponse getOneDiary(Long id) {
-		TempDiary diary = diaryRepository.getOne(id);
+		TempDiary diary = diaryRepository.findById(id)
+				.orElseThrow(NotFoundException::new);
 		return response(diary);
 	}
 
 	@Override
 	public TempDiaryResponse updateDiary(TempDiaryRequest request) {
-		TempDiary diary = diaryRepository.getOne(request.getId());
+		TempDiary diary = diaryRepository.findById(request.getId())
+				.orElseThrow(NotFoundException::new);
 		diary.update(request);
 		return response(diaryRepository.save(diary));
 	}
@@ -124,7 +127,8 @@ public class TempDiaryServiceImpl implements TempDiaryService {
 	}
 	
 	public SuccessResponse updateGood(Long diaryId, User loginUser) {
-		TempDiary diary = diaryRepository.getOne(diaryId);
+		TempDiary diary = diaryRepository.findById(diaryId)
+				.orElseThrow(NotFoundException::new);
 		TempDiary updateDiary = diaryRepository.save(goodService.pushGood(diary, loginUser));
 		return SuccessResponse.builder()
 				.success(Integer.toString(updateDiary.getCountOfGood()))
