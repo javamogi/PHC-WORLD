@@ -52,7 +52,7 @@ public class DiaryRepositoryCustomImpl implements DiaryRepositoryCustom{
                                 JPAExpressions
                                         .select(answer.count())
                                         .from(answer)
-                                        .where(answer.writer.eq(qUser)), "countOfAnswers"),
+                                        .where(answer.diary.eq(diary)), "countOfAnswers"),
                         ExpressionUtils.as(
                                 JPAExpressions
                                         .select(good.count())
