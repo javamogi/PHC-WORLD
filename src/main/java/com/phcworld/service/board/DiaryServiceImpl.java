@@ -55,14 +55,7 @@ public class DiaryServiceImpl implements DiaryService {
 
 		Page<DiarySelectDto> diaryPage = findPageDiary(loginUser, pageNum, requestUser);
 
-		List<DiaryResponse> diaryResponseList = diaryPage.getContent().stream()
-				.map(DiaryResponse::of)
-				.collect(Collectors.toList());
-		DiaryResponseDto diaryResponseDto = DiaryResponseDto.builder()
-				.totalPages(diaryPage.getTotalPages())
-				.diaries(diaryResponseList)
-				.build();
-		return diaryResponseDto;
+		return getDiaryResponseDto(diaryPage);
 	}
 
 	@Transactional(readOnly = true)
@@ -80,13 +73,7 @@ public class DiaryServiceImpl implements DiaryService {
 	public DiaryResponseDto findPageDiaryTemp2(User requestUser, Integer pageNum) {
 		PageRequest pageRequest = PageRequest.of(pageNum - 1, 6, Sort.by("id").descending());
 		Page<DiarySelectDto> page = diaryRepository.findAllPage(requestUser, pageRequest);
-		List<DiaryResponse> list = page.getContent().stream()
-				.map(DiaryResponse::of)
-				.collect(Collectors.toList());
-		return DiaryResponseDto.builder()
-				.diaries(list)
-				.totalPages(page.getTotalPages())
-				.build();
+		return getDiaryResponseDto(page);
 	}
 
 	private boolean isLoginUser(User loginUser, User requestUser) {
@@ -165,34 +152,25 @@ public class DiaryServiceImpl implements DiaryService {
 	}
 	
 	private DiaryResponse response(Diary diary) {
-		DiaryResponse diaryResponse = DiaryResponse.builder()
-				.id(diary.getId())
-				.writer(diary.getWriter())
-				.title(diary.getTitle())
-				.contents(diary.getContents())
-				.thumbnail(diary.getThumbnail())
-				.countOfAnswers(diary.getCountOfAnswer())
-				.countOfGood(diary.getCountOfGood())
-				.updateDate(diary.getFormattedUpdateDate())
-				.build();
+		DiaryResponse diaryResponse = DiaryResponse.of(diary);
 		List<DiaryAnswer> answerList = diary.getDiaryAnswers();
 		if(answerList != null) {
 			List<DiaryAnswerApiResponse> diaryAnswerApiResponseList = answerList.stream()
-					.map(answer -> {
-						DiaryAnswerApiResponse diaryAnswerApiResponse = DiaryAnswerApiResponse.builder()
-								.id(answer.getId())
-								.writer(answer.getWriter())
-								.contents(answer.getContents())
-								.diaryId(answer.getDiary().getId())
-								.countOfAnswers(answer.getDiary().getCountOfAnswer())
-								.updateDate(answer.getFormattedUpdateDate())
-								.build();
-						return diaryAnswerApiResponse;
-					})
+					.map(DiaryAnswerApiResponse::of)
 					.collect(Collectors.toList());
 			diaryResponse.setDiaryAnswerList(diaryAnswerApiResponseList);
 		}
 		return diaryResponse;
+	}
+
+	private DiaryResponseDto getDiaryResponseDto(Page<DiarySelectDto> diaryPage) {
+		List<DiaryResponse> diaryResponseList = diaryPage.getContent().stream()
+				.map(DiaryResponse::of)
+				.collect(Collectors.toList());
+		return DiaryResponseDto.builder()
+				.totalPages(diaryPage.getTotalPages())
+				.diaries(diaryResponseList)
+				.build();
 	}
 	
 }
