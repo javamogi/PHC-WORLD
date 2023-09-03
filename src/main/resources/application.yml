@@ -3,6 +3,10 @@ spring:
     multipart:
       max-file-size: 5MB
       max-request-size: 5MB
+  mvc:
+    hiddenmethod:
+      filter:
+        enabled: true
 
   profiles:
     active: dev
