@@ -1,6 +1,7 @@
 package com.phcworld.domain.image;
 
 import com.phcworld.domain.user.User;
+import com.phcworld.exception.model.NotFoundException;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -52,7 +53,7 @@ public class ImageServiceImplTest {
 		assertThat(actual).isEqualTo(image);
 	}
 	
-	@Test(expected = JpaObjectRetrievalFailureException.class)
+	@Test(expected = NotFoundException.class)
 	@Transactional
 	public void deleteImageById() throws Exception {
 		Image image = imageService.createImage(user, "haha.jpg", "1234.jpg", 100L);
