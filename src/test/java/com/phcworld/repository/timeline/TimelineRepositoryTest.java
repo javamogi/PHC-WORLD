@@ -28,6 +28,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -65,6 +66,9 @@ public class TimelineRepositoryTest {
 	private DiaryAnswer diaryAnswer;
 	private FreeBoard freeBoard;
 	private FreeBoardAnswer freeBoardAnswer;
+
+	@Autowired
+	private EntityManager em;
 
 	@Before
 	public void setup(){
@@ -430,6 +434,35 @@ public class TimelineRepositoryTest {
 		Timeline readTimeline = timelineRepository.findById(createdTimeline.getId())
 				.orElseThrow(() -> new CustomException("400", "게시물 정보가 없습니다."));
 		assertThat(createdTimeline).isEqualTo(readTimeline);
+	}
+
+	@Test(expected = CustomException.class)
+	public void deleteGoodTimeline() {
+		Good good = Good.builder()
+				.diary(diary)
+				.user(user)
+				.createDate(LocalDateTime.now())
+				.build();
+		Good createdGood = goodRepository.save(good);
+		List<Good> list = new ArrayList<Good>();
+		list.add(createdGood);
+		diary.setGoodPushedUser(list);
+		PostInfo postInfo = PostInfo.builder()
+				.saveType(SaveType.GOOD)
+				.postId(good.getId())
+				.redirectId(good.getDiary().getId())
+				.build();
+		Timeline diaryTimeline = Timeline.builder()
+				.postInfo(postInfo)
+				.user(good.getUser())
+				.saveDate(diary.getCreateDate())
+				.build();
+		Timeline createdTimeline = timelineRepository.save(diaryTimeline);
+		em.clear();
+		timelineRepository.deleteDiaryTimeline(diary.getId());
+
+		timelineRepository.findById(createdTimeline.getId())
+				.orElseThrow(() -> new CustomException("400", "게시물 정보가 없습니다."));
 	}
 	
 	@Test

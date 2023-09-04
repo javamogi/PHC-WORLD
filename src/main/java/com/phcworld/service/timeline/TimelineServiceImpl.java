@@ -187,5 +187,9 @@ public class TimelineServiceImpl implements TimelineService {
 				.orElseThrow(() -> new CustomException("400", "타임라인이 존재하지 않습니다."));
 		timelineRepository.delete(timeline);
 	}
+
+	public void deleteDiaryTimeline(Long diaryId){
+		timelineRepository.deleteDiaryTimeline(diaryId);
+	}
 	
 }

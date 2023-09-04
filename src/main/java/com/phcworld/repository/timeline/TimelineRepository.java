@@ -11,7 +11,7 @@ import com.phcworld.domain.user.User;
 
 import java.util.Optional;
 
-public interface TimelineRepository extends JpaRepository<Timeline, Long> {
+public interface TimelineRepository extends JpaRepository<Timeline, Long>, TimelineRepositoryCustom {
 	Page<Timeline> findByUser(User user, Pageable Pageable);
 
 //	Timeline findBySaveTypeAndPostIdAndRedirectId(SaveType saveType, Long postId, Long redirectId);

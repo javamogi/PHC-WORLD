@@ -118,16 +118,18 @@ public class DiaryServiceImpl implements DiaryService {
 	public void deleteDiary(Long id) {
 		Diary diary = diaryRepository.findById(id)
 				.orElseThrow(() -> new CustomException("400", "게시물이 존재하지 않습니다."));
-		timelineService.deleteTimeline(diary);
+//		timelineService.deleteTimeline(diary);
+		timelineService.deleteDiaryTimeline(diary.getId());
 		List<Good> goodList = diary.getGoodPushedUser();
 		for(int i = 0; i < goodList.size(); i++) {
-			timelineService.deleteTimeline(goodList.get(i));
-			alertService.deleteAlert(goodList.get(i));
+			Good good = goodList.get(i);
+//			timelineService.deleteTimeline(goodList.get(i));
+			alertService.deleteAlert(good);
 		}
 		List<DiaryAnswer> answerList = diary.getDiaryAnswers();
 		for(int i = 0; i < answerList.size(); i++) {
 			DiaryAnswer diaryAnswer = answerList.get(i);
-			timelineService.deleteTimeline(diaryAnswer);
+//			timelineService.deleteTimeline(diaryAnswer);
 			alertService.deleteAlert(diaryAnswer);
 		}
 		diaryRepository.delete(diary);

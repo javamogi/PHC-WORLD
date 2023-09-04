@@ -75,9 +75,9 @@ public class AlertServiceImpl implements AlertService {
 		Alert alert = Alert.builder()
 //				.type("Diary")
 //				.diaryAnswer(diaryAnswer)
+//				.registerUser(diaryAnswer.getWriter())
+//				.postWriter(diaryAnswer.getDiary().getWriter())
 				.postInfo(postInfo)
-				.registerUser(diaryAnswer.getWriter())
-				.postWriter(diaryAnswer.getDiary().getWriter())
 				.createDate(diaryAnswer.getCreateDate())
 				.read(false)
 				.build();
