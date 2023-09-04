@@ -124,13 +124,17 @@ public class DiaryServiceImpl implements DiaryService {
 		for(int i = 0; i < goodList.size(); i++) {
 			Good good = goodList.get(i);
 //			timelineService.deleteTimeline(goodList.get(i));
-			alertService.deleteAlert(good);
+			if(!diary.getWriter().equals(good.getUser())){
+				alertService.deleteAlert(good);
+			}
 		}
 		List<DiaryAnswer> answerList = diary.getDiaryAnswers();
 		for(int i = 0; i < answerList.size(); i++) {
 			DiaryAnswer diaryAnswer = answerList.get(i);
 //			timelineService.deleteTimeline(diaryAnswer);
-			alertService.deleteAlert(diaryAnswer);
+			if(!diary.getWriter().equals(diaryAnswer.getWriter())){
+				alertService.deleteAlert(diaryAnswer);
+			}
 		}
 		diaryRepository.delete(diary);
 	}
