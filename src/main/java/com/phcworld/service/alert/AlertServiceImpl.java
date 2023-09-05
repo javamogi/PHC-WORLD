@@ -134,5 +134,9 @@ public class AlertServiceImpl implements AlertService {
 				.orElseThrow(() -> new CustomException("400", "알림이 존재하지 않습니다."));
 		alertRepository.delete(alert);
 	}
+
+	public void deleteDiaryAlert(Long diaryId){
+		alertRepository.deleteDiaryAlert(diaryId);
+	}
 	
 }

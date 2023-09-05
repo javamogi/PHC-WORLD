@@ -50,4 +50,13 @@ public class AlertRepositoryCustomImpl implements AlertRepositoryCustom {
                 .fetch();
     }
 
+    @Override
+    public void deleteDiaryAlert(Long diaryId) {
+        queryFactory
+                .delete(alert)
+                .where(alert.postInfo.redirectId.eq(diaryId)
+                        .and(alert.postInfo.saveType.in(SaveType.DIARY, SaveType.DIARY_ANSWER, SaveType.GOOD)))
+                .execute();
+    }
+
 }

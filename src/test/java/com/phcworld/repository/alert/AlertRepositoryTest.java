@@ -10,6 +10,7 @@ import com.phcworld.domain.board.FreeBoard;
 import com.phcworld.domain.common.SaveType;
 import com.phcworld.domain.embedded.PostInfo;
 import com.phcworld.domain.good.Good;
+import com.phcworld.domain.timeline.Timeline;
 import com.phcworld.domain.user.User;
 import com.phcworld.exception.model.CustomException;
 import com.phcworld.repository.answer.DiaryAnswerRepository;
@@ -31,7 +32,9 @@ import org.springframework.data.domain.Sort;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -72,6 +75,9 @@ public class AlertRepositoryTest {
 	private FreeBoard freeBoard;
 
 	private FreeBoardAnswer freeBoardAnswer;
+
+	@Autowired
+	private EntityManager em;
 
 	@Before
 	public void setup(){
@@ -227,7 +233,7 @@ public class AlertRepositoryTest {
 	}
 	
 	@Test
-	public void deleteGoodAlert() {
+	public void deleteGood() {
 		User user2 = User.builder()
 				.id(2L)
 				.email("test4@test.test")
@@ -259,6 +265,41 @@ public class AlertRepositoryTest {
 		alertRepository.delete(createdAlert);
 		Optional<Alert> selectAlert = alertRepository.findById(createdAlert.getId());
 		assertFalse(selectAlert.isPresent());
+	}
+
+	@Test(expected = CustomException.class)
+	public void deleteGoodAlert() {
+		User user2 = User.builder()
+				.id(2L)
+				.email("test4@test.test")
+				.password("test4")
+				.name("테스트4")
+				.profileImage("blank-profile-picture.png")
+				.authority("ROLE_USER")
+				.createDate(LocalDateTime.now())
+				.build();
+		Good good = Good.builder()
+				.diary(diary)
+				.user(user2)
+				.createDate(LocalDateTime.now())
+				.build();
+		PostInfo postInfo = PostInfo.builder()
+				.saveType(SaveType.GOOD)
+				.postId(good.getId())
+				.redirectId(good.getDiary().getId())
+				.build();
+		Alert alert = Alert.builder()
+				.postInfo(postInfo)
+				.registerUser(good.getUser())
+				.postWriter(good.getDiary().getWriter())
+				.createDate(LocalDateTime.now())
+				.build();
+		Alert createdAlert = alertRepository.save(alert);
+		em.clear();
+		alertRepository.deleteDiaryAlert(diary.getId());
+
+		alertRepository.findById(createdAlert.getId())
+				.orElseThrow(() -> new CustomException("400", "게시물 정보가 없습니다."));
 	}
 	
 	@Test

@@ -7,4 +7,6 @@ import java.util.List;
 
 public interface AlertRepositoryCustom {
     List<AlertSelectDto> findAlertListByPostWriter(User user);
+
+    void deleteDiaryAlert(Long diaryId);
 }
