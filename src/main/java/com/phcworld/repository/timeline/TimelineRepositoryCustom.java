@@ -1,5 +1,7 @@
 package com.phcworld.repository.timeline;
 
+import com.phcworld.domain.common.SaveType;
+
 public interface TimelineRepositoryCustom {
-    void deleteDiaryTimeline(Long diaryId);
+    void deleteTimeline(SaveType saveType, Long id);
 }

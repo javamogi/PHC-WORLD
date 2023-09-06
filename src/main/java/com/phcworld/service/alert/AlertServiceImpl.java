@@ -135,8 +135,8 @@ public class AlertServiceImpl implements AlertService {
 		alertRepository.delete(alert);
 	}
 
-	public void deleteDiaryAlert(Long diaryId){
-		alertRepository.deleteDiaryAlert(diaryId);
+	public void deleteDiaryAlert(SaveType saveType, Long id){
+		alertRepository.deleteAlert(saveType, id);
 	}
 	
 }

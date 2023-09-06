@@ -51,12 +51,23 @@ public class AlertRepositoryCustomImpl implements AlertRepositoryCustom {
     }
 
     @Override
-    public void deleteDiaryAlert(Long diaryId) {
+    public void deleteAlert(SaveType saveType, Long id) {
         queryFactory
                 .delete(alert)
-                .where(alert.postInfo.redirectId.eq(diaryId)
-                        .and(alert.postInfo.saveType.in(SaveType.DIARY, SaveType.DIARY_ANSWER, SaveType.GOOD)))
+                .where(eqSaveType(saveType, id))
                 .execute();
+    }
+
+    private BooleanExpression eqSaveType(SaveType saveType, Long id){
+        if(saveType == SaveType.DIARY){
+            return alert.postInfo.redirectId.eq(id)
+                    .and(alert.postInfo.saveType.in(SaveType.DIARY, SaveType.DIARY_ANSWER, SaveType.GOOD));
+        } else if (saveType == SaveType.FREE_BOARD){
+            return alert.postInfo.redirectId.eq(id)
+                    .and(alert.postInfo.saveType.in(SaveType.FREE_BOARD, SaveType.FREE_BOARD_ANSWER));
+        }
+        return alert.postInfo.postId.eq(id)
+                .and(alert.postInfo.saveType.eq(saveType));
     }
 
 }

@@ -188,8 +188,8 @@ public class TimelineServiceImpl implements TimelineService {
 		timelineRepository.delete(timeline);
 	}
 
-	public void deleteDiaryTimeline(Long diaryId){
-		timelineRepository.deleteDiaryTimeline(diaryId);
+	public void deleteDiaryTimeline(SaveType saveType, Long id){
+		timelineRepository.deleteTimeline(saveType, id);
 	}
 	
 }

@@ -459,7 +459,7 @@ public class TimelineRepositoryTest {
 				.build();
 		Timeline createdTimeline = timelineRepository.save(diaryTimeline);
 		em.clear();
-		timelineRepository.deleteDiaryTimeline(diary.getId());
+		timelineRepository.deleteTimeline(SaveType.DIARY, diary.getId());
 
 		timelineRepository.findById(createdTimeline.getId())
 				.orElseThrow(() -> new CustomException("400", "게시물 정보가 없습니다."));

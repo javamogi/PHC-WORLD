@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import com.phcworld.domain.board.DiaryResponseDto;
+import com.phcworld.domain.common.SaveType;
 import com.phcworld.exception.model.CustomException;
 import com.phcworld.repository.board.dto.DiarySelectDto;
 import com.phcworld.repository.user.UserRepository;
@@ -118,8 +119,8 @@ public class DiaryServiceImpl implements DiaryService {
 	public void deleteDiary(Long id) {
 		Diary diary = diaryRepository.findById(id)
 				.orElseThrow(() -> new CustomException("400", "게시물이 존재하지 않습니다."));
-		timelineService.deleteDiaryTimeline(diary.getId());
-		alertService.deleteDiaryAlert(diary.getId());
+		timelineService.deleteDiaryTimeline(SaveType.DIARY, diary.getId());
+		alertService.deleteDiaryAlert(SaveType.DIARY, diary.getId());
 		diaryRepository.delete(diary);
 	}
 

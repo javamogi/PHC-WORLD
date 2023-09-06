@@ -2,7 +2,6 @@ package com.phcworld.repository.alert;
 
 import com.phcworld.domain.alert.Alert;
 import com.phcworld.domain.alert.dto.AlertResponseDto;
-import com.phcworld.domain.alert.dto.AlertSelectDto;
 import com.phcworld.domain.answer.DiaryAnswer;
 import com.phcworld.domain.answer.FreeBoardAnswer;
 import com.phcworld.domain.board.Diary;
@@ -10,7 +9,6 @@ import com.phcworld.domain.board.FreeBoard;
 import com.phcworld.domain.common.SaveType;
 import com.phcworld.domain.embedded.PostInfo;
 import com.phcworld.domain.good.Good;
-import com.phcworld.domain.timeline.Timeline;
 import com.phcworld.domain.user.User;
 import com.phcworld.exception.model.CustomException;
 import com.phcworld.repository.answer.DiaryAnswerRepository;
@@ -34,7 +32,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -296,7 +293,7 @@ public class AlertRepositoryTest {
 				.build();
 		Alert createdAlert = alertRepository.save(alert);
 		em.clear();
-		alertRepository.deleteDiaryAlert(diary.getId());
+		alertRepository.deleteAlert(SaveType.DIARY, diary.getId());
 
 		alertRepository.findById(createdAlert.getId())
 				.orElseThrow(() -> new CustomException("400", "게시물 정보가 없습니다."));
