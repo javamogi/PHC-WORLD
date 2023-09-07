@@ -9,14 +9,10 @@ import com.phcworld.exception.model.CustomException;
 import com.phcworld.repository.board.dto.DiarySelectDto;
 import com.phcworld.repository.user.UserRepository;
 import com.phcworld.service.user.UserService;
-import com.phcworld.utils.HttpSessionUtils;
-import com.phcworld.utils.PageNationsUtil;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,7 +22,6 @@ import com.phcworld.domain.api.model.response.SuccessResponse;
 import com.phcworld.domain.board.Diary;
 import com.phcworld.domain.board.DiaryRequest;
 import com.phcworld.domain.board.DiaryResponse;
-import com.phcworld.domain.good.Good;
 import com.phcworld.domain.user.User;
 import com.phcworld.repository.board.DiaryRepository;
 import com.phcworld.service.alert.AlertServiceImpl;
@@ -119,7 +114,7 @@ public class DiaryServiceImpl implements DiaryService {
 	public void deleteDiary(Long id) {
 		Diary diary = diaryRepository.findById(id)
 				.orElseThrow(() -> new CustomException("400", "게시물이 존재하지 않습니다."));
-		timelineService.deleteDiaryTimeline(SaveType.DIARY, diary.getId());
+		timelineService.deleteTimeline(SaveType.DIARY, diary.getId());
 		alertService.deleteDiaryAlert(SaveType.DIARY, diary.getId());
 		diaryRepository.delete(diary);
 	}

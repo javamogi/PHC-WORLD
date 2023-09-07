@@ -372,15 +372,13 @@ public class TimelineRepositoryTest {
 				.redirectId(freeBoard.getId())
 				.build();
 		Timeline freeBoardTimeline = Timeline.builder()
-//				.type("free board")
-//				.icon("list-alt")
-//				.freeBoard(freeBoard)
 				.postInfo(postInfo)
 				.user(user)
 				.saveDate(freeBoard.getCreateDate())
 				.build();
 		Timeline createdFreeBoardTimeline = timelineRepository.save(freeBoardTimeline);
-		timelineRepository.delete(createdFreeBoardTimeline);
+		em.clear();
+		timelineRepository.deleteTimeline(SaveType.FREE_BOARD, createdFreeBoardTimeline.getId());
 		Optional<Timeline> deletedTimeline = timelineRepository.findById(createdFreeBoardTimeline.getId());
 		assertFalse(deletedTimeline.isPresent());
 	}

@@ -6,6 +6,7 @@ import com.phcworld.domain.board.FreeBoardRequest;
 import com.phcworld.domain.board.FreeBoardResponse;
 import com.phcworld.domain.user.User;
 import com.phcworld.exception.model.CustomException;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -15,9 +16,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.hamcrest.CoreMatchers.hasItems;
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -25,10 +24,12 @@ public class FreeBoardServiceImplTest {
 
 	@Mock
 	private FreeBoardServiceImpl freeBoardService;
-		
-	@Test
-	public void createFreeBoard() {
-		User user = User.builder()
+
+	private User user;
+
+	@Before
+	public void setup(){
+		user = User.builder()
 				.id(1L)
 				.email("test3@test.test")
 				.password("test3")
@@ -37,6 +38,10 @@ public class FreeBoardServiceImplTest {
 				.authority("ROLE_USER")
 				.createDate(LocalDateTime.now())
 				.build();
+	}
+		
+	@Test
+	public void createFreeBoard() {
 		FreeBoardRequest request = FreeBoardRequest.builder()
 				.title("title")
 				.contents("contents")
@@ -63,21 +68,12 @@ public class FreeBoardServiceImplTest {
 				.build();
 		when(freeBoardService.createFreeBoard(user, request)).thenReturn(response);
 		FreeBoardResponse freeBoardResponse = freeBoardService.createFreeBoard(user, request);
-		assertThat(response, is(freeBoardResponse));
+		assertThat(response).isEqualTo(freeBoardResponse);
 	}
 		
 	
 	@Test
 	public void getOneFreeBoard() {
-		User user = User.builder()
-				.id(1L)
-				.email("test3@test.test")
-				.password("test3")
-				.name("테스트3")
-				.profileImage("blank-profile-picture.png")
-				.authority("ROLE_USER")
-				.createDate(LocalDateTime.now())
-				.build();
 		FreeBoardRequest request = FreeBoardRequest.builder()
 				.title("title")
 				.contents("contents")
@@ -108,7 +104,7 @@ public class FreeBoardServiceImplTest {
 		when(freeBoardService.getOneFreeBoard(response.getId())).thenReturn(response);
 		FreeBoardResponse actual = freeBoardService.getOneFreeBoard(response.getId());
 		
-		assertThat(actual, is(freeBoardResponse));
+		assertThat(actual).isEqualTo(freeBoardResponse);
 	}
 
 	@Test(expected = CustomException.class)
@@ -119,15 +115,6 @@ public class FreeBoardServiceImplTest {
 	
 	@Test
 	public void updateFreeBoard() throws Exception {
-		User user = User.builder()
-				.id(1L)
-				.email("test3@test.test")
-				.password("test3")
-				.name("테스트3")
-				.profileImage("blank-profile-picture.png")
-				.authority("ROLE_USER")
-				.createDate(LocalDateTime.now())
-				.build();
 		FreeBoard board = FreeBoard.builder()
 				.id(1L)
 				.writer(user)
@@ -161,20 +148,11 @@ public class FreeBoardServiceImplTest {
 		when(freeBoardService.updateFreeBoard(request)).thenReturn(response);
 		FreeBoardResponse updatedfreeBoard = freeBoardService.updateFreeBoard(request);
 		
-		assertThat(request.getContents(), is(updatedfreeBoard.getContents()));		
+		assertThat(request.getContents()).isEqualTo(updatedfreeBoard.getContents());
 	}
 	
 	@Test
 	public void deleteFreeBoardWhenEmptyFreeBoardAnswer() {
-		User user = User.builder()
-				.id(1L)
-				.email("test3@test.test")
-				.password("test3")
-				.name("테스트3")
-				.profileImage("blank-profile-picture.png")
-				.authority("ROLE_USER")
-				.createDate(LocalDateTime.now())
-				.build();
 		FreeBoard board = FreeBoard.builder()
 				.id(1L)
 				.writer(user)
@@ -190,15 +168,6 @@ public class FreeBoardServiceImplTest {
 	
 	@Test
 	public void deleteFreeBoard() {
-		User user = User.builder()
-				.id(1L)
-				.email("test3@test.test")
-				.password("test3")
-				.name("테스트3")
-				.profileImage("blank-profile-picture.png")
-				.authority("ROLE_USER")
-				.createDate(LocalDateTime.now())
-				.build();
 		FreeBoard board = FreeBoard.builder()
 				.id(1L)
 				.writer(user)
@@ -222,15 +191,6 @@ public class FreeBoardServiceImplTest {
 	
 	@Test
 	public void addFreeBoardCount() throws Exception {
-		User user = User.builder()
-				.id(1L)
-				.email("test3@test.test")
-				.password("test3")
-				.name("테스트3")
-				.profileImage("blank-profile-picture.png")
-				.authority("ROLE_USER")
-				.createDate(LocalDateTime.now())
-				.build();
 		FreeBoard board = FreeBoard.builder()
 				.id(1L)
 				.writer(user)
@@ -255,20 +215,11 @@ public class FreeBoardServiceImplTest {
 				.build();
 		when(freeBoardService.addFreeBoardCount(board.getId())).thenReturn(response);
 		FreeBoardResponse addedFreeBoardAnswer = freeBoardService.addFreeBoardCount(board.getId());
-		assertThat(1, is(addedFreeBoardAnswer.getCount()));
+		assertThat(1).isEqualTo(addedFreeBoardAnswer.getCount());
 	}
 	
 	@Test
 	public void findFreeBoardListByWriter() throws Exception {
-		User user = User.builder()
-				.id(1L)
-				.email("test3@test.test")
-				.password("test3")
-				.name("테스트3")
-				.profileImage("blank-profile-picture.png")
-				.authority("ROLE_USER")
-				.createDate(LocalDateTime.now())
-				.build();
 		FreeBoard board = FreeBoard.builder()
 				.id(1L)
 				.writer(user)
@@ -293,20 +244,13 @@ public class FreeBoardServiceImplTest {
 		
 		when(freeBoardService.findFreeBoardListByWriter(user)).thenReturn(freeBoardList);
 		List<FreeBoard> findFreeBoardList = freeBoardService.findFreeBoardListByWriter(user);
-		assertThat(findFreeBoardList, hasItems(board, board2));
+		assertThat(findFreeBoardList)
+				.contains(board)
+				.contains(board2);
 	}
 	
 	@Test
 	public void findFreeBoardAllList() throws Exception {
-		User user = User.builder()
-				.id(1L)
-				.email("test3@test.test")
-				.password("test3")
-				.name("테스트3")
-				.profileImage("blank-profile-picture.png")
-				.authority("ROLE_USER")
-				.createDate(LocalDateTime.now())
-				.build();
 		User user2 = User.builder()
 				.email("test4@test.test")
 				.password("test4")
@@ -338,7 +282,9 @@ public class FreeBoardServiceImplTest {
 		list.add(response2);
 		when(freeBoardService.findFreeBoardAllListAndSetNewBadge()).thenReturn(list);
 		List<FreeBoardResponse> findAllfreeBoardList =  freeBoardService.findFreeBoardAllListAndSetNewBadge();
-		assertThat(findAllfreeBoardList, hasItems(response, response2));
+		assertThat(findAllfreeBoardList)
+				.contains(response)
+				.contains(response2);
 	}
 	
 }

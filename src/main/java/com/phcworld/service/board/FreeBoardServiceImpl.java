@@ -4,7 +4,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import com.phcworld.domain.board.FreeBoardSearchDto;
+import com.phcworld.domain.common.SaveType;
 import com.phcworld.exception.model.CustomException;
+import com.phcworld.exception.model.NotFoundException;
 import com.phcworld.repository.board.dto.FreeBoardSelectDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
@@ -36,10 +38,9 @@ public class FreeBoardServiceImpl implements FreeBoardService {
 	@Override
 	public List<FreeBoardResponse> findFreeBoardAllListAndSetNewBadge() {
 		List<FreeBoard> list = freeBoardRepository.findAll();
-		List<FreeBoardResponse> freeBoardAnswerApiResponseList = list.stream()
+		return list.stream()
 				.map(FreeBoardResponse::of)
 				.collect(Collectors.toList());
-		return freeBoardAnswerApiResponseList;
 	}
 
 	@Transactional(readOnly = true)
@@ -47,10 +48,9 @@ public class FreeBoardServiceImpl implements FreeBoardService {
 	public List<FreeBoardResponse> getSearchResult(FreeBoardSearchDto search) {
 		PageRequest pageRequest = PageRequest.of(search.getPageNum() - 1, search.getPageSize(), Sort.by("createDate").descending());
 		List<FreeBoardSelectDto> list = freeBoardRepository.findByKeywordOrderById(search.getKeyword(), pageRequest);
-		List<FreeBoardResponse> freeBoardAnswerApiResponseList = list.stream()
+		return list.stream()
 				.map(FreeBoardResponse::of)
 				.collect(Collectors.toList());
-		return freeBoardAnswerApiResponseList;
 	}
 
 	@Transactional
@@ -74,7 +74,7 @@ public class FreeBoardServiceImpl implements FreeBoardService {
 	@Override
 	public FreeBoardResponse getOneFreeBoard(Long id) {
 		FreeBoard freeBoard = freeBoardRepository.findById(id)
-				.orElseThrow(() -> new CustomException("400", "게시글이 없습니다."));
+				.orElseThrow(NotFoundException::new);
 		return response(freeBoard);
 	}
 
@@ -82,7 +82,7 @@ public class FreeBoardServiceImpl implements FreeBoardService {
 	@Override
 	public FreeBoardResponse addFreeBoardCount(Long id) {
 		FreeBoard freeBoard = freeBoardRepository.findById(id)
-				.orElseThrow(() -> new CustomException("400", "게시글이 없습니다."));
+				.orElseThrow(NotFoundException::new);
 		freeBoard.addCount();
 		return response(freeBoardRepository.save(freeBoard));
 	}
@@ -91,7 +91,7 @@ public class FreeBoardServiceImpl implements FreeBoardService {
 	@Override
 	public FreeBoardResponse updateFreeBoard(FreeBoardRequest request) {
 		FreeBoard freeBoard = freeBoardRepository.findById(request.getId())
-				.orElseThrow(() -> new CustomException("400", "게시글이 없습니다."));
+				.orElseThrow(NotFoundException::new);
 		freeBoard.update(request);
 		return response(freeBoardRepository.save(freeBoard));
 	}
@@ -100,14 +100,8 @@ public class FreeBoardServiceImpl implements FreeBoardService {
 	@Override
 	public void deleteFreeBoard(Long id) {
 		FreeBoard freeBoard = freeBoardRepository.findById(id)
-				.orElseThrow(() -> new CustomException("400", "게시글이 없습니다."));
-		timelineService.deleteTimeline(freeBoard);
-		List<FreeBoardAnswer> answerList = freeBoard.getFreeBoardAnswers();
-		for(int i = 0; i < answerList.size(); i++) {
-			FreeBoardAnswer freeBoardAnswer = answerList.get(i);
-			timelineService.deleteTimeline(freeBoardAnswer);
-			alertService.deleteAlert(freeBoardAnswer);
-		}
+				.orElseThrow(NotFoundException::new);
+		timelineService.deleteTimeline(SaveType.FREE_BOARD, id);
 		freeBoardRepository.delete(freeBoard);
 	}
 
