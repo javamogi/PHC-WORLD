@@ -67,7 +67,16 @@ $(document).ready(function(){
 				if(temp === 0){
 					$("#countOfAnswer").text(data.success);
 				} else {
-					$("#countOfDiaryAnswer").text(data.success);
+					var txt = $("#countOfDiaryAnswer").text();
+					var val = txt.replace(/\[|\]/g, "");
+					val -= 1;
+					var count;
+					if(val === 0){
+						count = "";
+					} else {
+						count = "[" + val + "]";
+					}
+					$("#countOfDiaryAnswer").text(count);
 				}
 			}
 		});

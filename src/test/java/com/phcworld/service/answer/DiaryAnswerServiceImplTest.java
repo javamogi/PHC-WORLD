@@ -126,7 +126,7 @@ public class DiaryAnswerServiceImplTest {
 		
 		answer.getDiary().getDiaryAnswers().remove(answer);
 		SuccessResponse response = SuccessResponse.builder()
-				.success(answer.getDiary().getCountOfAnswer())
+				.success("삭제성공")
 				.build();
 		when(diaryAnswerService.delete(answer.getId(), writer))
 		.thenReturn(response);

@@ -5,7 +5,6 @@ import java.util.stream.Collectors;
 
 import com.phcworld.domain.board.FreeBoardSearchDto;
 import com.phcworld.domain.common.SaveType;
-import com.phcworld.exception.model.CustomException;
 import com.phcworld.exception.model.NotFoundException;
 import com.phcworld.repository.board.dto.FreeBoardSelectDto;
 import lombok.RequiredArgsConstructor;
@@ -102,6 +101,7 @@ public class FreeBoardServiceImpl implements FreeBoardService {
 		FreeBoard freeBoard = freeBoardRepository.findById(id)
 				.orElseThrow(NotFoundException::new);
 		timelineService.deleteTimeline(SaveType.FREE_BOARD, id);
+		alertService.deleteAlert(SaveType.FREE_BOARD, id);
 		freeBoardRepository.delete(freeBoard);
 	}
 

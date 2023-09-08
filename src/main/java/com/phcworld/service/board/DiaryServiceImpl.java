@@ -115,7 +115,7 @@ public class DiaryServiceImpl implements DiaryService {
 		Diary diary = diaryRepository.findById(id)
 				.orElseThrow(() -> new CustomException("400", "게시물이 존재하지 않습니다."));
 		timelineService.deleteTimeline(SaveType.DIARY, diary.getId());
-		alertService.deleteDiaryAlert(SaveType.DIARY, diary.getId());
+		alertService.deleteAlert(SaveType.DIARY, diary.getId());
 		diaryRepository.delete(diary);
 	}
 

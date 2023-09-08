@@ -2,6 +2,7 @@ package com.phcworld.service.answer;
 
 import java.util.List;
 
+import com.phcworld.domain.common.SaveType;
 import com.phcworld.exception.model.ErrorCode;
 import com.phcworld.exception.model.NotFoundException;
 import com.phcworld.exception.model.NotMatchUserException;
@@ -46,15 +47,14 @@ public class DiaryAnswerServiceImpl implements CrudInterface<DiaryAnswerRequest,
 				.build();
 		
 		DiaryAnswer createdDiaryAnswer = diaryAnswerRepository.save(diaryAnswer);
-		DiaryAnswerApiResponse diaryAnswerApiResponse = DiaryAnswerApiResponse.of(createdDiaryAnswer);
-		
+
 		timelineService.createTimeline(createdDiaryAnswer);
 		
 		if(!diary.matchUser(loginUser)) {
 			alertService.createAlert(createdDiaryAnswer);
 		}
 		
-		return diaryAnswerApiResponse;
+		return DiaryAnswerApiResponse.of(createdDiaryAnswer);
 	}
 	
 	@Override
@@ -89,18 +89,13 @@ public class DiaryAnswerServiceImpl implements CrudInterface<DiaryAnswerRequest,
 			throw new NotMatchUserException();
 		}
 		
-		timelineService.deleteTimeline(diaryAnswer);
-		if(diaryAnswer.isSameWriter(loginUser)) {
-			alertService.deleteAlert(diaryAnswer);
-		}
+		timelineService.deleteTimeline(SaveType.DIARY_ANSWER, id);
+		alertService.deleteAlert(SaveType.DIARY_ANSWER, id);
 		
 		diaryAnswerRepository.deleteById(id);
-		Diary diary = diaryRepository.findById(diaryAnswer.getDiary().getId())
-				.orElseThrow(() -> new NotFoundException(ErrorCode.NOT_FOUND));
-		diary.getDiaryAnswers().remove(diaryAnswer);
-		
+
 		return SuccessResponse.builder()
-				.success(diary.getCountOfAnswer())
+				.success("삭제성공")
 				.build();
 	}
 	

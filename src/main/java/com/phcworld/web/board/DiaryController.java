@@ -72,7 +72,7 @@ public class DiaryController {
 
 	@GetMapping("/list/{email}/temp2")
 	public String getDairyListTmp2(@PathVariable String email, @RequestParam(defaultValue = "1") Integer pageNum,
-							   Model model, HttpSession session) {
+							   Model model) {
 		User requestUser = userService.findUserByEmail(email);
 		DiaryResponseDto dto = diaryService.findPageDiaryTemp2(requestUser, pageNum);
 

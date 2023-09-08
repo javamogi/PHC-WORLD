@@ -156,7 +156,7 @@ public class DiaryAnswerControllerTest {
 				.build();
 
 		SuccessResponse response = SuccessResponse.builder()
-				.success(diaryAnswer.getDiary().getCountOfAnswer())
+				.success("삭제성공")
 				.build();
 
 
@@ -165,7 +165,7 @@ public class DiaryAnswerControllerTest {
 		this.mvc.perform(delete("/diaries/{diaryId}/answer/{id}", 1L, 1L)
 				.session(mockSession))
 		.andExpect(status().isOk())
-		.andExpect(jsonPath("$.success").value(""));
+		.andExpect(jsonPath("$.success").value("삭제성공"));
 	}
 	
 	@Test

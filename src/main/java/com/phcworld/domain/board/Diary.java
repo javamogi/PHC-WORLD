@@ -99,5 +99,8 @@ public class Diary {
 		}
 		return this.id.equals(diaryId);
 	}
-	
+
+	public void removeAnswer(DiaryAnswer diaryAnswer) {
+		this.getDiaryAnswers().remove(diaryAnswer);
+	}
 }
