@@ -134,7 +134,7 @@ public class FreeBoardAnswerControllerTest {
 				.contents("test")
 				.build();
 		SuccessResponse response = SuccessResponse.builder()
-				.success(freeBoardAnswer.getFreeBoard().getCountOfAnswer())
+				.success("삭제성공")
 				.build();
 		
 		when(this.freeBoardAnswerService.delete(freeBoardAnswer.getId(), user))
@@ -142,7 +142,7 @@ public class FreeBoardAnswerControllerTest {
 		this.mvc.perform(delete("/freeboards/{freeboardId}/answers/{id}", 1L, 1L)
 				.session(mockSession))
 		.andExpect(status().isOk())
-		.andExpect(jsonPath("$.success").value(""));
+		.andExpect(jsonPath("$.success").value("삭제성공"));
 	}
 	
 	@Test

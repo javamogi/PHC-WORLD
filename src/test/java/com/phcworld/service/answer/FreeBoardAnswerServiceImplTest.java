@@ -98,7 +98,7 @@ public class FreeBoardAnswerServiceImplTest {
 
 		answer.getFreeBoard().getFreeBoardAnswers().remove(answer);
 		SuccessResponse response = SuccessResponse.builder()
-				.success(answer.getFreeBoard().getCountOfAnswer())
+				.success("삭제성공")
 				.build();
 		when(freeBoardAnswerService.delete(answer.getId(), writer))
 		.thenReturn(response);

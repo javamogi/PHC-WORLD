@@ -65,22 +65,27 @@ $(document).ready(function(){
 				deleteBtn.closest("article").remove();
 				var temp = $("#countOfDiaryAnswer").length;
 				if(temp === 0){
-					$("#countOfAnswer").text(data.success);
+					var txt = $("#countOfAnswer").text();
+					$("#countOfAnswer").text(countAnswer(txt));
 				} else {
 					var txt = $("#countOfDiaryAnswer").text();
-					var val = txt.replace(/\[|\]/g, "");
-					val -= 1;
-					var count;
-					if(val === 0){
-						count = "";
-					} else {
-						count = "[" + val + "]";
-					}
-					$("#countOfDiaryAnswer").text(count);
+					$("#countOfDiaryAnswer").text(countAnswer(txt));
 				}
 			}
 		});
 	});
+
+	function countAnswer(txt){
+		var val = txt.replace(/\[|\]/g, "");
+		val -= 1;
+		var count;
+		if(val === 0){
+			count = "";
+		} else {
+			count = "[" + val + "]";
+		}
+		return count;
+	}
 	
 	$(document).on("click", "a.answer-get", function(e){
 		e.preventDefault();

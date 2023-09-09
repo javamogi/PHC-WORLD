@@ -2,6 +2,7 @@ package com.phcworld.service.answer;
 
 import java.util.List;
 
+import com.phcworld.domain.common.SaveType;
 import com.phcworld.exception.model.NotFoundException;
 import com.phcworld.exception.model.NotMatchUserException;
 import lombok.RequiredArgsConstructor;
@@ -89,18 +90,12 @@ public class FreeBoardAnswerServiceImpl implements CrudInterface<FreeBoardAnswer
 			throw new NotMatchUserException();
 		}
 
-		timelineService.deleteTimeline(freeBoardAnswer);
-		if(freeBoardAnswer.isSameWriter(loginUser)) {
-			alertService.deleteAlert(freeBoardAnswer);
-		}
+		timelineService.deleteTimeline(SaveType.FREE_BOARD_ANSWER, id);
+		alertService.deleteAlert(SaveType.FREE_BOARD_ANSWER, id);
 		freeBoardAnswerRepository.deleteById(id);
 		
-		FreeBoard freeBoard = freeBoardRepository.findById(freeBoardAnswer.getFreeBoard().getId())
-				.orElseThrow(NotFoundException::new);
-		freeBoard.getFreeBoardAnswers().remove(freeBoardAnswer);
-		log.info("countOfAnswer : {}", freeBoard.getCountOfAnswer());
 		return SuccessResponse.builder()
-				.success(freeBoard.getCountOfAnswer())
+				.success("삭제성공")
 				.build();
 	}
 	
