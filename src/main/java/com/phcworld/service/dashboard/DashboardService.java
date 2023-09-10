@@ -3,26 +3,14 @@ package com.phcworld.service.dashboard;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.phcworld.domain.dashboard.DashBoardSelectDto;
+import com.phcworld.domain.dashboard.dto.DashBoardSelectDto;
 import com.phcworld.domain.timeline.dto.TimelineResponseDto;
 import com.phcworld.repository.dashboard.DashBoardRepositoryCustom;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.phcworld.domain.alert.Alert;
-import com.phcworld.domain.answer.DiaryAnswer;
-import com.phcworld.domain.answer.FreeBoardAnswer;
-import com.phcworld.domain.board.Diary;
-import com.phcworld.domain.board.FreeBoard;
-import com.phcworld.domain.timeline.Timeline;
 import com.phcworld.domain.user.DashBoardUser;
 import com.phcworld.domain.user.User;
-import com.phcworld.service.alert.AlertServiceImpl;
-import com.phcworld.service.answer.DiaryAnswerServiceImpl;
-import com.phcworld.service.answer.FreeBoardAnswerServiceImpl;
-import com.phcworld.service.board.DiaryServiceImpl;
-import com.phcworld.service.board.FreeBoardServiceImpl;
 import com.phcworld.service.timeline.TimelineServiceImpl;
 
 @Service

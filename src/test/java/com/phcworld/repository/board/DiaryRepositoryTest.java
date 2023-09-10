@@ -167,7 +167,7 @@ public class DiaryRepositoryTest {
 				.thumbnail("no-image-icon.gif")
 				.build();
 		diaryRepository.save(diary);
-		PageRequest pageRequest = PageRequest.of(0, 10, Sort.by("createDate").descending());
+		PageRequest pageRequest = PageRequest.of(0, 10, Sort.by("good").descending());
 		StopWatch queryStopWatch = new StopWatch();
 		queryStopWatch.start();
 		Page<DiarySelectDto> diaryPage = diaryRepository.findAllPage(user, pageRequest);

@@ -1,4 +1,4 @@
-package com.phcworld.domain.dashboard;
+package com.phcworld.domain.dashboard.dto;
 
 import com.phcworld.domain.timeline.Timeline;
 import lombok.Getter;

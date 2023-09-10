@@ -7,6 +7,8 @@ import com.phcworld.domain.user.QUser;
 import com.phcworld.domain.user.User;
 import com.phcworld.repository.board.dto.DiarySelectDto;
 import com.querydsl.core.types.ExpressionUtils;
+import com.querydsl.core.types.Order;
+import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Expressions;
@@ -16,8 +18,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -31,21 +35,24 @@ public class DiaryRepositoryCustomImpl implements DiaryRepositoryCustom{
     QDiaryAnswer answer = QDiaryAnswer.diaryAnswer;
 
     private List<DiarySelectDto> findAllList(User user, Pageable pageable){
-        List<Long> ids = queryFactory
-                .select(diary.id)
-                .from(diary)
-//                .leftJoin(diary.writer, user)
-//                .where(user.email.eq(keyword))
-                .where(eqWriter(user))
-                .offset(pageable.getOffset())
-                .limit(pageable.getPageSize())
-                .orderBy(diary.createDate.desc())
-                .fetch();
+        List<OrderSpecifier> orders = getOrderSpecifier(pageable);
+//        List<Long> ids = queryFactory
+//                .select(diary.id)
+//                .from(diary)
+////                .leftJoin(diary.writer, user)
+////                .where(user.email.eq(keyword))
+//                .where(eqWriter(user))
+//                .offset(pageable.getOffset())
+//                .limit(pageable.getPageSize())
+////                .orderBy(diary.createDate.desc())
+//                .orderBy(orders.stream().toArray(OrderSpecifier[]::new))
+//                .fetch();
 
         return queryFactory
                 .select(Projections.fields(DiarySelectDto.class,
                         diary.id,
                         qUser.as("writer"),
+//                        diary.writer,
                         diary.title,
                         diary.thumbnail,
                         ExpressionUtils.as(
@@ -53,21 +60,23 @@ public class DiaryRepositoryCustomImpl implements DiaryRepositoryCustom{
                                         .select(answer.count())
                                         .from(answer)
                                         .where(answer.diary.eq(diary)), "countOfAnswers"),
-                        ExpressionUtils.as(
-                                JPAExpressions
-                                        .select(good.count())
-                                        .from(good)
-                                        .where(good.diary.eq(diary)), "countOfGood"),
+//                        ExpressionUtils.as(
+//                                JPAExpressions
+//                                        .select(good.count())
+//                                        .from(good)
+//                                        .where(good.diary.eq(diary)), "countOfGood"),
                         diary.updateDate,
-                        diary.createDate
-//                        good.count().as("countOfGood")
+                        diary.createDate,
+                        good.count().coalesce(0L).as("countOfGood")
                         ))
                 .from(diary)
                 .leftJoin(diary.writer, qUser)
-//                .leftJoin(good).on(good.diary.eq(diary))
-                .where(diary.id.in(ids))
-                .orderBy(diary.createDate.desc())
-//                .groupBy(diary)
+                .leftJoin(good).on(good.diary.eq(diary))
+//                .where(diary.id.in(ids))
+                .where(eqWriter(user))
+//                .orderBy(diary.createDate.desc())
+                .orderBy(orders.stream().toArray(OrderSpecifier[]::new))
+                .groupBy(diary)
                 .fetch();
     }
 
@@ -91,6 +100,28 @@ public class DiaryRepositoryCustomImpl implements DiaryRepositoryCustom{
             return null;
         }
         return diary.writer.eq(user);
+    }
+
+    private List<OrderSpecifier> getOrderSpecifier(Pageable pageable){
+        List<OrderSpecifier> orders = new ArrayList<>();
+        if(pageable.getSort() != null){
+            for(Sort.Order order : pageable.getSort()){
+                Order direction = order.getDirection().isAscending() ? Order.ASC : Order.DESC;
+                switch (order.getProperty()){
+                    case "createDate":
+                        OrderSpecifier<?> createDate = new OrderSpecifier(direction, diary.createDate);
+                        orders.add(createDate);
+                        break;
+                    case "good":
+                        OrderSpecifier<?> goodCount = new OrderSpecifier(direction, good.count());
+                        orders.add(goodCount);
+                        OrderSpecifier<?> createDate2 = new OrderSpecifier(direction, diary.createDate);
+                        orders.add(createDate2);
+                        break;
+                }
+            }
+        }
+        return orders;
     }
 
 }

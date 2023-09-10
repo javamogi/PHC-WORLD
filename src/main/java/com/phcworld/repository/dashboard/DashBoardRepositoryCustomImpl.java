@@ -5,7 +5,7 @@ import com.phcworld.domain.answer.QDiaryAnswer;
 import com.phcworld.domain.answer.QFreeBoardAnswer;
 import com.phcworld.domain.board.QDiary;
 import com.phcworld.domain.board.QFreeBoard;
-import com.phcworld.domain.dashboard.DashBoardSelectDto;
+import com.phcworld.domain.dashboard.dto.DashBoardSelectDto;
 import com.phcworld.domain.timeline.QTimeline;
 import com.phcworld.domain.user.QUser;
 import com.phcworld.domain.user.User;
