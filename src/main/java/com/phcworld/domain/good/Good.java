@@ -2,13 +2,7 @@ package com.phcworld.domain.good;
 
 import java.time.LocalDateTime;
 
-import javax.persistence.Entity;
-import javax.persistence.ForeignKey;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 
 import com.phcworld.domain.board.Diary;
 import com.phcworld.domain.user.User;
@@ -24,6 +18,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@Table(indexes = @Index(name = "idx__diary_id", columnList = "diary_id"))
 public class Good {
 
 	@Id

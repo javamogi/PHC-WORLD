@@ -10,6 +10,7 @@ import com.phcworld.repository.board.dto.DiarySelectDto;
 import com.phcworld.util.DiaryFactory;
 import lombok.extern.slf4j.Slf4j;
 import org.jeasy.random.EasyRandom;
+import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -25,6 +26,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StopWatch;
 
+import javax.persistence.EntityManager;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -49,9 +51,11 @@ public class DiaryRepositoryTest {
 
 	private User user;
 
+	@Before
 	public void setup(){
 		user = User.builder()
 				.id(1L)
+				.email("test@test.test")
 				.build();
 	}
 
@@ -159,7 +163,10 @@ public class DiaryRepositoryTest {
 	}
 
 	@Test
+	@Transactional
 	public void findAllByQuerydsl(){
+		// setup 메소드에 @Before어노테이션을 붙이지 않아서 writer가 null저장됨
+		// 그래서 inner join으로 user 테이블에 null인 user가 없어서 조회가 안되었음.
 		Diary diary = Diary.builder()
 				.writer(user)
 				.title("title")
@@ -175,6 +182,7 @@ public class DiaryRepositoryTest {
 		log.info("DB querydsl SELECT 시간 : {}", queryStopWatch.getTotalTimeSeconds());
 
 		List<DiarySelectDto> list = diaryPage.getContent();
+		log.info("list size : {}", list.size());
 		List<DiaryResponse> responseList = list.stream()
 						.map(DiaryResponse::of)
 						.collect(Collectors.toList());
