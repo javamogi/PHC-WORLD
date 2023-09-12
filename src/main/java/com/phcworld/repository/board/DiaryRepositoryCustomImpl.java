@@ -36,7 +36,7 @@ public class DiaryRepositoryCustomImpl implements DiaryRepositoryCustom{
     QGood good = QGood.good;
     QDiaryAnswer answer = QDiaryAnswer.diaryAnswer;
 
-    private List<DiarySelectDto> findAllList(User user, Pageable pageable){
+    private List<DiarySelectDto> findAllListToSub(User user, Pageable pageable){
 
         List<OrderSpecifier> orders = getOrderSpecifier(pageable);
 
@@ -58,6 +58,7 @@ public class DiaryRepositoryCustomImpl implements DiaryRepositoryCustom{
         List<DiarySelectDto> ids = queryFactory
                 .select(Projections.fields(DiarySelectDto.class,
                         diary.id,
+//                        diary.goodPushedUser.size().as("countOfGood")))
                         ExpressionUtils.as(
                                 JPAExpressions
                                         .select(good.count())
@@ -67,9 +68,9 @@ public class DiaryRepositoryCustomImpl implements DiaryRepositoryCustom{
                 .where(eqWriter(user))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
-//                .orderBy(aliasCount.desc(), diary.createDate.desc())
+//                .orderBy(diary.goodPushedUser.size().desc(), diary.createDate.desc())
                 .orderBy(orders.stream().toArray(OrderSpecifier[]::new))
-                .groupBy(diary)
+//                .groupBy(diary)
                 .fetch();
 
         return queryFactory
@@ -89,6 +90,7 @@ public class DiaryRepositoryCustomImpl implements DiaryRepositoryCustom{
                                         .select(good.count())
                                         .from(good)
                                         .where(good.diary.eq(diary)), "countOfGood"),
+//                        diary.goodPushedUser.size().as("countOfGood"),
                         diary.updateDate,
                         diary.createDate
 //                        good.count().coalesce(0L).as("countOfGood")
@@ -143,10 +145,117 @@ public class DiaryRepositoryCustomImpl implements DiaryRepositoryCustom{
                         OrderSpecifier<?> createDate2 = new OrderSpecifier(direction, diary.createDate);
                         orders.add(createDate2);
                         break;
+                    case "good2":
+                        OrderSpecifier<?> goodCount2 = new OrderSpecifier(direction, diary.goodPushedUser.size());
+                        orders.add(goodCount2);
+                        OrderSpecifier<?> createDate3 = new OrderSpecifier(direction, diary.createDate);
+                        orders.add(createDate3);
+                        break;
                 }
             }
         }
         return orders;
+    }
+
+    // 다른 테이블의 개수를 정렬 기준으로 삼기 때문에 임시테이블 + 정렬은 어쩔수 없이 사용할 것이라 판단
+    // 그래서 필요한 정보만 가져오는 방식을 생각함
+    // 속도에서는 많이 빨라질 것이라 예상됨
+    // 하지만 페이징처리에서 막힘
+    // Diary에 좋아요 개수를 담당하는 컬럼을 추가할까 했지만 너무 잘 바뀌는 요소라 추가하지 않음
+    private List<DiarySelectDto> findAllListTemp(User user, Pageable pageable){
+
+        List<OrderSpecifier> orders = getOrderSpecifier(pageable);
+
+        int pageSize = pageable.getPageSize();
+        List<Long> ids = queryFactory
+                .select(diary.id)
+                .from(diary)
+                .where(eqWriter(user),
+                        diary.goodPushedUser.isNotEmpty())
+                .offset(pageable.getOffset())
+                .limit(pageSize)
+//                .orderBy(diary.goodPushedUser.size().desc(), diary.createDate.desc())
+                .orderBy(orders.stream().toArray(OrderSpecifier[]::new))
+                .fetch();
+
+        List<Long> idsList = ids;
+        if(ids.size() < pageSize){
+            pageSize = pageSize - ids.size();
+            List<Long> ids2 = queryFactory
+                    .select(diary.id)
+                    .from(diary)
+                    .where(eqWriter(user),
+                            diary.goodPushedUser.isEmpty())
+                    .offset(pageable.getOffset())
+                    .limit(pageSize)
+                    .orderBy(diary.createDate.desc())
+                    .fetch();
+            idsList.addAll(ids2);
+        }
+
+        return queryFactory
+                .select(Projections.fields(DiarySelectDto.class,
+                        diary.id,
+                        diary.writer,
+                        diary.title,
+                        diary.thumbnail,
+                        ExpressionUtils.as(
+                                JPAExpressions
+                                        .select(answer.count())
+                                        .from(answer)
+                                        .where(answer.diary.eq(diary)), "countOfAnswers"),
+                        ExpressionUtils.as(
+                                JPAExpressions
+                                        .select(good.count())
+                                        .from(good)
+                                        .where(good.diary.eq(diary)), "countOfGood"),
+                        diary.updateDate,
+                        diary.createDate
+                ))
+                .from(diary)
+                .where(diary.id.in(idsList))
+                .orderBy(orders.stream().toArray(OrderSpecifier[]::new))
+                .fetch();
+    }
+
+    // size()를 이용한 방식
+    // 서브쿼리와 같음
+    // DiarySelectDto의 countOfGood 자료형을 Integer로 변경해야함
+    // 서브쿼리를 사용한다는것은 같지만 속도는 0.5초가량 빠름
+    private List<DiarySelectDto> findAllList(User user, Pageable pageable){
+
+        List<OrderSpecifier> orders = getOrderSpecifier(pageable);
+
+        List<DiarySelectDto> ids = queryFactory
+                .select(Projections.fields(DiarySelectDto.class,
+                        diary.id,
+                        diary.goodPushedUser.size().as("countOfGood")))
+                .from(diary)
+                .where(eqWriter(user))
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .orderBy(orders.stream().toArray(OrderSpecifier[]::new))
+                .fetch();
+
+        return queryFactory
+                .select(Projections.fields(DiarySelectDto.class,
+                        diary.id,
+                        diary.writer,
+                        diary.title,
+                        diary.thumbnail,
+                        ExpressionUtils.as(
+                                JPAExpressions
+                                        .select(answer.count())
+                                        .from(answer)
+                                        .where(answer.diary.eq(diary)), "countOfAnswers"),
+                        diary.goodPushedUser.size().as("countOfGood"),
+                        diary.updateDate,
+                        diary.createDate
+                ))
+                .from(diary)
+                .where(diary.id.in(ids.stream().map(DiarySelectDto::getId).collect(Collectors.toList())))
+                .orderBy(orders.stream().toArray(OrderSpecifier[]::new))
+                .fetch();
     }
 
 }

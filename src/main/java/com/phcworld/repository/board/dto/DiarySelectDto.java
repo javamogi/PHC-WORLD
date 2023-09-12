@@ -25,7 +25,7 @@ public class DiarySelectDto {
 
     private Long countOfAnswers;
 
-    private Long countOfGood;
+    private Integer countOfGood;
 
     private LocalDateTime updateDate;
 

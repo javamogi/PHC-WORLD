@@ -174,7 +174,7 @@ public class DiaryRepositoryTest {
 				.thumbnail("no-image-icon.gif")
 				.build();
 		diaryRepository.save(diary);
-		PageRequest pageRequest = PageRequest.of(0, 10, Sort.by("good").descending());
+		PageRequest pageRequest = PageRequest.of(0, 10, Sort.by("createDate").descending());
 		StopWatch queryStopWatch = new StopWatch();
 		queryStopWatch.start();
 		Page<DiarySelectDto> diaryPage = diaryRepository.findAllPage(user, pageRequest);
@@ -186,6 +186,9 @@ public class DiaryRepositoryTest {
 		List<DiaryResponse> responseList = list.stream()
 						.map(DiaryResponse::of)
 						.collect(Collectors.toList());
+		for (int i = 0; i < responseList.size(); i++) {
+			log.info("diary response : {}", responseList.get(i));
+		}
 		assertThat(responseList.get(0).getTitle())
 				.isEqualTo(diary.getTitle());
 	}
