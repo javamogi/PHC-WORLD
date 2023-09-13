@@ -122,66 +122,6 @@ public class TimelineServiceImpl implements TimelineService {
 		return timelineRepository.save(timeline);
 	}
 	
-	public void deleteTimeline(Diary diary) {
-		PostInfo postInfo = PostInfo.builder()
-				.saveType(SaveType.DIARY)
-				.postId(diary.getId())
-				.redirectId(diary.getId())
-				.build();
-//		Timeline timeline = timelineRepository.findBySaveTypeAndPostIdAndRedirectId(SaveType.DIARY, diary.getId(), diary.getId());
-		Timeline timeline = timelineRepository.findByPostInfo(postInfo)
-				.orElseThrow(() -> new CustomException("400", "타임라인이 존재하지 않습니다."));
-		timelineRepository.delete(timeline);
-	}
-
-	public void deleteTimeline(DiaryAnswer diaryAnswer) {
-		PostInfo postInfo = PostInfo.builder()
-				.saveType(SaveType.DIARY_ANSWER)
-				.postId(diaryAnswer.getId())
-				.redirectId(diaryAnswer.getDiary().getId())
-				.build();
-//		Timeline timeline = timelineRepository.findBySaveTypeAndPostIdAndRedirectId(SaveType.DIARY_ANSWER, diaryAnswer.getId(), diaryAnswer.getDiary().getId());
-		Timeline timeline = timelineRepository.findByPostInfo(postInfo)
-				.orElseThrow(() -> new CustomException("400", "타임라인이 존재하지 않습니다."));
-		timelineRepository.delete(timeline);
-	}
-
-	public void deleteTimeline(FreeBoard freeBoard) {
-		PostInfo postInfo = PostInfo.builder()
-				.saveType(SaveType.FREE_BOARD)
-				.postId(freeBoard.getId())
-				.redirectId(freeBoard.getId())
-				.build();
-//		Timeline timeline = timelineRepository.findBySaveTypeAndPostIdAndRedirectId(SaveType.FREE_BOARD, freeBoard.getId(), freeBoard.getId());
-		Timeline timeline = timelineRepository.findByPostInfo(postInfo)
-				.orElseThrow(() -> new CustomException("400", "타임라인이 존재하지 않습니다."));
-		timelineRepository.delete(timeline);
-	}
-
-	public void deleteTimeline(FreeBoardAnswer freeBoardAnswer) {
-		PostInfo postInfo = PostInfo.builder()
-				.saveType(SaveType.FREE_BOARD_ANSWER)
-				.postId(freeBoardAnswer.getId())
-				.redirectId(freeBoardAnswer.getFreeBoard().getId())
-				.build();
-//		Timeline timeline = timelineRepository.findBySaveTypeAndPostIdAndRedirectId(SaveType.FREE_BOARD_ANSWER, freeBoardAnswer.getId(), freeBoardAnswer.getFreeBoard().getId());
-		Timeline timeline = timelineRepository.findByPostInfo(postInfo)
-				.orElseThrow(() -> new CustomException("400", "타임라인이 존재하지 않습니다."));
-		timelineRepository.delete(timeline);
-	}
-
-	public void deleteTimeline(Good good) {
-		PostInfo postInfo = PostInfo.builder()
-				.saveType(SaveType.GOOD)
-				.postId(good.getId())
-				.redirectId(good.getDiary().getId())
-				.build();
-//		Timeline timeline = timelineRepository.findBySaveTypeAndPostIdAndRedirectId(SaveType.GOOD, good.getId(), good.getDiary().getId());
-		Timeline timeline = timelineRepository.findByPostInfo(postInfo)
-				.orElseThrow(() -> new CustomException("400", "타임라인이 존재하지 않습니다."));
-		timelineRepository.delete(timeline);
-	}
-
 	public void deleteTimeline(Long timelineId){
 		Timeline timeline = timelineRepository.findById(timelineId)
 				.orElseThrow(() -> new CustomException("400", "타임라인이 존재하지 않습니다."));

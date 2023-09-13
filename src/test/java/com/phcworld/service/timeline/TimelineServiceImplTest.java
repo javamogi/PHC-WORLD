@@ -263,26 +263,26 @@ public class TimelineServiceImplTest {
 				.user(user)
 				.createDate(LocalDateTime.now())
 				.build();
-		timelineService.deleteTimeline(good);
-		verify(timelineService, times(1)).deleteTimeline(good);
+		timelineService.deleteTimeline(SaveType.GOOD, good.getId());
+		verify(timelineService, times(1)).deleteTimeline(SaveType.GOOD, good.getId());
 	}
 
 	@Test
 	public void deleteDiaryAnswerTimeline() {
-		timelineService.deleteTimeline(diaryAnswer);
-		verify(timelineService, times(1)).deleteTimeline(diaryAnswer);
+		timelineService.deleteTimeline(SaveType.DIARY_ANSWER, diaryAnswer.getId());
+		verify(timelineService, times(1)).deleteTimeline(SaveType.DIARY_ANSWER, diaryAnswer.getId());
 	}
 
 	@Test
 	public void deleteFreeBoardTimeline() {
-		timelineService.deleteTimeline(freeBoard);
-		verify(timelineService, times(1)).deleteTimeline(freeBoard);
+		timelineService.deleteTimeline(SaveType.FREE_BOARD, freeBoard.getId());
+		verify(timelineService, times(1)).deleteTimeline(SaveType.FREE_BOARD, freeBoard.getId());
 	}
 
 	@Test
 	public void deleteFreeBoardAnswerTimeline() {
-		timelineService.deleteTimeline(freeBoardAnswer);
-		verify(timelineService, times(1)).deleteTimeline(freeBoardAnswer);
+		timelineService.deleteTimeline(SaveType.FREE_BOARD_ANSWER, freeBoardAnswer.getId());
+		verify(timelineService, times(1)).deleteTimeline(SaveType.FREE_BOARD_ANSWER, freeBoardAnswer.getId());
 	}
 
 	@Test
@@ -300,7 +300,7 @@ public class TimelineServiceImplTest {
 				.diary(diary)
 				.user(user2)
 				.build();
-		timelineService.deleteTimeline(good);
-		verify(timelineService, times(1)).deleteTimeline(good);
+		timelineService.deleteTimeline(SaveType.GOOD, good.getId());
+		verify(timelineService, times(1)).deleteTimeline(SaveType.GOOD, good.getId());
 	}
 }

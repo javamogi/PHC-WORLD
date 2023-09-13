@@ -378,7 +378,7 @@ public class TimelineRepositoryTest {
 				.build();
 		Timeline createdFreeBoardTimeline = timelineRepository.save(freeBoardTimeline);
 		em.clear();
-		timelineRepository.deleteTimeline(SaveType.FREE_BOARD, createdFreeBoardTimeline.getId());
+		timelineRepository.deleteTimeline(SaveType.FREE_BOARD, freeBoard.getId());
 		Optional<Timeline> deletedTimeline = timelineRepository.findById(createdFreeBoardTimeline.getId());
 		assertFalse(deletedTimeline.isPresent());
 	}
