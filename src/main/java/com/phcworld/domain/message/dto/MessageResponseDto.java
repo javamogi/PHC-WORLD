@@ -2,10 +2,13 @@ package com.phcworld.domain.message.dto;
 
 import com.phcworld.domain.message.ChatRoomMessage;
 import lombok.Builder;
+import lombok.Getter;
+import lombok.ToString;
 
 import java.time.format.DateTimeFormatter;
 
 @Builder
+@Getter
 public class MessageResponseDto {
     private Long messageId;
     private String writerName;
