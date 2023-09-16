@@ -1,16 +1,15 @@
 package com.phcworld.domain.message;
 
 import com.phcworld.domain.user.User;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 
 @Entity
 @NoArgsConstructor
 @Getter
+@ToString
+@Setter
 public class ChatRoomUser {
 
     @Id

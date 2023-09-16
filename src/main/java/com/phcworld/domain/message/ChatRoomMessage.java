@@ -29,13 +29,16 @@ public class ChatRoomMessage {
     @CreatedDate
     private LocalDateTime sendDate;
 
+    private Boolean isRead;
+
     @Builder
-    public ChatRoomMessage(Long id, ChatRoom chatRoom, User writer, String message, LocalDateTime sendDate) {
+    public ChatRoomMessage(Long id, ChatRoom chatRoom, User writer, String message, LocalDateTime sendDate, Boolean isRead) {
         this.id = id;
         this.chatRoom = chatRoom;
         this.writer = writer;
         this.message = message;
         this.sendDate = sendDate;
+        this.isRead = isRead;
     }
 }
 
