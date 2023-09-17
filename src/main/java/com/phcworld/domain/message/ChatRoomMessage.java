@@ -12,6 +12,8 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Getter
 @EntityListeners(AuditingEntityListener.class)
+@EqualsAndHashCode
+@ToString
 public class ChatRoomMessage {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
