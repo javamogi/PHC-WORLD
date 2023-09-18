@@ -2,6 +2,7 @@ package com.phcworld.domain.message;
 
 import com.phcworld.domain.user.User;
 import lombok.*;
+import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -12,8 +13,6 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Getter
 @EntityListeners(AuditingEntityListener.class)
-@EqualsAndHashCode
-@ToString
 public class ChatRoomMessage {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -41,6 +40,14 @@ public class ChatRoomMessage {
         this.message = message;
         this.sendDate = sendDate;
         this.isRead = isRead;
+    }
+
+    public void deleteMessage() {
+        this.message = "deleted";
+    }
+
+    public boolean isSameWriter(User loginUser) {
+        return this.getWriter().getId().equals(loginUser.getId());
     }
 }
 

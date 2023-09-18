@@ -9,6 +9,7 @@ import com.phcworld.domain.message.dto.MessageRequestDto;
 import com.phcworld.domain.message.dto.MessageResponseDto;
 import com.phcworld.domain.user.User;
 import com.phcworld.exception.model.NotFoundException;
+import com.phcworld.exception.model.NotMatchUserException;
 import com.phcworld.repository.message.ChatRoomMessageRepository;
 import com.phcworld.repository.message.ChatRoomRepository;
 import com.phcworld.repository.message.ChatRoomUserRepository;
@@ -42,7 +43,7 @@ public class ChatService {
                 .isRead(false)
                 .build();
         chatRoomMessageRepository.save(message);
-        return MessageResponseDto.of(message, loginUser.getName());
+        return MessageResponseDto.of(message);
     }
 
     private ChatRoom getChatRoom(User loginUser, MessageRequestDto dto) {
@@ -97,5 +98,16 @@ public class ChatService {
         return list.stream()
                 .map(ChatRoomMessageResponseDto::of)
                 .collect(Collectors.toList());
+    }
+
+    @Transactional
+    public MessageResponseDto deleteMessage(Long messageId, User loginUser){
+        ChatRoomMessage message = chatRoomMessageRepository.findById(messageId)
+                .orElseThrow(NotFoundException::new);
+        if(!message.isSameWriter(loginUser)){
+            throw new NotMatchUserException();
+        }
+        message.deleteMessage();
+        return MessageResponseDto.of(message);
     }
 }
