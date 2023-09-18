@@ -1,5 +1,6 @@
 package com.phcworld.service.message;
 
+import com.phcworld.domain.message.ChatRoomMessage;
 import com.phcworld.domain.message.dto.ChatRoomMessageResponseDto;
 import com.phcworld.domain.message.dto.ChatRoomSelectDto;
 import com.phcworld.domain.message.dto.MessageRequestDto;
@@ -8,11 +9,13 @@ import com.phcworld.domain.user.User;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,6 +28,9 @@ public class ChatServiceTest {
 
     @SpyBean
     private ChatService chatService;
+
+    @Autowired
+    private EntityManager em;
 
     @Test
     @Transactional
@@ -103,5 +109,24 @@ public class ChatServiceTest {
         chatService.sendMessage(user2, dto2);
         List<ChatRoomMessageResponseDto> messages = chatService.getMessagesByChatRoom(1L, 1);
         assertThat(messages.size()).isEqualTo(2);
+    }
+
+    @Test
+    @Transactional
+    public void 메세지_삭제_내용을_수정(){
+        User loginUser = User.builder()
+                .id(1L)
+                .name("테스트")
+                .build();
+        List<Long> ids = new ArrayList<>();
+        ids.add(2L);
+        MessageRequestDto dto = MessageRequestDto.builder()
+                .toUserIds(ids)
+                .message("hi")
+                .build();
+        chatService.sendMessage(loginUser, dto);
+        em.clear();
+        MessageResponseDto responseDto = chatService.deleteMessage(1L, loginUser);
+        assertThat(responseDto.getMessage()).isEqualTo("deleted");
     }
 }
