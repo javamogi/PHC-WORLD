@@ -51,5 +51,13 @@ public class ChatRoomMessage {
     public boolean isSameWriter(User loginUser) {
         return this.getWriter().getId().equals(loginUser.getId());
     }
+
+    public String getWriterName() {
+        return writer.getName();
+    }
+
+    public String getWriterProfileImage() {
+        return writer.getProfileImage();
+    }
 }
 
