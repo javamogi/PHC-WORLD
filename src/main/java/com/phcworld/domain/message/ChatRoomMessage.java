@@ -13,6 +13,8 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Getter
 @EntityListeners(AuditingEntityListener.class)
+@Table(indexes = @Index(name = "idx__chat_room_id_send_date", columnList = "chat_room_id, sendDate"))
+@DynamicUpdate
 public class ChatRoomMessage {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
