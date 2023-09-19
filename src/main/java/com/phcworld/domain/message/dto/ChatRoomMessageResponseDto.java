@@ -19,8 +19,8 @@ public class ChatRoomMessageResponseDto {
         return ChatRoomMessageResponseDto.builder()
                 .messageId(message.getId())
                 .message(message.getMessage())
-                .writerName(message.getWriter().getName())
-                .writerImgUrl(message.getWriter().getProfileImage())
+                .writerName(message.getWriterName())
+                .writerImgUrl(message.getWriterProfileImage())
                 .sendDate(LocalDateTimeUtils.getTime(message.getSendDate()))
                 .read(message.getIsRead() ? "읽음" : "읽지 않음")
                 .build();

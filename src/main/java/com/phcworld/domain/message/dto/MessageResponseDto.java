@@ -15,10 +15,10 @@ public class MessageResponseDto {
     private String message;
     private String sendDate;
 
-    public static MessageResponseDto of(ChatRoomMessage message, String writerName){
+    public static MessageResponseDto of(ChatRoomMessage message){
         return MessageResponseDto.builder()
                 .messageId(message.getId())
-                .writerName(writerName)
+                .writerName(message.getWriterName())
                 .message(message.getMessage())
                 .sendDate(message.getSendDate().format(DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm:ss")))
                 .build();
