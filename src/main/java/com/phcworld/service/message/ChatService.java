@@ -89,7 +89,7 @@ public class ChatService {
         return chatRoomRepository.findChatRoomListByUser(loginUser);
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public List<ChatRoomMessageResponseDto> getMessagesByChatRoom(Long chatRoomId, int pageNum){
         ChatRoom chatRoom = chatRoomRepository.findById(chatRoomId)
                 .orElseThrow(NotFoundException::new);
