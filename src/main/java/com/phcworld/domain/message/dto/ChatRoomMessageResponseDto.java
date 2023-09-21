@@ -3,10 +3,11 @@ package com.phcworld.domain.message.dto;
 import com.phcworld.domain.message.ChatRoomMessage;
 import com.phcworld.utils.LocalDateTimeUtils;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.ToString;
 
 @Builder
-@ToString
+@Getter
 public class ChatRoomMessageResponseDto {
     private Long messageId;
     private String message;

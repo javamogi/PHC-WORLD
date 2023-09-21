@@ -2,6 +2,7 @@ package com.phcworld.domain.user;
 
 import java.security.NoSuchAlgorithmException;
 import java.time.LocalDateTime;
+import java.util.Objects;
 import java.util.Set;
 
 import javax.persistence.*;
@@ -103,5 +104,17 @@ public class User {
 			this.authority = "ROLE_ADMIN";
 		}
 	}
-	
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		User user = (User) o;
+		return Objects.equals(id, user.id) && Objects.equals(email, user.email) && Objects.equals(name, user.name) && Objects.equals(authority, user.authority);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(id, email, name, authority);
+	}
 }
