@@ -51,6 +51,7 @@ public class ChatServiceTest {
     }
 
     @Test
+    @Transactional
     public void 대화방_목록(){
         User loginUser = User.builder()
                 .id(1L)
@@ -85,10 +86,13 @@ public class ChatServiceTest {
     }
 
     @Test
+    @Transactional
     public void 대화방_메세지_목록(){
         User loginUser = User.builder()
                 .id(1L)
+                .email("test@test.test")
                 .name("테스트")
+                .authority("ROLE_ADMIN")
                 .build();
         List<Long> ids = new ArrayList<>();
         ids.add(2L);
@@ -96,7 +100,7 @@ public class ChatServiceTest {
                 .toUserIds(ids)
                 .message("hi")
                 .build();
-        chatService.sendMessage(loginUser, dto);
+        MessageResponseDto message = chatService.sendMessage(loginUser, dto);
         User user2 = User.builder()
                 .id(2L)
                 .build();
@@ -107,7 +111,8 @@ public class ChatServiceTest {
                 .message("하이요")
                 .build();
         chatService.sendMessage(user2, dto2);
-        List<ChatRoomMessageResponseDto> messages = chatService.getMessagesByChatRoom(1L, 1);
+        em.clear();
+        List<ChatRoomMessageResponseDto> messages = chatService.getMessagesByChatRoom(message.getChatRoomId(), 1, loginUser);
         assertThat(messages.size()).isEqualTo(2);
     }
 
@@ -124,9 +129,9 @@ public class ChatServiceTest {
                 .toUserIds(ids)
                 .message("hi")
                 .build();
-        chatService.sendMessage(loginUser, dto);
+        MessageResponseDto message = chatService.sendMessage(loginUser, dto);
         em.clear();
-        MessageResponseDto responseDto = chatService.deleteMessage(1L, loginUser);
+        MessageResponseDto responseDto = chatService.deleteMessage(message.getMessageId(), loginUser);
         assertThat(responseDto.getMessage()).isEqualTo("deleted");
     }
 }

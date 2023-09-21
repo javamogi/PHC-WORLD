@@ -2,10 +2,7 @@ package com.phcworld.domain.message.dto;
 
 import com.phcworld.domain.message.ChatRoomUser;
 import com.phcworld.utils.LocalDateTimeUtils;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -14,6 +11,8 @@ import java.util.List;
 @Getter
 @ToString
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class ChatRoomSelectDto {
 
     private Long chatRoomId;

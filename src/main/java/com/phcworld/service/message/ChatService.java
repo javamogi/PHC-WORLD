@@ -90,9 +90,12 @@ public class ChatService {
     }
 
     @Transactional(readOnly = true)
-    public List<ChatRoomMessageResponseDto> getMessagesByChatRoom(Long chatRoomId, int pageNum){
+    public List<ChatRoomMessageResponseDto> getMessagesByChatRoom(Long chatRoomId, int pageNum, User loginUser){
         ChatRoom chatRoom = chatRoomRepository.findById(chatRoomId)
                 .orElseThrow(NotFoundException::new);
+        if(!chatRoom.containsUser(loginUser)){
+            throw new NotMatchUserException();
+        }
         PageRequest pageRequest = PageRequest.of(pageNum - 1, 10);
         List<ChatRoomMessage> list = chatRoomMessageRepository.findByChatRoomOrderBySendDateDesc(chatRoom, pageRequest);
         return list.stream()

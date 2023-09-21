@@ -14,6 +14,7 @@ public class MessageResponseDto {
     private String writerName;
     private String message;
     private String sendDate;
+    private Long chatRoomId;
 
     public static MessageResponseDto of(ChatRoomMessage message){
         return MessageResponseDto.builder()
@@ -21,6 +22,7 @@ public class MessageResponseDto {
                 .writerName(message.getWriterName())
                 .message(message.getMessage())
                 .sendDate(message.getSendDate().format(DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm:ss")))
+                .chatRoomId(message.getChatRoom().getId())
                 .build();
     }
 }
