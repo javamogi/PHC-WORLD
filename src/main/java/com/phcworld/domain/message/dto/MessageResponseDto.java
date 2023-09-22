@@ -15,6 +15,7 @@ public class MessageResponseDto {
     private String message;
     private String sendDate;
     private Long chatRoomId;
+    private Integer readCount;
 
     public static MessageResponseDto of(ChatRoomMessage message){
         return MessageResponseDto.builder()
@@ -23,6 +24,7 @@ public class MessageResponseDto {
                 .message(message.getMessage())
                 .sendDate(message.getSendDate().format(DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm:ss")))
                 .chatRoomId(message.getChatRoom().getId())
+                .readCount(message.getReadUsers() != null ? message.getReadUsers().size() : 0)
                 .build();
     }
 }

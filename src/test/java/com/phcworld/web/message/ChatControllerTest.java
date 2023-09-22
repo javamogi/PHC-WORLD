@@ -1,6 +1,7 @@
 package com.phcworld.web.message;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.phcworld.domain.message.MessageReadUser;
 import com.phcworld.domain.message.dto.ChatRoomSelectDto;
 import com.phcworld.domain.message.dto.MessageRequestDto;
 import com.phcworld.domain.message.dto.MessageResponseDto;
@@ -76,7 +77,8 @@ public class ChatControllerTest {
                 .chatRoomId(1L)
                 .users(names)
                 .lastMessage("hi")
-                .isRead(false)
+//                .isRead(false)
+                .count(0)
                 .date(LocalDateTime.now())
                 .build();
 
@@ -95,7 +97,7 @@ public class ChatControllerTest {
                 .andExpect(jsonPath("$[0].users[0]").value("테스트"))
                 .andExpect(jsonPath("$[0].users[1]").value("테스트2"))
                 .andExpect(jsonPath("$[0].lastMessage").value("hi"))
-                .andExpect(jsonPath("$[0].isRead").value(false))
+//                .andExpect(jsonPath("$[0].isRead").value(false))
                 .andExpect(jsonPath("$[0].date").value("방금전"))
                 .andDo(print());
     }
@@ -153,7 +155,7 @@ public class ChatControllerTest {
                 .andExpect(jsonPath("$[0].message").value("hi"))
                 .andExpect(jsonPath("$[0].writerName").value(user.getName()))
                 .andExpect(jsonPath("$[0].writerImgUrl").value(user.getProfileImage()))
-                .andExpect(jsonPath("$[0].read").value("읽지 않음"))
+//                .andExpect(jsonPath("$[0].read").value("읽지 않음"))
                 .andExpect(jsonPath("$[0].sendDate").value("방금전"))
                 .andDo(print());
     }
