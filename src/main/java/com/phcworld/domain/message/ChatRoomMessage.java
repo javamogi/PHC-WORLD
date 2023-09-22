@@ -8,10 +8,12 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @NoArgsConstructor
 @Getter
+@Setter
 @EntityListeners(AuditingEntityListener.class)
 @Table(indexes = @Index(name = "idx__chat_room_id_send_date", columnList = "chat_room_id, sendDate"))
 @DynamicUpdate
@@ -32,20 +34,22 @@ public class ChatRoomMessage {
     @CreatedDate
     private LocalDateTime sendDate;
 
-    private Boolean isRead;
+    @OneToMany(mappedBy = "message")
+    private List<MessageReadUser> readUsers;
 
     @Builder
-    public ChatRoomMessage(Long id, ChatRoom chatRoom, User writer, String message, LocalDateTime sendDate, Boolean isRead) {
+    public ChatRoomMessage(Long id, ChatRoom chatRoom, User writer, String message, LocalDateTime sendDate, List<MessageReadUser> readUsers) {
         this.id = id;
         this.chatRoom = chatRoom;
         this.writer = writer;
         this.message = message;
         this.sendDate = sendDate;
-        this.isRead = isRead;
+        this.readUsers = readUsers;
     }
 
     public void deleteMessage() {
         this.message = "deleted";
+        this.readUsers = null;
     }
 
     public boolean isSameWriter(User loginUser) {
@@ -58,6 +62,10 @@ public class ChatRoomMessage {
 
     public String getWriterProfileImage() {
         return writer.getProfileImage();
+    }
+
+    public void removeReadUser(MessageReadUser readUser) {
+        this.readUsers.remove(readUser);
     }
 }
 

@@ -2,6 +2,8 @@ package com.phcworld.repository.message;
 
 import com.phcworld.domain.message.*;
 import com.phcworld.domain.message.dto.ChatRoomSelectDto;
+import com.phcworld.domain.message.dto.MessageSelectDto;
+import com.phcworld.domain.user.QUser;
 import com.phcworld.domain.user.User;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Projections;
@@ -10,6 +12,7 @@ import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import javafx.beans.binding.StringExpression;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
@@ -27,6 +30,8 @@ public class ChatRoomRepositoryCustomImpl implements ChatRoomRepositoryCustom{
     QChatRoom chatRoom = QChatRoom.chatRoom;
     QChatRoomUser chatRoomUser = QChatRoomUser.chatRoomUser;
     QChatRoomMessage message = QChatRoomMessage.chatRoomMessage;
+    QMessageReadUser readUser = QMessageReadUser.messageReadUser;
+    QUser user = QUser.user;
 
     @Override
     public List<ChatRoomSelectDto> findChatRoomListByUser(User user){
@@ -39,6 +44,7 @@ public class ChatRoomRepositoryCustomImpl implements ChatRoomRepositoryCustom{
                                 .from(message)
                                 .where(message.chatRoom.eq(chatRoom))
                 ))
+                .join(message.readUsers, readUser)
                 .where(chatRoom.users.contains(
                         JPAExpressions
                                 .select(chatRoomUser)
@@ -46,11 +52,12 @@ public class ChatRoomRepositoryCustomImpl implements ChatRoomRepositoryCustom{
                                 .where(chatRoomUser.chatRoom.eq(chatRoom)
                                         .and(chatRoomUser.user.eq(user)))
                 ))
-                .orderBy(message.isRead.asc(), message.sendDate.desc())
+//                .orderBy(message.isRead.asc(), message.sendDate.desc())
+                .orderBy(message.sendDate.desc())
                 .transform(groupBy(chatRoom.id).as(Projections.fields(ChatRoomSelectDto.class,
                         chatRoom.id.as("chatRoomId"),
                         message.message.as("lastMessage"),
-                        message.isRead,
+                        message.readUsers.size().as("count"),
                         list(
                                 Expressions.stringTemplate("{0}", chatRoomUser.user.name)
                         ).as("users"),
@@ -60,12 +67,35 @@ public class ChatRoomRepositoryCustomImpl implements ChatRoomRepositoryCustom{
     }
 
     @Override
-    public ChatRoom findByChatRoomByUsers(List<Long> ids){
+    public ChatRoom findChatRoomByUsers(List<Long> ids){
         return queryFactory
                 .select(chatRoom)
                 .from(chatRoom)
                 .where(eqUsers(ids))
                 .fetchOne();
+    }
+
+    @Override
+    public List<MessageSelectDto> findMessagesByChatRoom(ChatRoom chatRoom, PageRequest pageRequest){
+        Map<Long, MessageSelectDto> map = queryFactory
+                .from(message)
+                .leftJoin(message.writer, user)
+                .leftJoin(message.readUsers, readUser)
+                .where(message.chatRoom.eq(chatRoom))
+                .offset(pageRequest.getOffset())
+                .limit(pageRequest.getPageSize())
+                .orderBy(message.sendDate.desc())
+                .transform(groupBy(message.id).as(Projections.fields(MessageSelectDto.class,
+                        message.id.as("messageId"),
+                        message.writer.name.as("writerName"),
+                        message.writer.profileImage.as("profileImgUrl"),
+                        message.message,
+                        message.sendDate.as("sendDate"),
+                        list(
+                                readUser.user
+                        ).as("readUsers")
+                        )));
+        return new ArrayList<>(map.values());
     }
 
     private BooleanBuilder eqUsers(List<Long> ids) {

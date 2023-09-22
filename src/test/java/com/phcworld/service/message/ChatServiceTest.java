@@ -48,6 +48,7 @@ public class ChatServiceTest {
         MessageResponseDto responseDto = chatService.sendMessage(loginUser, dto);
         assertThat(responseDto.getMessage()).isEqualTo(dto.getMessage());
         assertThat(responseDto.getWriterName()).isEqualTo(loginUser.getName());
+        assertThat(responseDto.getReadCount()).isEqualTo(1);
     }
 
     @Test
@@ -103,6 +104,9 @@ public class ChatServiceTest {
         MessageResponseDto message = chatService.sendMessage(loginUser, dto);
         User user2 = User.builder()
                 .id(2L)
+                .email("test2@test.test")
+                .name("테스트2")
+                .authority("ROLE_USER")
                 .build();
         ids.clear();
         ids.add(1L);
@@ -114,6 +118,9 @@ public class ChatServiceTest {
         em.clear();
         List<ChatRoomMessageResponseDto> messages = chatService.getMessagesByChatRoom(message.getChatRoomId(), 1, loginUser);
         assertThat(messages.size()).isEqualTo(2);
+        assertThat(messages.get(0).getReadCount()).isEqualTo(0);
+        assertThat(messages.get(1).getReadCount()).isEqualTo(1);
+
     }
 
     @Test

@@ -3,22 +3,22 @@ package com.phcworld.service.message;
 import com.phcworld.domain.message.ChatRoom;
 import com.phcworld.domain.message.ChatRoomMessage;
 import com.phcworld.domain.message.ChatRoomUser;
-import com.phcworld.domain.message.dto.ChatRoomMessageResponseDto;
-import com.phcworld.domain.message.dto.ChatRoomSelectDto;
-import com.phcworld.domain.message.dto.MessageRequestDto;
-import com.phcworld.domain.message.dto.MessageResponseDto;
+import com.phcworld.domain.message.MessageReadUser;
+import com.phcworld.domain.message.dto.*;
 import com.phcworld.domain.user.User;
 import com.phcworld.exception.model.NotFoundException;
 import com.phcworld.exception.model.NotMatchUserException;
 import com.phcworld.repository.message.ChatRoomMessageRepository;
 import com.phcworld.repository.message.ChatRoomRepository;
 import com.phcworld.repository.message.ChatRoomUserRepository;
+import com.phcworld.repository.message.MessageReadUserRepository;
 import com.phcworld.repository.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -31,6 +31,7 @@ public class ChatService {
     private final ChatRoomUserRepository chatRoomUserRepository;
     private final ChatRoomMessageRepository chatRoomMessageRepository;
     private final UserRepository userRepository;
+    private final MessageReadUserRepository messageReadUserRepository;
 
     @Transactional
     public MessageResponseDto sendMessage(User loginUser, MessageRequestDto dto){
@@ -40,10 +41,28 @@ public class ChatService {
                 .message(dto.getMessage())
                 .chatRoom(chatRoom)
                 .writer(loginUser)
-                .isRead(false)
+//                .isRead(false)
                 .build();
         chatRoomMessageRepository.save(message);
+
+        List<MessageReadUser> readUsers = saveReadUser(dto, message);
+        message.setReadUsers(readUsers);
+
         return MessageResponseDto.of(message);
+    }
+
+    private List<MessageReadUser> saveReadUser(MessageRequestDto dto, ChatRoomMessage message) {
+        List<MessageReadUser> readUsers = new ArrayList<>();
+        for (Long id : dto.getToUserIds()) {
+            User readUser = userRepository.findById(id)
+                    .orElseThrow(NotFoundException::new);
+            MessageReadUser messageReadUser = MessageReadUser.builder()
+                    .user(readUser)
+                    .message(message)
+                    .build();
+            readUsers.add(messageReadUserRepository.save(messageReadUser));
+        }
+        return readUsers;
     }
 
     private ChatRoom getChatRoom(User loginUser, MessageRequestDto dto) {
@@ -53,7 +72,7 @@ public class ChatService {
                     .orElseThrow(NotFoundException::new);
         } else {
             List<Long> ids = dto.getToUserIds();
-            chatRoom = chatRoomRepository.findByChatRoomByUsers(ids);
+            chatRoom = chatRoomRepository.findChatRoomByUsers(ids);
 
             if (chatRoom == null){
                 chatRoom = getNewChatRoom(loginUser, ids);
@@ -97,11 +116,37 @@ public class ChatService {
             throw new NotMatchUserException();
         }
         PageRequest pageRequest = PageRequest.of(pageNum - 1, 10);
-        List<ChatRoomMessage> list = chatRoomMessageRepository.findByChatRoomOrderBySendDateDesc(chatRoom, pageRequest);
+        List<MessageSelectDto> list = chatRoomRepository.findMessagesByChatRoom(chatRoom, pageRequest);
+//        List<ChatRoomMessage> list = chatRoomMessageRepository.findByChatRoomOrderBySendDateDesc(chatRoom, pageRequest);
+        removeReader(loginUser, list);
         return list.stream()
                 .map(ChatRoomMessageResponseDto::of)
                 .collect(Collectors.toList());
     }
+
+    private void removeReader(User loginUser, List<MessageSelectDto> list) {
+        for (int i = 0; i < list.size(); i++){
+            MessageSelectDto message = list.get(0);
+            for(int j = 0; j < message.getReadUsers().size(); j++){
+                User readUser = message.getReadUsers().get(j);
+                if(readUser.equals(loginUser)){
+                    message.removeReadUser(readUser);
+                }
+            }
+        }
+    }
+
+//    private void removeReader(User loginUser, List<ChatRoomMessage> list) {
+//        for (int i = 0; i < list.size(); i++){
+//            ChatRoomMessage message = list.get(0);
+//            for(int j = 0; j < message.getReadUsers().size(); j++){
+//                MessageReadUser readUser = message.getReadUsers().get(j);
+//                if(readUser.readUser(loginUser)){
+//                    message.removeReadUser(readUser);
+//                }
+//            }
+//        }
+//    }
 
     @Transactional
     public MessageResponseDto deleteMessage(Long messageId, User loginUser){

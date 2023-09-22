@@ -18,10 +18,14 @@ public class ChatRoomSelectDto {
     private Long chatRoomId;
     private List<String> users;
     private String lastMessage;
-    private Boolean isRead;
+    private Integer count;
     private LocalDateTime date;
 
     public String getDate(){
         return LocalDateTimeUtils.getTime(date);
+    }
+
+    public String getRead(){
+        return count == 0 ? "읽음" : "읽지 않음";
     }
 }
