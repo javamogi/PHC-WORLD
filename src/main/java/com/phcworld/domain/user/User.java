@@ -1,5 +1,6 @@
 package com.phcworld.domain.user;
 
+import java.io.Serializable;
 import java.security.NoSuchAlgorithmException;
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -31,7 +32,7 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 @ToString(exclude = "password")
 @Table(name = "USERS")
-public class User {
+public class User implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

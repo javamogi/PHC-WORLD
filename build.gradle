@@ -66,6 +66,10 @@ dependencies {
     implementation "com.querydsl:querydsl-apt:${queryDslVersion}"
     testImplementation 'org.jeasy:easy-random-core:4.3.0'
     implementation 'org.springframework.boot:spring-boot-starter-jdbc'
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+
+    // redis session
+//    implementation 'org.springframework.session:spring-session-data-redis'
 }
 
 group = 'com.phcworld'
