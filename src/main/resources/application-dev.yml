@@ -9,6 +9,9 @@ spring:
     url: jdbc:h2:mem:portfolio;DB_CLOSE_DELAY=-1
     username: sa
     password:
+  redis:
+    host: localhost
+    port: 6379
 
   jpa:
     database-platform: org.hibernate.dialect.H2Dialect
