@@ -28,3 +28,6 @@ server:
 jasypt:
   encryptor:
     bean: jasyptStringEncryptor
+
+jwt:
+  secret: c3ByaW5nLXNlY3VyaXR5LWp3dC1waGMtd29yZA==
