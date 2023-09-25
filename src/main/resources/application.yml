@@ -30,4 +30,4 @@ jasypt:
     bean: jasyptStringEncryptor
 
 jwt:
-  secret: c3ByaW5nLXNlY3VyaXR5LWp3dC1waGMtd29yZA==
+  secret: c3ByaW5nLXNlY3VyaXR5LWp3dC1waGMtd29ybGQtc2VjcmV0LWtleQ==
