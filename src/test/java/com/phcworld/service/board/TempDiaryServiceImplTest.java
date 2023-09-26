@@ -13,6 +13,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import com.phcworld.domain.user.Authority;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -46,7 +47,7 @@ public class TempDiaryServiceImplTest {
 				.password("test3")
 				.name("테스트3")
 				.profileImage("blank-profile-picture.png")
-				.authority("ROLE_USER")
+				.authority(Authority.ROLE_USER)
 				.createDate(LocalDateTime.now())
 				.build();
 		TempDiary diary = TempDiary.builder()
@@ -79,7 +80,7 @@ public class TempDiaryServiceImplTest {
 				.password("test3")
 				.name("테스트3")
 				.profileImage("blank-profile-picture.png")
-				.authority("ROLE_USER")
+				.authority(Authority.ROLE_USER)
 				.createDate(LocalDateTime.now())
 				.build();
 		TempDiaryRequest request = TempDiaryRequest.builder()
@@ -116,7 +117,7 @@ public class TempDiaryServiceImplTest {
 				.password("test3")
 				.name("테스트3")
 				.profileImage("blank-profile-picture.png")
-				.authority("ROLE_USER")
+				.authority(Authority.ROLE_USER)
 				.createDate(LocalDateTime.now())
 				.build();
 		TempDiary diary = TempDiary.builder()
@@ -147,7 +148,7 @@ public class TempDiaryServiceImplTest {
 				.password("test3")
 				.name("테스트3")
 				.profileImage("blank-profile-picture.png")
-				.authority("ROLE_USER")
+				.authority(Authority.ROLE_USER)
 				.createDate(LocalDateTime.now())
 				.build();
 		TempDiary diary = TempDiary.builder()
@@ -192,7 +193,7 @@ public class TempDiaryServiceImplTest {
 				.password("test3")
 				.name("테스트3")
 				.profileImage("blank-profile-picture.png")
-				.authority("ROLE_USER")
+				.authority(Authority.ROLE_USER)
 				.createDate(LocalDateTime.now())
 				.build();
 		TempDiary diary = TempDiary.builder()
@@ -214,7 +215,7 @@ public class TempDiaryServiceImplTest {
 				.password("test3")
 				.name("테스트3")
 				.profileImage("blank-profile-picture.png")
-				.authority("ROLE_USER")
+				.authority(Authority.ROLE_USER)
 				.createDate(LocalDateTime.now())
 				.build();
 		TempDiary diary = TempDiary.builder()
@@ -245,7 +246,7 @@ public class TempDiaryServiceImplTest {
 				.password("test3")
 				.name("테스트3")
 				.profileImage("blank-profile-picture.png")
-				.authority("ROLE_USER")
+				.authority(Authority.ROLE_USER)
 				.createDate(LocalDateTime.now())
 				.build();
 		TempDiary diary = TempDiary.builder()
@@ -282,7 +283,7 @@ public class TempDiaryServiceImplTest {
 				.password("test3")
 				.name("테스트3")
 				.profileImage("blank-profile-picture.png")
-				.authority("ROLE_USER")
+				.authority(Authority.ROLE_USER)
 				.createDate(LocalDateTime.now())
 				.build();
 		TempDiary diary = TempDiary.builder()
@@ -318,7 +319,7 @@ public class TempDiaryServiceImplTest {
 				.password("test3")
 				.name("테스트3")
 				.profileImage("blank-profile-picture.png")
-				.authority("ROLE_USER")
+				.authority(Authority.ROLE_USER)
 				.createDate(LocalDateTime.now())
 				.build();
 		TempDiary diary = TempDiary.builder()

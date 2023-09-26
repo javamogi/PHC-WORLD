@@ -66,4 +66,7 @@ public class FreeBoardResponse {
 				.build();
 	}
 
+	public boolean matchUser(User loginUser) {
+		return this.writer.equals(loginUser);
+	}
 }

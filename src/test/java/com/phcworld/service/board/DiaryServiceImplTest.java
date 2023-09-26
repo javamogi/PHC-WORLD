@@ -7,6 +7,7 @@ import com.phcworld.domain.board.DiaryRequest;
 import com.phcworld.domain.board.DiaryResponse;
 import com.phcworld.domain.board.DiaryResponseDto;
 import com.phcworld.domain.good.Good;
+import com.phcworld.domain.user.Authority;
 import com.phcworld.domain.user.User;
 import com.phcworld.repository.board.dto.DiarySelectDto;
 import com.phcworld.util.DiaryFactory;
@@ -48,7 +49,7 @@ public class DiaryServiceImplTest {
 				.password("test3")
 				.name("테스트3")
 				.profileImage("blank-profile-picture.png")
-				.authority("ROLE_USER")
+				.authority(Authority.ROLE_USER)
 				.createDate(LocalDateTime.now())
 				.build();
 		diary = DiaryFactory.getDiaryEntity(user);

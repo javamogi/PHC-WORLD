@@ -74,11 +74,11 @@ public class FreeBoardController {
 		if (loginUser != null) {
 			isLoginUser = true;
 			if (freeBoard != null) {
-				if (freeBoard.getWriter().equals(loginUser)) {
+				if (freeBoard.matchUser(loginUser)) {
 					matchLoginUserAndWriter = true;
 				}
 			}
-			if (matchLoginUserAndWriter == false && loginUser.matchAdminAuthority()) {
+			if (!matchLoginUserAndWriter && loginUser.matchAdminAuthority()) {
 				matchAuthority = true;
 			}
 		}

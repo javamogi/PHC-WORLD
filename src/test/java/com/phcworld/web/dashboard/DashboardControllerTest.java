@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 
 import com.phcworld.domain.common.SaveType;
 import com.phcworld.domain.embedded.PostInfo;
+import com.phcworld.domain.user.Authority;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -88,7 +89,7 @@ public class DashboardControllerTest {
 				.password("test3")
 				.name("테스트3")
 				.profileImage("blank-profile-picture.png")
-				.authority("ROLE_USER")
+				.authority(Authority.ROLE_USER)
 				.createDate(LocalDateTime.now())
 				.build();
 		mockSession.setAttribute(HttpSessionUtils.USER_SESSION_KEY, user);
@@ -125,7 +126,7 @@ public class DashboardControllerTest {
 				.password("test3")
 				.name("테스트3")
 				.profileImage("blank-profile-picture.png")
-				.authority("ROLE_USER")
+				.authority(Authority.ROLE_USER)
 				.createDate(LocalDateTime.now())
 				.build();
 		FreeBoard freeBoard = FreeBoard.builder()
@@ -165,7 +166,7 @@ public class DashboardControllerTest {
 				.password("test3")
 				.name("테스트3")
 				.profileImage("blank-profile-picture.png")
-				.authority("ROLE_USER")
+				.authority(Authority.ROLE_USER)
 				.createDate(LocalDateTime.now())
 				.build();
 		FreeBoard freeBoard = FreeBoard.builder()
@@ -211,7 +212,7 @@ public class DashboardControllerTest {
 				.password("test3")
 				.name("테스트3")
 				.profileImage("blank-profile-picture.png")
-				.authority("ROLE_USER")
+				.authority(Authority.ROLE_USER)
 				.createDate(LocalDateTime.now())
 				.build();
 		Diary diary = Diary.builder()
@@ -250,7 +251,7 @@ public class DashboardControllerTest {
 				.password("test3")
 				.name("테스트3")
 				.profileImage("blank-profile-picture.png")
-				.authority("ROLE_USER")
+				.authority(Authority.ROLE_USER)
 				.createDate(LocalDateTime.now())
 				.build();
 		Diary diary = Diary.builder()
@@ -294,7 +295,7 @@ public class DashboardControllerTest {
 				.password("test3")
 				.name("테스트3")
 				.profileImage("blank-profile-picture.png")
-				.authority("ROLE_USER")
+				.authority(Authority.ROLE_USER)
 				.createDate(LocalDateTime.now())
 				.build();
 		Diary diary = Diary.builder()

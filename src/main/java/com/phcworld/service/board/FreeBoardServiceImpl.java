@@ -83,7 +83,7 @@ public class FreeBoardServiceImpl implements FreeBoardService {
 		FreeBoard freeBoard = freeBoardRepository.findById(id)
 				.orElseThrow(NotFoundException::new);
 		freeBoard.addCount();
-		return response(freeBoardRepository.save(freeBoard));
+		return response(freeBoard);
 	}
 
 	@Transactional
@@ -92,7 +92,7 @@ public class FreeBoardServiceImpl implements FreeBoardService {
 		FreeBoard freeBoard = freeBoardRepository.findById(request.getId())
 				.orElseThrow(NotFoundException::new);
 		freeBoard.update(request);
-		return response(freeBoardRepository.save(freeBoard));
+		return response(freeBoard);
 	}
 
 	@Transactional

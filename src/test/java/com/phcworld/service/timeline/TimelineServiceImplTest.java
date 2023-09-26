@@ -13,6 +13,7 @@ import com.phcworld.domain.board.FreeBoard;
 import com.phcworld.domain.common.SaveType;
 import com.phcworld.domain.embedded.PostInfo;
 import com.phcworld.domain.good.Good;
+import com.phcworld.domain.user.Authority;
 import com.phcworld.exception.model.NotFoundException;
 import org.junit.Before;
 import org.junit.Test;
@@ -63,7 +64,7 @@ public class TimelineServiceImplTest {
 				.password("test3")
 				.name("테스트3")
 				.profileImage("blank-profile-picture.png")
-				.authority("ROLE_USER")
+				.authority(Authority.ROLE_USER)
 				.createDate(LocalDateTime.now())
 				.build();
 		diary = Diary.builder()
@@ -293,7 +294,7 @@ public class TimelineServiceImplTest {
 				.password("test4")
 				.name("테스트4")
 				.profileImage("blank-profile-picture.png")
-				.authority("ROLE_USER")
+				.authority(Authority.ROLE_USER)
 				.createDate(LocalDateTime.now())
 				.build();
 		Good good = Good.builder()

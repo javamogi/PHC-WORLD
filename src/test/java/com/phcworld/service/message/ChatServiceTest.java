@@ -5,6 +5,7 @@ import com.phcworld.domain.message.dto.ChatRoomMessageResponseDto;
 import com.phcworld.domain.message.dto.ChatRoomSelectDto;
 import com.phcworld.domain.message.dto.MessageRequestDto;
 import com.phcworld.domain.message.dto.MessageResponseDto;
+import com.phcworld.domain.user.Authority;
 import com.phcworld.domain.user.User;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
@@ -93,7 +94,7 @@ public class ChatServiceTest {
                 .id(1L)
                 .email("test@test.test")
                 .name("테스트")
-                .authority("ROLE_ADMIN")
+                .authority(Authority.ROLE_ADMIN)
                 .build();
         List<Long> ids = new ArrayList<>();
         ids.add(2L);
@@ -106,7 +107,7 @@ public class ChatServiceTest {
                 .id(2L)
                 .email("test2@test.test")
                 .name("테스트2")
-                .authority("ROLE_USER")
+                .authority(Authority.ROLE_USER)
                 .build();
         ids.clear();
         ids.add(1L);

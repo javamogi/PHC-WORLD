@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.phcworld.domain.user.Authority;
 import com.phcworld.exception.model.NotMatchUserException;
 import org.junit.Before;
 import org.junit.Test;
@@ -43,7 +44,7 @@ public class DiaryAnswerServiceImplTest {
 				.password("test")
 				.name("테스트")
 				.profileImage("blank-profile-picture.png")
-				.authority("ROLE_USER")
+				.authority(Authority.ROLE_USER)
 				.createDate(LocalDateTime.now())
 				.build();
 
@@ -98,7 +99,7 @@ public class DiaryAnswerServiceImplTest {
 				.password("test3")
 				.name("테스트3")
 				.profileImage("blank-profile-picture.png")
-				.authority("ROLE_USER")
+				.authority(Authority.ROLE_USER)
 				.createDate(LocalDateTime.now())
 				.build();
 		DiaryAnswer answer = DiaryAnswer.builder()

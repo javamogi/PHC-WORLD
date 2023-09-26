@@ -5,6 +5,7 @@ import com.phcworld.domain.board.Diary;
 import com.phcworld.domain.board.DiaryRequest;
 import com.phcworld.domain.board.DiaryResponse;
 import com.phcworld.domain.good.Good;
+import com.phcworld.domain.user.Authority;
 import com.phcworld.domain.user.User;
 import com.phcworld.repository.board.dto.DiarySelectDto;
 import com.phcworld.service.board.DiaryServiceImpl;
@@ -56,7 +57,7 @@ public class DiaryControllerTest {
 				.password("test3")
 				.name("테스트3")
 				.profileImage("blank-profile-picture.png")
-				.authority("ROLE_USER")
+				.authority(Authority.ROLE_USER)
 				.createDate(LocalDateTime.now())
 				.build();
 		mockSession.setAttribute(HttpSessionUtils.USER_SESSION_KEY, user);
@@ -69,7 +70,7 @@ public class DiaryControllerTest {
 				.password("test")
 				.name("테스트")
 				.profileImage("blank-profile-picture.png")
-				.authority("ROLE_USER")
+				.authority(Authority.ROLE_USER)
 				.createDate(LocalDateTime.now())
 				.build();
 		given(this.userService.findUserByEmail("test@test.test"))
@@ -137,7 +138,7 @@ public class DiaryControllerTest {
 				.password("test3")
 				.name("테스트3")
 				.profileImage("blank-profile-picture.png")
-				.authority("ROLE_USER")
+				.authority(Authority.ROLE_USER)
 				.createDate(LocalDateTime.now())
 				.build();
 		mockSession.setAttribute(HttpSessionUtils.USER_SESSION_KEY, user);
@@ -160,7 +161,7 @@ public class DiaryControllerTest {
 				.password("test3")
 				.name("테스트3")
 				.profileImage("blank-profile-picture.png")
-				.authority("ROLE_USER")
+				.authority(Authority.ROLE_USER)
 				.createDate(LocalDateTime.now())
 				.build();
 		mockSession.setAttribute(HttpSessionUtils.USER_SESSION_KEY, user);
@@ -214,7 +215,7 @@ public class DiaryControllerTest {
 				.password("test3")
 				.name("테스트3")
 				.profileImage("blank-profile-picture.png")
-				.authority("ROLE_USER")
+				.authority(Authority.ROLE_USER)
 				.createDate(LocalDateTime.now())
 				.build();
 		mockSession.setAttribute(HttpSessionUtils.USER_SESSION_KEY, user);
@@ -262,7 +263,7 @@ public class DiaryControllerTest {
 				.password("test3")
 				.name("테스트3")
 				.profileImage("blank-profile-picture.png")
-				.authority("ROLE_USER")
+				.authority(Authority.ROLE_USER)
 				.createDate(LocalDateTime.now())
 				.build();
 		Diary diary = Diary.builder()
@@ -305,7 +306,7 @@ public class DiaryControllerTest {
 				.password("test3")
 				.name("테스트3")
 				.profileImage("blank-profile-picture.png")
-				.authority("ROLE_USER")
+				.authority(Authority.ROLE_USER)
 				.createDate(LocalDateTime.now())
 				.build();
 		mockSession.setAttribute(HttpSessionUtils.USER_SESSION_KEY, user);
@@ -318,7 +319,7 @@ public class DiaryControllerTest {
 				.password("test4")
 				.name("테스트4")
 				.profileImage("blank-profile-picture.png")
-				.authority("ROLE_USER")
+				.authority(Authority.ROLE_USER)
 				.createDate(LocalDateTime.now())
 				.build();
 		Diary diary = Diary.builder()
@@ -361,10 +362,10 @@ public class DiaryControllerTest {
 				.password("test3")
 				.name("테스트3")
 				.profileImage("blank-profile-picture.png")
-				.authority("ROLE_USER")
+				.authority(Authority.ROLE_USER)
 				.createDate(LocalDateTime.now())
 				.build();
-		user.setAuthority("ROLE_ADMIN");
+		user.setAuthority(Authority.ROLE_ADMIN);
 		mockSession.setAttribute(HttpSessionUtils.USER_SESSION_KEY, user);
 		mockSession.setAttribute("messages", null);
 		mockSession.setAttribute("countMessages", "");
@@ -375,7 +376,7 @@ public class DiaryControllerTest {
 				.password("test4")
 				.name("테스트4")
 				.profileImage("blank-profile-picture.png")
-				.authority("ROLE_USER")
+				.authority(Authority.ROLE_USER)
 				.createDate(LocalDateTime.now())
 				.build();
 		Diary diary = Diary.builder()
@@ -418,7 +419,7 @@ public class DiaryControllerTest {
 				.password("test3")
 				.name("테스트3")
 				.profileImage("blank-profile-picture.png")
-				.authority("ROLE_USER")
+				.authority(Authority.ROLE_USER)
 				.createDate(LocalDateTime.now())
 				.build();
 		mockSession.setAttribute(HttpSessionUtils.USER_SESSION_KEY, user);
@@ -462,7 +463,7 @@ public class DiaryControllerTest {
 				.password("test3")
 				.name("테스트3")
 				.profileImage("blank-profile-picture.png")
-				.authority("ROLE_USER")
+				.authority(Authority.ROLE_USER)
 				.createDate(LocalDateTime.now())
 				.build();
 		Diary diary = Diary.builder()
@@ -500,7 +501,7 @@ public class DiaryControllerTest {
 				.password("test3")
 				.name("테스트3")
 				.profileImage("blank-profile-picture.png")
-				.authority("ROLE_USER")
+				.authority(Authority.ROLE_USER)
 				.createDate(LocalDateTime.now())
 				.build();
 		mockSession.setAttribute(HttpSessionUtils.USER_SESSION_KEY, user);
@@ -513,7 +514,7 @@ public class DiaryControllerTest {
 				.password("test4")
 				.name("테스트4")
 				.profileImage("blank-profile-picture.png")
-				.authority("ROLE_USER")
+				.authority(Authority.ROLE_USER)
 				.createDate(LocalDateTime.now())
 				.build();
 		Diary diary = Diary.builder()
@@ -553,7 +554,7 @@ public class DiaryControllerTest {
 				.password("test3")
 				.name("테스트3")
 				.profileImage("blank-profile-picture.png")
-				.authority("ROLE_USER")
+				.authority(Authority.ROLE_USER)
 				.createDate(LocalDateTime.now())
 				.build();
 		mockSession.setAttribute(HttpSessionUtils.USER_SESSION_KEY, user);
@@ -630,7 +631,7 @@ public class DiaryControllerTest {
 				.password("test3")
 				.name("테스트3")
 				.profileImage("blank-profile-picture.png")
-				.authority("ROLE_USER")
+				.authority(Authority.ROLE_USER)
 				.createDate(LocalDateTime.now())
 				.build();
 		mockSession.setAttribute(HttpSessionUtils.USER_SESSION_KEY, user);
@@ -643,7 +644,7 @@ public class DiaryControllerTest {
 				.password("test4")
 				.name("테스트4")
 				.profileImage("blank-profile-picture.png")
-				.authority("ROLE_USER")
+				.authority(Authority.ROLE_USER)
 				.createDate(LocalDateTime.now())
 				.build();
 		Diary diary = Diary.builder()
@@ -682,7 +683,7 @@ public class DiaryControllerTest {
 				.password("test3")
 				.name("테스트3")
 				.profileImage("blank-profile-picture.png")
-				.authority("ROLE_USER")
+				.authority(Authority.ROLE_USER)
 				.createDate(LocalDateTime.now())
 				.build();
 		mockSession.setAttribute(HttpSessionUtils.USER_SESSION_KEY, user);
@@ -729,7 +730,7 @@ public class DiaryControllerTest {
 				.password("test3")
 				.name("테스트3")
 				.profileImage("blank-profile-picture.png")
-				.authority("ROLE_USER")
+				.authority(Authority.ROLE_USER)
 				.createDate(LocalDateTime.now())
 				.build();
 		mockSession.setAttribute(HttpSessionUtils.USER_SESSION_KEY, user);
@@ -742,7 +743,7 @@ public class DiaryControllerTest {
 				.password("test4")
 				.name("테스트4")
 				.profileImage("blank-profile-picture.png")
-				.authority("ROLE_USER")
+				.authority(Authority.ROLE_USER)
 				.createDate(LocalDateTime.now())
 				.build();
 		Diary diary = Diary.builder()
@@ -786,7 +787,7 @@ public class DiaryControllerTest {
 				.password("test3")
 				.name("테스트3")
 				.profileImage("blank-profile-picture.png")
-				.authority("ROLE_USER")
+				.authority(Authority.ROLE_USER)
 				.createDate(LocalDateTime.now())
 				.build();
 		mockSession.setAttribute(HttpSessionUtils.USER_SESSION_KEY, user);

@@ -16,6 +16,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import java.time.LocalDateTime;
 import java.util.List;
 
+import com.phcworld.domain.user.Authority;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -127,7 +128,7 @@ public class UserControllerTest {
 				.password("test3")
 				.name("test3")
 				.profileImage("blank-profile-picture.png")
-				.authority("ROLE_USER")
+				.authority(Authority.ROLE_USER)
 				.createDate(LocalDateTime.now())
 				.build();
 		when(this.userService.findUserByEmail("test@test.test"))
@@ -164,7 +165,7 @@ public class UserControllerTest {
 				.password("test")
 				.name("테스트")
 				.profileImage("blank-profile-picture.png")
-				.authority("ROLE_ADMIN")
+				.authority(Authority.ROLE_ADMIN)
 				.createDate(LocalDateTime.now())
 				.build();
 		when(this.userService.findUserByEmail("test@test.test"))
@@ -190,7 +191,7 @@ public class UserControllerTest {
 				.password("test")
 				.name("테스트")
 				.profileImage("blank-profile-picture.png")
-				.authority("ROLE_USER")
+				.authority(Authority.ROLE_USER)
 				.createDate(LocalDateTime.now())
 				.build();
 		when(this.userService.findUserByEmail("test@test.test"))
@@ -212,7 +213,7 @@ public class UserControllerTest {
 				.password("test")
 				.name("테스트")
 				.profileImage("blank-profile-picture.png")
-				.authority("ROLE_USER")
+				.authority(Authority.ROLE_USER)
 				.createDate(LocalDateTime.now())
 				.build();
 		when(this.userService.findUserByEmail("test@test.test"))
@@ -234,7 +235,7 @@ public class UserControllerTest {
 				.password("test")
 				.name("테스트")
 				.profileImage("blank-profile-picture.png")
-				.authority("ROLE_USER")
+				.authority(Authority.ROLE_USER)
 				.createDate(LocalDateTime.now())
 				.build();
 		when(this.userService.findUserByEmail("test@test.test"))
@@ -264,7 +265,7 @@ public class UserControllerTest {
 				.password("test")
 				.name("테스트")
 				.profileImage("blank-profile-picture.png")
-				.authority("ROLE_USER")
+				.authority(Authority.ROLE_USER)
 				.createDate(LocalDateTime.now())
 				.build();
 		user.setId(1L);
@@ -300,7 +301,7 @@ public class UserControllerTest {
 				.password("test")
 				.name("테스트")
 				.profileImage("blank-profile-picture.png")
-				.authority("ROLE_USER")
+				.authority(Authority.ROLE_USER)
 				.createDate(LocalDateTime.now())
 				.build();
 		user.setId(1L);
@@ -324,7 +325,7 @@ public class UserControllerTest {
 				.password("test")
 				.name("테스트")
 				.profileImage("blank-profile-picture.png")
-				.authority("ROLE_USER")
+				.authority(Authority.ROLE_USER)
 				.createDate(LocalDateTime.now())
 				.build();
 		user.setId(1L);
@@ -358,7 +359,7 @@ public class UserControllerTest {
 				.password("test")
 				.name("테스트")
 				.profileImage("blank-profile-picture.png")
-				.authority("ROLE_USER")
+				.authority(Authority.ROLE_USER)
 				.createDate(LocalDateTime.now())
 				.build();
 		user.setId(1L);
@@ -382,7 +383,7 @@ public class UserControllerTest {
 				.password("test")
 				.name("테스트")
 				.profileImage("blank-profile-picture.png")
-				.authority("ROLE_USER")
+				.authority(Authority.ROLE_USER)
 				.createDate(LocalDateTime.now())
 				.build();
 		user.setId(1L);
@@ -403,7 +404,7 @@ public class UserControllerTest {
 				.password("test")
 				.name("테스트")
 				.profileImage("blank-profile-picture.png")
-				.authority("ROLE_USER")
+				.authority(Authority.ROLE_USER)
 				.createDate(LocalDateTime.now())
 				.build();
 		user.setId(1L);
@@ -424,7 +425,7 @@ public class UserControllerTest {
 				.password("test")
 				.name("테스트")
 				.profileImage("blank-profile-picture.png")
-				.authority("ROLE_USER")
+				.authority(Authority.ROLE_USER)
 				.createDate(LocalDateTime.now())
 				.build();
 		loginUser.setId(1L);
@@ -437,7 +438,7 @@ public class UserControllerTest {
 				.password("test2")
 				.name("테스트2")
 				.profileImage("blank-profile-picture.png")
-				.authority("ROLE_USER")
+				.authority(Authority.ROLE_USER)
 				.createDate(LocalDateTime.now())
 				.build();
 		when(this.userService.findUserById(2L))
@@ -464,7 +465,7 @@ public class UserControllerTest {
 				.password("test")
 				.name("테스트")
 				.profileImage("blank-profile-picture.png")
-				.authority("ROLE_USER")
+				.authority(Authority.ROLE_USER)
 				.createDate(LocalDateTime.now())
 				.build();
 		loginUser.setId(1L);

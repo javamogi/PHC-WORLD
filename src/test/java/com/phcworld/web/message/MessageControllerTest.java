@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.phcworld.domain.user.Authority;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,7 +58,7 @@ public class MessageControllerTest {
 				.password("test3")
 				.name("테스트3")
 				.profileImage("blank-profile-picture.png")
-				.authority("ROLE_USER")
+				.authority(Authority.ROLE_USER)
 				.createDate(LocalDateTime.now())
 				.build();
 		mockSession.setAttribute(HttpSessionUtils.USER_SESSION_KEY, user);
@@ -78,7 +79,7 @@ public class MessageControllerTest {
 				.password("test3")
 				.name("테스트3")
 				.profileImage("blank-profile-picture.png")
-				.authority("ROLE_USER")
+				.authority(Authority.ROLE_USER)
 				.createDate(LocalDateTime.now())
 				.build();
 		user.setId(1L);
@@ -101,7 +102,7 @@ public class MessageControllerTest {
 				.password("test3")
 				.name("테스트3")
 				.profileImage("blank-profile-picture.png")
-				.authority("ROLE_USER")
+				.authority(Authority.ROLE_USER)
 				.createDate(LocalDateTime.now())
 				.build();
 		User receiveUser = User.builder()
@@ -110,7 +111,7 @@ public class MessageControllerTest {
 				.password("test4")
 				.name("테스트4")
 				.profileImage("blank-profile-picture.png")
-				.authority("ROLE_USER")
+				.authority(Authority.ROLE_USER)
 				.createDate(LocalDateTime.now())
 				.build();
 		mockSession.setAttribute(HttpSessionUtils.USER_SESSION_KEY, user);
@@ -162,7 +163,7 @@ public class MessageControllerTest {
 				.password("test3")
 				.name("테스트3")
 				.profileImage("blank-profile-picture.png")
-				.authority("ROLE_USER")
+				.authority(Authority.ROLE_USER)
 				.createDate(LocalDateTime.now())
 				.build();
 		User receiveUser = User.builder()
@@ -171,7 +172,7 @@ public class MessageControllerTest {
 				.password("test4")
 				.name("테스트4")
 				.profileImage("blank-profile-picture.png")
-				.authority("ROLE_USER")
+				.authority(Authority.ROLE_USER)
 				.createDate(LocalDateTime.now())
 				.build();
 		mockSession.setAttribute(HttpSessionUtils.USER_SESSION_KEY, user);
@@ -241,7 +242,7 @@ public class MessageControllerTest {
 				.password("test3")
 				.name("테스트3")
 				.profileImage("blank-profile-picture.png")
-				.authority("ROLE_USER")
+				.authority(Authority.ROLE_USER)
 				.createDate(LocalDateTime.now())
 				.build();
 		User receiveUser = User.builder()
@@ -250,7 +251,7 @@ public class MessageControllerTest {
 				.password("test4")
 				.name("테스트4")
 				.profileImage("blank-profile-picture.png")
-				.authority("ROLE_USER")
+				.authority(Authority.ROLE_USER)
 				.createDate(LocalDateTime.now())
 				.build();
 		mockSession.setAttribute(HttpSessionUtils.USER_SESSION_KEY, user);

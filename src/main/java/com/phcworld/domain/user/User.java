@@ -54,7 +54,8 @@ public class User implements Serializable {
 	@Pattern(regexp = "^[가-힣a-zA-Z0-9]+$", message = "한글, 영문, 숫자만 가능합니다.")
 	private String name;
 
-	private String authority;
+	@Enumerated(EnumType.STRING)
+	private Authority authority;
 
 	private LocalDateTime createDate;
 
@@ -95,14 +96,14 @@ public class User implements Serializable {
 		if (this.authority == null) {
 			return false;
 		}
-		return this.authority.equals("ROLE_ADMIN");
+		return this.authority == Authority.ROLE_ADMIN;
 	}
 
 	public void ifMeSetAdmin() {
 //		if (user.getEmail().equals("pakoh200@naver.com")) {
 		if (this.email.equals("pakoh200@naver.com")) {
 //			user.setAuthority("ROLE_ADMIN");
-			this.authority = "ROLE_ADMIN";
+			this.authority = Authority.ROLE_ADMIN;
 		}
 	}
 
@@ -111,7 +112,7 @@ public class User implements Serializable {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 		User user = (User) o;
-		return Objects.equals(id, user.id) && Objects.equals(email, user.email) && Objects.equals(name, user.name) && Objects.equals(authority, user.authority);
+		return Objects.equals(id, user.id) && Objects.equals(email, user.email) && Objects.equals(name, user.name) && authority == user.authority;
 	}
 
 	@Override
