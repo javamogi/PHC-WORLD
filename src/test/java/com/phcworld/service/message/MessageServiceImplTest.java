@@ -9,6 +9,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.phcworld.domain.user.Authority;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -39,7 +40,7 @@ public class MessageServiceImplTest {
 				.password("test3")
 				.name("테스트3")
 				.profileImage("blank-profile-picture.png")
-				.authority("ROLE_USER")
+				.authority(Authority.ROLE_USER)
 				.createDate(LocalDateTime.now())
 				.build();
 		MessageRequest request = MessageRequest.builder()
@@ -52,7 +53,7 @@ public class MessageServiceImplTest {
 				.password("test4")
 				.name("테스트4")
 				.profileImage("blank-profile-picture.png")
-				.authority("ROLE_USER")
+				.authority(Authority.ROLE_USER)
 				.createDate(LocalDateTime.now())
 				.build();
 		
@@ -79,7 +80,7 @@ public class MessageServiceImplTest {
 				.password("test3")
 				.name("테스트3")
 				.profileImage("blank-profile-picture.png")
-				.authority("ROLE_USER")
+				.authority(Authority.ROLE_USER)
 				.createDate(LocalDateTime.now())
 				.build();
 		User receiveUser = User.builder()
@@ -88,7 +89,7 @@ public class MessageServiceImplTest {
 				.password("test4")
 				.name("테스트4")
 				.profileImage("blank-profile-picture.png")
-				.authority("ROLE_USER")
+				.authority(Authority.ROLE_USER)
 				.createDate(LocalDateTime.now())
 				.build();
 		
@@ -131,7 +132,7 @@ public class MessageServiceImplTest {
 				.password("test3")
 				.name("테스트3")
 				.profileImage("blank-profile-picture.png")
-				.authority("ROLE_USER")
+				.authority(Authority.ROLE_USER)
 				.createDate(LocalDateTime.now())
 				.build();
 		User receiveUser = User.builder()
@@ -140,7 +141,7 @@ public class MessageServiceImplTest {
 				.password("test4")
 				.name("테스트4")
 				.profileImage("blank-profile-picture.png")
-				.authority("ROLE_USER")
+				.authority(Authority.ROLE_USER)
 				.createDate(LocalDateTime.now())
 				.build();
 		
@@ -191,7 +192,7 @@ public class MessageServiceImplTest {
 				.password("test3")
 				.name("테스트3")
 				.profileImage("blank-profile-picture.png")
-				.authority("ROLE_USER")
+				.authority(Authority.ROLE_USER)
 				.createDate(LocalDateTime.now())
 				.build();
 		User receiveUser = User.builder()
@@ -200,7 +201,7 @@ public class MessageServiceImplTest {
 				.password("test4")
 				.name("테스트4")
 				.profileImage("blank-profile-picture.png")
-				.authority("ROLE_USER")
+				.authority(Authority.ROLE_USER)
 				.createDate(LocalDateTime.now())
 				.build();
 		
@@ -251,7 +252,7 @@ public class MessageServiceImplTest {
 				.password("test3")
 				.name("테스트3")
 				.profileImage("blank-profile-picture.png")
-				.authority("ROLE_USER")
+				.authority(Authority.ROLE_USER)
 				.createDate(LocalDateTime.now())
 				.build();
 		User receiveUser = User.builder()
@@ -260,7 +261,7 @@ public class MessageServiceImplTest {
 				.password("test4")
 				.name("테스트4")
 				.profileImage("blank-profile-picture.png")
-				.authority("ROLE_USER")
+				.authority(Authority.ROLE_USER)
 				.createDate(LocalDateTime.now())
 				.build();
 		
@@ -339,7 +340,7 @@ public class MessageServiceImplTest {
 				.password("test3")
 				.name("테스트3")
 				.profileImage("blank-profile-picture.png")
-				.authority("ROLE_USER")
+				.authority(Authority.ROLE_USER)
 				.createDate(LocalDateTime.now())
 				.build();
 		User receiveUser = User.builder()
@@ -348,7 +349,7 @@ public class MessageServiceImplTest {
 				.password("test4")
 				.name("테스트4")
 				.profileImage("blank-profile-picture.png")
-				.authority("ROLE_USER")
+				.authority(Authority.ROLE_USER)
 				.createDate(LocalDateTime.now())
 				.build();
 		

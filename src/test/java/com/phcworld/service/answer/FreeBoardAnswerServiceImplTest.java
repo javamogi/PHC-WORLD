@@ -6,6 +6,7 @@ import com.phcworld.domain.api.model.response.FreeBoardAnswerApiResponse;
 import com.phcworld.domain.api.model.response.SuccessResponse;
 import com.phcworld.domain.board.FreeBoard;
 import com.phcworld.domain.exception.MatchNotUserException;
+import com.phcworld.domain.user.Authority;
 import com.phcworld.domain.user.User;
 import com.phcworld.exception.model.NotMatchUserException;
 import org.junit.Before;
@@ -42,7 +43,7 @@ public class FreeBoardAnswerServiceImplTest {
 				.password("test")
 				.name("테스트")
 				.profileImage("blank-profile-picture.png")
-				.authority("ROLE_USER")
+				.authority(Authority.ROLE_USER)
 				.createDate(LocalDateTime.now())
 				.build();
 
@@ -115,7 +116,7 @@ public class FreeBoardAnswerServiceImplTest {
 				.password("test3")
 				.name("테스트3")
 				.profileImage("blank-profile-picture.png")
-				.authority("ROLE_USER")
+				.authority(Authority.ROLE_USER)
 				.createDate(LocalDateTime.now())
 				.build();
 		FreeBoardAnswer answer = FreeBoardAnswer.builder()

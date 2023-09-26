@@ -30,7 +30,7 @@ public class TokenProvider {
 
     public String generateAccessToken(User user, long now){
         String id = user.getId().toString();
-        String authority = user.getAuthority();
+        String authority = user.getAuthority().toString();
         // Access Token 생성
         Date accessTokenExpiresIn = new Date(now + ACCESS_TOKEN_EXPIRE_TIME);
         return Jwts.builder()
@@ -60,7 +60,7 @@ public class TokenProvider {
     public TokenDto generateTokenDto(User user) {
 
         String id = user.getId().toString();
-        String authorities = user.getAuthority();
+        String authorities = user.getAuthority().toString();
 
         long now = (new Date()).getTime();
 

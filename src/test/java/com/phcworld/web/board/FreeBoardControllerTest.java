@@ -3,6 +3,7 @@ package com.phcworld.web.board;
 import com.phcworld.domain.board.FreeBoard;
 import com.phcworld.domain.board.FreeBoardRequest;
 import com.phcworld.domain.board.FreeBoardResponse;
+import com.phcworld.domain.user.Authority;
 import com.phcworld.domain.user.User;
 import com.phcworld.service.board.FreeBoardServiceImpl;
 import com.phcworld.service.timeline.TimelineServiceImpl;
@@ -49,7 +50,7 @@ public class FreeBoardControllerTest {
 				.password("test3")
 				.name("테스트3")
 				.profileImage("blank-profile-picture.png")
-				.authority("ROLE_USER")
+				.authority(Authority.ROLE_USER)
 				.createDate(LocalDateTime.now())
 				.build();
 		mockSession.setAttribute(HttpSessionUtils.USER_SESSION_KEY, user);
@@ -105,7 +106,7 @@ public class FreeBoardControllerTest {
 				.password("test3")
 				.name("테스트3")
 				.profileImage("blank-profile-picture.png")
-				.authority("ROLE_USER")
+				.authority(Authority.ROLE_USER)
 				.createDate(LocalDateTime.now())
 				.build();
 		mockSession.setAttribute(HttpSessionUtils.USER_SESSION_KEY, user);
@@ -127,7 +128,7 @@ public class FreeBoardControllerTest {
 				.password("test3")
 				.name("테스트3")
 				.profileImage("blank-profile-picture.png")
-				.authority("ROLE_USER")
+				.authority(Authority.ROLE_USER)
 				.createDate(LocalDateTime.now())
 				.build();
 		mockSession.setAttribute(HttpSessionUtils.USER_SESSION_KEY, user);
@@ -185,7 +186,7 @@ public class FreeBoardControllerTest {
 				.password("test3")
 				.name("테스트3")
 				.profileImage("blank-profile-picture.png")
-				.authority("ROLE_USER")
+				.authority(Authority.ROLE_USER)
 				.createDate(LocalDateTime.now())
 				.build();
 		mockSession.setAttribute(HttpSessionUtils.USER_SESSION_KEY, user);
@@ -225,7 +226,7 @@ public class FreeBoardControllerTest {
 				.password("test3")
 				.name("테스트3")
 				.profileImage("blank-profile-picture.png")
-				.authority("ROLE_USER")
+				.authority(Authority.ROLE_USER)
 				.createDate(LocalDateTime.now())
 				.build();
 		FreeBoardResponse response = FreeBoardResponse.builder()
@@ -261,7 +262,7 @@ public class FreeBoardControllerTest {
 				.password("test3")
 				.name("테스트3")
 				.profileImage("blank-profile-picture.png")
-				.authority("ROLE_USER")
+				.authority(Authority.ROLE_USER)
 				.createDate(LocalDateTime.now())
 				.build();
 		mockSession.setAttribute(HttpSessionUtils.USER_SESSION_KEY, user);
@@ -274,7 +275,7 @@ public class FreeBoardControllerTest {
 				.password("test4")
 				.name("테스트4")
 				.profileImage("blank-profile-picture.png")
-				.authority("ROLE_USER")
+				.authority(Authority.ROLE_USER)
 				.createDate(LocalDateTime.now())
 				.build();
 		FreeBoardResponse response = FreeBoardResponse.builder()
@@ -310,7 +311,7 @@ public class FreeBoardControllerTest {
 				.password("test3")
 				.name("테스트3")
 				.profileImage("blank-profile-picture.png")
-				.authority("ROLE_ADMIN")
+				.authority(Authority.ROLE_ADMIN)
 				.createDate(LocalDateTime.now())
 				.build();
 		mockSession.setAttribute(HttpSessionUtils.USER_SESSION_KEY, user);
@@ -323,7 +324,7 @@ public class FreeBoardControllerTest {
 				.password("test4")
 				.name("테스트4")
 				.profileImage("blank-profile-picture.png")
-				.authority("ROLE_USER")
+				.authority(Authority.ROLE_USER)
 				.createDate(LocalDateTime.now())
 				.build();
 		FreeBoardResponse response = FreeBoardResponse.builder()
@@ -359,7 +360,7 @@ public class FreeBoardControllerTest {
 				.password("test3")
 				.name("테스트3")
 				.profileImage("blank-profile-picture.png")
-				.authority("ROLE_USER")
+				.authority(Authority.ROLE_USER)
 				.createDate(LocalDateTime.now())
 				.build();
 		mockSession.setAttribute(HttpSessionUtils.USER_SESSION_KEY, user);
@@ -396,7 +397,7 @@ public class FreeBoardControllerTest {
 				.password("test3")
 				.name("테스트3")
 				.profileImage("blank-profile-picture.png")
-				.authority("ROLE_USER")
+				.authority(Authority.ROLE_USER)
 				.createDate(LocalDateTime.now())
 				.build();
 		FreeBoardResponse response = FreeBoardResponse.builder()
@@ -427,7 +428,7 @@ public class FreeBoardControllerTest {
 				.password("test3")
 				.name("테스트3")
 				.profileImage("blank-profile-picture.png")
-				.authority("ROLE_USER")
+				.authority(Authority.ROLE_USER)
 				.createDate(LocalDateTime.now())
 				.build();
 		mockSession.setAttribute(HttpSessionUtils.USER_SESSION_KEY, user);
@@ -440,7 +441,7 @@ public class FreeBoardControllerTest {
 				.password("test4")
 				.name("테스트4")
 				.profileImage("blank-profile-picture.png")
-				.authority("ROLE_USER")
+				.authority(Authority.ROLE_USER)
 				.createDate(LocalDateTime.now())
 				.build();
 		FreeBoardResponse response = FreeBoardResponse.builder()
@@ -473,7 +474,7 @@ public class FreeBoardControllerTest {
 				.password("test3")
 				.name("테스트3")
 				.profileImage("blank-profile-picture.png")
-				.authority("ROLE_USER")
+				.authority(Authority.ROLE_USER)
 				.createDate(LocalDateTime.now())
 				.build();
 		mockSession.setAttribute(HttpSessionUtils.USER_SESSION_KEY, user);
@@ -548,7 +549,7 @@ public class FreeBoardControllerTest {
 				.password("test3")
 				.name("테스트3")
 				.profileImage("blank-profile-picture.png")
-				.authority("ROLE_USER")
+				.authority(Authority.ROLE_USER)
 				.createDate(LocalDateTime.now())
 				.build();
 		mockSession.setAttribute(HttpSessionUtils.USER_SESSION_KEY, user);
@@ -561,7 +562,7 @@ public class FreeBoardControllerTest {
 				.password("test4")
 				.name("테스트4")
 				.profileImage("blank-profile-picture.png")
-				.authority("ROLE_USER")
+				.authority(Authority.ROLE_USER)
 				.createDate(LocalDateTime.now())
 				.build();
 		FreeBoardResponse response = FreeBoardResponse.builder()
@@ -597,7 +598,7 @@ public class FreeBoardControllerTest {
 				.password("test3")
 				.name("테스트3")
 				.profileImage("blank-profile-picture.png")
-				.authority("ROLE_USER")
+				.authority(Authority.ROLE_USER)
 				.createDate(LocalDateTime.now())
 				.build();
 		mockSession.setAttribute(HttpSessionUtils.USER_SESSION_KEY, user);
@@ -640,7 +641,7 @@ public class FreeBoardControllerTest {
 				.password("test3")
 				.name("테스트3")
 				.profileImage("blank-profile-picture.png")
-				.authority("ROLE_USER")
+				.authority(Authority.ROLE_USER)
 				.createDate(LocalDateTime.now())
 				.build();
 		mockSession.setAttribute(HttpSessionUtils.USER_SESSION_KEY, user);
@@ -653,7 +654,7 @@ public class FreeBoardControllerTest {
 				.password("test4")
 				.name("테스트4")
 				.profileImage("blank-profile-picture.png")
-				.authority("ROLE_USER")
+				.authority(Authority.ROLE_USER)
 				.createDate(LocalDateTime.now())
 				.build();
 		FreeBoardResponse response = FreeBoardResponse.builder()

@@ -7,6 +7,7 @@ import static org.mockito.Mockito.when;
 
 import java.time.LocalDateTime;
 
+import com.phcworld.domain.user.Authority;
 import com.phcworld.repository.user.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
@@ -43,7 +44,7 @@ public class UserServiceTest {
 				.password("test3")
 				.name("test3")
 				.profileImage("blank-profile-picture.png")
-				.authority("ROLE_USER")
+				.authority(Authority.ROLE_USER)
 				.createDate(LocalDateTime.now())
 				.build();
 //		given(userRepository.save(user)).willReturn(user);
@@ -59,13 +60,13 @@ public class UserServiceTest {
 				.password("test")
 				.name("주인장")
 				.profileImage("blank-profile-picture.png")
-				.authority("ROLE_USER")
+				.authority(Authority.ROLE_USER)
 				.createDate(LocalDateTime.now())
 				.build();
 		when(userService.createUser(user)).thenReturn(user);
 		User adminUser = userService.createUser(user);
 		adminUser.ifMeSetAdmin();
-		assertThat(adminUser.getAuthority(), is("ROLE_ADMIN"));
+		assertThat(adminUser.getAuthority(), is(Authority.ROLE_ADMIN));
 	}
 	
 	@Test
@@ -75,7 +76,7 @@ public class UserServiceTest {
 				.password("test3")
 				.name("테스트")
 				.profileImage("blank-profile-picture.png")
-				.authority("ROLE_USER")
+				.authority(Authority.ROLE_USER)
 				.createDate(LocalDateTime.now())
 				.build();
 		when(userService.createUser(user)).thenReturn(user);
@@ -92,7 +93,7 @@ public class UserServiceTest {
 				.password("test1")
 				.name("테스트1")
 				.profileImage("blank-profile-picture.png")
-				.authority("ROLE_USER")
+				.authority(Authority.ROLE_USER)
 				.build();
 		when(userService.createUser(user)).thenReturn(user);
 		User createUser = userService.createUser(user);
@@ -101,7 +102,7 @@ public class UserServiceTest {
 				.password("test2")
 				.name("테스트2")
 				.profileImage("blank-profile-picture.png")
-				.authority("ROLE_USER")
+				.authority(Authority.ROLE_USER)
 				.build();
 		createUser.update(updateUser);
 		when(userService.updateUser(createUser, updateUser)).thenReturn(updateUser);
@@ -116,7 +117,7 @@ public class UserServiceTest {
 				.password("test1")
 				.name("테스트1")
 				.profileImage("blank-profile-picture.png")
-				.authority("ROLE_USER")
+				.authority(Authority.ROLE_USER)
 				.createDate(LocalDateTime.now())
 				.build();
 		User updateUser = User.builder()
@@ -124,7 +125,7 @@ public class UserServiceTest {
 				.password("test1")
 				.name("테스트1")
 				.profileImage("test.jpg")
-				.authority("ROLE_USER")
+				.authority(Authority.ROLE_USER)
 				.createDate(LocalDateTime.now())
 				.build();
 		when(userService.imageUpdate(user, "test.jpg")).thenReturn(updateUser);

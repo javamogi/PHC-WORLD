@@ -3,6 +3,7 @@ package com.phcworld.service.user;
 import java.security.NoSuchAlgorithmException;
 import java.time.LocalDateTime;
 
+import com.phcworld.domain.user.Authority;
 import com.phcworld.exception.model.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +24,7 @@ public class UserService {
 	public User createUser(User user) throws NoSuchAlgorithmException {
 		String password = SecurityUtils.getEncSHA256(user.getPassword());
 		user.setPassword(password);
-		user.setAuthority("ROLE_USER");
+		user.setAuthority(Authority.ROLE_USER);
 		user.setCreateDate(LocalDateTime.now());
 		user.setProfileImage("blank-profile-picture.png");
 		user.ifMeSetAdmin();

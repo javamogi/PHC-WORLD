@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.phcworld.domain.user.Authority;
 import com.phcworld.exception.model.NotMatchUserException;
 import com.phcworld.util.FreeBoardFactory;
 import org.junit.Before;
@@ -59,7 +60,7 @@ public class FreeBoardAnswerControllerTest {
 				.password("test3")
 				.name("테스트3")
 				.profileImage("blank-profile-picture.png")
-				.authority("ROLE_USER")
+				.authority(Authority.ROLE_USER)
 				.createDate(LocalDateTime.now())
 				.build();
 		freeBoard = FreeBoard.builder()
@@ -162,7 +163,7 @@ public class FreeBoardAnswerControllerTest {
 				.password("test4")
 				.name("테스트4")
 				.profileImage("blank-profile-picture.png")
-				.authority("ROLE_USER")
+				.authority(Authority.ROLE_USER)
 				.createDate(LocalDateTime.now())
 				.build();
 		mockSession.setAttribute(HttpSessionUtils.USER_SESSION_KEY, user);

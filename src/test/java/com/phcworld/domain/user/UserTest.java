@@ -37,13 +37,13 @@ public class UserTest {
 				.email("lombok@test.test")
 				.password("lombokpss")
 				.name("lombok")
-				.authority("ROLE_USER")
+				.authority(Authority.ROLE_USER)
 				.build();
 		User test = User.builder()
 				.email("lombok@test.test")
 				.password("lombokpss")
 				.name("lombok")
-				.authority("ROLE_USER")
+				.authority(Authority.ROLE_USER)
 				.build();
 		assertThat(user)
 				.isEqualTo(test);
@@ -180,12 +180,12 @@ public class UserTest {
 	@Test
 	public void matchAdminAuthority() {
 		User adminUser = User.builder()
-				.authority("ROLE_ADMIN")
+				.authority(Authority.ROLE_ADMIN)
 				.build();
 		assertTrue(adminUser.matchAdminAuthority());
 		
 		User user = User.builder()
-				.authority("ROLE_USER")
+				.authority(Authority.ROLE_USER)
 				.build();
 		assertFalse(user.matchAdminAuthority());
 	}
@@ -196,6 +196,6 @@ public class UserTest {
 				.email("pakoh200@naver.com")
 				.build();
 		me.ifMeSetAdmin();
-		assertThat(me.getAuthority()).isEqualTo("ROLE_ADMIN");
+		assertThat(me.getAuthority()).isEqualTo(Authority.ROLE_ADMIN);
 	}
 }

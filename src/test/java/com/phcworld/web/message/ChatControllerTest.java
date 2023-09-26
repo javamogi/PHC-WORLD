@@ -5,6 +5,7 @@ import com.phcworld.domain.message.MessageReadUser;
 import com.phcworld.domain.message.dto.ChatRoomSelectDto;
 import com.phcworld.domain.message.dto.MessageRequestDto;
 import com.phcworld.domain.message.dto.MessageResponseDto;
+import com.phcworld.domain.user.Authority;
 import com.phcworld.domain.user.User;
 import com.phcworld.service.message.ChatService;
 import com.phcworld.utils.HttpSessionUtils;
@@ -62,7 +63,7 @@ public class ChatControllerTest {
                 .password("test")
                 .name("테스트")
                 .profileImage("blank-profile-picture.png")
-                .authority("ROLE_ADMIN")
+                .authority(Authority.ROLE_ADMIN)
                 .createDate(LocalDateTime.now())
                 .build();
         mockSession.setAttribute(HttpSessionUtils.USER_SESSION_KEY, user);

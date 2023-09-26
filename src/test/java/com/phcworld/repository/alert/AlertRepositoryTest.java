@@ -9,6 +9,7 @@ import com.phcworld.domain.board.FreeBoard;
 import com.phcworld.domain.common.SaveType;
 import com.phcworld.domain.embedded.PostInfo;
 import com.phcworld.domain.good.Good;
+import com.phcworld.domain.user.Authority;
 import com.phcworld.domain.user.User;
 import com.phcworld.exception.model.CustomException;
 import com.phcworld.repository.answer.DiaryAnswerRepository;
@@ -237,7 +238,7 @@ public class AlertRepositoryTest {
 				.password("test4")
 				.name("테스트4")
 				.profileImage("blank-profile-picture.png")
-				.authority("ROLE_USER")
+				.authority(Authority.ROLE_USER)
 				.createDate(LocalDateTime.now())
 				.build();
 		Good good = Good.builder()
@@ -272,7 +273,7 @@ public class AlertRepositoryTest {
 				.password("test4")
 				.name("테스트4")
 				.profileImage("blank-profile-picture.png")
-				.authority("ROLE_USER")
+				.authority(Authority.ROLE_USER)
 				.createDate(LocalDateTime.now())
 				.build();
 		Good good = Good.builder()
@@ -349,7 +350,7 @@ public class AlertRepositoryTest {
 				.password("test4")
 				.name("테스트4")
 				.profileImage("blank-profile-picture.png")
-				.authority("ROLE_USER")
+				.authority(Authority.ROLE_USER)
 				.createDate(LocalDateTime.now())
 				.build();
 		Good good = Good.builder()

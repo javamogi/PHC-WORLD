@@ -1,5 +1,6 @@
 package com.phcworld.domain.image;
 
+import com.phcworld.domain.user.Authority;
 import com.phcworld.domain.user.User;
 import com.phcworld.exception.model.NotFoundException;
 import org.junit.Before;
@@ -32,7 +33,7 @@ public class ImageServiceImplTest {
 				.password("test3")
 				.name("테스트3")
 				.profileImage("blank-profile-picture.png")
-				.authority("ROLE_USER")
+				.authority(Authority.ROLE_USER)
 				.createDate(LocalDateTime.now())
 				.build();
 	}
