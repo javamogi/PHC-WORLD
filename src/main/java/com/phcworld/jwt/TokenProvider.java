@@ -2,6 +2,7 @@ package com.phcworld.jwt;
 
 import com.phcworld.domain.user.User;
 import com.phcworld.exception.model.CustomException;
+import com.phcworld.jwt.dto.TokenDto;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -54,6 +55,32 @@ public class TokenProvider {
         } catch (IllegalArgumentException e) {
             throw new CustomException("400", "JWT 토큰이 잘못되었습니다.");
         }
+    }
+
+    public TokenDto generateTokenDto(User user) {
+
+        String id = user.getId().toString();
+        String authorities = user.getAuthority();
+
+        long now = (new Date()).getTime();
+
+        // Access Token 생성
+        String accessToken = generateAccessToken(user, now);
+
+        // Refresh Token 생성
+        String refreshToken = Jwts.builder()
+                .setSubject(id)
+                .claim("type", "refresh")
+                .claim(AUTHORITIES_KEY, authorities)
+                .setExpiration(new Date(now + REFRESH_TOKEN_EXPIRE_TIME))
+                .signWith(key, SignatureAlgorithm.HS256)
+                .compact();
+
+        return TokenDto.builder()
+                .grantType(BEARER_TYPE)
+                .accessToken(accessToken)
+                .refreshToken(refreshToken)
+                .build();
     }
 
 }
