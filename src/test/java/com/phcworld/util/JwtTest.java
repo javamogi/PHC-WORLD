@@ -13,8 +13,11 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import java.time.Duration;
 import java.util.Base64;
 import java.util.Date;
 
@@ -33,6 +36,9 @@ public class JwtTest {
 
     @Value("${jwt.secret}")
     private String secretKey;
+
+    @Autowired
+    private StringRedisTemplate redisTemplate;
 
     @Test
     public void 비밀키_암호화(){
@@ -88,5 +94,8 @@ public class JwtTest {
                 .orElseThrow(NotFoundException::new);
         TokenDto dto = tokenProvider.generateTokenDto(user);
         log.info("token : {}", dto);
+        ValueOperations<String, String> ops = redisTemplate.opsForValue();
+        String refreshToken = ops.get(user.getId() + user.getAuthority().toString());
+        assertThat(refreshToken).isEqualTo(dto.getRefreshToken());
     }
 }

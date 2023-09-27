@@ -7,10 +7,14 @@ import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Service;
 
 import java.security.Key;
+import java.time.Duration;
 import java.util.Date;
 
 @Slf4j
@@ -22,6 +26,9 @@ public class TokenProvider {
     private static final long REFRESH_TOKEN_EXPIRE_TIME = 1000 * 60 * 60 * 24 * 7;  // 7일
 
     private final Key key;
+
+    @Autowired
+    private StringRedisTemplate redisTemplate;
 
     public TokenProvider(@Value("${jwt.secret}") String secretKey) {
         byte[] keyBytes = Decoders.BASE64.decode(secretKey);
@@ -38,6 +45,19 @@ public class TokenProvider {
                 .claim(AUTHORITIES_KEY, authority)
                 .claim("type", "access")
                 .setExpiration(accessTokenExpiresIn)
+                .signWith(key, SignatureAlgorithm.HS256)
+                .compact();
+    }
+
+    public String generateRefreshToken(User user, long now){
+        String id = user.getId().toString();
+        String authority = user.getAuthority().toString();
+        // Refresh Token 생성
+        return Jwts.builder()
+                .setSubject(id)
+                .claim(AUTHORITIES_KEY, authority)
+                .claim("type", "refresh")
+                .setExpiration(new Date(now + REFRESH_TOKEN_EXPIRE_TIME))
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
     }
@@ -61,6 +81,7 @@ public class TokenProvider {
 
         String id = user.getId().toString();
         String authorities = user.getAuthority().toString();
+        String userKey = id + authorities;
 
         long now = (new Date()).getTime();
 
@@ -68,13 +89,11 @@ public class TokenProvider {
         String accessToken = generateAccessToken(user, now);
 
         // Refresh Token 생성
-        String refreshToken = Jwts.builder()
-                .setSubject(id)
-                .claim("type", "refresh")
-                .claim(AUTHORITIES_KEY, authorities)
-                .setExpiration(new Date(now + REFRESH_TOKEN_EXPIRE_TIME))
-                .signWith(key, SignatureAlgorithm.HS256)
-                .compact();
+        String refreshToken = generateRefreshToken(user, now);
+
+        ValueOperations<String, String> ops = redisTemplate.opsForValue();
+        Duration expireDuration = Duration.ofMillis(REFRESH_TOKEN_EXPIRE_TIME);
+        ops.set(userKey, refreshToken, expireDuration.getSeconds());
 
         return TokenDto.builder()
                 .grantType(BEARER_TYPE)
