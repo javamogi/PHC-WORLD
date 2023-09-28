@@ -1,32 +1,13 @@
 package com.phcworld.web.user;
 
-import java.security.NoSuchAlgorithmException;
-import java.util.List;
-
-import javax.servlet.http.HttpSession;
-import javax.validation.Valid;
-
 import com.phcworld.domain.alert.dto.AlertResponseDto;
-import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.ObjectError;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
 import com.phcworld.domain.emailAuth.EmailAuth;
 import com.phcworld.domain.message.Message;
 import com.phcworld.domain.message.MessageResponse;
 import com.phcworld.domain.timeline.Timeline;
 import com.phcworld.domain.user.LoginRequestUser;
 import com.phcworld.domain.user.User;
+import com.phcworld.security.utils.SecurityUtil;
 import com.phcworld.service.alert.AlertServiceImpl;
 import com.phcworld.service.emailAuth.EmailAuthService;
 import com.phcworld.service.message.MessageServiceImpl;
@@ -34,8 +15,20 @@ import com.phcworld.service.timeline.TimelineServiceImpl;
 import com.phcworld.service.user.UserService;
 import com.phcworld.utils.HttpSessionUtils;
 import com.phcworld.utils.PageNationsUtil;
-
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
+import java.security.NoSuchAlgorithmException;
+import java.util.List;
 
 @Controller
 @RequestMapping("/users")
@@ -141,7 +134,7 @@ public class UserController {
 //		List<Alert> alerts = alertService.findListAlertByPostUser(user);
 		List<AlertResponseDto> alerts = alertService.findByAlertListByPostUser(user);
 		session.setAttribute("alerts", alerts);
-		
+		SecurityUtil.setSecurityContext(user);
 		return "redirect:/dashboard";
 	}
 	
