@@ -7,6 +7,7 @@ import com.phcworld.domain.user.Authority;
 import com.phcworld.exception.model.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,10 +21,11 @@ import com.phcworld.utils.SecurityUtils;
 public class UserService {
 
 	private final UserRepository userRepository;
+	private final PasswordEncoder passwordEncoder;
 
 	public User createUser(User user) throws NoSuchAlgorithmException {
-		String password = SecurityUtils.getEncSHA256(user.getPassword());
-		user.setPassword(password);
+//		String password = SecurityUtils.getEncSHA256(user.getPassword());
+		user.setPassword(passwordEncoder.encode(user.getPassword()));
 		user.setAuthority(Authority.ROLE_USER);
 		user.setCreateDate(LocalDateTime.now());
 		user.setProfileImage("blank-profile-picture.png");

@@ -28,3 +28,4 @@ logging:
     com.phcworld.web: debug
     com.phcworld.domain: debug
     org.springframework.jdbc: debug
+    org.springframework.security: debug

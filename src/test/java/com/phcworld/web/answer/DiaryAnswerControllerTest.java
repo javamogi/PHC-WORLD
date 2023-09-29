@@ -1,6 +1,7 @@
 package com.phcworld.web.answer;
 
 import static org.mockito.Mockito.when;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
@@ -24,6 +25,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpSession;
+import org.springframework.security.test.context.support.WithAnonymousUser;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -51,8 +54,9 @@ public class DiaryAnswerControllerTest {
 
 	@MockBean
 	private DiaryAnswerServiceImpl diaryAnswerService;
-	
+
 	@Test
+	@WithMockUser(username = "test3@test.test", authorities = "ROLE_USER")
 	public void createDiaryAnswer() throws Exception {
 		MockHttpSession mockSession = new MockHttpSession();
 		User user = User.builder()
@@ -98,6 +102,7 @@ public class DiaryAnswerControllerTest {
 		when(this.diaryAnswerService.create(user, diary.getId(), request))
 		.thenReturn(diaryAnswerApiResponse);
 		this.mvc.perform(post("/diaries/{diaryId}/answer", 1L)
+						.with(csrf())
 				.contentType(MediaType.APPLICATION_JSON)
 				.param("contents", "test")
 				.session(mockSession))
@@ -114,21 +119,26 @@ public class DiaryAnswerControllerTest {
 	public void createEmptyLoginUser() throws Exception {
 		MockHttpSession mockSession = new MockHttpSession();
 		this.mvc.perform(post("/diaries/{diaryId}/answer", 1L)
+						.with(csrf())
 				.param("contents", "test")
 				.session(mockSession))
-		.andExpect(jsonPath("$.error").value("권한이 없습니다."));
+				.andExpect(status().isUnauthorized());
+//		.andExpect(jsonPath("$.error").value("권한이 없습니다."));
 	}
 	
 	@Test
+	@WithMockUser(username = "test3@test.test", authorities = "ROLE_USER")
 	public void createEmptyContents() throws Exception {
 		MockHttpSession mockSession = new MockHttpSession();
 		this.mvc.perform(post("/diaries/{diaryId}/answer", 1L)
+						.with(csrf())
 				.param("contents", "")
 				.session(mockSession))
 		.andExpect(jsonPath("$.error").value("잘못된 요청입니다. 내용을 입력하세요."));
 	}
 	
 	@Test
+	@WithMockUser(username = "test3@test.test", authorities = "ROLE_USER")
 	public void deleteSuccessDiaryAnswer() throws Exception {
 		MockHttpSession mockSession = new MockHttpSession();
 		User user = User.builder()
@@ -164,6 +174,7 @@ public class DiaryAnswerControllerTest {
 		when(this.diaryAnswerService.delete(diaryAnswer.getId(), user))
 		.thenReturn(response);
 		this.mvc.perform(delete("/diaries/{diaryId}/answer/{id}", 1L, 1L)
+						.with(csrf())
 				.session(mockSession))
 		.andExpect(status().isOk())
 		.andExpect(jsonPath("$.success").value("삭제성공"));
@@ -173,11 +184,14 @@ public class DiaryAnswerControllerTest {
 	public void deleteEmptyLoginUser() throws Exception {
 		MockHttpSession mockSession = new MockHttpSession();
 		this.mvc.perform(delete("/diaries/{diaryId}/answer/{id}", 1L, 1L)
+						.with(csrf())
 				.session(mockSession))
-		.andExpect(jsonPath("$.error").value("권한이 없습니다."));
+				.andExpect(status().isUnauthorized());
+//		.andExpect(jsonPath("$.error").value("권한이 없습니다."));
 	}
 	
 	@Test
+	@WithMockUser(username = "test3@test.test", authorities = "ROLE_USER")
 	public void deleteWhenNotMatchWriter() throws Exception {
 		MockHttpSession mockSession = new MockHttpSession();
 		User user = User.builder()
@@ -217,11 +231,13 @@ public class DiaryAnswerControllerTest {
 		when(this.diaryAnswerService.delete(diaryAnswer.getId(), user))
 		.thenThrow(new NotMatchUserException());
 		this.mvc.perform(delete("/diaries/{diaryId}/answer/{id}", 1L, 1L)
+						.with(csrf())
 				.session(mockSession))
 		.andExpect(jsonPath("$.error").value("권한이 없습니다."));
 	}
 	
 	@Test
+	@WithMockUser(username = "test3@test.test", authorities = "ROLE_USER")
 	public void readDiaryAnswer() throws Exception {
 		MockHttpSession mockSession = new MockHttpSession();
 		User user = User.builder()
@@ -265,6 +281,7 @@ public class DiaryAnswerControllerTest {
 		.thenReturn(diaryAnswerApiResponse);
 
 		this.mvc.perform(get("/diaries/{diaryId}/answer/{id}", 1L, 1L)
+						.with(csrf())
 				.session(mockSession))
 		.andExpect(status().isOk())
 		.andExpect(jsonPath("$.id").value(diaryAnswerApiResponse.getId()))
@@ -276,15 +293,18 @@ public class DiaryAnswerControllerTest {
 	}
 	
 	@Test
+	@WithMockUser(username = "test3@test.test", authorities = "ROLE_USER")
 	public void updateEmptyContents() throws Exception {
 		MockHttpSession mockSession = new MockHttpSession();
 		this.mvc.perform(patch("/diaries/{diaryId}/answer", 1L)
+						.with(csrf())
 				.param("contents", "")
 				.session(mockSession))
 		.andExpect(jsonPath("$.error").value("잘못된 요청입니다. 내용을 입력하세요."));
 	}
 	
 	@Test
+	@WithMockUser(username = "test3@test.test", authorities = "ROLE_USER")
 	public void updateDiaryAnswer() throws Exception {
 		MockHttpSession mockSession = new MockHttpSession();
 		User user = User.builder()
@@ -332,6 +352,7 @@ public class DiaryAnswerControllerTest {
 		when(this.diaryAnswerService.update(request, user))
 		.thenReturn(diaryAnswerApiResponse);
 		this.mvc.perform(patch("/diaries/{diaryId}/answer", 1L)
+						.with(csrf())
 				.param("id", "1")
 				.param("contents", "update")
 				.session(mockSession))

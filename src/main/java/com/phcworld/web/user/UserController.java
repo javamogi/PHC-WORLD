@@ -1,14 +1,25 @@
 package com.phcworld.web.user;
 
 import java.security.NoSuchAlgorithmException;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import com.phcworld.domain.alert.dto.AlertResponseDto;
+import com.phcworld.security.utils.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -52,6 +63,8 @@ public class UserController {
 	private final AlertServiceImpl alertService;
 	
 	private final EmailAuthService emailService;
+
+	private final PasswordEncoder passwordEncoder;
 	
 	@PostMapping("")
 	public String create(@Valid User user, BindingResult bindingResult, Model model) throws NoSuchAlgorithmException {
@@ -111,7 +124,8 @@ public class UserController {
 			model.addAttribute("errorMessage", "존재하지 않는 이메일입니다.");
 			return "/user/login";
 		}
-		if(!user.matchPassword(requestUser.getPassword())) {
+//		if(!user.matchPassword(encodedPassword)) {
+		if(!passwordEncoder.matches(requestUser.getPassword(), user.getPassword())) {
 			model.addAttribute("errorMessage", "비밀번호가 틀립니다.");
 			return "/user/login";
 		}
@@ -141,7 +155,7 @@ public class UserController {
 //		List<Alert> alerts = alertService.findListAlertByPostUser(user);
 		List<AlertResponseDto> alerts = alertService.findByAlertListByPostUser(user);
 		session.setAttribute("alerts", alerts);
-		
+		SecurityUtil.setSecurityContext(user);
 		return "redirect:/dashboard";
 	}
 	
