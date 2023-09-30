@@ -78,8 +78,7 @@ dependencies {
 
     // security
     implementation "org.springframework.boot:spring-boot-starter-security"
-
-    implementation group: 'com.googlecode.json-simple', name: 'json-simple', version: '1.1.1'
+    testImplementation 'org.springframework.security:spring-security-test'
 }
 
 group = 'com.phcworld'
