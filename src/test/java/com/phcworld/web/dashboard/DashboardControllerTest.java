@@ -1,34 +1,14 @@
 package com.phcworld.web.dashboard;
 
-import static org.hamcrest.Matchers.containsString;
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
-
-import java.time.LocalDateTime;
-
-import com.phcworld.domain.common.SaveType;
-import com.phcworld.domain.embedded.PostInfo;
-import com.phcworld.domain.user.Authority;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.mock.web.MockHttpSession;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.web.servlet.MockMvc;
-
 import com.phcworld.domain.answer.DiaryAnswer;
 import com.phcworld.domain.answer.FreeBoardAnswer;
 import com.phcworld.domain.board.Diary;
 import com.phcworld.domain.board.FreeBoard;
+import com.phcworld.domain.common.SaveType;
+import com.phcworld.domain.embedded.PostInfo;
 import com.phcworld.domain.good.Good;
 import com.phcworld.domain.timeline.Timeline;
+import com.phcworld.domain.user.Authority;
 import com.phcworld.domain.user.DashBoardUser;
 import com.phcworld.domain.user.User;
 import com.phcworld.service.alert.AlertServiceImpl;
@@ -39,14 +19,32 @@ import com.phcworld.service.board.FreeBoardServiceImpl;
 import com.phcworld.service.dashboard.DashboardService;
 import com.phcworld.service.timeline.TimelineServiceImpl;
 import com.phcworld.utils.HttpSessionUtils;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.mock.web.MockHttpSession;
+import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.web.servlet.MockMvc;
+
+import java.time.LocalDateTime;
+
+import static org.hamcrest.Matchers.containsString;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@WebMvcTest(DashboardController.class)
+@WebMvcTest(value = DashboardController.class)
 public class DashboardControllerTest {
-	
+
+
 	@Autowired
 	private MockMvc mvc;
-	
+
 	@MockBean
 	private FreeBoardServiceImpl freeBoardService;
 
@@ -72,7 +70,8 @@ public class DashboardControllerTest {
 	public void requestDashboardWhenEmptyLoginUser() throws Exception {
 		MockHttpSession mockSession = new MockHttpSession();
 		this.mvc.perform(get("/dashboard")
-				.session(mockSession))
+				.session(mockSession)
+				)
 		.andDo(print())
 		.andExpect(view().name(containsString("/user/login")))
 		.andExpect(status().isOk())
@@ -81,6 +80,7 @@ public class DashboardControllerTest {
 	}
 	
 	@Test
+	@WithMockUser
 	public void requestDashboard() throws Exception {
 		MockHttpSession mockSession = new MockHttpSession();
 		User user = User.builder()

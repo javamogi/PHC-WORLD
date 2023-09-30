@@ -15,6 +15,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.time.Duration;
@@ -39,6 +41,9 @@ public class JwtTest {
 
     @Autowired
     private StringRedisTemplate redisTemplate;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Test
     public void 비밀키_암호화(){
@@ -97,5 +102,12 @@ public class JwtTest {
         ValueOperations<String, String> ops = redisTemplate.opsForValue();
         String refreshToken = ops.get(user.getId() + user.getAuthority().toString());
         assertThat(refreshToken).isEqualTo(dto.getRefreshToken());
+    }
+
+    @Test
+    public void encodePassword(){
+        String password = passwordEncoder.encode("test");
+        log.info("password : {}", password);
+        assertThat(passwordEncoder.matches("test", password)).isTrue();
     }
 }
