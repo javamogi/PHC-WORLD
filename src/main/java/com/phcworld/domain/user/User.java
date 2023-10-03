@@ -121,11 +121,11 @@ public class User implements Serializable {
 		return Objects.hash(id, email, name, authority);
 	}
 
-	public UsernamePasswordAuthenticationToken toAuthentication(String password) {
-		return new UsernamePasswordAuthenticationToken(id, password);
-	}
-
 	public String getUserKey() {
 		return id + authority.toString();
+	}
+
+	public UsernamePasswordAuthenticationToken toAuthentication(String password) {
+		return new UsernamePasswordAuthenticationToken(id, password);
 	}
 }

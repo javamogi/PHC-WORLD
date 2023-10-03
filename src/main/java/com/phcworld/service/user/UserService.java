@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.core.Authentication;
@@ -25,6 +26,8 @@ import com.phcworld.domain.user.User;
 import com.phcworld.repository.user.UserRepository;
 import com.phcworld.utils.SecurityUtils;
 
+import javax.security.auth.login.CredentialException;
+
 @Service
 @Transactional
 @RequiredArgsConstructor
@@ -34,9 +37,8 @@ public class UserService {
 	private final PasswordEncoder passwordEncoder;
 	private final CustomUserDetailsService userDetailsService;
 	private final TokenProvider tokenProvider;
-	private final StringRedisTemplate redisTemplate;
 
-	public User createUser(User user) throws NoSuchAlgorithmException {
+	public User createUser(User user) {
 //		String password = SecurityUtils.getEncSHA256(user.getPassword());
 		user.setPassword(passwordEncoder.encode(user.getPassword()));
 		user.setAuthority(Authority.ROLE_USER);
