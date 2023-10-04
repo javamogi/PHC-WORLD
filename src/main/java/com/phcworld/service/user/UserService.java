@@ -1,20 +1,15 @@
 package com.phcworld.service.user;
 
-import java.security.NoSuchAlgorithmException;
-import java.time.Duration;
-import java.time.LocalDateTime;
-
 import com.phcworld.domain.user.Authority;
 import com.phcworld.domain.user.LoginRequestUser;
+import com.phcworld.domain.user.User;
 import com.phcworld.exception.model.NotFoundException;
 import com.phcworld.jwt.TokenProvider;
 import com.phcworld.jwt.dto.TokenDto;
 import com.phcworld.jwt.service.CustomUserDetailsService;
+import com.phcworld.repository.user.UserRepository;
+import com.phcworld.security.utils.SecurityUtil;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.StringRedisTemplate;
-import org.springframework.data.redis.core.ValueOperations;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.core.Authentication;
@@ -22,11 +17,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.phcworld.domain.user.User;
-import com.phcworld.repository.user.UserRepository;
-import com.phcworld.utils.SecurityUtils;
-
-import javax.security.auth.login.CredentialException;
+import java.time.LocalDateTime;
 
 @Service
 @Transactional
@@ -77,12 +68,20 @@ public class UserService {
 
 		// 비밀번호 확인 + spring security 객체 생성 후 JWT 토큰 생성
 		UsernamePasswordAuthenticationToken authenticationToken = user.toAuthentication(requestUser.getPassword());
-		DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
-		authenticationProvider.setUserDetailsService(userDetailsService);
-		authenticationProvider.setPasswordEncoder(passwordEncoder);
-		Authentication authentication = authenticationProvider.authenticate(authenticationToken);
+		Authentication authentication = SecurityUtil.getAuthentication(authenticationToken, userDetailsService, passwordEncoder);
+//		Authentication authentication = getAuthentication(authenticationToken);
+//		Authentication authentication = authenticationManagerBuilder
+//				.getObject()
+//				.authenticate(authenticationToken);
 
 		// 5. 토큰 발급
 		return tokenProvider.generateTokenDto(authentication);
 	}
+
+//	private Authentication getAuthentication(UsernamePasswordAuthenticationToken authenticationToken) {
+//		DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
+//		authenticationProvider.setUserDetailsService(userDetailsService);
+//		authenticationProvider.setPasswordEncoder(passwordEncoder);
+//		return authenticationProvider.authenticate(authenticationToken);
+//	}
 }

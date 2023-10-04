@@ -3,11 +3,14 @@ package com.phcworld.security.utils;
 import com.phcworld.domain.user.User;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -35,6 +38,15 @@ public class SecurityUtil {
 
         Authentication authentication = new UsernamePasswordAuthenticationToken(principal, "", authorities);
         SecurityContextHolder.getContext().setAuthentication(authentication);
+    }
+
+    public static Authentication getAuthentication(UsernamePasswordAuthenticationToken authenticationToken,
+                                             UserDetailsService userDetailsService,
+                                             PasswordEncoder passwordEncoder) {
+        DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
+        authenticationProvider.setUserDetailsService(userDetailsService);
+        authenticationProvider.setPasswordEncoder(passwordEncoder);
+        return authenticationProvider.authenticate(authenticationToken);
     }
 
 }
