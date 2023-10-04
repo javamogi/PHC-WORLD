@@ -7,9 +7,11 @@ import com.phcworld.exception.model.ErrorResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import java.util.HashMap;
 import java.util.Map;
 
 @RestControllerAdvice
@@ -33,6 +35,13 @@ public class CommonsExceptionHandler {
         else {
             return new ResponseEntity(map, HttpStatus.NOT_FOUND);
         }
+    }
+
+    @ExceptionHandler(BadCredentialsException.class)
+    public ResponseEntity handlerBadCredentialsException(){
+        Map<String, Object> map = new HashMap<>();
+        map.put("message", "비밀번호가 틀렸습니다.");
+        return new ResponseEntity(map, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(CustomBaseException.class)

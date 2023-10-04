@@ -1,19 +1,23 @@
 package com.phcworld.service.user;
 
-import java.security.NoSuchAlgorithmException;
-import java.time.LocalDateTime;
-
 import com.phcworld.domain.user.Authority;
+import com.phcworld.domain.user.LoginRequestUser;
+import com.phcworld.domain.user.User;
 import com.phcworld.exception.model.NotFoundException;
+import com.phcworld.jwt.TokenProvider;
+import com.phcworld.jwt.dto.TokenDto;
+import com.phcworld.jwt.service.CustomUserDetailsService;
+import com.phcworld.repository.user.UserRepository;
+import com.phcworld.security.utils.SecurityUtil;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.phcworld.domain.user.User;
-import com.phcworld.repository.user.UserRepository;
-import com.phcworld.utils.SecurityUtils;
+import java.time.LocalDateTime;
 
 @Service
 @Transactional
@@ -22,8 +26,10 @@ public class UserService {
 
 	private final UserRepository userRepository;
 	private final PasswordEncoder passwordEncoder;
+	private final CustomUserDetailsService userDetailsService;
+	private final TokenProvider tokenProvider;
 
-	public User createUser(User user) throws NoSuchAlgorithmException {
+	public User createUser(User user) {
 //		String password = SecurityUtils.getEncSHA256(user.getPassword());
 		user.setPassword(passwordEncoder.encode(user.getPassword()));
 		user.setAuthority(Authority.ROLE_USER);
@@ -52,5 +58,30 @@ public class UserService {
 		loginUser.setProfileImage(profileImage);
 		return userRepository.save(loginUser);
 	}
-	
+
+	public TokenDto tokenLogin(LoginRequestUser requestUser) {
+		String email = requestUser.getEmail();
+		User user = userRepository.findByEmail(email);
+		if(user == null){
+			throw new NotFoundException();
+		}
+
+		// 비밀번호 확인 + spring security 객체 생성 후 JWT 토큰 생성
+		UsernamePasswordAuthenticationToken authenticationToken = user.toAuthentication(requestUser.getPassword());
+		Authentication authentication = SecurityUtil.getAuthentication(authenticationToken, userDetailsService, passwordEncoder);
+//		Authentication authentication = getAuthentication(authenticationToken);
+//		Authentication authentication = authenticationManagerBuilder
+//				.getObject()
+//				.authenticate(authenticationToken);
+
+		// 5. 토큰 발급
+		return tokenProvider.generateTokenDto(authentication);
+	}
+
+//	private Authentication getAuthentication(UsernamePasswordAuthenticationToken authenticationToken) {
+//		DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
+//		authenticationProvider.setUserDetailsService(userDetailsService);
+//		authenticationProvider.setPasswordEncoder(passwordEncoder);
+//		return authenticationProvider.authenticate(authenticationToken);
+//	}
 }

@@ -23,6 +23,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import lombok.experimental.Accessors;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 
 @Entity
 @Data
@@ -118,5 +119,13 @@ public class User implements Serializable {
 	@Override
 	public int hashCode() {
 		return Objects.hash(id, email, name, authority);
+	}
+
+	public String getUserKey() {
+		return id + authority.toString();
+	}
+
+	public UsernamePasswordAuthenticationToken toAuthentication(String password) {
+		return new UsernamePasswordAuthenticationToken(id, password);
 	}
 }

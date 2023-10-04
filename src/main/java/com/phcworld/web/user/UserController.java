@@ -10,6 +10,7 @@ import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import com.phcworld.domain.alert.dto.AlertResponseDto;
+import com.phcworld.jwt.dto.TokenDto;
 import com.phcworld.security.utils.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -158,7 +159,7 @@ public class UserController {
 		SecurityUtil.setSecurityContext(user);
 		return "redirect:/dashboard";
 	}
-	
+
 	@GetMapping("/logout")
 	public String logout(HttpSession session) {
 		session.removeAttribute(HttpSessionUtils.USER_SESSION_KEY);

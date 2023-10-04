@@ -31,7 +31,7 @@ public class TokenProvider {
     private static final String AUTHORITIES_KEY = "auth";
     private static final String BEARER_TYPE = "bearer";
     private static final long ACCESS_TOKEN_EXPIRE_TIME = 1000 * 60 * 30;            // 30분
-    private static final long REFRESH_TOKEN_EXPIRE_TIME = 1000 * 60 * 60 * 24 * 7;  // 7일
+    private static final long REFRESH_TOKEN_EXPIRE_TIME = 1000 * 60 * 60 * 24 * 3;  // 3일
 
     private final Key key;
 
@@ -111,6 +111,36 @@ public class TokenProvider {
                 .build();
     }
 
+    public TokenDto generateTokenDto(Authentication authentication) {
+
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        String id = userDetails.getUsername();
+
+        String authorities = authentication.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .collect(Collectors.joining(","));
+
+        String userKey = id + authorities;
+
+        long now = (new Date()).getTime();
+
+        // Access Token 생성
+        String accessToken = generateAccessToken(authentication, now);
+
+        // Refresh Token 생성
+        String refreshToken = generateRefreshToken(authentication, now);
+
+        ValueOperations<String, String> ops = redisTemplate.opsForValue();
+        Duration expireDuration = Duration.ofMillis(REFRESH_TOKEN_EXPIRE_TIME);
+        ops.set(userKey, refreshToken, expireDuration.getSeconds());
+
+        return TokenDto.builder()
+                .grantType(BEARER_TYPE)
+                .accessToken(accessToken)
+                .refreshToken(refreshToken)
+                .build();
+    }
+
     public Authentication getAuthentication(String accessToken) {
         // 토큰 복호화
         Claims claims = parseClaims(accessToken);
@@ -171,12 +201,28 @@ public class TokenProvider {
         // Access Token 생성
         Date accessTokenExpiresIn = new Date(now + ACCESS_TOKEN_EXPIRE_TIME);
         return Jwts.builder()
-//                .setSubject(authentication.getName())       // payload "sub": "name"
-                .setSubject(id)       // payload "sub": "name"
-                .claim(AUTHORITIES_KEY, authorities)        // payload "auth": "ROLE_USER"
-                .claim("type", "access")        // payload "auth": "ROLE_USER"
-                .setExpiration(accessTokenExpiresIn)        // payload "exp": 1516239022 (예시)
-                .signWith(key, SignatureAlgorithm.HS512)    // header "alg": "HS512"
+                .setSubject(id)
+                .claim(AUTHORITIES_KEY, authorities)
+                .claim("type", "access")
+                .setExpiration(accessTokenExpiresIn)
+                .signWith(key, SignatureAlgorithm.HS256)
+                .compact();
+    }
+
+    public String generateRefreshToken(Authentication authentication, long now){
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        String id = userDetails.getUsername();
+        String authorities = authentication.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .collect(Collectors.joining(","));
+
+        // Refresh Token 생성
+        return Jwts.builder()
+                .setSubject(id)
+                .claim(AUTHORITIES_KEY, authorities)
+                .claim("type", "refresh")
+                .setExpiration(new Date(now + REFRESH_TOKEN_EXPIRE_TIME))
+                .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
     }
 
