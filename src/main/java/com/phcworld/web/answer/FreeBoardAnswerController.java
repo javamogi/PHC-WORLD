@@ -35,8 +35,7 @@ public class FreeBoardAnswerController {
 	
 	@PostMapping("")
 	@ResponseStatus(value = HttpStatus.CREATED)
-	public FreeBoardAnswerApiResponse create(@PathVariable Long freeboardId, FreeBoardAnswerRequest request, HttpSession session) 
-			throws LoginNotUserException, ContentsEmptyException {
+	public FreeBoardAnswerApiResponse create(@PathVariable Long freeboardId, FreeBoardAnswerRequest request, HttpSession session) {
 		if(request.isContentsEmpty()) {
 			throw new BadRequestException();
 		}

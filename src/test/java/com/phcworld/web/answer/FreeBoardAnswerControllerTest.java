@@ -1,10 +1,12 @@
 package com.phcworld.web.answer;
 
 import static org.mockito.Mockito.when;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -19,9 +21,12 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.mock.web.MockHttpSession;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -74,6 +79,7 @@ public class FreeBoardAnswerControllerTest {
 	}
 
 	@Test
+	@WithMockUser(username = "test3@test.test", authorities = "ROLE_USER")
 	public void createFreeBoardAnswer() throws Exception {
 		MockHttpSession mockSession = new MockHttpSession();
 		mockSession.setAttribute(HttpSessionUtils.USER_SESSION_KEY, user);
@@ -95,6 +101,7 @@ public class FreeBoardAnswerControllerTest {
 		when(this.freeBoardAnswerService.create(user, freeBoard.getId(), request))
 		.thenReturn(freeBoardAnswerApiResponse);
 		this.mvc.perform(post("/freeboards/{freeboardId}/answers", 1L)
+						.with(csrf())
 				.param("contents", "test")
 				.session(mockSession))
 		.andExpect(status().isCreated())
@@ -110,21 +117,26 @@ public class FreeBoardAnswerControllerTest {
 	public void createFailedFreeBoardAnswerWhenNotLoginUser() throws Exception {
 		MockHttpSession mockSession = new MockHttpSession();
 		this.mvc.perform(post("/freeboards/{freeboardId}/answers", 1L)
+						.with(csrf())
 				.param("contents", "test")
 				.session(mockSession))
-		.andExpect(jsonPath("$.error").value("권한이 없습니다."));
+			.andDo(print())
+			.andExpect(status().isUnauthorized());
 	}
 	
 	@Test
+	@WithMockUser(username = "test3@test.test", authorities = "ROLE_USER")
 	public void createFailedFreeBoardAnswerWhenEmptyContents() throws Exception {
 		MockHttpSession mockSession = new MockHttpSession();
 		this.mvc.perform(post("/freeboards/{freeboardId}/answers", 1L)
+						.with(csrf())
 				.param("contents", "")
 				.session(mockSession))
 		.andExpect(jsonPath("$.error").value("잘못된 요청입니다. 내용을 입력하세요."));
 	}
 	
 	@Test
+	@WithMockUser(username = "test3@test.test", authorities = "ROLE_USER")
 	public void deleteSuccessFreeBoardAnswer() throws Exception {
 		MockHttpSession mockSession = new MockHttpSession();
 		mockSession.setAttribute(HttpSessionUtils.USER_SESSION_KEY, user);
@@ -141,6 +153,7 @@ public class FreeBoardAnswerControllerTest {
 		when(this.freeBoardAnswerService.delete(freeBoardAnswer.getId(), user))
 		.thenReturn(response);
 		this.mvc.perform(delete("/freeboards/{freeboardId}/answers/{id}", 1L, 1L)
+						.with(csrf())
 				.session(mockSession))
 		.andExpect(status().isOk())
 		.andExpect(jsonPath("$.success").value("삭제성공"));
@@ -150,11 +163,14 @@ public class FreeBoardAnswerControllerTest {
 	public void deleteFailedFreeBoardAnswerWhenNotLoginUser() throws Exception {
 		MockHttpSession mockSession = new MockHttpSession();
 		this.mvc.perform(delete("/freeboards/{freeboardId}/answers/{id}", 1L, 1L)
+						.with(csrf())
 				.session(mockSession))
-		.andExpect(jsonPath("$.error").value("권한이 없습니다."));
+			.andDo(print())
+			.andExpect(status().isUnauthorized());
 	}
 	
 	@Test
+	@WithMockUser(username = "test3@test.test", authorities = "ROLE_USER")
 	public void deleteFailedFreeBoardAnswerWhenNotMatchUserUser() throws Exception {
 		MockHttpSession mockSession = new MockHttpSession();
 		User user2 = User.builder()
@@ -178,11 +194,13 @@ public class FreeBoardAnswerControllerTest {
 		when(this.freeBoardAnswerService.delete(freeBoardAnswer.getId(), user))
 		.thenThrow(new NotMatchUserException());
 		this.mvc.perform(delete("/freeboards/{freeboardId}/answers/{id}", 1L, 1L)
+						.with(csrf())
 				.session(mockSession))
 		.andExpect(jsonPath("$.error").value("권한이 없습니다."));
 	}
 	
 	@Test
+	@WithMockUser(username = "test3@test.test", authorities = "ROLE_USER")
 	public void readFreeBoardAnswer() throws Exception {
 		MockHttpSession mockSession = new MockHttpSession();
 		mockSession.setAttribute(HttpSessionUtils.USER_SESSION_KEY, user);
@@ -201,6 +219,7 @@ public class FreeBoardAnswerControllerTest {
 		when(this.freeBoardAnswerService.read(freeBoardAnswer.getId(), user))
 		.thenReturn(freeBoardAnswerApiResponse);
 		this.mvc.perform(get("/freeboards/{freeboardId}/answers/{id}", 1L, 1L)
+						.with(csrf())
 				.session(mockSession))
 		.andExpect(status().isOk())
 		.andExpect(jsonPath("$.id").value(freeBoardAnswerApiResponse.getId()))
@@ -212,15 +231,18 @@ public class FreeBoardAnswerControllerTest {
 	}
 	
 	@Test
+	@WithMockUser(username = "test3@test.test", authorities = "ROLE_USER")
 	public void updateFailedFreeBoardAnswerWhenEmptyContents() throws Exception {
 		MockHttpSession mockSession = new MockHttpSession();
 		this.mvc.perform(patch("/freeboards/{freeboardId}/answers", 1L)
+						.with(csrf())
 				.param("contents", "")
 				.session(mockSession))
 		.andExpect(jsonPath("$.error").value("잘못된 요청입니다. 내용을 입력하세요."));
 	}
 	
 	@Test
+	@WithMockUser(username = "test3@test.test", authorities = "ROLE_USER")
 	public void updateFreeBoardAnswer() throws Exception {
 		MockHttpSession mockSession = new MockHttpSession();
 		mockSession.setAttribute(HttpSessionUtils.USER_SESSION_KEY, user);
@@ -244,6 +266,7 @@ public class FreeBoardAnswerControllerTest {
 		when(this.freeBoardAnswerService.update(request, user))
 		.thenReturn(freeBoardAnswerApiResponse);
 		this.mvc.perform(patch("/freeboards/{freeboardId}/answers", 1L)
+						.with(csrf())
 				.param("id", "1")
 				.param("contents", "update")
 				.session(mockSession))
