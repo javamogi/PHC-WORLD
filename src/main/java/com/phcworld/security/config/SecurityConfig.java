@@ -5,9 +5,12 @@ import com.phcworld.jwt.config.JwtSecurityConfig;
 import com.phcworld.jwt.entry.JwtAuthenticationEntryPoint;
 import com.phcworld.jwt.filter.JwtExceptionFilter;
 import com.phcworld.jwt.handler.JwtAccessDeniedHandler;
+import com.phcworld.jwt.service.CustomUserDetailsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
@@ -25,6 +28,8 @@ public class SecurityConfig {
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
     private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
     private final JwtExceptionFilter jwtExceptionFilter;
+
+    private final CustomUserDetailsService userDetailsService;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -62,7 +67,8 @@ public class SecurityConfig {
                 .antMatchers("/",
                         "/users/form",
                         "/users/loginForm",
-                        "/users/login").permitAll()
+                        "/users/login",
+                        "/login").permitAll()
                 .anyRequest().authenticated()   // 나머지는 전부 인증 필요
 
 //                .and()
