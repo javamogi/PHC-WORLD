@@ -105,7 +105,7 @@ public class UserController {
 		if(existUser(loginUser)) {
 			return "redirect:/dashboard";
 		}
-		return "/user/form";
+		return "user/form";
 	}
 	
 	@GetMapping("/loginForm")
@@ -114,7 +114,7 @@ public class UserController {
 		if(existUser(loginUser)) {
 			return "redirect:/dashboard";
 		}
-		return "/user/login";
+		return "user/login";
 	}
 	
 	@PostMapping("/login")
