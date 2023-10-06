@@ -2,7 +2,7 @@
 <html lang="ko">
 
 <head>
-{{> /include/header}}
+{{> include/header}}
 <style type="text/css">
 #dataTables-example > tbody > tr > td .avatar {
   width: 22px;
@@ -15,8 +15,8 @@
 
     <div id="wrapper">
 
-       {{> /include/header-navbar}}
-       {{> /include/side-navbar}}
+       {{> include/header-navbar}}
+       {{> include/side-navbar}}
 
         <div id="page-wrapper">
             <div class="row">
@@ -75,7 +75,7 @@
     </div>
     <!-- /#wrapper -->
 
-    {{> /include/footer}}
+    {{> include/footer}}
     <script>
     $(document).ready(function() {
         $('#dataTables-example').DataTable({

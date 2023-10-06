@@ -23,7 +23,7 @@ public class MovieApiController {
 	@GetMapping("/page")
 	public String view() {
 		
-		return "/movie/movie";
+		return "movie/movie";
 	}
 	
 	@GetMapping(value = "", produces="application/json;charset=UTF-8")

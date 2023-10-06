@@ -24,6 +24,7 @@ server:
       charset: UTF-8
       force-request: true
       force: true
+      force-response: true
 
 jasypt:
   encryptor:
