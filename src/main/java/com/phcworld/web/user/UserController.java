@@ -77,12 +77,12 @@ public class UserController {
 				log.debug("error : {},{}", error.getCode(), error.getDefaultMessage());
 				model.addAttribute("errorMessage", error.getDefaultMessage());
 			}
-			return "/user/form";
+			return "user/form";
 		}
 		User emailUser = userService.findUserByEmail(user.getEmail());
 		if(existUser(emailUser)) {
 			model.addAttribute("errorMessage", "이미 등록된 이메일입니다.");
-			return "/user/form";
+			return "user/form";
 		}
 		userService.createUser(user);
 		
@@ -123,19 +123,19 @@ public class UserController {
 		log.debug("input User : {}", user);
 		if(!existUser(user)) {
 			model.addAttribute("errorMessage", "존재하지 않는 이메일입니다.");
-			return "/user/login";
+			return "user/login";
 		}
 //		if(!user.matchPassword(encodedPassword)) {
 		if(!passwordEncoder.matches(requestUser.getPassword(), user.getPassword())) {
 			model.addAttribute("errorMessage", "비밀번호가 틀립니다.");
-			return "/user/login";
+			return "user/login";
 		}
 		
 		EmailAuth emailAuth = emailService.findByEmail(user.getEmail());
 		if(emailAuth != null) {
 			if(!emailAuth.isAuthenticate()) {
 				model.addAttribute("errorMessage", "이메일 인증이 안됐습니다. 메일에서 인증하세요.");
-				return "/user/login";
+				return "user/login";
 			}
 		}
 		
@@ -170,27 +170,27 @@ public class UserController {
 	public String updateForm(@PathVariable Long id, Model model, HttpSession session) {
 		if(!HttpSessionUtils.isLoginUser(session)) {
 			model.addAttribute("errorMessage", "로그인이 필요합니다.");
-			return "/user/login";
+			return "user/login";
 		}
 		User loginUser = HttpSessionUtils.getUserFromSession(session);
 		if(!loginUser.matchId(id)) {
 			model.addAttribute("errorMessage", "본인의 정보만 수정 가능합니다.");
-			return "/user/login";
+			return "user/login";
 		}
 		model.addAttribute("user", loginUser);
-		return "/user/updateForm";
+		return "user/updateForm";
 	}
 	
 	@PutMapping("/{id}")
 	public String update(@PathVariable Long id, @Valid User newUser, BindingResult bindingResult, Model model, HttpSession session, RedirectAttributes redirectAttributes) {
 		if(!HttpSessionUtils.isLoginUser(session)) {
 			model.addAttribute("errorMessage", "로그인이 필요합니다.");
-			return "/user/login";
+			return "user/login";
 		}
 		User loginUser = HttpSessionUtils.getUserFromSession(session);
 		if(!loginUser.matchId(id)) {
 			model.addAttribute("errorMessage", "본인의 정보만 수정 가능합니다.");
-			return "/user/login";
+			return "user/login";
 		}
 		if(bindingResult.hasErrors()) {
 			log.debug("Binding Result has Error!");
@@ -210,7 +210,7 @@ public class UserController {
 			@RequestParam(defaultValue = "1") Integer receivePageNum, HttpSession session, Model model) {
 		if(!HttpSessionUtils.isLoginUser(session)) {
 			model.addAttribute("errorMessage", "로그인이 필요합니다.");
-			return "/user/login";
+			return "user/login";
 		}
 		User loginUser = HttpSessionUtils.getUserFromSession(session);
 		User user = userService.findUserById(id);
@@ -228,7 +228,7 @@ public class UserController {
 		
 		model.addAttribute("user", user);
 		model.addAttribute("timeline", timelines);
-		return "/user/profile";
+		return "user/profile";
 	}
 
 	private void viewLoginUserMessage(Integer sendPageNum, Integer receivePageNum, Model model, User user) {

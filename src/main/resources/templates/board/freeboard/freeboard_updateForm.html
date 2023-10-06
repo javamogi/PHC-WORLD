@@ -5,7 +5,7 @@
 	<title>일지 글 수정</title>
 	<link rel="stylesheet" href="/daumeditor/css/editor.css" type="text/css" charset="utf-8"/>
 	<script src="/daumeditor/js/editor_loader.js" type="text/javascript" charset="utf-8"></script>
-	{{> /include/header}}
+	{{> include/header}}
 <script type="text/javascript">
 	window.onload = function(){
 		loadContent();
@@ -14,8 +14,8 @@
 
 </head>
 <body>
-        {{> /include/header-navbar}}
-      {{> /include/side-navbar}}
+        {{> include/header-navbar}}
+      {{> include/side-navbar}}
 
 <div id="wrapper">
         <div id="page-wrapper">
@@ -48,7 +48,7 @@
                                         <div class="form-group">
                                             <label for="contents">내용</label>
      											<!-- <div id="editor_frame"></div> -->
-     											{{> /board/editor}}
+     											{{> board/editor}}
      											<!-- 
      											<textarea id="sample_contents_source" style="display:none;">
      											{{{contents}}}
@@ -85,7 +85,7 @@
     </div>
     <!-- /#wrapper -->
     
-    {{> /include/footer}}
+    {{> include/footer}}
 	<script src="/daumeditor/js/daumeditor_freeboard.js"></script>
 
 </body>

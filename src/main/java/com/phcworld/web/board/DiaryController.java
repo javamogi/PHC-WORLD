@@ -49,7 +49,7 @@ public class DiaryController {
 
 		model.addAttribute("requestUser", requestUser);
 
-		return "/board/diary/diary";
+		return "board/diary/diary";
 	}
 
 	@GetMapping("/list/{email}/temp")
@@ -67,7 +67,7 @@ public class DiaryController {
 
 		model.addAttribute("requestUser", requestUser);
 
-		return "/board/diary/diary";
+		return "board/diary/diary";
 	}
 
 	@GetMapping("/list/{email}/temp2")
@@ -83,23 +83,23 @@ public class DiaryController {
 
 		model.addAttribute("requestUser", requestUser);
 
-		return "/board/diary/diary";
+		return "board/diary/diary";
 	}
 
 	@GetMapping("/form")
 	public String form(HttpSession session, Model model) {
 		if (!HttpSessionUtils.isLoginUser(session)) {
-			return "/user/login";
+			return "user/login";
 		}
 		User loginUser = HttpSessionUtils.getUserFromSession(session);
 		model.addAttribute("user", loginUser);
-		return "/board/diary/diary_form";
+		return "board/diary/diary_form";
 	}
 
 	@PostMapping("")
 	public String create(DiaryRequest diaryRequest, HttpSession session) {
 		if (!HttpSessionUtils.isLoginUser(session)) {
-			return "/user/login";
+			return "user/login";
 		}
 		User sessionUser = HttpSessionUtils.getUserFromSession(session);
 		DiaryResponse response = diaryService.createDiary(sessionUser, diaryRequest);
@@ -129,34 +129,34 @@ public class DiaryController {
 		model.addAttribute("user", isLoginUser);
 		model.addAttribute("matchUser", matchLoginUserAndWriter);
 		model.addAttribute("matchAuthority", matchAuthority);
-		return "/board/diary/detail_diary";
+		return "board/diary/detail_diary";
 	}
 
 	@GetMapping("/{id}/form")
 	public String updateForm(@PathVariable Long id, Model model, HttpSession session) {
 		if (!HttpSessionUtils.isLoginUser(session)) {
-			return "/user/login";
+			return "user/login";
 		}
 		User loginUser = HttpSessionUtils.getUserFromSession(session);
 		DiaryResponse diary = diaryService.getOneDiary(id);
 		if (!loginUser.matchId(diary.getWriter().getId())) {
 			model.addAttribute("errorMessage", "본인의 작성한 글만 수정 가능합니다.");
-			return "/user/login";
+			return "user/login";
 		}
 		model.addAttribute("diary", diary);
-		return "/board/diary/diary_updateForm";
+		return "board/diary/diary_updateForm";
 	}
 
 	@PatchMapping("")
 	public String update(DiaryRequest diaryRequest, HttpSession session, Model model) {
 		if (!HttpSessionUtils.isLoginUser(session)) {
-			return "/user/login";
+			return "user/login";
 		}
 		User loginUser = HttpSessionUtils.getUserFromSession(session);
 		DiaryResponse diary = diaryService.getOneDiary(diaryRequest.getId());
 		if (!loginUser.matchId(diary.getWriter().getId())) {
 			model.addAttribute("errorMessage", "본인의 작성한 글만 수정 가능합니다.");
-			return "/user/login";
+			return "user/login";
 		}
 		diaryService.updateDiary(diaryRequest);
 		return "redirect:/diaries/" + diaryRequest.getId();
@@ -165,13 +165,13 @@ public class DiaryController {
 	@DeleteMapping("/{id}")
 	public String delete(@PathVariable Long id, HttpSession session, Model model) {
 		if (!HttpSessionUtils.isLoginUser(session)) {
-			return "/user/login";
+			return "user/login";
 		}
 		User loginUser = HttpSessionUtils.getUserFromSession(session);
 		DiaryResponse diary = diaryService.getOneDiary(id);
 		if (!loginUser.matchId(diary.getWriter().getId()) && !loginUser.matchAdminAuthority()) {
 			model.addAttribute("errorMessage", "삭제 권한이 없습니다.");
-			return "/user/login";
+			return "user/login";
 		}
 		diaryService.deleteDiary(id);
 		return "redirect:/diaries/list/" + loginUser.getEmail();

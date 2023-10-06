@@ -34,7 +34,7 @@ public class DashboardController {
 	public String requestDashboard(HttpSession session, Model model) {
 		if(!HttpSessionUtils.isLoginUser(session)) {
 			model.addAttribute("errorMessage", "로그인이 필요합니다.");
-			return "/user/login";
+			return "user/login";
 		}
 		User loginUser = HttpSessionUtils.getUserFromSession(session);
 		DashBoardUser dashBoardUser = dashboardService.getDashBoardUser(loginUser);
@@ -43,7 +43,7 @@ public class DashboardController {
 //		model.addAttribute("timelines", tempTimelineList);
 
 		model.addAttribute("dashboard", dashBoardUser);
-		return "/dashboard/dashboard";
+		return "dashboard/dashboard";
 	}
 	
 	@GetMapping("/timeline/{id}")

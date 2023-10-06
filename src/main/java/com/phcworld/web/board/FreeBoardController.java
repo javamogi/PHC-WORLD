@@ -31,28 +31,28 @@ public class FreeBoardController {
 		List<FreeBoardResponse> list = freeBoardService.findFreeBoardAllListAndSetNewBadge();
 //		List<FreeBoardResponse> list = freeBoardService.getByQuerydsl(pageNum, pageSize, keyword);
 		model.addAttribute("freeboards", list);
-		return "/board/freeboard/freeboard";
+		return "board/freeboard/freeboard";
 	}
 
 	@GetMapping("/temp/test")
 	public String getSearchResult(FreeBoardSearchDto search, Model model) {
 		List<FreeBoardResponse> list = freeBoardService.getSearchResult(search);
 		model.addAttribute("freeboards", list);
-		return "/board/freeboard/freeboard";
+		return "board/freeboard/freeboard";
 	}
 
 	@GetMapping("/form")
 	public String form(HttpSession session) {
 		if (!HttpSessionUtils.isLoginUser(session)) {
-			return "/user/login";
+			return "user/login";
 		}
-		return "/board/freeboard/freeboard_form";
+		return "board/freeboard/freeboard_form";
 	}
 
 	@PostMapping("")
 	public String create(FreeBoardRequest request, HttpSession session) {
 		if (!HttpSessionUtils.isLoginUser(session)) {
-			return "/user/login";
+			return "user/login";
 		}
 		User sessionUser = HttpSessionUtils.getUserFromSession(session);
 		
@@ -87,34 +87,34 @@ public class FreeBoardController {
 		model.addAttribute("user", isLoginUser);
 		model.addAttribute("matchUser", matchLoginUserAndWriter);
 		model.addAttribute("matchAuthority", matchAuthority);
-		return "/board/freeboard/detail_freeboard";
+		return "board/freeboard/detail_freeboard";
 	}
 
 	@GetMapping("/{id}/form")
 	public String update(@PathVariable Long id, Model model, HttpSession session) {
 		if (!HttpSessionUtils.isLoginUser(session)) {
-			return "/user/login";
+			return "user/login";
 		}
 		User loginUser = HttpSessionUtils.getUserFromSession(session);
 		FreeBoardResponse freeBoard = freeBoardService.getOneFreeBoard(id);
 		if (!loginUser.matchId(freeBoard.getWriter().getId())) {
 			model.addAttribute("errorMessage", "본인의 작성한 글만 수정 가능합니다.");
-			return "/user/login";
+			return "user/login";
 		}
 		model.addAttribute("freeBoard", freeBoard);
-		return "/board/freeboard/freeboard_updateForm";
+		return "board/freeboard/freeboard_updateForm";
 	}
 
 	@PatchMapping("")
 	public String modify(FreeBoardRequest request, HttpSession session, Model model) {
 		if (!HttpSessionUtils.isLoginUser(session)) {
-			return "/user/login";
+			return "user/login";
 		}
 		User loginUser = HttpSessionUtils.getUserFromSession(session);
 		FreeBoardResponse oneFreeBoard = freeBoardService.getOneFreeBoard(request.getId());
 		if (!loginUser.matchId(oneFreeBoard.getWriter().getId())) {
 			model.addAttribute("errorMessage", "본인의 작성한 글만 수정 가능합니다.");
-			return "/user/login";
+			return "user/login";
 		}
 		
 		freeBoardService.updateFreeBoard(request);
@@ -124,13 +124,13 @@ public class FreeBoardController {
 	@DeleteMapping("/{id}")
 	public String delete(@PathVariable Long id, HttpSession session, Model model) {
 		if (!HttpSessionUtils.isLoginUser(session)) {
-			return "/user/login";
+			return "user/login";
 		}
 		User loginUser = HttpSessionUtils.getUserFromSession(session);
 		FreeBoardResponse freeBoard = freeBoardService.getOneFreeBoard(id);
 		if (!loginUser.matchId(freeBoard.getWriter().getId()) && !loginUser.matchAdminAuthority()) {
 			model.addAttribute("errorMessage", "삭제 권한이 없습니다.");
-			return "/user/login";
+			return "user/login";
 		}
 		freeBoardService.deleteFreeBoard(id);
 		return "redirect:/freeboards";
