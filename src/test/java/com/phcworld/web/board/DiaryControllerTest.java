@@ -19,6 +19,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.mock.web.MockHttpSession;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -30,6 +31,7 @@ import java.util.stream.Collectors;
 import static org.hamcrest.Matchers.containsString;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.when;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -49,6 +51,7 @@ public class DiaryControllerTest {
 	private DiaryServiceImpl diaryService;
 
 	@Test
+	@WithMockUser(username = "test3@test.test", authorities = "ROLE_USER")
 	public void requestEmailDiaryList() throws Exception {
 		MockHttpSession mockSession = new MockHttpSession();
 		User user = User.builder()
@@ -112,6 +115,7 @@ public class DiaryControllerTest {
 		
 
 		this.mvc.perform(get("/diaries/list/{email}", "test@test.test")
+						.with(csrf())
 				.session(mockSession))
 		.andDo(print())
 		.andExpect(view().name(containsString("/board/diary/diary")))
@@ -123,13 +127,16 @@ public class DiaryControllerTest {
 	}
 	
 	@Test
+	@WithMockUser(username = "test3@test.test", authorities = "ROLE_USER")
 	public void requestDiaryFormEmptyLoginUser() throws Exception {
-		this.mvc.perform(get("/diaries/form"))
+		this.mvc.perform(get("/diaries/form")
+						.with(csrf()))
 		.andExpect(view().name(containsString("/user/login")))
 		.andExpect(status().isOk());
 	}
 	
 	@Test
+	@WithMockUser(username = "test3@test.test", authorities = "ROLE_USER")
 	public void successDiaryForm() throws Exception {
 		MockHttpSession mockSession = new MockHttpSession();
 		User user = User.builder()
@@ -146,6 +153,7 @@ public class DiaryControllerTest {
 		mockSession.setAttribute("countMessages", "");
 		mockSession.setAttribute("alerts", null);
 		this.mvc.perform(get("/diaries/form")
+						.with(csrf())
 				.session(mockSession))
 		.andExpect(view().name(containsString("/board/diary/diary_form")))
 		.andExpect(model().attribute("user", user))
@@ -153,6 +161,7 @@ public class DiaryControllerTest {
 	}
 	
 	@Test
+	@WithMockUser(username = "test3@test.test", authorities = "ROLE_USER")
 	public void createDiary() throws Exception {
 		MockHttpSession mockSession = new MockHttpSession();
 		User user = User.builder()
@@ -186,6 +195,7 @@ public class DiaryControllerTest {
 		.thenReturn(response);
 
 		this.mvc.perform(post("/diaries")
+						.with(csrf())
 				.param("title", "test")
 				.param("contents", "test")
 				.param("thumbnail", "no-image-icon.gif")
@@ -198,15 +208,18 @@ public class DiaryControllerTest {
 	public void createWhenEmptyLoginUserDiary() throws Exception {
 		MockHttpSession mockSession = new MockHttpSession();
 		this.mvc.perform(post("/diaries")
+						.with(csrf())
 				.param("title", "test")
 				.param("contents", "test")
 				.param("thumbnail", "no-image-icon.gif")
 				.session(mockSession))
-		.andExpect(view().name(containsString("/user/login")))
-		.andExpect(status().isOk());
+				.andExpect(status().isUnauthorized());
+//		.andExpect(view().name(containsString("/user/login")))
+//		.andExpect(status().isOk());
 	}
 	
 	@Test
+	@WithMockUser(username = "test3@test.test", authorities = "ROLE_USER")
 	public void readDairyWhenDiaryWriterEqualLoginUser() throws Exception {
 		MockHttpSession mockSession = new MockHttpSession();
 		User user = User.builder()
@@ -243,6 +256,7 @@ public class DiaryControllerTest {
 		when(this.diaryService.getOneDiary(1L))
 		.thenReturn(diaryResponse);
 		this.mvc.perform(get("/diaries/{id}", 1L)
+						.with(csrf())
 				.session(mockSession))
 		.andDo(print())
 		.andExpect(view().name(containsString("/board/diary/detail_diary")))
@@ -286,18 +300,21 @@ public class DiaryControllerTest {
 		when(this.diaryService.getOneDiary(1L))
 		.thenReturn(diaryResponse);
 		this.mvc.perform(get("/diaries/{id}", 1L)
+						.with(csrf())
 				.session(mockSession))
 		.andDo(print())
-		.andExpect(view().name(containsString("/board/diary/detail_diary")))
-		.andExpect(status().isOk())
-		.andExpect(model().attribute("diary", diaryResponse))
-		.andExpect(model().attribute("user", false))
-		.andExpect(model().attribute("matchUser", false))
-		.andExpect(model().attribute("matchAuthority", false))
-		.andExpect(model().size(4));
+				.andExpect(status().isUnauthorized());
+//		.andExpect(view().name(containsString("/board/diary/detail_diary")))
+//		.andExpect(status().isOk())
+//		.andExpect(model().attribute("diary", diaryResponse))
+//		.andExpect(model().attribute("user", false))
+//		.andExpect(model().attribute("matchUser", false))
+//		.andExpect(model().attribute("matchAuthority", false))
+//		.andExpect(model().size(4));
 	}
 	
 	@Test
+	@WithMockUser(username = "test3@test.test", authorities = "ROLE_USER")
 	public void readWhenWriterNotEqualLoginUser() throws Exception {
 		MockHttpSession mockSession = new MockHttpSession();
 		User user = User.builder()
@@ -342,6 +359,7 @@ public class DiaryControllerTest {
 		when(this.diaryService.getOneDiary(1L))
 		.thenReturn(diaryResponse);
 		this.mvc.perform(get("/diaries/{id}", 1L)
+						.with(csrf())
 				.session(mockSession))
 		.andDo(print())
 		.andExpect(view().name(containsString("/board/diary/detail_diary")))
@@ -354,6 +372,7 @@ public class DiaryControllerTest {
 	}
 	
 	@Test
+	@WithMockUser(username = "test3@test.test", authorities = "ROLE_USER")
 	public void readDairyWhenHasAuthority() throws Exception {
 		MockHttpSession mockSession = new MockHttpSession();
 		User user = User.builder()
@@ -399,6 +418,7 @@ public class DiaryControllerTest {
 		when(this.diaryService.getOneDiary(1L))
 		.thenReturn(diaryResponse);
 		this.mvc.perform(get("/diaries/{id}", 1L)
+						.with(csrf())
 				.session(mockSession))
 		.andDo(print())
 		.andExpect(view().name(containsString("/board/diary/detail_diary")))
@@ -411,6 +431,7 @@ public class DiaryControllerTest {
 	}
 	
 	@Test
+	@WithMockUser(username = "test3@test.test", authorities = "ROLE_USER")
 	public void requestUpdateDiaryForm() throws Exception {
 		MockHttpSession mockSession = new MockHttpSession();
 		User user = User.builder()
@@ -446,6 +467,7 @@ public class DiaryControllerTest {
 		when(this.diaryService.getOneDiary(1L))
 		.thenReturn(diaryResponse);
 		this.mvc.perform(get("/diaries/{id}/form", 1L)
+						.with(csrf())
 				.session(mockSession))
 		.andDo(print())
 		.andExpect(view().name(containsString("/board/diary/diary_updateForm")))
@@ -486,13 +508,16 @@ public class DiaryControllerTest {
 		when(this.diaryService.getOneDiary(1L))
 		.thenReturn(diaryResponse);
 		this.mvc.perform(get("/diaries/{id}/form", 1L)
+						.with(csrf())
 				.session(mockSession))
 		.andDo(print())
-		.andExpect(view().name(containsString("/user/login")))
-		.andExpect(status().isOk());
+				.andExpect(status().isUnauthorized());
+//		.andExpect(view().name(containsString("/user/login")))
+//		.andExpect(status().isOk());
 	}
 	
 	@Test
+	@WithMockUser(username = "test3@test.test", authorities = "ROLE_USER")
 	public void requestUpdateFormWhenMatchNotWriter() throws Exception {
 		MockHttpSession mockSession = new MockHttpSession();
 		User user = User.builder()
@@ -537,6 +562,7 @@ public class DiaryControllerTest {
 		when(this.diaryService.getOneDiary(1L))
 		.thenReturn(diaryResponse);
 		this.mvc.perform(get("/diaries/{id}/form", 1L)
+						.with(csrf())
 				.session(mockSession))
 		.andDo(print())
 		.andExpect(view().name(containsString("/user/login")))
@@ -546,6 +572,7 @@ public class DiaryControllerTest {
 	}
 	
 	@Test
+	@WithMockUser(username = "test3@test.test", authorities = "ROLE_USER")
 	public void successUpdateDiary() throws Exception {
 		MockHttpSession mockSession = new MockHttpSession();
 		User user = User.builder()
@@ -602,6 +629,7 @@ public class DiaryControllerTest {
 		when(this.diaryService.updateDiary(request))
 		.thenReturn(updatedDiaryResponse);
 		this.mvc.perform(patch("/diaries")
+						.with(csrf())
 				.param("id", "1")
 				.param("contents", "updateTest")
 				.param("thumbnail", "no-image-icon.gif")
@@ -613,16 +641,19 @@ public class DiaryControllerTest {
 	public void updateEmptyLoginUser() throws Exception {
 		MockHttpSession mockSession = new MockHttpSession();
 		this.mvc.perform(patch("/diaries")
+						.with(csrf())
 				.param("id", "1")
 				.param("contents", "updateTest")
 				.param("thumbnail", "no-image-icon.gif")
 				.session(mockSession))
 		.andDo(print())
-		.andExpect(view().name(containsString("/user/login")))
-		.andExpect(status().isOk());
+		.andExpect(status().isUnauthorized());
+//		.andExpect(view().name(containsString("/user/login")))
+//		.andExpect(status().isOk());
 	}
 	
 	@Test
+	@WithMockUser(username = "test3@test.test", authorities = "ROLE_USER")
 	public void updateWhenNotMatchWriter() throws Exception {
 		MockHttpSession mockSession = new MockHttpSession();
 		User user = User.builder()
@@ -663,6 +694,7 @@ public class DiaryControllerTest {
 		when(this.diaryService.getOneDiary(1L))
 		.thenReturn(response);
 		this.mvc.perform(patch("/diaries")
+						.with(csrf())
 				.param("id", "1")
 				.param("contents", "updateTest")
 				.param("thumbnail", "no-image-icon.gif")
@@ -675,6 +707,7 @@ public class DiaryControllerTest {
 	}
 	
 	@Test
+	@WithMockUser(username = "test3@test.test", authorities = "ROLE_USER")
 	public void successDeleteDiary() throws Exception {
 		MockHttpSession mockSession = new MockHttpSession();
 		User user = User.builder()
@@ -707,14 +740,17 @@ public class DiaryControllerTest {
 		.thenReturn(response);
 		diaryService.deleteDiary(1L);
 		this.mvc.perform(delete("/diaries/{id}", 1L)
+						.with(csrf())
 				.session(mockSession))
 		.andExpect(redirectedUrl("/diaries/list/" + user.getEmail()));
 	}
 	
 	@Test
+	@WithMockUser(username = "test3@test.test", authorities = "ROLE_USER")
 	public void deleteEmptyLoginUser() throws Exception {
 		MockHttpSession mockSession = new MockHttpSession();
 		this.mvc.perform(delete("/diaries/{id}", 1L)
+						.with(csrf())
 				.session(mockSession))
 		.andDo(print())
 		.andExpect(view().name(containsString("/user/login")))
@@ -722,6 +758,7 @@ public class DiaryControllerTest {
 	}
 	
 	@Test
+	@WithMockUser(username = "test3@test.test", authorities = "ROLE_USER")
 	public void deleteWhenNotMatchAuthority() throws Exception {
 		MockHttpSession mockSession = new MockHttpSession();
 		User user = User.builder()
@@ -762,6 +799,7 @@ public class DiaryControllerTest {
 		when(this.diaryService.getOneDiary(1L))
 		.thenReturn(response);
 		this.mvc.perform(delete("/diaries/{id}", 1L)
+						.with(csrf())
 				.session(mockSession))
 		.andDo(print())
 		.andExpect(view().name(containsString("/user/login")))
@@ -774,11 +812,14 @@ public class DiaryControllerTest {
 	public void pushUpbuttonWhenEmptyLoginUser() throws Exception {
 		MockHttpSession mockSession = new MockHttpSession();
 		this.mvc.perform(put("/diaries/{diaryId}/good", 1L)
+						.with(csrf())
 				.session(mockSession))
-		.andExpect(jsonPath("$.error").value("로그인을 해야합니다."));
+				.andExpect(status().isUnauthorized());
+//		.andExpect(jsonPath("$.error").value("로그인을 해야합니다."));
 	}
 	
 	@Test
+	@WithMockUser(username = "test3@test.test", authorities = "ROLE_USER")
 	public void pushUpbutton() throws Exception {
 		MockHttpSession mockSession = new MockHttpSession();
 		User user = User.builder()
@@ -813,6 +854,7 @@ public class DiaryControllerTest {
 		when(diaryService.updateGood(diary.getId(), user))
 		.thenReturn(successResponse);
 		this.mvc.perform(put("/diaries/{diaryId}/good", 1L)
+						.with(csrf())
 				.session(mockSession))
 		.andExpect(status().isOk())
 		.andExpect(jsonPath("$.success").value(successResponse.getSuccess()));
