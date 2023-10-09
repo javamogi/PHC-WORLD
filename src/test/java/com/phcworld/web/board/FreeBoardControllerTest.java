@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.mock.web.MockHttpSession;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -23,6 +24,7 @@ import java.util.List;
 
 import static org.hamcrest.Matchers.containsString;
 import static org.mockito.Mockito.when;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -42,6 +44,7 @@ public class FreeBoardControllerTest {
 	private TimelineServiceImpl timelineService;
 
 	@Test
+	@WithMockUser(username = "test3@test.test", authorities = "ROLE_USER")
 	public void getAllList() throws Exception{
 		MockHttpSession mockSession = new MockHttpSession();
 		User user = User.builder()
@@ -82,9 +85,10 @@ public class FreeBoardControllerTest {
 		
 		when(this.freeBoardService.findFreeBoardAllListAndSetNewBadge())
 		.thenReturn(list);
-		this.mvc.perform(get("/freeboards"))
+		this.mvc.perform(get("/freeboards")
+						.with(csrf()))
 		.andDo(print())
-		.andExpect(view().name(containsString("/board/freeboard/freeboard")))
+		.andExpect(view().name(containsString("board/freeboard/freeboard")))
 		.andExpect(status().isOk())
 		.andExpect(model().attribute("freeboards", list))
 		.andExpect(model().size(1));
@@ -93,11 +97,13 @@ public class FreeBoardControllerTest {
 	@Test
 	public void matchNotLoginUserCreateForm() throws Exception {
 		this.mvc.perform(get("/freeboards/form"))
-		.andExpect(view().name(containsString("/user/login")))
-		.andExpect(status().isOk());
+				.andExpect(status().isUnauthorized());
+//		.andExpect(view().name(containsString("/user/login")))
+//		.andExpect(status().isOk());
 	}
 	
 	@Test
+	@WithMockUser(username = "test3@test.test", authorities = "ROLE_USER")
 	public void successCreateForm() throws Exception {
 		MockHttpSession mockSession = new MockHttpSession();
 		User user = User.builder()
@@ -114,12 +120,14 @@ public class FreeBoardControllerTest {
 		mockSession.setAttribute("countMessages", "");
 		mockSession.setAttribute("alerts", null);
 		this.mvc.perform(get("/freeboards/form")
+						.with(csrf())
 				.session(mockSession))
-		.andExpect(view().name(containsString("/board/freeboard/freeboard_form")))
+		.andExpect(view().name(containsString("board/freeboard/freeboard_form")))
 		.andExpect(status().isOk());
 	}
 	
 	@Test
+	@WithMockUser(username = "test3@test.test", authorities = "ROLE_USER")
 	public void create() throws Exception {
 		MockHttpSession mockSession = new MockHttpSession();
 		User user = User.builder()
@@ -158,6 +166,7 @@ public class FreeBoardControllerTest {
 		.thenReturn(response);
 
 		this.mvc.perform(post("/freeboards")
+						.with(csrf())
 				.param("title", "test")
 				.param("contents", "test")
 				.param("icon", "")
@@ -169,15 +178,18 @@ public class FreeBoardControllerTest {
 	public void createEmptyLoginUser() throws Exception {
 		MockHttpSession mockSession = new MockHttpSession();
 		this.mvc.perform(post("/freeboards")
+						.with(csrf())
 				.param("title", "test")
 				.param("contents", "test")
 				.param("icon", "")
 				.session(mockSession))
-		.andExpect(view().name(containsString("/user/login")))
-		.andExpect(status().isOk());
+				.andExpect(status().isUnauthorized());
+//		.andExpect(view().name(containsString("/user/login")))
+//		.andExpect(status().isOk());
 	}
 	
 	@Test
+	@WithMockUser(username = "test3@test.test", authorities = "ROLE_USER")
 	public void readWhenWriterEqualLoginUser() throws Exception {
 		MockHttpSession mockSession = new MockHttpSession();
 		User user = User.builder()
@@ -206,9 +218,10 @@ public class FreeBoardControllerTest {
 		when(this.freeBoardService.addFreeBoardCount(1L))
 		.thenReturn(response);
 		this.mvc.perform(get("/freeboards/{id}", 1L)
+						.with(csrf())
 				.session(mockSession))
 		.andDo(print())
-		.andExpect(view().name(containsString("/board/freeboard/detail_freeboard")))
+		.andExpect(view().name(containsString("board/freeboard/detail_freeboard")))
 		.andExpect(status().isOk())
 		.andExpect(model().attribute("freeBoard", response))
 		.andExpect(model().attribute("user", true))
@@ -218,6 +231,7 @@ public class FreeBoardControllerTest {
 	}
 	
 	@Test
+	@WithMockUser(username = "test3@test.test", authorities = "ROLE_USER")
 	public void readWhenNotMatchLoginUserAndWriter() throws Exception {
 		MockHttpSession mockSession = new MockHttpSession();
 		User user = User.builder()
@@ -242,9 +256,10 @@ public class FreeBoardControllerTest {
 		when(this.freeBoardService.addFreeBoardCount(1L))
 		.thenReturn(response);
 		this.mvc.perform(get("/freeboards/{id}", 1L)
+						.with(csrf())
 				.session(mockSession))
 		.andDo(print())
-		.andExpect(view().name(containsString("/board/freeboard/detail_freeboard")))
+		.andExpect(view().name(containsString("board/freeboard/detail_freeboard")))
 		.andExpect(status().isOk())
 		.andExpect(model().attribute("freeBoard", response))
 		.andExpect(model().attribute("user", false))
@@ -254,6 +269,7 @@ public class FreeBoardControllerTest {
 	}
 	
 	@Test
+	@WithMockUser(username = "test3@test.test", authorities = "ROLE_USER")
 	public void readWhenWriterNotEqualLoginUser() throws Exception {
 		MockHttpSession mockSession = new MockHttpSession();
 		User user = User.builder()
@@ -291,9 +307,10 @@ public class FreeBoardControllerTest {
 		when(this.freeBoardService.addFreeBoardCount(1L))
 		.thenReturn(response);
 		this.mvc.perform(get("/freeboards/{id}", 1L)
+						.with(csrf())
 				.session(mockSession))
 		.andDo(print())
-		.andExpect(view().name(containsString("/board/freeboard/detail_freeboard")))
+		.andExpect(view().name(containsString("board/freeboard/detail_freeboard")))
 		.andExpect(status().isOk())
 		.andExpect(model().attribute("freeBoard", response))
 		.andExpect(model().attribute("user", true))
@@ -303,6 +320,7 @@ public class FreeBoardControllerTest {
 	}
 	
 	@Test
+	@WithMockUser(username = "test3@test.test", authorities = "ROLE_USER")
 	public void readWhenHasAdminAuthority() throws Exception {
 		MockHttpSession mockSession = new MockHttpSession();
 		User user = User.builder()
@@ -340,9 +358,10 @@ public class FreeBoardControllerTest {
 		when(this.freeBoardService.addFreeBoardCount(1L))
 		.thenReturn(response);
 		this.mvc.perform(get("/freeboards/{id}", 1L)
+						.with(csrf())
 				.session(mockSession))
 		.andDo(print())
-		.andExpect(view().name(containsString("/board/freeboard/detail_freeboard")))
+		.andExpect(view().name(containsString("board/freeboard/detail_freeboard")))
 		.andExpect(status().isOk())
 		.andExpect(model().attribute("freeBoard", response))
 		.andExpect(model().attribute("user", true))
@@ -352,6 +371,7 @@ public class FreeBoardControllerTest {
 	}
 	
 	@Test
+	@WithMockUser(username = "test3@test.test", authorities = "ROLE_USER")
 	public void successUpdateForm() throws Exception {
 		MockHttpSession mockSession = new MockHttpSession();
 		User user = User.builder()
@@ -380,9 +400,10 @@ public class FreeBoardControllerTest {
 		when(this.freeBoardService.getOneFreeBoard(1L))
 		.thenReturn(response);
 		this.mvc.perform(get("/freeboards/{id}/form", 1L)
+						.with(csrf())
 				.session(mockSession))
 		.andDo(print())
-		.andExpect(view().name(containsString("/board/freeboard/freeboard_updateForm")))
+		.andExpect(view().name(containsString("board/freeboard/freeboard_updateForm")))
 		.andExpect(status().isOk())
 		.andExpect(model().attribute("freeBoard", response))
 		.andExpect(model().size(1));
@@ -413,13 +434,16 @@ public class FreeBoardControllerTest {
 		when(this.freeBoardService.getOneFreeBoard(1L))
 		.thenReturn(response);
 		this.mvc.perform(get("/freeboards/{id}/form", 1L)
+						.with(csrf())
 				.session(mockSession))
 		.andDo(print())
-		.andExpect(view().name(containsString("/user/login")))
-		.andExpect(status().isOk());
+				.andExpect(status().isUnauthorized());
+//		.andExpect(view().name(containsString("/user/login")))
+//		.andExpect(status().isOk());
 	}
 	
 	@Test
+	@WithMockUser(username = "test3@test.test", authorities = "ROLE_USER")
 	public void updateWhenMatchNotLoginUserAndWriter() throws Exception {
 		MockHttpSession mockSession = new MockHttpSession();
 		User user = User.builder()
@@ -457,15 +481,17 @@ public class FreeBoardControllerTest {
 		when(this.freeBoardService.getOneFreeBoard(1L))
 		.thenReturn(response);
 		this.mvc.perform(get("/freeboards/{id}/form", 1L)
+						.with(csrf())
 				.session(mockSession))
 		.andDo(print())
-		.andExpect(view().name(containsString("/user/login")))
+		.andExpect(view().name(containsString("user/login")))
 		.andExpect(status().isOk())
 		.andExpect(model().attribute("errorMessage", "본인의 작성한 글만 수정 가능합니다."))
 		.andExpect(model().size(1));
 	}
 	
 	@Test
+	@WithMockUser(username = "test3@test.test", authorities = "ROLE_USER")
 	public void successUpdateFreeBoard() throws Exception {
 		MockHttpSession mockSession = new MockHttpSession();
 		User user = User.builder()
@@ -522,6 +548,7 @@ public class FreeBoardControllerTest {
 		when(this.freeBoardService.updateFreeBoard(request))
 		.thenReturn(response2);
 		this.mvc.perform(patch("/freeboards")
+						.with(csrf())
 				.param("id", "1")
 				.session(mockSession))
 		.andExpect(redirectedUrl("/freeboards/" + 1L));
@@ -531,16 +558,19 @@ public class FreeBoardControllerTest {
 	public void updateWhenEmptyLoginUser() throws Exception {
 		MockHttpSession mockSession = new MockHttpSession();
 		this.mvc.perform(patch("/freeboards")
+						.with(csrf())
 				.param("id", "1")
 				.param("contents", "updateTest")
 				.param("icon", "test.jpg")
 				.session(mockSession))
 		.andDo(print())
-		.andExpect(view().name(containsString("/user/login")))
-		.andExpect(status().isOk());
+				.andExpect(status().isUnauthorized());
+//		.andExpect(view().name(containsString("/user/login")))
+//		.andExpect(status().isOk());
 	}
 	
 	@Test
+	@WithMockUser(username = "test3@test.test", authorities = "ROLE_USER")
 	public void updateWhenNotMatchUserAndWriter() throws Exception {
 		MockHttpSession mockSession = new MockHttpSession();
 		User user = User.builder()
@@ -578,18 +608,20 @@ public class FreeBoardControllerTest {
 		when(this.freeBoardService.getOneFreeBoard(1L))
 		.thenReturn(response);
 		this.mvc.perform(patch("/freeboards")
+						.with(csrf())
 				.param("id", "1")
 				.param("contents", "updateTest")
 				.param("icon", "test.jpg")
 				.session(mockSession))
 		.andDo(print())
-		.andExpect(view().name(containsString("/user/login")))
+		.andExpect(view().name(containsString("user/login")))
 		.andExpect(status().isOk())
 		.andExpect(model().attribute("errorMessage", "본인의 작성한 글만 수정 가능합니다."))
 		.andExpect(model().size(2));
 	}
 	
 	@Test
+	@WithMockUser(username = "test3@test.test", authorities = "ROLE_USER")
 	public void successDelete() throws Exception {
 		MockHttpSession mockSession = new MockHttpSession();
 		User user = User.builder()
@@ -618,6 +650,7 @@ public class FreeBoardControllerTest {
 		when(this.freeBoardService.getOneFreeBoard(1L))
 		.thenReturn(response);
 		this.mvc.perform(delete("/freeboards/{id}", 1L)
+						.with(csrf())
 				.session(mockSession))
 		.andExpect(redirectedUrl("/freeboards"));
 	}
@@ -626,13 +659,16 @@ public class FreeBoardControllerTest {
 	public void deleteWhenEmptyLoginUser() throws Exception {
 		MockHttpSession mockSession = new MockHttpSession();
 		this.mvc.perform(delete("/freeboards/{id}", 1L)
+						.with(csrf())
 				.session(mockSession))
 		.andDo(print())
-		.andExpect(view().name(containsString("/user/login")))
-		.andExpect(status().isOk());
+				.andExpect(status().isUnauthorized());
+//		.andExpect(view().name(containsString("/user/login")))
+//		.andExpect(status().isOk());
 	}
 	
 	@Test
+	@WithMockUser(username = "test3@test.test", authorities = "ROLE_USER")
 	public void deleteWhenNotMatchAuthority() throws Exception {
 		MockHttpSession mockSession = new MockHttpSession();
 		User user = User.builder()
@@ -670,9 +706,10 @@ public class FreeBoardControllerTest {
 		when(this.freeBoardService.getOneFreeBoard(1L))
 		.thenReturn(response);
 		this.mvc.perform(delete("/freeboards/{id}", 1L)
+						.with(csrf())
 				.session(mockSession))
 		.andDo(print())
-		.andExpect(view().name(containsString("/user/login")))
+		.andExpect(view().name(containsString("user/login")))
 		.andExpect(status().isOk())
 		.andExpect(model().attribute("errorMessage", "삭제 권한이 없습니다."))
 		.andExpect(model().size(1));
