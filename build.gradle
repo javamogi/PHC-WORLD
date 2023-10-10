@@ -79,6 +79,9 @@ dependencies {
     // security
     implementation "org.springframework.boot:spring-boot-starter-security"
     testImplementation 'org.springframework.security:spring-security-test'
+
+    // 외부 api 사용을 위한 webclient 의존성
+    implementation "org.springframework.boot:spring-boot-starter-webflux"
 }
 
 group = 'com.phcworld'

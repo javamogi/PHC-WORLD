@@ -26,7 +26,7 @@ public class MovieApiController {
 		return "movie/movie";
 	}
 	
-	@GetMapping(value = "", produces="application/json;charset=UTF-8")
+	@GetMapping(value = "/pre", produces="application/json;charset=UTF-8")
 	public @ResponseBody String search(HttpServletRequest request) {
 		String title = request.getParameter("title");
 		String pnum = request.getParameter("pnum");
@@ -40,7 +40,7 @@ public class MovieApiController {
 		String clientSecret = "secret";// 애플리케이션 클라이언트 시크릿값";
 		try {
 			String text = URLEncoder.encode(title, "UTF-8");
-			String apiURL = "https://openapi.naver.com/v1/search/movie?query=" + text + "&start=" + start; // json
+			String apiURL = "https://openapi.naver.com/v1/search/movie.json?query=" + text + "&start=" + start; // json
 			URL url = new URL(apiURL);
 			HttpURLConnection con = (HttpURLConnection) url.openConnection();
 			con.setRequestMethod("GET");

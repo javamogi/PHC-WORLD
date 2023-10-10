@@ -58,7 +58,7 @@ $(document).ready(function(){
 				$.each(data.items, function(key, value){
 					var searchList = "<div class='media'><div class='media-left media-middle'><a href='"+data.items[key].link+"'>" +
 					"<img class='mr-3' src='"+data.items[key].image+"'></a></div><div class='media-body'><p>제목 : <a href='"+ data.items[key].link +"'>"+data.items[key].title+"</a></p>" +
-					"<p>제작년도 : "+ data.items[key].pubDate +"</p><p>감독 : "+data.items[key].director+"</p><p>배우 : "+data.items[key].actor+"</p><p>평점 : "+data.items[key].userRating+"</p></div></div>";
+					"<p>제작년도 : "+ data.items[key].pubdate +"</p><p>저자 : "+data.items[key].author+"</p><p>출판사 : "+data.items[key].publisher+"</p><p>가격 : "+data.items[key].discount+"</p></div></div>";
 					$(".panel-body").append(searchList);
 				});
 			},
@@ -134,10 +134,10 @@ function addSearch(e){
 						"</div>" +
 						"<div class='media-body'>" +
 						"<p>제목 : <a href='"+ data.items[key].link +"'>"+data.items[key].title+"</a></p>" +
-				"<p>제작년도 : "+ data.items[key].pubDate +"</p>" +
-						"<p>감독 : "+data.items[key].director+"</p>" +
-								"<p>배우 : "+data.items[key].actor+"</p>" +
-										"<p>평점 : "+data.items[key].userRating+"</p>" +
+				"<p>제작년도 : "+ data.items[key].pubdate +"</p>" +
+						"<p>저자 : "+data.items[key].author+"</p>" +
+								"<p>출판사 : "+data.items[key].publisher+"</p>" +
+										"<p>가격 : "+data.items[key].discount+"</p>" +
 												"</div></div>";
 				$(".panel-body").append(searchList);
 			});
