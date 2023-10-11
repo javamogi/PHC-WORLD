@@ -1,17 +1,18 @@
 # PHC-WORLD
 ### 프로젝트 특징
 > * JAVA 8
-> * spring-boot 2.1.13.RELEASE
+> * Spring-Boot
+> * Spring-Security
 > * JPA
-> * Maven
-> * h2-database
+> * JWT
+> * Maven, Gradle
+> * h2-database, MySql, Redis
 > * bootstrap
 > * jQuery
 > * Ajax
 > * Lombok
 > * mustache template
-> * devtools (liveReload)
-> * Junit 테스트
+> * Junit4 테스트
 ***
 ### 프로젝트 기능
 * 게시판을 이용할 수 있는 사이트입니다.
@@ -19,8 +20,8 @@
 * 게시판은 두 종류입니다.
   1. 회원이 이용할 수 있는 자유게시판
   2. 자신의 글만 모아놓은 일기 게시판
-* 회원간에는 메세지를 주고 받을 수 있습니다. (업데이트 필요)
-* 일기 게시판은 회원 email을 주소에 타이핑하여 다른 회원의 글을 볼 수 있습니다. (업데이트 필요)
+* 회원간에는 메세지를 주고 받을 수 있습니다.
+* 일기 게시판은 회원 email을 주소에 타이핑하여 다른 회원의 글을 볼 수 있습니다.
 * 자유게시판의 정렬은 bootstrap dataTable을 사용하였습니다.
 * 일기게시판의 정렬은 Page를 사용하였습니다. 
 * 로그인 후 첫페이지는 로그인 한 User의 행적(타임라인)을 최신순으로 5개를 나타냈습니다. 
