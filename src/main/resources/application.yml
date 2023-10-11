@@ -7,6 +7,8 @@ spring:
     hiddenmethod:
       filter:
         enabled: true
+    pathmatch:
+      matching-strategy: ant_path_matcher
 
   profiles:
     active: dev
@@ -31,3 +33,7 @@ jasypt:
 
 jwt:
   secret: c3ByaW5nLXNlY3VyaXR5LWp3dC1waGMtd29ybGQtc2VjcmV0LWtleQ==
+
+naver:
+  client-id: id
+  client-secret: secret
