@@ -15,6 +15,7 @@ plugins {
     id 'org.springframework.boot' version '2.7.6'
     id 'io.spring.dependency-management' version '1.0.11.RELEASE'
     id "com.ewerk.gradle.plugins.querydsl" version "1.0.10"
+    id "org.asciidoctor.jvm.convert" version "3.3.2"
 }
 
 repositories {
@@ -23,6 +24,15 @@ repositories {
     maven {
         url = uri('https://repo.maven.apache.org/maven2/')
     }
+}
+
+// querydsl이 compileClassPath를 상속하도록 설정
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+    querydsl.extendsFrom compileClasspath
+    asciidoctorExt
 }
 
 dependencies {
@@ -85,6 +95,10 @@ dependencies {
     
     // swagger
     implementation 'io.springfox:springfox-boot-starter:3.0.0'
+
+    // Srping Rest Docs
+    asciidoctorExt 'org.springframework.restdocs:spring-restdocs-asciidoctor'
+    testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
 }
 
 group = 'com.phcworld'
@@ -127,10 +141,41 @@ compileQuerydsl {
     options.annotationProcessorPath = configurations.querydsl
 }
 
-// querydsl이 compileClassPath를 상속하도록 설정
-configurations {
-    compileOnly {
-        extendsFrom annotationProcessor
-    }
-    querydsl.extendsFrom compileClasspath
+ext {
+    set('snippetsDir', file("build/generated-snippets"))
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+    outputs.dir snippetsDir
+}
+
+tasks.named('asciidoctor') {
+    inputs.dir snippetsDir
+    dependsOn test
+}
+
+test {
+    useJUnitPlatform()
+    outputs.dir snippetsDir
+}
+
+asciidoctor {
+    inputs.dir snippetsDir
+    configurations 'asciidoctorExt'
+    dependsOn test
+}
+
+asciidoctor.doFirst {
+    delete file('src/main/resources/static/docs')
+}
+
+task copyDocument(type: Copy) {
+    dependsOn asciidoctor
+    from file("build/docs/asciidoc")
+    into file("src/main/resources/static/docs")
+}
+
+build {
+    dependsOn copyDocument
 }

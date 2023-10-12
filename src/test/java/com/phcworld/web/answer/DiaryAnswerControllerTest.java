@@ -1,49 +1,46 @@
 package com.phcworld.web.answer;
 
-import static org.mockito.Mockito.when;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-
-import com.phcworld.domain.user.Authority;
-import com.phcworld.exception.model.NotMatchUserException;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureWebMvc;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.MediaType;
-import org.springframework.mock.web.MockHttpSession;
-import org.springframework.security.test.context.support.WithAnonymousUser;
-import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.web.servlet.MockMvc;
-
 import com.phcworld.domain.answer.DiaryAnswer;
 import com.phcworld.domain.api.model.request.DiaryAnswerRequest;
 import com.phcworld.domain.api.model.response.DiaryAnswerApiResponse;
 import com.phcworld.domain.api.model.response.SuccessResponse;
 import com.phcworld.domain.board.Diary;
-import com.phcworld.domain.exception.MatchNotUserException;
+import com.phcworld.domain.user.Authority;
 import com.phcworld.domain.user.User;
+import com.phcworld.exception.model.NotMatchUserException;
 import com.phcworld.service.answer.DiaryAnswerServiceImpl;
 import com.phcworld.service.board.DiaryServiceImpl;
 import com.phcworld.utils.HttpSessionUtils;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockHttpSession;
+import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
+import org.springframework.restdocs.payload.PayloadDocumentation;
+import org.springframework.restdocs.request.RequestDocumentation;
+import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.web.servlet.MockMvc;
+
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.mockito.Mockito.when;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebMvcTest(DiaryAnswerController.class)
+@AutoConfigureRestDocs
 public class DiaryAnswerControllerTest {
 	
 	@Autowired
@@ -101,7 +98,7 @@ public class DiaryAnswerControllerTest {
 
 		when(this.diaryAnswerService.create(user, diary.getId(), request))
 		.thenReturn(diaryAnswerApiResponse);
-		this.mvc.perform(post("/diaries/{diaryId}/answer", 1L)
+		this.mvc.perform(RestDocumentationRequestBuilders.post("/diaries/{diaryId}/answer", 1L)
 						.with(csrf())
 				.contentType(MediaType.APPLICATION_JSON)
 				.param("contents", "test")
@@ -112,7 +109,18 @@ public class DiaryAnswerControllerTest {
 		.andExpect(jsonPath("$.contents").value(diaryAnswerApiResponse.getContents()))
 		.andExpect(jsonPath("$.diaryId").value(diaryAnswerApiResponse.getDiaryId()))
 		.andExpect(jsonPath("$.countOfAnswers").value(diaryAnswerApiResponse.getCountOfAnswers()))
-		.andExpect(jsonPath("$.updateDate").value(diaryAnswerApiResponse.getUpdateDate()));
+		.andExpect(jsonPath("$.updateDate").value(diaryAnswerApiResponse.getUpdateDate()))
+				.andDo(document("diary-answer-save",
+						RequestDocumentation.pathParameters(
+								RequestDocumentation.parameterWithName("diaryId").description("게시글 ID")
+						)
+//						,
+//						PayloadDocumentation.responseFields(
+//								PayloadDocumentation.fieldWithPath("diaryId").description("게시글 ID"),
+//								PayloadDocumentation.fieldWithPath("writer").description("작성자 정보"),
+//								PayloadDocumentation.fieldWithPath("contents").description("게시글 내용")
+//						)
+				));
 	}
 	
 	@Test
