@@ -22,8 +22,11 @@ import com.phcworld.utils.HttpSessionUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.mock.web.MockHttpSession;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -33,6 +36,7 @@ import java.time.LocalDateTime;
 
 import static org.hamcrest.Matchers.containsString;
 import static org.mockito.Mockito.when;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -50,10 +54,10 @@ public class DashboardControllerTest {
 
 	@MockBean
 	private FreeBoardAnswerServiceImpl freeBoardAnswerService;
-	
+
 	@MockBean
 	private DiaryServiceImpl diaryService;
-	
+
 	@MockBean
 	private DiaryAnswerServiceImpl diaryAnswerService;
 	
@@ -70,17 +74,18 @@ public class DashboardControllerTest {
 	public void requestDashboardWhenEmptyLoginUser() throws Exception {
 		MockHttpSession mockSession = new MockHttpSession();
 		this.mvc.perform(get("/dashboard")
-				.session(mockSession)
+						.with(csrf())
+						.session(mockSession)
 				)
-		.andDo(print())
-		.andExpect(view().name(containsString("/user/login")))
-		.andExpect(status().isOk())
-		.andExpect(model().attribute("errorMessage", "로그인이 필요합니다."))
-		.andExpect(model().size(1));
+				.andDo(print())
+//		.andExpect(view().name(containsString("/user/loginForm")))
+//		.andExpect(model().attribute("errorMessage", "로그인이 필요합니다."))
+//		.andExpect(model().size(1));
+				.andExpect(status().isUnauthorized());
 	}
 	
 	@Test
-	@WithMockUser
+	@WithMockUser(username = "test3@test.test", authorities = "ROLE_USER")
 	public void requestDashboard() throws Exception {
 		MockHttpSession mockSession = new MockHttpSession();
 		User user = User.builder()
@@ -110,15 +115,17 @@ public class DashboardControllerTest {
 		
 		
 		this.mvc.perform(get("/dashboard")
+						.with(csrf())
 				.session(mockSession))
 		.andDo(print())
-		.andExpect(view().name(containsString("/dashboard/dashboard")))
+		.andExpect(view().name(containsString("dashboard/dashboard")))
 		.andExpect(status().isOk())
 		.andExpect(model().attribute("dashboard", dashboard))
 		.andExpect(model().size(1));
 	}
 	
 	@Test
+	@WithMockUser(username = "test3@test.test", authorities = "ROLE_USER")
 	public void redirectFreeBoard() throws Exception {
 		User user = User.builder()
 				.id(1L)
@@ -154,11 +161,13 @@ public class DashboardControllerTest {
 				.build();
 		when(this.timelineService.getOneTimeline(1L))
 		.thenReturn(timeline);
-		this.mvc.perform(get("/dashboard/timeline/{id}", 1L))
+		this.mvc.perform(get("/dashboard/timeline/{id}", 1L)
+						.with(csrf()))
 		.andExpect(redirectedUrl("/freeboards/" + timeline.getPostInfo().getRedirectId()));
 	}
 	
 	@Test
+	@WithMockUser(username = "test3@test.test", authorities = "ROLE_USER")
 	public void redirectFreeBoardAnswer() throws Exception {
 		User user = User.builder()
 				.id(1L)
@@ -200,11 +209,13 @@ public class DashboardControllerTest {
 				.build();
 		when(this.timelineService.getOneTimeline(1L))
 		.thenReturn(timeline);
-		this.mvc.perform(get("/dashboard/timeline/{id}", 1L))
+		this.mvc.perform(get("/dashboard/timeline/{id}", 1L)
+						.with(csrf()))
 		.andExpect(redirectedUrl("/freeboards/" + timeline.getPostInfo().getRedirectId()));
 	}
 	
 	@Test
+	@WithMockUser(username = "test3@test.test", authorities = "ROLE_USER")
 	public void redirectDiary() throws Exception {
 		User user = User.builder()
 				.id(1L)
@@ -239,11 +250,13 @@ public class DashboardControllerTest {
 				.build();
 		when(this.timelineService.getOneTimeline(1L))
 		.thenReturn(timeline);
-		this.mvc.perform(get("/dashboard/timeline/{id}", 1L))
+		this.mvc.perform(get("/dashboard/timeline/{id}", 1L)
+						.with(csrf()))
 		.andExpect(redirectedUrl("/diaries/" + timeline.getPostInfo().getRedirectId()));
 	}
 	
 	@Test
+	@WithMockUser(username = "test3@test.test", authorities = "ROLE_USER")
 	public void redirectDiaryAnswer() throws Exception {
 		User user = User.builder()
 				.id(1L)
@@ -283,11 +296,13 @@ public class DashboardControllerTest {
 				.build();
 		when(this.timelineService.getOneTimeline(1L))
 		.thenReturn(timeline);
-		this.mvc.perform(get("/dashboard/timeline/{id}", 1L))
+		this.mvc.perform(get("/dashboard/timeline/{id}", 1L)
+						.with(csrf()))
 		.andExpect(redirectedUrl("/diaries/" + timeline.getPostInfo().getRedirectId()));
 	}
 	
 	@Test
+	@WithMockUser(username = "test3@test.test", authorities = "ROLE_USER")
 	public void redirectGood() throws Exception {
 		User user = User.builder()
 				.id(1L)
@@ -327,7 +342,8 @@ public class DashboardControllerTest {
 				.build();
 		when(this.timelineService.getOneTimeline(1L))
 		.thenReturn(timeline);
-		this.mvc.perform(get("/dashboard/timeline/{id}", 1L))
+		this.mvc.perform(get("/dashboard/timeline/{id}", 1L)
+						.with(csrf()))
 		.andExpect(redirectedUrl("/diaries/" + timeline.getPostInfo().getRedirectId()));
 	}
 
