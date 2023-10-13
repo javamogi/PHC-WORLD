@@ -17,7 +17,7 @@ public class EmailController {
 	
 	private final EmailAuthRepository emailAuthRepository;
 	
-	@RequestMapping("/emailConfirm")
+	@RequestMapping("/check")
 	public String authKeyConfirm(@RequestParam String email, @RequestParam String authKey, Model model) {
 		EmailAuth emailAuth = emailAuthRepository.findByEmail(email);
 		if(emailAuth == null) {
