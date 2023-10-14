@@ -1,6 +1,7 @@
 package com.phcworld.web.upload;
 
 import static org.mockito.Mockito.when;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -16,6 +17,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.mock.web.MockHttpSession;
 import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -39,6 +41,7 @@ public class UploadControllerTest {
 	private UserService userService;
 	
 	@Test
+	@WithMockUser(username = "test3@test.test", authorities = "ROLE_USER")
 	public void uploadImage() throws Exception {
 		MockHttpSession mockSession = new MockHttpSession();
 		User user = User.builder()
@@ -67,19 +70,23 @@ public class UploadControllerTest {
 		.thenReturn(image);
 		this.mvc.perform(multipart("/upload/imageUpload")
 				.file(multipartFile)
+				.with(csrf())
 				.session(mockSession))
 		.andExpect(status().isOk());
 	}
 
 	@Test
+	@WithMockUser(username = "test3@test.test", authorities = "ROLE_USER")
 	public void deleteImage() throws Exception {
 		this.mvc.perform(get("/upload/deleteImage")
+						.with(csrf())
 				.param("randFileName", "123.jpg"))
 		.andExpect(status().isOk())
 		.andExpect(jsonPath("$.success").value("파일이 존재하지 않습니다."));
 	}
 	
 	@Test
+	@WithMockUser(username = "test3@test.test", authorities = "ROLE_USER")
 	public void findImage() throws Exception {
 		User user = User.builder()
 				.id(1L)
@@ -110,6 +117,7 @@ public class UploadControllerTest {
 	}
 	
 	@Test
+	@WithMockUser(username = "test3@test.test", authorities = "ROLE_USER")
 	public void uploadProfileImage() throws Exception {
 		MockHttpSession mockSession = new MockHttpSession();
 		User user = User.builder()
@@ -132,6 +140,7 @@ public class UploadControllerTest {
 		.thenReturn(user);
 		this.mvc.perform(multipart("/upload/profileUpload")
 				.file(multipartFile)
+				.with(csrf())
 				.session(mockSession))
 		.andExpect(status().isOk());
 	}

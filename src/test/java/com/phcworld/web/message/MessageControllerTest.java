@@ -1,6 +1,7 @@
 package com.phcworld.web.message;
 
 import static org.mockito.Mockito.when;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -14,10 +15,13 @@ import com.phcworld.domain.user.Authority;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpSession;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -29,7 +33,8 @@ import com.phcworld.service.user.UserService;
 import com.phcworld.utils.HttpSessionUtils;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@WebMvcTest(MessageController.class)
+@SpringBootTest
+@AutoConfigureMockMvc
 public class MessageControllerTest {
 	
 	@Autowired
@@ -43,13 +48,19 @@ public class MessageControllerTest {
 	
 	@Test
 	public void whenEmptyLoginUser() throws Exception {
+		MockHttpSession mockSession = new MockHttpSession();
+		mockSession.setAttribute(HttpSessionUtils.USER_SESSION_KEY, null);
 		this.mvc.perform(post("/message")
+						.with(csrf())
 				.param("toUserEmail", "test2@test.test")
-				.param("contents", "test"))
-		.andExpect(jsonPath("$.error").value("로그인을 해야합니다."));
+				.param("contents", "test")
+						.session(mockSession))
+				.andExpect(status().is3xxRedirection());
+//		.andExpect(jsonPath("$.error").value("로그인을 해야합니다."));
 	}
 	
 	@Test
+	@WithMockUser(username = "test3@test.test", authorities = "ROLE_USER")
 	public void whenEmptyReceiveUser() throws Exception {
 		MockHttpSession mockSession = new MockHttpSession();
 		User user = User.builder()
@@ -72,6 +83,7 @@ public class MessageControllerTest {
 	}
 	
 	@Test
+	@WithMockUser(username = "test3@test.test", authorities = "ROLE_USER")
 	public void whenEqualReceiveUser() throws Exception {
 		MockHttpSession mockSession = new MockHttpSession();
 		User user = User.builder()
@@ -94,6 +106,7 @@ public class MessageControllerTest {
 	}
 
 	@Test
+	@WithMockUser(username = "test3@test.test", authorities = "ROLE_USER")
 	public void sendMessage() throws Exception {
 		MockHttpSession mockSession = new MockHttpSession();
 		User user = User.builder()
@@ -151,10 +164,12 @@ public class MessageControllerTest {
 	@Test
 	public void whenEmptyLoginUserConfirmMessage() throws Exception {
 		this.mvc.perform(get("/message/{id}", 1L))
-		.andExpect(jsonPath("$.error").value("로그인을 해야합니다."));
+				.andExpect(status().is3xxRedirection());
+//		.andExpect(jsonPath("$.error").value("로그인을 해야합니다."));
 	}
 	
 	@Test
+	@WithMockUser(username = "test3@test.test", authorities = "ROLE_USER")
 	public void confirmMessage() throws Exception {
 		MockHttpSession mockSession = new MockHttpSession();
 		User user = User.builder()
@@ -230,10 +245,12 @@ public class MessageControllerTest {
 	@Test
 	public void whenEmptyLoginUserGetToUserInfo() throws Exception {
 		this.mvc.perform(post("/message/info/{id}", 1L))
-		.andExpect(jsonPath("$.error").value("로그인을 해야합니다."));
+				.andExpect(status().is3xxRedirection());
+//		.andExpect(jsonPath("$.error").value("로그인을 해야합니다."));
 	}
 	
 	@Test
+	@WithMockUser(username = "test3@test.test", authorities = "ROLE_USER")
 	public void getToUserInfo() throws Exception {
 		MockHttpSession mockSession = new MockHttpSession();
 		User user = User.builder()
