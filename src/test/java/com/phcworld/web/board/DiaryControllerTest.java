@@ -118,7 +118,7 @@ public class DiaryControllerTest {
 						.with(csrf())
 				.session(mockSession))
 		.andDo(print())
-		.andExpect(view().name(containsString("/board/diary/diary")))
+		.andExpect(view().name(containsString("board/diary/diary")))
 		.andExpect(status().isOk())
 		.andExpect(model().attribute("diaries", diaryResponseList))
 		.andExpect(model().attribute("pageNations", pageNations))
@@ -131,7 +131,7 @@ public class DiaryControllerTest {
 	public void requestDiaryFormEmptyLoginUser() throws Exception {
 		this.mvc.perform(get("/diaries/form")
 						.with(csrf()))
-		.andExpect(view().name(containsString("/user/login")))
+		.andExpect(view().name(containsString("user/login")))
 		.andExpect(status().isOk());
 	}
 	
@@ -155,7 +155,7 @@ public class DiaryControllerTest {
 		this.mvc.perform(get("/diaries/form")
 						.with(csrf())
 				.session(mockSession))
-		.andExpect(view().name(containsString("/board/diary/diary_form")))
+		.andExpect(view().name(containsString("board/diary/diary_form")))
 		.andExpect(model().attribute("user", user))
 		.andExpect(status().isOk());
 	}
@@ -259,7 +259,7 @@ public class DiaryControllerTest {
 						.with(csrf())
 				.session(mockSession))
 		.andDo(print())
-		.andExpect(view().name(containsString("/board/diary/detail_diary")))
+		.andExpect(view().name(containsString("board/diary/detail_diary")))
 		.andExpect(status().isOk())
 		.andExpect(model().attribute("diary", diaryResponse))
 		.andExpect(model().attribute("user", true))
@@ -362,7 +362,7 @@ public class DiaryControllerTest {
 						.with(csrf())
 				.session(mockSession))
 		.andDo(print())
-		.andExpect(view().name(containsString("/board/diary/detail_diary")))
+		.andExpect(view().name(containsString("board/diary/detail_diary")))
 		.andExpect(status().isOk())
 		.andExpect(model().attribute("diary", diaryResponse))
 		.andExpect(model().attribute("user", true))
@@ -421,7 +421,7 @@ public class DiaryControllerTest {
 						.with(csrf())
 				.session(mockSession))
 		.andDo(print())
-		.andExpect(view().name(containsString("/board/diary/detail_diary")))
+		.andExpect(view().name(containsString("board/diary/detail_diary")))
 		.andExpect(status().isOk())
 		.andExpect(model().attribute("diary", diaryResponse))
 		.andExpect(model().attribute("user", true))
@@ -470,7 +470,7 @@ public class DiaryControllerTest {
 						.with(csrf())
 				.session(mockSession))
 		.andDo(print())
-		.andExpect(view().name(containsString("/board/diary/diary_updateForm")))
+		.andExpect(view().name(containsString("board/diary/diary_updateForm")))
 		.andExpect(status().isOk())
 		.andExpect(model().attribute("diary", diaryResponse))
 		.andExpect(model().size(1));
@@ -565,7 +565,7 @@ public class DiaryControllerTest {
 						.with(csrf())
 				.session(mockSession))
 		.andDo(print())
-		.andExpect(view().name(containsString("/user/login")))
+		.andExpect(view().name(containsString("user/login")))
 		.andExpect(status().isOk())
 		.andExpect(model().attribute("errorMessage", "본인의 작성한 글만 수정 가능합니다."))
 		.andExpect(model().size(1));
@@ -700,7 +700,7 @@ public class DiaryControllerTest {
 				.param("thumbnail", "no-image-icon.gif")
 				.session(mockSession))
 		.andDo(print())
-		.andExpect(view().name(containsString("/user/login")))
+		.andExpect(view().name(containsString("user/login")))
 		.andExpect(status().isOk())
 		.andExpect(model().attribute("errorMessage", "본인의 작성한 글만 수정 가능합니다."))
 		.andExpect(model().size(2));
@@ -753,7 +753,7 @@ public class DiaryControllerTest {
 						.with(csrf())
 				.session(mockSession))
 		.andDo(print())
-		.andExpect(view().name(containsString("/user/login")))
+		.andExpect(view().name(containsString("user/login")))
 		.andExpect(status().isOk());
 	}
 	
@@ -802,7 +802,7 @@ public class DiaryControllerTest {
 						.with(csrf())
 				.session(mockSession))
 		.andDo(print())
-		.andExpect(view().name(containsString("/user/login")))
+		.andExpect(view().name(containsString("user/login")))
 		.andExpect(status().isOk())
 		.andExpect(model().attribute("errorMessage", "삭제 권한이 없습니다."))
 		.andExpect(model().size(1));
