@@ -36,8 +36,7 @@ public class MessageController {
 	private final MessageServiceImpl messageService;
 	
 	@PostMapping("")
-	public MessageResponse sendMessage(MessageRequest request, HttpSession session) 
-			throws LoginNotUserException, UserNotFoundException, MatchNotUserException {
+	public MessageResponse sendMessage(MessageRequest request, HttpSession session) {
 		log.debug("toUser : {}", request.getToUserEmail()); 
 		if(!HttpSessionUtils.isLoginUser(session)) {
 			throw new LoginNotUserException("로그인을 해야합니다.");

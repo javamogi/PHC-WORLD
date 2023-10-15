@@ -18,6 +18,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpSession;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,6 +29,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.mockito.Mockito.when;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -70,6 +72,7 @@ public class ChatControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "test@test.test", authorities = "ROLE_ADMIN")
     public void 로그인_회원_채팅_목록() throws Exception {
         List<String> names = new ArrayList<>();
         names.add(user.getName());
@@ -89,6 +92,7 @@ public class ChatControllerTest {
         when(chatService.getChatRoomList(user)).thenReturn(chatRoomList);
 
         this.mvc.perform(get("/chat/rooms")
+                        .with(csrf())
                         .session(mockSession)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
@@ -104,6 +108,7 @@ public class ChatControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "test@test.test", authorities = "ROLE_ADMIN")
     public void 메세지_보냄() throws Exception {
         List<Long> ids = new ArrayList<>();
         ids.add(2L);
@@ -123,6 +128,7 @@ public class ChatControllerTest {
         when(chatService.sendMessage(user, dto)).thenReturn(responseDto);
 
         this.mvc.perform(post("/chat/message")
+                        .with(csrf())
                         .session(mockSession)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
@@ -136,6 +142,7 @@ public class ChatControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "test@test.test", authorities = "ROLE_ADMIN")
     @Transactional
     public void 메세지_목록() throws Exception {
         List<Long> ids = new ArrayList<>();
@@ -147,6 +154,7 @@ public class ChatControllerTest {
         MessageResponseDto message = chatService.sendMessage(user, dto);
         em.clear();
         this.mvc.perform(get("/chat/{chatRoomId}/messages", message.getChatRoomId())
+                        .with(csrf())
                         .param("pageNum", "1")
                         .session(mockSession)
                         .accept(MediaType.APPLICATION_JSON))
@@ -162,6 +170,7 @@ public class ChatControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "test@test.test", authorities = "ROLE_ADMIN")
     @Transactional
     public void 메세지_삭제() throws Exception {
 
@@ -175,6 +184,7 @@ public class ChatControllerTest {
         MessageResponseDto message = chatService.sendMessage(user, dto);
 
         this.mvc.perform(patch("/chat/messages/{messageId}", message.getMessageId())
+                        .with(csrf())
                         .session(mockSession)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())

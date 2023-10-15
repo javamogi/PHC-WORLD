@@ -23,6 +23,7 @@ import org.springframework.validation.ObjectError;
 import java.security.Key;
 import java.time.Duration;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -32,6 +33,7 @@ public class TokenProvider {
     private static final String BEARER_TYPE = "bearer";
     private static final long ACCESS_TOKEN_EXPIRE_TIME = 1000 * 60 * 30;            // 30분
     private static final long REFRESH_TOKEN_EXPIRE_TIME = 1000 * 60 * 60 * 24 * 3;  // 3일
+//    private static final long REFRESH_TOKEN_EXPIRE_TIME = 1000 * 10;  // 10초
 
     private final Key key;
 
@@ -102,7 +104,7 @@ public class TokenProvider {
 
         ValueOperations<String, String> ops = redisTemplate.opsForValue();
         Duration expireDuration = Duration.ofMillis(REFRESH_TOKEN_EXPIRE_TIME);
-        ops.set(userKey, refreshToken, expireDuration.getSeconds());
+        ops.set(userKey, refreshToken, expireDuration.getSeconds(), TimeUnit.SECONDS);
 
         return TokenDto.builder()
                 .grantType(BEARER_TYPE)
