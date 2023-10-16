@@ -10,6 +10,7 @@ import javax.persistence.OneToMany;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.phcworld.domain.answer.TempDiaryAnswer;
+import com.phcworld.domain.board.dto.TempDiaryRequest;
 import com.phcworld.domain.good.TempGood;
 import com.phcworld.domain.parent.BasicBoardAndAnswer;
 import com.phcworld.domain.user.User;

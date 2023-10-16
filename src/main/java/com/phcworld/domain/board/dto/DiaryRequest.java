@@ -1,4 +1,4 @@
-package com.phcworld.domain.board;
+package com.phcworld.domain.board.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,14 +9,14 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class FreeBoardRequest {
-
+public class DiaryRequest {
+	
 	private Long id;
-
+	
 	private String title;
-
+	
 	private String contents;
-
-	private String icon;
+	
+	private String thumbnail;
 
 }

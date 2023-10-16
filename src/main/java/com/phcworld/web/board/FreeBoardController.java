@@ -4,16 +4,15 @@ import java.util.List;
 
 import javax.servlet.http.HttpSession;
 
-import com.phcworld.domain.board.FreeBoardSearchDto;
+import com.phcworld.domain.board.dto.FreeBoardSearchDto;
 import com.phcworld.service.timeline.TimelineServiceImpl;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import com.phcworld.domain.board.FreeBoardRequest;
-import com.phcworld.domain.board.FreeBoardResponse;
+import com.phcworld.domain.board.dto.FreeBoardRequest;
+import com.phcworld.domain.board.dto.FreeBoardResponse;
 import com.phcworld.domain.user.User;
 import com.phcworld.service.board.FreeBoardService;
 import com.phcworld.utils.HttpSessionUtils;

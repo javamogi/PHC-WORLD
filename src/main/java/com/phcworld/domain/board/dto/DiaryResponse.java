@@ -1,8 +1,9 @@
-package com.phcworld.domain.board;
+package com.phcworld.domain.board.dto;
 
 import java.util.List;
 
 import com.phcworld.domain.api.model.response.DiaryAnswerApiResponse;
+import com.phcworld.domain.board.Diary;
 import com.phcworld.domain.user.User;
 
 import com.phcworld.repository.board.dto.DiarySelectDto;

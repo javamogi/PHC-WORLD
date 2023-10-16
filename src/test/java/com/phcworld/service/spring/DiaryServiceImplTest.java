@@ -1,8 +1,6 @@
 package com.phcworld.service.spring;
 
-import com.phcworld.domain.board.DiaryResponse;
-import com.phcworld.domain.board.FreeBoardResponse;
-import com.phcworld.domain.board.FreeBoardSearchDto;
+import com.phcworld.domain.board.dto.DiaryResponse;
 import com.phcworld.domain.user.User;
 import com.phcworld.repository.board.dto.DiarySelectDto;
 import com.phcworld.service.board.DiaryServiceImpl;

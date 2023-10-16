@@ -1,8 +1,8 @@
 package com.phcworld.web.board;
 
 import com.phcworld.domain.board.FreeBoard;
-import com.phcworld.domain.board.FreeBoardRequest;
-import com.phcworld.domain.board.FreeBoardResponse;
+import com.phcworld.domain.board.dto.FreeBoardRequest;
+import com.phcworld.domain.board.dto.FreeBoardResponse;
 import com.phcworld.domain.user.Authority;
 import com.phcworld.domain.user.User;
 import com.phcworld.service.board.FreeBoardServiceImpl;

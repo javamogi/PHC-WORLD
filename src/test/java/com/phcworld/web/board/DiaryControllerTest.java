@@ -2,8 +2,8 @@ package com.phcworld.web.board;
 
 import com.phcworld.domain.api.model.response.SuccessResponse;
 import com.phcworld.domain.board.Diary;
-import com.phcworld.domain.board.DiaryRequest;
-import com.phcworld.domain.board.DiaryResponse;
+import com.phcworld.domain.board.dto.DiaryRequest;
+import com.phcworld.domain.board.dto.DiaryResponse;
 import com.phcworld.domain.good.Good;
 import com.phcworld.domain.user.Authority;
 import com.phcworld.domain.user.User;

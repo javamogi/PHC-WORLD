@@ -3,8 +3,8 @@ package com.phcworld.repository.board;
 
 import com.phcworld.domain.board.Diary;
 import com.phcworld.domain.board.DiaryInsertDto;
-import com.phcworld.domain.board.DiaryRequest;
-import com.phcworld.domain.board.DiaryResponse;
+import com.phcworld.domain.board.dto.DiaryRequest;
+import com.phcworld.domain.board.dto.DiaryResponse;
 import com.phcworld.domain.user.User;
 import com.phcworld.repository.board.dto.DiarySelectDto;
 import com.phcworld.util.DiaryFactory;
@@ -26,7 +26,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StopWatch;
 
-import javax.persistence.EntityManager;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -91,7 +90,7 @@ public class DiaryRepositoryTest {
 		StopWatch queryStopWatch = new StopWatch();
 		queryStopWatch.start();
 
-		String sql = String.format("INSERT INTO %s (writer_id, title, contents, thumbnail, create_date, update_date) VALUES (:writerId, :title, :contents, :thumbnail, :createDate, :updateDate)", "diary");
+		String sql = String.format("INSERT INTO %s (writer_id, title, contents, thumbnail, count_good, create_date, update_date) VALUES (:writerId, :title, :contents, :thumbnail, :countGood, :createDate, :updateDate)", "diary");
 
 		SqlParameterSource[] params = list
 				.stream()

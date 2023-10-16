@@ -3,7 +3,7 @@ package com.phcworld.service.board;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.phcworld.domain.board.DiaryResponseDto;
+import com.phcworld.domain.board.dto.DiaryResponseDto;
 import com.phcworld.domain.common.SaveType;
 import com.phcworld.exception.model.CustomException;
 import com.phcworld.repository.board.dto.DiarySelectDto;
@@ -20,8 +20,8 @@ import com.phcworld.domain.answer.DiaryAnswer;
 import com.phcworld.domain.api.model.response.DiaryAnswerApiResponse;
 import com.phcworld.domain.api.model.response.SuccessResponse;
 import com.phcworld.domain.board.Diary;
-import com.phcworld.domain.board.DiaryRequest;
-import com.phcworld.domain.board.DiaryResponse;
+import com.phcworld.domain.board.dto.DiaryRequest;
+import com.phcworld.domain.board.dto.DiaryResponse;
 import com.phcworld.domain.user.User;
 import com.phcworld.repository.board.DiaryRepository;
 import com.phcworld.service.alert.AlertServiceImpl;
@@ -84,6 +84,7 @@ public class DiaryServiceImpl implements DiaryService {
 				.title(request.getTitle())
 				.contents(request.getContents())
 				.thumbnail(request.getThumbnail())
+				.countGood(0L)
 				.build();
 		Diary createdDiary = diaryRepository.save(diary);
 		

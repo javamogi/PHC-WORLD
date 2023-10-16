@@ -6,8 +6,8 @@ import java.util.List;
 import org.springframework.data.domain.Page;
 
 import com.phcworld.domain.board.TempDiary;
-import com.phcworld.domain.board.TempDiaryRequest;
-import com.phcworld.domain.board.TempDiaryResponse;
+import com.phcworld.domain.board.dto.TempDiaryRequest;
+import com.phcworld.domain.board.dto.TempDiaryResponse;
 import com.phcworld.domain.user.User;
 
 public interface TempDiaryService {

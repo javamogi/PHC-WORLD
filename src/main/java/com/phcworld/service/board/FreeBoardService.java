@@ -3,9 +3,9 @@ package com.phcworld.service.board;
 import java.util.List;
 
 import com.phcworld.domain.board.FreeBoard;
-import com.phcworld.domain.board.FreeBoardRequest;
-import com.phcworld.domain.board.FreeBoardResponse;
-import com.phcworld.domain.board.FreeBoardSearchDto;
+import com.phcworld.domain.board.dto.FreeBoardRequest;
+import com.phcworld.domain.board.dto.FreeBoardResponse;
+import com.phcworld.domain.board.dto.FreeBoardSearchDto;
 import com.phcworld.domain.user.User;
 
 public interface FreeBoardService {

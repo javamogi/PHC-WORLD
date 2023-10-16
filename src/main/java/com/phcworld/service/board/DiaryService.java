@@ -7,8 +7,8 @@ import com.phcworld.repository.board.dto.DiarySelectDto;
 import org.springframework.data.domain.Page;
 
 import com.phcworld.domain.board.Diary;
-import com.phcworld.domain.board.DiaryRequest;
-import com.phcworld.domain.board.DiaryResponse;
+import com.phcworld.domain.board.dto.DiaryRequest;
+import com.phcworld.domain.board.dto.DiaryResponse;
 import com.phcworld.domain.user.User;
 
 public interface DiaryService {
