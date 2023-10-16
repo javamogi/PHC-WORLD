@@ -1,9 +1,9 @@
 package com.phcworld.web.board;
 
 import com.phcworld.domain.api.model.response.SuccessResponse;
-import com.phcworld.domain.board.DiaryRequest;
-import com.phcworld.domain.board.DiaryResponse;
-import com.phcworld.domain.board.DiaryResponseDto;
+import com.phcworld.domain.board.dto.DiaryRequest;
+import com.phcworld.domain.board.dto.DiaryResponse;
+import com.phcworld.domain.board.dto.DiaryResponseDto;
 import com.phcworld.domain.exception.LoginNotUserException;
 import com.phcworld.domain.user.User;
 import com.phcworld.repository.board.dto.DiarySelectDto;

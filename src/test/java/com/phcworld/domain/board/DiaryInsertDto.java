@@ -12,6 +12,7 @@ public class DiaryInsertDto {
     private String title;
     private String contents;
     private String thumbnail;
+    private Long countGood;
     private LocalDateTime createDate;
     private LocalDateTime updateDate;
 
@@ -21,6 +22,7 @@ public class DiaryInsertDto {
                 .title(diary.getTitle())
                 .contents(diary.getContents())
                 .thumbnail(diary.getThumbnail())
+                .countGood(diary.getCountGood())
                 .createDate(diary.getCreateDate())
                 .updateDate(diary.getUpdateDate())
                 .build();

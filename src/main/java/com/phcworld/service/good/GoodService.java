@@ -5,7 +5,6 @@ import java.util.List;
 
 import com.phcworld.domain.common.SaveType;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.phcworld.domain.board.Diary;
@@ -38,6 +37,7 @@ public class GoodService {
 			if(!diary.matchUser(loginUser)) {
 				alertService.createAlert(good);
 			}
+			diary.addGood();
 		} else {
 			goodRepository.delete(good);
 			diary.getGoodPushedUser().remove(good);
@@ -45,6 +45,7 @@ public class GoodService {
 			if(!diary.matchUser(loginUser)) {
 				alertService.deleteAlert(good);
 			}
+			diary.removeGood();
 		}
 		return diary;
 	}

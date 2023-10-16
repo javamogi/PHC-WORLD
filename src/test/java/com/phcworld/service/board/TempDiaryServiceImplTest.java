@@ -26,8 +26,8 @@ import org.springframework.transaction.annotation.Transactional;
 import com.phcworld.domain.answer.TempDiaryAnswer;
 import com.phcworld.domain.api.model.response.SuccessResponse;
 import com.phcworld.domain.board.TempDiary;
-import com.phcworld.domain.board.TempDiaryRequest;
-import com.phcworld.domain.board.TempDiaryResponse;
+import com.phcworld.domain.board.dto.TempDiaryRequest;
+import com.phcworld.domain.board.dto.TempDiaryResponse;
 import com.phcworld.domain.good.TempGood;
 import com.phcworld.domain.user.User;
 

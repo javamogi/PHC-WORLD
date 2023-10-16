@@ -5,21 +5,18 @@ import java.util.stream.Collectors;
 
 import com.phcworld.exception.model.NotFoundException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.phcworld.domain.answer.TempDiaryAnswer;
 import com.phcworld.domain.api.model.response.DiaryAnswerApiResponse;
 import com.phcworld.domain.api.model.response.SuccessResponse;
-import com.phcworld.domain.board.Diary;
 import com.phcworld.domain.board.TempDiary;
-import com.phcworld.domain.board.TempDiaryRequest;
-import com.phcworld.domain.board.TempDiaryResponse;
+import com.phcworld.domain.board.dto.TempDiaryRequest;
+import com.phcworld.domain.board.dto.TempDiaryResponse;
 import com.phcworld.domain.user.User;
 import com.phcworld.repository.board.TempDiaryRepository;
 import com.phcworld.service.alert.AlertServiceImpl;

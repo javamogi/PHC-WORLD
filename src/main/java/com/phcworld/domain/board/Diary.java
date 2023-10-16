@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.persistence.*;
 
+import com.phcworld.domain.board.dto.DiaryRequest;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -27,7 +28,8 @@ import lombok.experimental.Accessors;
 @EntityListeners(AuditingEntityListener.class)
 @ToString(exclude = {"writer", "diaryAnswers", "goodPushedUser"})
 @Table(indexes = {@Index(name = "idx__writer_id_create_date", columnList = "writer_id, createDate"),
-				@Index(name = "idx__create_date", columnList = "createDate")})
+				@Index(name = "idx__create_date", columnList = "createDate"),
+				@Index(name = "idx__count_good_create_date", columnList = "countGood, createDate")})
 public class Diary {
 
 	@Id
@@ -46,6 +48,14 @@ public class Diary {
 
 	private String thumbnail;
 
+	private Long countGood;
+
+	@CreatedDate
+	private LocalDateTime createDate;
+
+	@LastModifiedDate
+	private LocalDateTime updateDate;
+
 	@OneToMany(mappedBy = "diary", cascade = CascadeType.REMOVE)
 	// @JsonManagedReference
 	@JsonBackReference
@@ -54,12 +64,6 @@ public class Diary {
 	@OneToMany(mappedBy = "diary", cascade = CascadeType.REMOVE)
 	@JsonBackReference
 	private List<Good> goodPushedUser;
-
-	@CreatedDate
-	private LocalDateTime createDate;
-	
-	@LastModifiedDate
-	private LocalDateTime updateDate;
 
 	public String getFormattedCreateDate() {
 		return LocalDateTimeUtils.getTime(createDate);
@@ -103,5 +107,13 @@ public class Diary {
 
 	public void removeAnswer(DiaryAnswer diaryAnswer) {
 		this.getDiaryAnswers().remove(diaryAnswer);
+	}
+
+	public void addGood() {
+		this.countGood++;
+	}
+
+	public void removeGood() {
+		this.countGood--;
 	}
 }

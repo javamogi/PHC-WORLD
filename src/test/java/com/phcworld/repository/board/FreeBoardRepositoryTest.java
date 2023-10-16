@@ -25,7 +25,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.phcworld.domain.board.FreeBoard;
-import com.phcworld.domain.board.FreeBoardRequest;
+import com.phcworld.domain.board.dto.FreeBoardRequest;
 import com.phcworld.domain.user.User;
 
 import lombok.extern.slf4j.Slf4j;

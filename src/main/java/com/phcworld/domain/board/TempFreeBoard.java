@@ -9,6 +9,7 @@ import javax.persistence.OneToMany;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.phcworld.domain.answer.TempFreeBoardAnswer;
+import com.phcworld.domain.board.dto.TempFreeBoardRequest;
 import com.phcworld.domain.parent.BasicBoardAndAnswer;
 import com.phcworld.domain.user.User;
 

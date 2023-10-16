@@ -21,8 +21,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.phcworld.domain.answer.TempFreeBoardAnswer;
 import com.phcworld.domain.board.TempFreeBoard;
-import com.phcworld.domain.board.TempFreeBoardRequest;
-import com.phcworld.domain.board.TempFreeBoardResponse;
+import com.phcworld.domain.board.dto.TempFreeBoardRequest;
+import com.phcworld.domain.board.dto.TempFreeBoardResponse;
 import com.phcworld.domain.user.User;
 
 @RunWith(SpringJUnit4ClassRunner.class)

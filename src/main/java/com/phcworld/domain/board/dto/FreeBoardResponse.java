@@ -1,13 +1,9 @@
-package com.phcworld.domain.board;
+package com.phcworld.domain.board.dto;
 
-import java.time.Duration;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
-import com.phcworld.domain.answer.FreeBoardAnswer;
 import com.phcworld.domain.api.model.response.FreeBoardAnswerApiResponse;
+import com.phcworld.domain.board.FreeBoard;
 import com.phcworld.domain.user.User;
 
 import com.phcworld.repository.board.dto.FreeBoardSelectDto;

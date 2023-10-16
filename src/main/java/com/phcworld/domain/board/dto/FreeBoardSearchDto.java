@@ -1,4 +1,4 @@
-package com.phcworld.domain.board;
+package com.phcworld.domain.board.dto;
 
 import lombok.Getter;
 import lombok.Setter;

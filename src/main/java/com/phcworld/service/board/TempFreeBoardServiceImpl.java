@@ -7,15 +7,14 @@ import java.util.stream.Collectors;
 
 import com.phcworld.exception.model.NotFoundException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.phcworld.domain.answer.TempFreeBoardAnswer;
 import com.phcworld.domain.api.model.response.FreeBoardAnswerApiResponse;
 import com.phcworld.domain.board.TempFreeBoard;
-import com.phcworld.domain.board.TempFreeBoardRequest;
-import com.phcworld.domain.board.TempFreeBoardResponse;
+import com.phcworld.domain.board.dto.TempFreeBoardRequest;
+import com.phcworld.domain.board.dto.TempFreeBoardResponse;
 import com.phcworld.domain.user.User;
 import com.phcworld.repository.board.TempFreeBoardRepository;
 import com.phcworld.service.alert.AlertServiceImpl;

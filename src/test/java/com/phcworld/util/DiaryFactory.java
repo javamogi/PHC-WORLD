@@ -12,7 +12,6 @@ import java.time.LocalDateTime;
 import java.util.function.Predicate;
 
 import static org.jeasy.random.FieldPredicates.*;
-import static org.jeasy.random.FieldPredicates.inClass;
 
 public class DiaryFactory {
     public static EasyRandom getDiaryRandomEntity(){
@@ -30,12 +29,17 @@ public class DiaryFactory {
                 .and(ofType(User.class))
                 .and(inClass(Diary.class));
 
+        Predicate<Field> countPredicate = named("countGood")
+                .and(ofType(Long.class))
+                .and(inClass(Diary.class));
+
         LocalDate firstDate = LocalDate.of(2010, 1, 1);
         LocalDate lastDate = LocalDate.now().minusDays(1);
         EasyRandomParameters param = new EasyRandomParameters()
                 .excludeField(idPredicate)
                 .dateRange(firstDate, lastDate)
-                .randomize(writerIdPredicate, () -> user);
+                .randomize(writerIdPredicate, () -> user)
+                .randomize(countPredicate, () -> (long) (Math.random() * 1000));
 
         return new EasyRandom(param);
     }
