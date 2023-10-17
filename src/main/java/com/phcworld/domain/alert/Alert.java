@@ -4,11 +4,7 @@ import java.time.LocalDateTime;
 
 import javax.persistence.*;
 
-import com.phcworld.domain.answer.DiaryAnswer;
-import com.phcworld.domain.answer.FreeBoardAnswer;
-import com.phcworld.domain.common.SaveType;
 import com.phcworld.domain.embedded.PostInfo;
-import com.phcworld.domain.good.Good;
 import com.phcworld.domain.user.User;
 import com.phcworld.utils.LocalDateTimeUtils;
 
@@ -59,7 +55,7 @@ public class Alert {
 	
 	private LocalDateTime createDate;
 
-	private Boolean read;
+	private Boolean isRead;
 
 	public String getFormattedCreateDate() {
 		return LocalDateTimeUtils.getTime(createDate);

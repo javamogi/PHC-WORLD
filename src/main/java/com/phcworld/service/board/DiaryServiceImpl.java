@@ -58,7 +58,7 @@ public class DiaryServiceImpl implements DiaryService {
 	@Override
 	public Page<DiarySelectDto> findPageDiary(User loginUser, Integer pageNum, User requestUser) {
 //		PageRequest pageRequest = PageRequest.of(pageNum - 1, 6, new Sort(Direction.DESC, "id"));
-		PageRequest pageRequest = PageRequest.of(pageNum - 1, 6, Sort.by("createDate").descending());
+		PageRequest pageRequest = PageRequest.of(pageNum - 1, 6, Sort.by("good3").descending());
 		if(isLoginUser(loginUser, requestUser)) {
 			return diaryRepository.findAllPage(requestUser, pageRequest);
 		}
@@ -134,7 +134,7 @@ public class DiaryServiceImpl implements DiaryService {
 		Diary updatedGoodCount = diaryRepository.save(goodService.pushGood(diary, loginUser));
 		
 		return SuccessResponse.builder()
-				.success(Integer.toString(updatedGoodCount.getCountOfGood()))
+				.success(Long.toString(updatedGoodCount.getCountGood()))
 				.build();
 	}
 	

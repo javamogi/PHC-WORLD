@@ -61,7 +61,7 @@ public class AlertServiceImpl implements AlertService {
 				.registerUser(good.getUser())
 				.postWriter(good.getDiary().getWriter())
 				.createDate(good.getCreateDate())
-				.read(false)
+				.isRead(false)
 				.build();
 		return alertRepository.save(alert);
 	}
@@ -79,7 +79,7 @@ public class AlertServiceImpl implements AlertService {
 //				.postWriter(diaryAnswer.getDiary().getWriter())
 				.postInfo(postInfo)
 				.createDate(diaryAnswer.getCreateDate())
-				.read(false)
+				.isRead(false)
 				.build();
 		return alertRepository.save(alert);
 	}
@@ -97,7 +97,7 @@ public class AlertServiceImpl implements AlertService {
 				.registerUser(freeBoardAnswer.getWriter())
 				.postWriter(freeBoardAnswer.getFreeBoard().getWriter())
 				.createDate(freeBoardAnswer.getCreateDate())
-				.read(false)
+				.isRead(false)
 				.build();
 		return alertRepository.save(alert);
 	}
