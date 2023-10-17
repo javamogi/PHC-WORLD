@@ -26,7 +26,7 @@ public class DiaryResponse {
 
 	private String countOfAnswers;
 
-	private Integer countOfGood;
+	private Long countOfGood;
 
 	private String updateDate;
 
@@ -42,7 +42,7 @@ public class DiaryResponse {
 				.contents(diary.getContents())
 				.thumbnail(diary.getThumbnail())
 				.countOfAnswers(diary.getCountOfAnswer())
-				.countOfGood(diary.getCountOfGood())
+				.countOfGood(diary.getCountGood())
 				.updateDate(diary.getFormattedUpdateDate())
 				.build();
 	}
@@ -54,7 +54,7 @@ public class DiaryResponse {
 				.title(diary.getTitle())
 				.thumbnail(diary.getThumbnail())
 				.countOfAnswers(diary.getCountOfAnswers() != null ? diary.getCountOfAnswers().toString() : "0")
-				.countOfGood(diary.getCountOfGood() != null ? diary.getCountOfGood().intValue() : 0)
+				.countOfGood(diary.getCountOfGood() != null ? diary.getCountOfGood() : 0)
 				.updateDate(diary.getFormattedUpdateDate())
 				.createDate(diary.getFormattedCreateDate())
 				.build();
