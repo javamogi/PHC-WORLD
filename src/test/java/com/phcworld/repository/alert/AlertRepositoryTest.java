@@ -104,7 +104,7 @@ public class AlertRepositoryTest {
 				.registerUser(diaryAnswer.getWriter())
 				.postWriter(diaryAnswer.getDiary().getWriter())
 				.createDate(LocalDateTime.now())
-				.read(false)
+				.isRead(false)
 				.build();
 		Alert createdAlert = alertRepository.save(alert);
 		assertNotNull(createdAlert);
@@ -124,7 +124,7 @@ public class AlertRepositoryTest {
 				.registerUser(freeBoardAnswer.getWriter())
 				.postWriter(freeBoardAnswer.getFreeBoard().getWriter())
 				.createDate(LocalDateTime.now())
-				.read(false)
+				.isRead(false)
 				.build();
 		Alert createdAlert = alertRepository.save(alert);
 		assertNotNull(createdAlert);

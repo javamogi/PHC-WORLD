@@ -242,6 +242,7 @@ public class DiaryControllerTest {
 				.contents("test")
 				.thumbnail("no-image-icon.gif")
 				.updateDate(LocalDateTime.now())
+				.countGood(0L)
 				.build();
 		DiaryResponse diaryResponse = DiaryResponse.builder()
 				.id(diary.getId())
@@ -250,7 +251,7 @@ public class DiaryControllerTest {
 				.contents(diary.getContents())
 				.thumbnail(diary.getThumbnail())
 				.countOfAnswers(diary.getCountOfAnswer())
-				.countOfGood(diary.getCountOfGood())
+				.countOfGood(diary.getCountGood())
 				.updateDate(diary.getFormattedUpdateDate())
 				.build();
 		when(this.diaryService.getOneDiary(1L))
@@ -294,7 +295,7 @@ public class DiaryControllerTest {
 				.contents(diary.getContents())
 				.thumbnail(diary.getThumbnail())
 				.countOfAnswers(diary.getCountOfAnswer())
-				.countOfGood(diary.getCountOfGood())
+				.countOfGood(diary.getCountGood())
 				.updateDate(diary.getFormattedUpdateDate())
 				.build();
 		when(this.diaryService.getOneDiary(1L))
@@ -344,6 +345,7 @@ public class DiaryControllerTest {
 				.writer(user2)
 				.title("test")
 				.contents("test")
+				.countGood(0L)
 				.thumbnail("no-image-icon.gif")
 				.build();
 		DiaryResponse diaryResponse = DiaryResponse.builder()
@@ -353,7 +355,7 @@ public class DiaryControllerTest {
 				.contents(diary.getContents())
 				.thumbnail(diary.getThumbnail())
 				.countOfAnswers(diary.getCountOfAnswer())
-				.countOfGood(diary.getCountOfGood())
+				.countOfGood(diary.getCountGood())
 				.updateDate(diary.getFormattedUpdateDate())
 				.build();
 		when(this.diaryService.getOneDiary(1L))
@@ -404,6 +406,7 @@ public class DiaryControllerTest {
 				.title("test")
 				.contents("test")
 				.thumbnail("no-image-icon.gif")
+				.countGood(0L)
 				.build();
 		DiaryResponse diaryResponse = DiaryResponse.builder()
 				.id(diary.getId())
@@ -412,7 +415,7 @@ public class DiaryControllerTest {
 				.contents(diary.getContents())
 				.thumbnail(diary.getThumbnail())
 				.countOfAnswers(diary.getCountOfAnswer())
-				.countOfGood(diary.getCountOfGood())
+				.countOfGood(diary.getCountGood())
 				.updateDate(diary.getFormattedUpdateDate())
 				.build();
 		when(this.diaryService.getOneDiary(1L))
@@ -461,7 +464,7 @@ public class DiaryControllerTest {
 				.contents(diary.getContents())
 				.thumbnail(diary.getThumbnail())
 				.countOfAnswers(diary.getCountOfAnswer())
-				.countOfGood(diary.getCountOfGood())
+				.countOfGood(diary.getCountGood())
 				.updateDate(diary.getFormattedUpdateDate())
 				.build();
 		when(this.diaryService.getOneDiary(1L))
@@ -502,7 +505,7 @@ public class DiaryControllerTest {
 				.contents(diary.getContents())
 				.thumbnail(diary.getThumbnail())
 				.countOfAnswers(diary.getCountOfAnswer())
-				.countOfGood(diary.getCountOfGood())
+				.countOfGood(diary.getCountGood())
 				.updateDate(diary.getFormattedUpdateDate())
 				.build();
 		when(this.diaryService.getOneDiary(1L))
@@ -556,7 +559,7 @@ public class DiaryControllerTest {
 				.contents(diary.getContents())
 				.thumbnail(diary.getThumbnail())
 				.countOfAnswers(diary.getCountOfAnswer())
-				.countOfGood(diary.getCountOfGood())
+				.countOfGood(diary.getCountGood())
 				.updateDate(diary.getFormattedUpdateDate())
 				.build();
 		when(this.diaryService.getOneDiary(1L))
@@ -620,7 +623,7 @@ public class DiaryControllerTest {
 				.contents(updateDiary.getContents())
 				.thumbnail(updateDiary.getThumbnail())
 				.countOfAnswers(updateDiary.getCountOfAnswer())
-				.countOfGood(updateDiary.getCountOfGood())
+				.countOfGood(updateDiary.getCountGood())
 				.updateDate(updateDiary.getFormattedUpdateDate())
 				.build();
 		diary.update(request);
