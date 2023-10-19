@@ -55,6 +55,7 @@ public class DiaryRepositoryCustomImpl implements DiaryRepositoryCustom{
 //                .groupBy(diary)
 //                .fetch();
 
+
         List<DiarySelectDto> ids = queryFactory
                 .select(Projections.fields(DiarySelectDto.class,
                         diary.id,
