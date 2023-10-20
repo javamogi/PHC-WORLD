@@ -20,7 +20,7 @@ public class StatisticsService {
 
     @Transactional
     public List<StatisticsDto> getRegisterMemberStatistics(LocalDate startDate, LocalDate endDate){
-        return userRepository.findRegisterUserStatistics(startDate, endDate);
+        return statisticsRepository.findRegisterUserStatistics(startDate, endDate);
     }
 
     @Transactional
