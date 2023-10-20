@@ -1,6 +1,7 @@
 package com.phcworld.service.statistics;
 
-import com.phcworld.domain.statistics.UserStatistics;
+import com.phcworld.domain.statistics.StatisticsDto;
+import com.phcworld.repository.statistics.StatisticsRepository;
 import com.phcworld.repository.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -15,21 +16,28 @@ import java.util.stream.Collectors;
 public class StatisticsService {
     private final UserRepository userRepository;
 
+    private final StatisticsRepository statisticsRepository;
+
     @Transactional
-    public List<UserStatistics> getRegisterMemberStatistics(LocalDate startDate, LocalDate endDate){
-        return userRepository.findRegisterUserStatistics(startDate, endDate);
+    public List<StatisticsDto> getRegisterMemberStatistics(LocalDate startDate, LocalDate endDate){
+        return statisticsRepository.findRegisterUserStatistics(startDate, endDate);
     }
 
     @Transactional
-    public List<UserStatistics> getRegisterMemberStatisticsForNativeQuery(LocalDate startDate, LocalDate endDate){
+    public List<StatisticsDto> getRegisterMemberStatisticsForNativeQuery(LocalDate startDate, LocalDate endDate){
         return userRepository.findRegisterUserStatisticsForNativeQuery(startDate, endDate)
                 .stream()
                 .map(r -> {
-                    return UserStatistics.builder()
+                    return StatisticsDto.builder()
                             .date(r.getDate())
                             .count(r.getCount())
                             .build();
                 })
                 .collect(Collectors.toList());
+    }
+
+    @Transactional
+    public List<StatisticsDto> getPostDiaryStatistics(LocalDate startDate, LocalDate endDate){
+        return statisticsRepository.findPostDiaryStatistics(startDate, endDate);
     }
 }

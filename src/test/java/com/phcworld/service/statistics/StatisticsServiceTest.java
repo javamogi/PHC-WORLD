@@ -1,6 +1,6 @@
 package com.phcworld.service.statistics;
 
-import com.phcworld.domain.statistics.UserStatistics;
+import com.phcworld.domain.statistics.StatisticsDto;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -24,8 +24,10 @@ public class StatisticsServiceTest {
         LocalDate startDate = LocalDate.of(2023, 1, 1);
         LocalDate endDate = LocalDate.of(2023, 12, 31);
 
-        List<UserStatistics> list = statisticsService.getRegisterMemberStatistics(startDate, endDate);
+        List<StatisticsDto> userRegsiterList = statisticsService.getRegisterMemberStatistics(startDate, endDate);
+        log.info("user list : {}", userRegsiterList);
 //        List<UserStatistics> list = statisticsService.getRegisterMemberStatisticsForNativeQuery(startDate, endDate);
-        log.info("list : {}", list);
+        List<StatisticsDto> diaryPostList = statisticsService.getPostDiaryStatistics(startDate, endDate);
+        log.info("diary list : {}", diaryPostList);
     }
 }
