@@ -1,6 +1,5 @@
 package com.phcworld.repository.user;
 
-import com.phcworld.domain.statistics.UserStatistics;
 import com.phcworld.domain.statistics.UserStatisticsInterface;
 import org.springframework.data.jpa.repository.JpaRepository;
 
