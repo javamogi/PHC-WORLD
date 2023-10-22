@@ -230,6 +230,7 @@ public class DiaryRepositoryCustomImpl implements DiaryRepositoryCustom{
     // DiarySelectDto의 countOfGood 자료형을 Integer로 변경해야함
     // 서브쿼리를 사용한다는것은 같지만 속도는 0.5초가량 빠름
     private List<DiarySelectDto> findAllListGoodPushedUserSize(User user, Pageable pageable){
+//    private List<DiarySelectDto> findAllList(User user, Pageable pageable){
 
         List<OrderSpecifier> orders = getOrderSpecifier(pageable);
 
@@ -267,6 +268,7 @@ public class DiaryRepositoryCustomImpl implements DiaryRepositoryCustom{
 
     // 좋아요 카운트 컬럼을 추가하여 index도 추가
     // 쓰기에서 이전보다 더 많은 비용이 발생할 것으로 예상
+//    private List<DiarySelectDto> findAllListByIndexColumn(User user, Pageable pageable){
     private List<DiarySelectDto> findAllList(User user, Pageable pageable){
 
         List<OrderSpecifier> orders = getOrderSpecifier(pageable);
