@@ -1,12 +1,14 @@
 package com.phcworld.service.statistics;
 
 import com.phcworld.domain.statistics.StatisticsDto;
+import com.phcworld.domain.statistics.UserStatisticsDto;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.util.StopWatch;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -29,5 +31,25 @@ public class StatisticsServiceTest {
 //        List<UserStatistics> list = statisticsService.getRegisterMemberStatisticsForNativeQuery(startDate, endDate);
         List<StatisticsDto> diaryPostList = statisticsService.getPostDiaryStatistics(startDate, endDate);
         log.info("diary list : {}", diaryPostList);
+    }
+
+    @Test
+    public void 회원_게시물_등록_카운트_by_서브쿼리(){
+        StopWatch stopWatch = new StopWatch();
+        stopWatch.start();
+        List<UserStatisticsDto> countList = statisticsService.getUserPostStatistics();
+        stopWatch.stop();
+        log.info("select 시간 : {}", stopWatch.getTotalTimeSeconds());
+        log.info("count list : {}", countList);
+    }
+
+    @Test
+    public void 회원_게시물_등록_카운트_by_조인(){
+        StopWatch stopWatch = new StopWatch();
+        stopWatch.start();
+        List<UserStatisticsDto> countList = statisticsService.getUserPostStatistics2();
+        stopWatch.stop();
+        log.info("select 시간 : {}", stopWatch.getTotalTimeSeconds());
+        log.info("count list : {}", countList);
     }
 }

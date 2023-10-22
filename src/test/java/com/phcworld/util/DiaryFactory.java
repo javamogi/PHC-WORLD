@@ -2,6 +2,7 @@ package com.phcworld.util;
 
 import com.phcworld.domain.answer.DiaryAnswer;
 import com.phcworld.domain.board.Diary;
+import com.phcworld.domain.good.Good;
 import com.phcworld.domain.user.User;
 import org.jeasy.random.EasyRandom;
 import org.jeasy.random.EasyRandomParameters;
@@ -60,5 +61,33 @@ public class DiaryFactory {
                 .diary(diary)
                 .contents("test")
                 .build();
+    }
+
+    public static EasyRandom getGoodEntity(){
+        Predicate<Field> idPredicate = named("id")
+                .and(ofType(Long.class))
+                .and(inClass(Good.class));
+
+        Predicate<Field> userIdPredicate = named("user")
+                .and(ofType(User.class))
+                .and(inClass(Good.class));
+
+        Predicate<Field> diaryIdPredicate = named("diary")
+                .and(ofType(Diary.class))
+                .and(inClass(Good.class));
+
+        LocalDate firstDate = LocalDate.of(2012, 1, 1);
+        LocalDate lastDate = LocalDate.now().minusDays(1);
+        EasyRandomParameters param = new EasyRandomParameters()
+                .excludeField(idPredicate)
+                .dateRange(firstDate, lastDate)
+                .randomize(userIdPredicate, () -> User.builder()
+                        .id((long) (Math.random() * 300) + 1)
+                        .build())
+                .randomize(diaryIdPredicate, () -> Diary.builder()
+                        .id((long) (Math.random() * 3000000) + 1)
+                        .build());
+
+        return new EasyRandom(param);
     }
 }

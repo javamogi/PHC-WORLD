@@ -1,11 +1,15 @@
 package com.phcworld.repository.statistics;
 
 import com.phcworld.domain.board.QDiary;
+import com.phcworld.domain.board.QFreeBoard;
 import com.phcworld.domain.statistics.StatisticsDto;
+import com.phcworld.domain.statistics.UserStatisticsDto;
 import com.phcworld.domain.user.QUser;
+import com.querydsl.core.types.ExpressionUtils;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.core.types.dsl.StringTemplate;
+import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -21,6 +25,8 @@ public class StatisticsRepository {
     QDiary diary = QDiary.diary;
 
     QUser user = QUser.user;
+
+    QFreeBoard freeBoard = QFreeBoard.freeBoard;
 
     public List<StatisticsDto> findRegisterUserStatistics(LocalDate startDate, LocalDate endDate){
         LocalDateTime start = startDate.atStartOfDay();
@@ -73,6 +79,37 @@ public class StatisticsRepository {
                 .from(diary)
                 .where(diary.createDate.between(start, end))
                 .groupBy(formattedDate)
+                .fetch();
+    }
+
+    public List<UserStatisticsDto> findUserPostRegisterStatistics(){
+
+        return queryFactory.select(Projections.fields(UserStatisticsDto.class,
+                        ExpressionUtils.as(
+                                JPAExpressions
+                                        .select(freeBoard.count())
+                                        .from(freeBoard)
+                                        .where(freeBoard.writer.eq(user)), "freeBoardPostCount"),
+                        ExpressionUtils.as(
+                                JPAExpressions
+                                        .select(diary.count())
+                                        .from(diary)
+                                        .where(diary.writer.eq(user)), "diaryPostCount"),
+                        user.name.as("userId")))
+                .from(user)
+                .fetch();
+    }
+
+    public List<UserStatisticsDto> findUserPostRegisterStatistics2(){
+
+        return queryFactory.select(Projections.fields(UserStatisticsDto.class,
+                        user.name.as("userId"),
+                        freeBoard.count().as("freeBoardPostCount"),
+                        diary.count().as("diaryPostCount")))
+                .from(user)
+                .leftJoin(freeBoard).on(freeBoard.writer.eq(user))
+                .leftJoin(diary).on(diary.writer.eq(user))
+                .groupBy(user.name)
                 .fetch();
     }
 }

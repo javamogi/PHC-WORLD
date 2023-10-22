@@ -1,6 +1,7 @@
 package com.phcworld.service.statistics;
 
 import com.phcworld.domain.statistics.StatisticsDto;
+import com.phcworld.domain.statistics.UserStatisticsDto;
 import com.phcworld.repository.statistics.StatisticsRepository;
 import com.phcworld.repository.user.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -39,5 +40,15 @@ public class StatisticsService {
     @Transactional
     public List<StatisticsDto> getPostDiaryStatistics(LocalDate startDate, LocalDate endDate){
         return statisticsRepository.findPostDiaryStatistics(startDate, endDate);
+    }
+
+    @Transactional
+    public List<UserStatisticsDto> getUserPostStatistics(){
+        return statisticsRepository.findUserPostRegisterStatistics();
+    }
+
+    @Transactional
+    public List<UserStatisticsDto> getUserPostStatistics2(){
+        return statisticsRepository.findUserPostRegisterStatistics2();
     }
 }
