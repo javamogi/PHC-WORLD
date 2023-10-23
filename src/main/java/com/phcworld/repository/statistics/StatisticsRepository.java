@@ -5,7 +5,9 @@ import com.phcworld.domain.board.QFreeBoard;
 import com.phcworld.domain.statistics.StatisticsDto;
 import com.phcworld.domain.statistics.UserStatisticsDto;
 import com.phcworld.domain.user.QUser;
+import com.phcworld.domain.user.User;
 import com.querydsl.core.types.ExpressionUtils;
+import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.core.types.dsl.StringTemplate;
@@ -17,6 +19,7 @@ import org.springframework.stereotype.Repository;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 
 @Repository
 @RequiredArgsConstructor
@@ -82,7 +85,7 @@ public class StatisticsRepository {
                 .fetch();
     }
 
-    public List<UserStatisticsDto> findUserPostRegisterStatistics(){
+    public List<UserStatisticsDto> findUserPostRegisterStatistics(User searchUser){
 
         return queryFactory.select(Projections.fields(UserStatisticsDto.class,
                         ExpressionUtils.as(
@@ -97,7 +100,15 @@ public class StatisticsRepository {
                                         .where(diary.writer.eq(user)), "diaryPostCount"),
                         user.name.as("userId")))
                 .from(user)
+                .where(eqUser(searchUser))
                 .fetch();
+    }
+
+    private Predicate eqUser(User searchUser) {
+        if(Objects.isNull(searchUser)){
+            return null;
+        }
+        return user.eq(searchUser);
     }
 
     public List<UserStatisticsDto> findUserPostRegisterStatistics2(){

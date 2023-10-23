@@ -2,6 +2,7 @@ package com.phcworld.service.statistics;
 
 import com.phcworld.domain.statistics.StatisticsDto;
 import com.phcworld.domain.statistics.UserStatisticsDto;
+import com.phcworld.domain.user.User;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -35,9 +36,12 @@ public class StatisticsServiceTest {
 
     @Test
     public void 회원_게시물_등록_카운트_by_서브쿼리(){
+//        User user = User.builder()
+//                .id(1L)
+//                .build();
         StopWatch stopWatch = new StopWatch();
         stopWatch.start();
-        List<UserStatisticsDto> countList = statisticsService.getUserPostStatistics();
+        List<UserStatisticsDto> countList = statisticsService.getUserPostStatistics(null);
         stopWatch.stop();
         log.info("select 시간 : {}", stopWatch.getTotalTimeSeconds());
         log.info("count list : {}", countList);

@@ -2,6 +2,7 @@ package com.phcworld.service.statistics;
 
 import com.phcworld.domain.statistics.StatisticsDto;
 import com.phcworld.domain.statistics.UserStatisticsDto;
+import com.phcworld.domain.user.User;
 import com.phcworld.repository.statistics.StatisticsRepository;
 import com.phcworld.repository.user.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -43,8 +44,8 @@ public class StatisticsService {
     }
 
     @Transactional
-    public List<UserStatisticsDto> getUserPostStatistics(){
-        return statisticsRepository.findUserPostRegisterStatistics();
+    public List<UserStatisticsDto> getUserPostStatistics(User user){
+        return statisticsRepository.findUserPostRegisterStatistics(user);
     }
 
     @Transactional
