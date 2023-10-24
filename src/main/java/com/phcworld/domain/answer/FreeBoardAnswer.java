@@ -2,15 +2,7 @@ package com.phcworld.domain.answer;
 
 import java.time.LocalDateTime;
 
-import javax.persistence.Entity;
-import javax.persistence.EntityListeners;
-import javax.persistence.ForeignKey;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.Lob;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -35,6 +27,8 @@ import lombok.experimental.Accessors;
 @Builder
 @Accessors(chain = true)
 @EntityListeners(AuditingEntityListener.class)
+@Table(indexes = {@Index(name = "idx__writer_id_create_date", columnList = "writer_id, createDate"),
+		@Index(name = "idx__free_board_id_create_date", columnList = "free_board_id, createDate")})
 public class FreeBoardAnswer {
 
 	@Id

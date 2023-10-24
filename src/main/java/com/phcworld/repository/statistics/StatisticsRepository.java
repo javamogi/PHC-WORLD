@@ -1,5 +1,7 @@
 package com.phcworld.repository.statistics;
 
+import com.phcworld.domain.answer.QDiaryAnswer;
+import com.phcworld.domain.answer.QFreeBoardAnswer;
 import com.phcworld.domain.board.QDiary;
 import com.phcworld.domain.board.QFreeBoard;
 import com.phcworld.domain.statistics.StatisticsDto;
@@ -30,6 +32,9 @@ public class StatisticsRepository {
     QUser user = QUser.user;
 
     QFreeBoard freeBoard = QFreeBoard.freeBoard;
+
+    QDiaryAnswer diaryAnswer = QDiaryAnswer.diaryAnswer;
+    QFreeBoardAnswer freeBoardAnswer = QFreeBoardAnswer.freeBoardAnswer;
 
     public List<StatisticsDto> findRegisterUserStatistics(LocalDate startDate, LocalDate endDate){
         LocalDateTime start = startDate.atStartOfDay();
@@ -98,6 +103,16 @@ public class StatisticsRepository {
                                         .select(diary.count())
                                         .from(diary)
                                         .where(diary.writer.eq(user)), "diaryPostCount"),
+                        ExpressionUtils.as(
+                                JPAExpressions
+                                        .select(diaryAnswer.count())
+                                        .from(diaryAnswer)
+                                        .where(diaryAnswer.writer.eq(user)), "diaryAnswerPostCount"),
+                        ExpressionUtils.as(
+                                JPAExpressions
+                                        .select(freeBoardAnswer.count())
+                                        .from(freeBoardAnswer)
+                                        .where(freeBoardAnswer.writer.eq(user)), "freeBoardAnswerPostCount"),
                         user.name.as("userId")))
                 .from(user)
                 .where(eqUser(searchUser))
@@ -116,10 +131,14 @@ public class StatisticsRepository {
         return queryFactory.select(Projections.fields(UserStatisticsDto.class,
                         user.name.as("userId"),
                         freeBoard.count().as("freeBoardPostCount"),
-                        diary.count().as("diaryPostCount")))
+                        diary.count().as("diaryPostCount"),
+                        diaryAnswer.count().as("diaryAnswerPostCount"),
+                        freeBoardAnswer.count().as("freeBoardAnswerPostCount")))
                 .from(user)
                 .leftJoin(freeBoard).on(freeBoard.writer.eq(user))
                 .leftJoin(diary).on(diary.writer.eq(user))
+                .leftJoin(diaryAnswer).on(diaryAnswer.writer.eq(user))
+                .leftJoin(freeBoardAnswer).on(freeBoardAnswer.writer.eq(user))
                 .groupBy(user.name)
                 .fetch();
     }
