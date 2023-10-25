@@ -127,7 +127,7 @@ public class FreeBoardController {
 		}
 		User loginUser = HttpSessionUtils.getUserFromSession(session);
 		FreeBoardResponse freeBoard = freeBoardService.getOneFreeBoard(id);
-		if (!loginUser.matchId(freeBoard.getWriter().getId()) && !loginUser.matchAdminAuthority()) {
+		if (!loginUser.matchAdminAuthority() && !loginUser.matchId(freeBoard.getWriterId())) {
 			model.addAttribute("errorMessage", "삭제 권한이 없습니다.");
 			return "user/login";
 		}

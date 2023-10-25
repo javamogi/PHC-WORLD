@@ -654,7 +654,7 @@ public class FreeBoardControllerTest {
 				.session(mockSession))
 		.andExpect(redirectedUrl("/freeboards"));
 	}
-	
+
 	@Test
 	public void deleteWhenEmptyLoginUser() throws Exception {
 		MockHttpSession mockSession = new MockHttpSession();

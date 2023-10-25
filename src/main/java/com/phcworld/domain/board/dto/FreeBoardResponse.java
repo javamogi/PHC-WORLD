@@ -65,4 +65,8 @@ public class FreeBoardResponse {
 	public boolean matchUser(User loginUser) {
 		return this.writer.equals(loginUser);
 	}
+
+    public Long getWriterId() {
+		return this.writer.getId();
+    }
 }
