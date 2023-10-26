@@ -1,9 +1,11 @@
 package com.phcworld.domain.board.dto;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.phcworld.domain.api.model.response.DiaryAnswerApiResponse;
 import com.phcworld.domain.board.Diary;
+import com.phcworld.domain.board.DiaryHashtag;
 import com.phcworld.domain.user.User;
 
 import com.phcworld.repository.board.dto.DiarySelectDto;
@@ -34,7 +36,16 @@ public class DiaryResponse {
 
 	private List<DiaryAnswerApiResponse> diaryAnswerList;
 
+	private List<String> hashtags;
+
 	public static DiaryResponse of(Diary diary){
+		List<DiaryHashtag> diaryHashtags = diary.getDiaryHashtags();
+		List<String> hashtagList = new ArrayList<>();
+		int size = diaryHashtags != null ? diaryHashtags.size() : 0;
+		for (int i = 0; i < size; i++){
+			DiaryHashtag diaryHashtag = diaryHashtags.get(i);
+			hashtagList.add(diaryHashtag.getHashtagName());
+		}
 		return DiaryResponse.builder()
 				.id(diary.getId())
 				.writer(diary.getWriter())
@@ -44,6 +55,7 @@ public class DiaryResponse {
 				.countOfAnswers(diary.getCountOfAnswer())
 				.countOfGood(diary.getCountGood())
 				.updateDate(diary.getFormattedUpdateDate())
+				.hashtags(hashtagList)
 				.build();
 	}
 
@@ -57,6 +69,7 @@ public class DiaryResponse {
 				.countOfGood(diary.getCountOfGood() != null ? diary.getCountOfGood() : 0)
 				.updateDate(diary.getFormattedUpdateDate())
 				.createDate(diary.getFormattedCreateDate())
+				.hashtags(diary.getHashtags())
 				.build();
 	}
 }

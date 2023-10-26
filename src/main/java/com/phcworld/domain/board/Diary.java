@@ -65,6 +65,9 @@ public class Diary {
 	@JsonBackReference
 	private List<Good> goodPushedUser;
 
+	@OneToMany(mappedBy = "diary", cascade = CascadeType.REMOVE)
+	private List<DiaryHashtag> diaryHashtags;
+
 	public String getFormattedCreateDate() {
 		return LocalDateTimeUtils.getTime(createDate);
 	}

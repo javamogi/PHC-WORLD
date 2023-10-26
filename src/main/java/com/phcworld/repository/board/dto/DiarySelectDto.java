@@ -6,6 +6,7 @@ import com.phcworld.utils.LocalDateTimeUtils;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Setter
 @Getter
@@ -30,6 +31,8 @@ public class DiarySelectDto {
     private LocalDateTime updateDate;
 
     private LocalDateTime createDate;
+
+    private List<String> hashtags;
 
     public String getFormattedUpdateDate(){
         return LocalDateTimeUtils.getTime(updateDate);

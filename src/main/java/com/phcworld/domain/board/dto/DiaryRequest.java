@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -18,5 +20,7 @@ public class DiaryRequest {
 	private String contents;
 	
 	private String thumbnail;
+
+	private List<String> hashtags;
 
 }
