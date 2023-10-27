@@ -14,6 +14,7 @@ import java.util.List;
 @EqualsAndHashCode
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
 public class DiarySelectDto {
 
     private Long id;
