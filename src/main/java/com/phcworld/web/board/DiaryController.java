@@ -31,12 +31,14 @@ public class DiaryController {
 	private final DiaryServiceImpl diaryService;
 
 	@GetMapping("/list/{email}")
-	public String getDairyList(@PathVariable String email, @RequestParam(defaultValue = "1") Integer pageNum, 
+	public String getDairyList(@PathVariable String email,
+							   @RequestParam(defaultValue = "1") Integer pageNum,
+			@RequestParam String searchKeyword,
 			Model model, HttpSession session) {
 		User loginUser = HttpSessionUtils.getUserFromSession(session);
 		User requestUser = userService.findUserByEmail(email);
 
-		Page<DiarySelectDto> diaryPage = diaryService.findPageDiary(loginUser, pageNum, requestUser);
+		Page<DiarySelectDto> diaryPage = diaryService.findPageDiary(loginUser, pageNum, requestUser, searchKeyword);
 
 		if (diaryPage != null) {
 			PageNationsUtil.viewPageNation("", pageNum, diaryPage.getTotalPages(), model);
@@ -54,11 +56,12 @@ public class DiaryController {
 
 	@GetMapping("/list/{email}/temp")
 	public String getDairyListTmp(@PathVariable String email, @RequestParam(defaultValue = "1") Integer pageNum,
+							   @RequestParam String searchKeyword,
 							   Model model, HttpSession session) {
 
 		User loginUser = HttpSessionUtils.getUserFromSession(session);
 		User requestUser = userService.findUserByEmail(email);
-		DiaryResponseDto dto = diaryService.getDiaryResponseListTemp(loginUser, email, pageNum);
+		DiaryResponseDto dto = diaryService.getDiaryResponseListTemp(loginUser, email, pageNum, searchKeyword);
 
 		if (dto != null) {
 			PageNationsUtil.viewPageNation("", pageNum, dto.getTotalPages(), model);
@@ -72,9 +75,9 @@ public class DiaryController {
 
 	@GetMapping("/list/{email}/temp2")
 	public String getDairyListTmp2(@PathVariable String email, @RequestParam(defaultValue = "1") Integer pageNum,
-							   Model model) {
+							   @RequestParam String searchKeyword, Model model) {
 		User requestUser = userService.findUserByEmail(email);
-		DiaryResponseDto dto = diaryService.findPageDiaryTemp2(requestUser, pageNum);
+		DiaryResponseDto dto = diaryService.findPageDiaryTemp2(requestUser, pageNum, searchKeyword);
 
 		if (!dto.getDiaries().isEmpty()) {
 			PageNationsUtil.viewPageNation("", pageNum, dto.getTotalPages(), model);

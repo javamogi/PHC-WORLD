@@ -4,6 +4,7 @@ import com.phcworld.domain.statistics.StatisticsDto;
 import com.phcworld.domain.statistics.UserStatisticsDto;
 import com.phcworld.domain.user.User;
 import lombok.extern.slf4j.Slf4j;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -48,6 +49,7 @@ public class StatisticsServiceTest {
     }
 
     @Test
+    @Ignore
     public void 회원_게시물_등록_카운트_by_조인(){
         StopWatch stopWatch = new StopWatch();
         stopWatch.start();

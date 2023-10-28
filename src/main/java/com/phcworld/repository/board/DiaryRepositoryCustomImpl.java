@@ -2,14 +2,14 @@ package com.phcworld.repository.board;
 
 import com.phcworld.domain.answer.QDiaryAnswer;
 import com.phcworld.domain.board.QDiary;
+import com.phcworld.domain.board.QDiaryHashtag;
+import com.phcworld.domain.board.QHashtag;
 import com.phcworld.domain.good.QGood;
+import com.phcworld.domain.message.dto.ChatRoomSelectDto;
 import com.phcworld.domain.user.QUser;
 import com.phcworld.domain.user.User;
 import com.phcworld.repository.board.dto.DiarySelectDto;
-import com.querydsl.core.types.ExpressionUtils;
-import com.querydsl.core.types.Order;
-import com.querydsl.core.types.OrderSpecifier;
-import com.querydsl.core.types.Projections;
+import com.querydsl.core.types.*;
 import com.querydsl.core.types.dsl.*;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -23,8 +23,12 @@ import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
+
+import static com.querydsl.core.group.GroupBy.groupBy;
+import static com.querydsl.core.group.GroupBy.list;
 
 @Repository
 @RequiredArgsConstructor
@@ -35,6 +39,8 @@ public class DiaryRepositoryCustomImpl implements DiaryRepositoryCustom{
     QUser qUser = QUser.user;
     QGood good = QGood.good;
     QDiaryAnswer answer = QDiaryAnswer.diaryAnswer;
+    QDiaryHashtag diaryHashtag = QDiaryHashtag.diaryHashtag;
+    QHashtag hashtag = QHashtag.hashtag;
 
     private List<DiarySelectDto> findAllListToSub(User user, Pageable pageable){
 
@@ -116,8 +122,8 @@ public class DiaryRepositoryCustomImpl implements DiaryRepositoryCustom{
     }
 
     @Override
-    public Page<DiarySelectDto> findAllPage(User user, Pageable pageable){
-        List<DiarySelectDto> content = findAllList(user, pageable);
+    public Page<DiarySelectDto> findAllPage(User user, Pageable pageable, String searchKeyword){
+        List<DiarySelectDto> content = findAllList(user, pageable, searchKeyword);
         Long count = getDiaryCount(null);
         return new PageImpl<>(content, pageable, count);
     }
@@ -269,7 +275,7 @@ public class DiaryRepositoryCustomImpl implements DiaryRepositoryCustom{
     // 좋아요 카운트 컬럼을 추가하여 index도 추가
     // 쓰기에서 이전보다 더 많은 비용이 발생할 것으로 예상
 //    private List<DiarySelectDto> findAllListByIndexColumn(User user, Pageable pageable){
-    private List<DiarySelectDto> findAllList(User user, Pageable pageable){
+    private List<DiarySelectDto> findAllListWithoutHashtag(User user, Pageable pageable){
 
         List<OrderSpecifier> orders = getOrderSpecifier(pageable);
 
@@ -302,6 +308,57 @@ public class DiaryRepositoryCustomImpl implements DiaryRepositoryCustom{
                 .where(diary.id.in(ids.stream().map(DiarySelectDto::getId).collect(Collectors.toList())))
                 .orderBy(orders.stream().toArray(OrderSpecifier[]::new))
                 .fetch();
+    }
+
+//    private List<DiarySelectDto> findAllListWithHashtag(User user, Pageable pageable){
+    private List<DiarySelectDto> findAllList(User user, Pageable pageable, String searchKeyword){
+
+        List<OrderSpecifier> orders = getOrderSpecifier(pageable);
+
+        List<DiarySelectDto> ids = queryFactory
+                .select(Projections.fields(DiarySelectDto.class,
+                        diary.id))
+                .from(diary)
+                .leftJoin(diaryHashtag).on(diaryHashtag.diary.eq(diary))
+                .leftJoin(hashtag).on(hashtag.eq(diaryHashtag.hashtag))
+                .where(eqWriter(user),
+                        findByHashtag(searchKeyword))
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .orderBy(orders.stream().toArray(OrderSpecifier[]::new))
+                .fetch();
+
+        Map<Long, DiarySelectDto> map =  queryFactory
+                .from(diary)
+                .leftJoin(diaryHashtag).on(diaryHashtag.diary.eq(diary))
+                .leftJoin(hashtag).on(hashtag.eq(diaryHashtag.hashtag))
+                .where(diary.id.in(ids.stream().map(DiarySelectDto::getId).collect(Collectors.toList())))
+                .orderBy(orders.stream().toArray(OrderSpecifier[]::new))
+                .transform(groupBy(diary.id).as(Projections.fields(DiarySelectDto.class,
+                        diary.id,
+                        diary.writer,
+                        diary.title,
+                        diary.thumbnail,
+                        ExpressionUtils.as(
+                                JPAExpressions
+                                        .select(answer.count())
+                                        .from(answer)
+                                        .where(answer.diary.eq(diary)), "countOfAnswers"),
+                        diary.countGood.as("countOfGood"),
+                        diary.updateDate,
+                        diary.createDate,
+                        list(
+                                hashtag.name
+                        ).as("hashtags")
+                )));
+        return new ArrayList<>(map.values());
+    }
+
+    private BooleanExpression findByHashtag(String keyword) {
+        if(keyword == null || keyword.equals("")){
+            return null;
+        }
+        return hashtag.name.eq(keyword);
     }
 
 }

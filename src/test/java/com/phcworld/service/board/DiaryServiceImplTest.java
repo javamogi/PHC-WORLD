@@ -16,6 +16,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
+import org.mockito.Spy;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -67,9 +68,10 @@ public class DiaryServiceImplTest {
 		list.add(DiarySelectDto.of(diary));
 		list.add(DiarySelectDto.of(diary2));
 
+		String searchKeyword = null;
 		Page<DiarySelectDto> page = new PageImpl<DiarySelectDto>(list);
-		when(diaryService.findPageDiary(user, 0, user)).thenReturn(page);
-		Page<DiarySelectDto> pageDiary = diaryService.findPageDiary(user, 0, user);
+		when(diaryService.findPageDiary(user, 0, user, searchKeyword)).thenReturn(page);
+		Page<DiarySelectDto> pageDiary = diaryService.findPageDiary(user, 0, user, searchKeyword);
 		List<DiarySelectDto> diaryList = pageDiary.getContent();
 		assertThat(diaryList)
 				.contains(DiarySelectDto.of(diary))
@@ -95,8 +97,9 @@ public class DiaryServiceImplTest {
 				.totalPages(page.getTotalPages())
 				.diaries(diaryResponseList)
 				.build();
-		when(diaryService.getDiaryResponseListTemp(user, user.getEmail(), 1)).thenReturn(diaryResponseDto);
-		DiaryResponseDto dto = diaryService.getDiaryResponseListTemp(user, user.getEmail(), 1);
+		String searchKeyword = null;
+		when(diaryService.getDiaryResponseListTemp(user, user.getEmail(), 1, null)).thenReturn(diaryResponseDto);
+		DiaryResponseDto dto = diaryService.getDiaryResponseListTemp(user, user.getEmail(), 1, null);
 		assertThat(dto.getDiaries())
 				.contains(DiaryResponse.of(diary))
 				.contains(DiaryResponse.of(diary2));
@@ -104,10 +107,14 @@ public class DiaryServiceImplTest {
 	
 	@Test
 	public void createDiary() {
+		List<String> hashtags = new ArrayList<>();
+		hashtags.add("#아침");
+		hashtags.add("#과일");
 		DiaryRequest request = DiaryRequest.builder()
 				.title("title")
 				.contents("contents")
 				.thumbnail("no-image-icon.gif")
+				.hashtags(hashtags)
 				.build();
 		DiaryResponse diaryResponse = DiaryResponse.builder()
 				.id(diary.getId())
@@ -115,12 +122,14 @@ public class DiaryServiceImplTest {
 				.title(request.getTitle())
 				.contents(request.getContents())
 				.thumbnail(request.getThumbnail())
+				.hashtags(hashtags)
 				.build();
 		when(diaryService.createDiary(user, request))
 		.thenReturn(diaryResponse);
 		DiaryResponse createdDiary = diaryService.createDiary(user, request);
 		assertThat("title").isEqualTo(createdDiary.getTitle());
 		assertThat("contents").isEqualTo(createdDiary.getContents());
+		assertThat(hashtags).contains("#아침").contains("#과일");
 	}
 	
 	@Test

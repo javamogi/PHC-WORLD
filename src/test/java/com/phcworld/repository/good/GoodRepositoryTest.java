@@ -5,6 +5,7 @@ import com.phcworld.domain.board.Diary;
 import com.phcworld.domain.board.DiaryInsertDto;
 import com.phcworld.domain.board.GoodInsertDto;
 import com.phcworld.domain.good.Good;
+import com.phcworld.domain.user.Authority;
 import com.phcworld.domain.user.User;
 import com.phcworld.repository.board.DiaryRepository;
 import com.phcworld.util.DiaryFactory;
@@ -23,6 +24,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StopWatch;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -84,6 +86,10 @@ public class GoodRepositoryTest {
 	public void setup(){
 		user = User.builder()
 				.id(1L)
+				.email("test@test.test")
+				.name("테스트")
+				.authority(Authority.ROLE_ADMIN)
+				.profileImage("blank-profile-picture.png")
 				.build();
 		diary = diaryRepository.save(DiaryFactory.getDiaryEntity(user));
 	}

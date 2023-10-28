@@ -104,10 +104,10 @@ public class DiaryControllerTest {
 		List<Integer> pageNations = new ArrayList<Integer>();
 		pageNations.add(1);
 		
-		
-		when(diaryService.findPageDiary(user, 1, requestUser))
+		String searchKeyword = null;
+		when(diaryService.findPageDiary(user, 1, requestUser, searchKeyword))
 		.thenReturn(page);
-		Page<DiarySelectDto> diaryPage = diaryService.findPageDiary(user, 1, requestUser);
+		Page<DiarySelectDto> diaryPage = diaryService.findPageDiary(user, 1, requestUser, searchKeyword);
 		
 		List<DiaryResponse> diaryResponseList = diaryPage.getContent().stream()
 				.map(DiaryResponse::of)

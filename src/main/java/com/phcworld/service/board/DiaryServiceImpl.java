@@ -3,9 +3,13 @@ package com.phcworld.service.board;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.phcworld.domain.board.DiaryHashtag;
+import com.phcworld.domain.board.Hashtag;
 import com.phcworld.domain.board.dto.DiaryResponseDto;
 import com.phcworld.domain.common.SaveType;
 import com.phcworld.exception.model.CustomException;
+import com.phcworld.repository.board.DiaryHashtagRepository;
+import com.phcworld.repository.board.HashtagRepository;
 import com.phcworld.repository.board.dto.DiarySelectDto;
 import com.phcworld.repository.user.UserRepository;
 import com.phcworld.service.user.UserService;
@@ -32,43 +36,45 @@ import com.phcworld.service.timeline.TimelineServiceImpl;
 @Service
 @RequiredArgsConstructor
 public class DiaryServiceImpl implements DiaryService {
-	
+
 	private final DiaryRepository diaryRepository;
-	
+
 	private final AlertServiceImpl alertService;
-	
+
 	private final TimelineServiceImpl timelineService;
-	
+
 	private final GoodService goodService;
 
 	private final UserService userService;
 
-	private final UserRepository userRepository;
+	private final DiaryHashtagRepository diaryHashtagRepository;
+
+	private final HashtagRepository hashtagRepository;
 
 	@Transactional(readOnly = true)
-	public DiaryResponseDto getDiaryResponseListTemp(User loginUser, String email, int pageNum) {
+	public DiaryResponseDto getDiaryResponseListTemp(User loginUser, String email, int pageNum, String searchKeyword) {
 		User requestUser = userService.findUserByEmail(email);
 
-		Page<DiarySelectDto> diaryPage = findPageDiary(loginUser, pageNum, requestUser);
+		Page<DiarySelectDto> diaryPage = findPageDiary(loginUser, pageNum, requestUser, searchKeyword);
 
 		return getDiaryResponseDto(diaryPage);
 	}
 
 	@Transactional(readOnly = true)
 	@Override
-	public Page<DiarySelectDto> findPageDiary(User loginUser, Integer pageNum, User requestUser) {
+	public Page<DiarySelectDto> findPageDiary(User loginUser, Integer pageNum, User requestUser, String searchKeyword) {
 //		PageRequest pageRequest = PageRequest.of(pageNum - 1, 6, new Sort(Direction.DESC, "id"));
 		PageRequest pageRequest = PageRequest.of(pageNum - 1, 6, Sort.by("good3").descending());
 		if(isLoginUser(loginUser, requestUser)) {
-			return diaryRepository.findAllPage(requestUser, pageRequest);
+			return diaryRepository.findAllPage(requestUser, pageRequest, searchKeyword);
 		}
-		return diaryRepository.findAllPage(loginUser, pageRequest);
+		return diaryRepository.findAllPage(loginUser, pageRequest, searchKeyword);
 	}
 
 	@Transactional(readOnly = true)
-	public DiaryResponseDto findPageDiaryTemp2(User requestUser, Integer pageNum) {
+	public DiaryResponseDto findPageDiaryTemp2(User requestUser, Integer pageNum, String searchKeyword) {
 		PageRequest pageRequest = PageRequest.of(pageNum - 1, 6, Sort.by("id").descending());
-		Page<DiarySelectDto> page = diaryRepository.findAllPage(requestUser, pageRequest);
+		Page<DiarySelectDto> page = diaryRepository.findAllPage(requestUser, pageRequest, searchKeyword);
 		return getDiaryResponseDto(page);
 	}
 
@@ -87,6 +93,20 @@ public class DiaryServiceImpl implements DiaryService {
 				.countGood(0L)
 				.build();
 		Diary createdDiary = diaryRepository.save(diary);
+
+		List<String> hashtags = request.getHashtags();
+		int size = hashtags != null ? hashtags.size() : 0;
+		for(int i = 0; i < size; i++){
+			Hashtag hashtag = hashtagRepository.findByName(hashtags.get(i))
+					.orElse(hashtagRepository.save(
+							Hashtag.builder()
+									.name(hashtags.get(i))
+									.build()));
+			diaryHashtagRepository.save(DiaryHashtag.builder()
+							.diary(diary)
+							.hashtag(hashtag)
+							.build());
+		}
 		
 		timelineService.createTimeline(createdDiary);
 		
