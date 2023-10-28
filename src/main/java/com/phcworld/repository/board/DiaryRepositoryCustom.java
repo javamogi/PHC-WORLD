@@ -7,5 +7,5 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 public interface DiaryRepositoryCustom {
-    Page<DiarySelectDto> findAllPage(User user, Pageable pageable);
+    Page<DiarySelectDto> findAllPage(User user, Pageable pageable, String searchKeyword);
 }

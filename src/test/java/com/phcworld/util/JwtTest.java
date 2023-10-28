@@ -53,6 +53,11 @@ public class JwtTest {
         log.info("key : {}", keyBase64Encoded);
         log.info("secret key : {}", secretKey);
         assertThat(keyBase64Encoded).isEqualTo(secretKey);
+
+        byte[] decodeByte = Base64.getDecoder().decode(keyBase64Encoded);
+        String str = new String(decodeByte);
+        log.info("str : {}", str);
+        assertThat(str).isEqualTo(secretKeyPlain);
     }
 
     @Test

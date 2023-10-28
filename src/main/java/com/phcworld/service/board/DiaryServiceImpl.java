@@ -52,29 +52,29 @@ public class DiaryServiceImpl implements DiaryService {
 	private final HashtagRepository hashtagRepository;
 
 	@Transactional(readOnly = true)
-	public DiaryResponseDto getDiaryResponseListTemp(User loginUser, String email, int pageNum) {
+	public DiaryResponseDto getDiaryResponseListTemp(User loginUser, String email, int pageNum, String searchKeyword) {
 		User requestUser = userService.findUserByEmail(email);
 
-		Page<DiarySelectDto> diaryPage = findPageDiary(loginUser, pageNum, requestUser);
+		Page<DiarySelectDto> diaryPage = findPageDiary(loginUser, pageNum, requestUser, searchKeyword);
 
 		return getDiaryResponseDto(diaryPage);
 	}
 
 	@Transactional(readOnly = true)
 	@Override
-	public Page<DiarySelectDto> findPageDiary(User loginUser, Integer pageNum, User requestUser) {
+	public Page<DiarySelectDto> findPageDiary(User loginUser, Integer pageNum, User requestUser, String searchKeyword) {
 //		PageRequest pageRequest = PageRequest.of(pageNum - 1, 6, new Sort(Direction.DESC, "id"));
 		PageRequest pageRequest = PageRequest.of(pageNum - 1, 6, Sort.by("good3").descending());
 		if(isLoginUser(loginUser, requestUser)) {
-			return diaryRepository.findAllPage(requestUser, pageRequest);
+			return diaryRepository.findAllPage(requestUser, pageRequest, searchKeyword);
 		}
-		return diaryRepository.findAllPage(loginUser, pageRequest);
+		return diaryRepository.findAllPage(loginUser, pageRequest, searchKeyword);
 	}
 
 	@Transactional(readOnly = true)
-	public DiaryResponseDto findPageDiaryTemp2(User requestUser, Integer pageNum) {
+	public DiaryResponseDto findPageDiaryTemp2(User requestUser, Integer pageNum, String searchKeyword) {
 		PageRequest pageRequest = PageRequest.of(pageNum - 1, 6, Sort.by("id").descending());
-		Page<DiarySelectDto> page = diaryRepository.findAllPage(requestUser, pageRequest);
+		Page<DiarySelectDto> page = diaryRepository.findAllPage(requestUser, pageRequest, searchKeyword);
 		return getDiaryResponseDto(page);
 	}
 

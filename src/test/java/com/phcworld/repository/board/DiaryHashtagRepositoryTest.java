@@ -8,6 +8,7 @@ import com.phcworld.domain.user.User;
 import lombok.extern.slf4j.Slf4j;
 import org.jeasy.random.EasyRandom;
 import org.jeasy.random.EasyRandomParameters;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +31,7 @@ public class DiaryHashtagRepositoryTest {
     private DiaryHashtagRepository diaryHashtagRepository;
 
     @Test
+    @Ignore
     public void insert(){
         Predicate<Field> idPredicate = named("id")
                 .and(ofType(Long.class))

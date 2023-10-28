@@ -31,9 +31,10 @@ public class DiaryServiceImplTest {
     @Test
     public void select(){
         User user = userService.findUserByEmail("test@test.test");
+        String searchKeyword = null;
         StopWatch queryStopWatch = new StopWatch();
         queryStopWatch.start();
-        Page<DiarySelectDto> list = service.findPageDiary(user, 3, user);
+        Page<DiarySelectDto> list = service.findPageDiary(user, 3, user, searchKeyword);
         queryStopWatch.stop();
         log.info("DB querydsl SELECT 시간 : {}", queryStopWatch.getTotalTimeSeconds());
         List<DiaryResponse> responseList = list.stream()

@@ -90,7 +90,8 @@ public class DiaryServiceImplIntegrationTest {
 		diaryService.createDiary(user, request);
 		StopWatch watch = new StopWatch();
 		watch.start();
-		Page<DiarySelectDto> pageDiary = diaryService.findPageDiary(user, 1, user);
+		String searchKeyword = "#과일";
+		Page<DiarySelectDto> pageDiary = diaryService.findPageDiary(user, 1, user, searchKeyword);
 		List<DiarySelectDto> diaryList = pageDiary.getContent();
 		watch.stop();
 		log.info("select 시간 : {}", watch.getTotalTimeMillis());

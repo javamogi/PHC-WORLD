@@ -68,9 +68,10 @@ public class DiaryServiceImplTest {
 		list.add(DiarySelectDto.of(diary));
 		list.add(DiarySelectDto.of(diary2));
 
+		String searchKeyword = null;
 		Page<DiarySelectDto> page = new PageImpl<DiarySelectDto>(list);
-		when(diaryService.findPageDiary(user, 0, user)).thenReturn(page);
-		Page<DiarySelectDto> pageDiary = diaryService.findPageDiary(user, 0, user);
+		when(diaryService.findPageDiary(user, 0, user, searchKeyword)).thenReturn(page);
+		Page<DiarySelectDto> pageDiary = diaryService.findPageDiary(user, 0, user, searchKeyword);
 		List<DiarySelectDto> diaryList = pageDiary.getContent();
 		assertThat(diaryList)
 				.contains(DiarySelectDto.of(diary))
@@ -96,8 +97,9 @@ public class DiaryServiceImplTest {
 				.totalPages(page.getTotalPages())
 				.diaries(diaryResponseList)
 				.build();
-		when(diaryService.getDiaryResponseListTemp(user, user.getEmail(), 1)).thenReturn(diaryResponseDto);
-		DiaryResponseDto dto = diaryService.getDiaryResponseListTemp(user, user.getEmail(), 1);
+		String searchKeyword = null;
+		when(diaryService.getDiaryResponseListTemp(user, user.getEmail(), 1, null)).thenReturn(diaryResponseDto);
+		DiaryResponseDto dto = diaryService.getDiaryResponseListTemp(user, user.getEmail(), 1, null);
 		assertThat(dto.getDiaries())
 				.contains(DiaryResponse.of(diary))
 				.contains(DiaryResponse.of(diary2));

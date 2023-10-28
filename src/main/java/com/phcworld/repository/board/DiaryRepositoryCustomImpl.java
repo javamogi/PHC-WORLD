@@ -9,10 +9,7 @@ import com.phcworld.domain.message.dto.ChatRoomSelectDto;
 import com.phcworld.domain.user.QUser;
 import com.phcworld.domain.user.User;
 import com.phcworld.repository.board.dto.DiarySelectDto;
-import com.querydsl.core.types.ExpressionUtils;
-import com.querydsl.core.types.Order;
-import com.querydsl.core.types.OrderSpecifier;
-import com.querydsl.core.types.Projections;
+import com.querydsl.core.types.*;
 import com.querydsl.core.types.dsl.*;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -125,8 +122,8 @@ public class DiaryRepositoryCustomImpl implements DiaryRepositoryCustom{
     }
 
     @Override
-    public Page<DiarySelectDto> findAllPage(User user, Pageable pageable){
-        List<DiarySelectDto> content = findAllList(user, pageable);
+    public Page<DiarySelectDto> findAllPage(User user, Pageable pageable, String searchKeyword){
+        List<DiarySelectDto> content = findAllList(user, pageable, searchKeyword);
         Long count = getDiaryCount(null);
         return new PageImpl<>(content, pageable, count);
     }
@@ -314,7 +311,7 @@ public class DiaryRepositoryCustomImpl implements DiaryRepositoryCustom{
     }
 
 //    private List<DiarySelectDto> findAllListWithHashtag(User user, Pageable pageable){
-    private List<DiarySelectDto> findAllList(User user, Pageable pageable){
+    private List<DiarySelectDto> findAllList(User user, Pageable pageable, String searchKeyword){
 
         List<OrderSpecifier> orders = getOrderSpecifier(pageable);
 
@@ -322,7 +319,10 @@ public class DiaryRepositoryCustomImpl implements DiaryRepositoryCustom{
                 .select(Projections.fields(DiarySelectDto.class,
                         diary.id))
                 .from(diary)
-                .where(eqWriter(user))
+                .leftJoin(diaryHashtag).on(diaryHashtag.diary.eq(diary))
+                .leftJoin(hashtag).on(hashtag.eq(diaryHashtag.hashtag))
+                .where(eqWriter(user),
+                        findByHashtag(searchKeyword))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .orderBy(orders.stream().toArray(OrderSpecifier[]::new))
@@ -352,6 +352,13 @@ public class DiaryRepositoryCustomImpl implements DiaryRepositoryCustom{
                         ).as("hashtags")
                 )));
         return new ArrayList<>(map.values());
+    }
+
+    private BooleanExpression findByHashtag(String keyword) {
+        if(keyword == null || keyword.equals("")){
+            return null;
+        }
+        return hashtag.name.eq(keyword);
     }
 
 }

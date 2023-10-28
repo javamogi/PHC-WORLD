@@ -176,7 +176,8 @@ public class DiaryRepositoryTest {
 		PageRequest pageRequest = PageRequest.of(0, 10, Sort.by("good3").descending());
 		StopWatch queryStopWatch = new StopWatch();
 		queryStopWatch.start();
-		Page<DiarySelectDto> diaryPage = diaryRepository.findAllPage(user, pageRequest);
+		String searchKeyword = "#사과";
+		Page<DiarySelectDto> diaryPage = diaryRepository.findAllPage(user, pageRequest, searchKeyword);
 		queryStopWatch.stop();
 		log.info("DB querydsl SELECT 시간 : {}", queryStopWatch.getTotalTimeSeconds());
 

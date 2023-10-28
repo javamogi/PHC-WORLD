@@ -12,7 +12,7 @@ import com.phcworld.domain.board.dto.DiaryResponse;
 import com.phcworld.domain.user.User;
 
 public interface DiaryService {
-	Page<DiarySelectDto> findPageDiary(User loginUser, Integer pageNum, User requestUser);
+	Page<DiarySelectDto> findPageDiary(User loginUser, Integer pageNum, User requestUser, String searchKeyword);
 	
 	DiaryResponse createDiary(User user, DiaryRequest diaryRequest);
 	

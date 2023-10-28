@@ -1,9 +1,6 @@
 package com.phcworld.domain.board;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 
@@ -13,6 +10,7 @@ import javax.persistence.*;
 @Builder
 @Getter
 @Table(indexes = @Index(name = "idx__diary_id", columnList = "diary_id"))
+@ToString
 public class DiaryHashtag {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
