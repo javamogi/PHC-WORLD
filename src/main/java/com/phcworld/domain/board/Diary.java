@@ -2,6 +2,7 @@ package com.phcworld.domain.board;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 
 import javax.persistence.*;
 
@@ -118,5 +119,18 @@ public class Diary {
 
 	public void removeGood() {
 		this.countGood--;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		Diary diary = (Diary) o;
+		return Objects.equals(id, diary.id) && Objects.equals(writer, diary.writer) && Objects.equals(title, diary.title) && Objects.equals(contents, diary.contents) && Objects.equals(thumbnail, diary.thumbnail) && Objects.equals(countGood, diary.countGood);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(id, writer, title, contents, thumbnail, countGood);
 	}
 }
