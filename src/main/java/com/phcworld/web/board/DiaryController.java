@@ -33,7 +33,7 @@ public class DiaryController {
 	@GetMapping("/list/{email}")
 	public String getDairyList(@PathVariable String email,
 							   @RequestParam(defaultValue = "1") Integer pageNum,
-			@RequestParam String searchKeyword,
+			@RequestParam(defaultValue = "") String searchKeyword,
 			Model model, HttpSession session) {
 		User loginUser = HttpSessionUtils.getUserFromSession(session);
 		User requestUser = userService.findUserByEmail(email);
@@ -56,7 +56,7 @@ public class DiaryController {
 
 	@GetMapping("/list/{email}/temp")
 	public String getDairyListTmp(@PathVariable String email, @RequestParam(defaultValue = "1") Integer pageNum,
-							   @RequestParam String searchKeyword,
+							   @RequestParam(defaultValue = "") String searchKeyword,
 							   Model model, HttpSession session) {
 
 		User loginUser = HttpSessionUtils.getUserFromSession(session);
@@ -75,7 +75,7 @@ public class DiaryController {
 
 	@GetMapping("/list/{email}/temp2")
 	public String getDairyListTmp2(@PathVariable String email, @RequestParam(defaultValue = "1") Integer pageNum,
-							   @RequestParam String searchKeyword, Model model) {
+							   @RequestParam(defaultValue = "") String searchKeyword, Model model) {
 		User requestUser = userService.findUserByEmail(email);
 		DiaryResponseDto dto = diaryService.findPageDiaryTemp2(requestUser, pageNum, searchKeyword);
 

@@ -104,7 +104,7 @@ public class DiaryControllerTest {
 		List<Integer> pageNations = new ArrayList<Integer>();
 		pageNations.add(1);
 		
-		String searchKeyword = null;
+		String searchKeyword = "";
 		when(diaryService.findPageDiary(user, 1, requestUser, searchKeyword))
 		.thenReturn(page);
 		Page<DiarySelectDto> diaryPage = diaryService.findPageDiary(user, 1, requestUser, searchKeyword);

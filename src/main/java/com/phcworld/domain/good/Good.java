@@ -1,17 +1,15 @@
 package com.phcworld.domain.good;
 
-import java.time.LocalDateTime;
-
-import javax.persistence.*;
-
 import com.phcworld.domain.board.Diary;
 import com.phcworld.domain.user.User;
 import com.phcworld.utils.LocalDateTimeUtils;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 @Data
@@ -38,4 +36,5 @@ public class Good {
 	public String getFormattedCreateDate() {
 		return LocalDateTimeUtils.getTime(createDate);
 	}
+
 }

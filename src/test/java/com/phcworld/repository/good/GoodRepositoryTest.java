@@ -8,6 +8,7 @@ import com.phcworld.domain.good.Good;
 import com.phcworld.domain.user.Authority;
 import com.phcworld.domain.user.User;
 import com.phcworld.repository.board.DiaryRepository;
+import com.phcworld.repository.user.UserRepository;
 import com.phcworld.util.DiaryFactory;
 import lombok.extern.slf4j.Slf4j;
 import org.jeasy.random.EasyRandom;
@@ -39,7 +40,10 @@ import static org.junit.Assert.assertNotNull;
 //@Transactional
 @Slf4j
 public class GoodRepositoryTest {
-	
+
+	@Autowired
+	private UserRepository userRepository;
+
 	@Autowired
 	private GoodRepository goodRepository;
 	
