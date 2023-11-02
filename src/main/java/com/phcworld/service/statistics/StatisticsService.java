@@ -1,10 +1,12 @@
 package com.phcworld.service.statistics;
 
+import com.phcworld.domain.statistics.HashtagStatisticsDto;
 import com.phcworld.domain.statistics.StatisticsDto;
 import com.phcworld.domain.statistics.UserStatisticsDto;
 import com.phcworld.domain.user.User;
 import com.phcworld.repository.statistics.StatisticsRepository;
 import com.phcworld.repository.user.UserRepository;
+import com.querydsl.core.Tuple;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -51,5 +53,10 @@ public class StatisticsService {
     @Transactional
     public List<UserStatisticsDto> getUserPostStatistics2(){
         return statisticsRepository.findUserPostRegisterStatistics2();
+    }
+
+    @Transactional(readOnly = true)
+    public List<HashtagStatisticsDto> getDiaryHashtagStatistics(){
+        return statisticsRepository.findDiaryHashtagStatistics();
     }
 }

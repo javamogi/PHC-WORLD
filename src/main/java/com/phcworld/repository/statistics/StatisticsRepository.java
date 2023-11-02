@@ -3,11 +3,14 @@ package com.phcworld.repository.statistics;
 import com.phcworld.domain.answer.QDiaryAnswer;
 import com.phcworld.domain.answer.QFreeBoardAnswer;
 import com.phcworld.domain.board.QDiary;
+import com.phcworld.domain.board.QDiaryHashtag;
 import com.phcworld.domain.board.QFreeBoard;
+import com.phcworld.domain.statistics.HashtagStatisticsDto;
 import com.phcworld.domain.statistics.StatisticsDto;
 import com.phcworld.domain.statistics.UserStatisticsDto;
 import com.phcworld.domain.user.QUser;
 import com.phcworld.domain.user.User;
+import com.querydsl.core.Tuple;
 import com.querydsl.core.types.ExpressionUtils;
 import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.Projections;
@@ -16,6 +19,7 @@ import com.querydsl.core.types.dsl.StringTemplate;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
@@ -25,6 +29,7 @@ import java.util.Objects;
 
 @Repository
 @RequiredArgsConstructor
+@Slf4j
 public class StatisticsRepository {
     private final JPAQueryFactory queryFactory;
     QDiary diary = QDiary.diary;
@@ -35,6 +40,7 @@ public class StatisticsRepository {
 
     QDiaryAnswer diaryAnswer = QDiaryAnswer.diaryAnswer;
     QFreeBoardAnswer freeBoardAnswer = QFreeBoardAnswer.freeBoardAnswer;
+    QDiaryHashtag diaryHashtag = QDiaryHashtag.diaryHashtag;
 
     public List<StatisticsDto> findRegisterUserStatistics(LocalDate startDate, LocalDate endDate){
         LocalDateTime start = startDate.atStartOfDay();
@@ -140,6 +146,17 @@ public class StatisticsRepository {
                 .leftJoin(diaryAnswer).on(diaryAnswer.writer.eq(user))
                 .leftJoin(freeBoardAnswer).on(freeBoardAnswer.writer.eq(user))
                 .groupBy(user.name)
+                .fetch();
+    }
+
+    public List<HashtagStatisticsDto> findDiaryHashtagStatistics(){
+        return queryFactory.select(Projections.fields(HashtagStatisticsDto.class,
+                        diaryHashtag.hashtag.name.count().as("count"),
+                        diaryHashtag.hashtag.name.as("hashtagName")))
+                .from(diaryHashtag)
+                .groupBy(diaryHashtag.hashtag.name)
+                .offset(0)
+                .limit(5)
                 .fetch();
     }
 }
