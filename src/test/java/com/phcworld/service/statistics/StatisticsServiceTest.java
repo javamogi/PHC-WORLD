@@ -1,8 +1,10 @@
 package com.phcworld.service.statistics;
 
+import com.phcworld.domain.statistics.HashtagStatisticsDto;
 import com.phcworld.domain.statistics.StatisticsDto;
 import com.phcworld.domain.statistics.UserStatisticsDto;
 import com.phcworld.domain.user.User;
+import com.querydsl.core.Tuple;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -57,5 +59,15 @@ public class StatisticsServiceTest {
         stopWatch.stop();
         log.info("select 시간 : {}", stopWatch.getTotalTimeSeconds());
         log.info("count list : {}", countList);
+    }
+
+    @Test
+    public void 일기_게시물_해시태그_통계(){
+        StopWatch stopWatch = new StopWatch();
+        stopWatch.start();
+        List<HashtagStatisticsDto> list = statisticsService.getDiaryHashtagStatistics();
+        stopWatch.stop();
+        log.info("select 시간 : {}", stopWatch.getTotalTimeSeconds());
+        log.info("list : {}", list);
     }
 }
