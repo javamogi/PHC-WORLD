@@ -56,7 +56,7 @@ public class StatisticsService {
     }
 
     @Transactional(readOnly = true)
-    public List<HashtagStatisticsDto> getDiaryHashtagStatistics(){
-        return statisticsRepository.findDiaryHashtagStatistics();
+    public List<HashtagStatisticsDto> getDiaryHashtagStatistics(User user){
+        return statisticsRepository.findDiaryHashtagStatistics(user);
     }
 }

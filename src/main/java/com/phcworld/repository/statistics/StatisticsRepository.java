@@ -14,6 +14,7 @@ import com.querydsl.core.Tuple;
 import com.querydsl.core.types.ExpressionUtils;
 import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.Projections;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.core.types.dsl.StringTemplate;
 import com.querydsl.jpa.JPAExpressions;
@@ -149,14 +150,23 @@ public class StatisticsRepository {
                 .fetch();
     }
 
-    public List<HashtagStatisticsDto> findDiaryHashtagStatistics(){
+    public List<HashtagStatisticsDto> findDiaryHashtagStatistics(User searchUser){
         return queryFactory.select(Projections.fields(HashtagStatisticsDto.class,
                         diaryHashtag.hashtag.name.count().as("count"),
                         diaryHashtag.hashtag.name.as("hashtagName")))
                 .from(diaryHashtag)
+                .where(eqWriter(searchUser))
+                .orderBy(diaryHashtag.hashtag.name.count().desc())
                 .groupBy(diaryHashtag.hashtag.name)
                 .offset(0)
                 .limit(5)
                 .fetch();
+    }
+
+    private BooleanExpression eqWriter(User searchUser) {
+        if(searchUser == null){
+            return null;
+        }
+        return diaryHashtag.diary.writer.eq(searchUser);
     }
 }
