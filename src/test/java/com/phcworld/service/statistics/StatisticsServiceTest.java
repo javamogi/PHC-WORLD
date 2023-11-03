@@ -62,10 +62,13 @@ public class StatisticsServiceTest {
     }
 
     @Test
-    public void 일기_게시물_해시태그_통계(){
+    public void 회원_일기_게시물_해시태그_통계(){
+        User user = User.builder()
+                .id(1L)
+                .build();
         StopWatch stopWatch = new StopWatch();
         stopWatch.start();
-        List<HashtagStatisticsDto> list = statisticsService.getDiaryHashtagStatistics();
+        List<HashtagStatisticsDto> list = statisticsService.getDiaryHashtagStatistics(null);
         stopWatch.stop();
         log.info("select 시간 : {}", stopWatch.getTotalTimeSeconds());
         log.info("list : {}", list);
