@@ -73,4 +73,14 @@ public class StatisticsServiceTest {
         log.info("select 시간 : {}", stopWatch.getTotalTimeSeconds());
         log.info("list : {}", list);
     }
+
+    @Test
+    public void 회원별_좋아요_카운트_통계(){
+        StopWatch stopWatch = new StopWatch();
+        stopWatch.start();
+        List<Tuple> list = statisticsService.getGoodCountByMember();
+        stopWatch.stop();
+        log.info("select 시간 : {}", stopWatch.getTotalTimeSeconds());
+        log.info("list : {}", list);
+    }
 }

@@ -5,6 +5,8 @@ import com.phcworld.domain.answer.QFreeBoardAnswer;
 import com.phcworld.domain.board.QDiary;
 import com.phcworld.domain.board.QDiaryHashtag;
 import com.phcworld.domain.board.QFreeBoard;
+import com.phcworld.domain.board.QHashtag;
+import com.phcworld.domain.good.QGood;
 import com.phcworld.domain.statistics.HashtagStatisticsDto;
 import com.phcworld.domain.statistics.StatisticsDto;
 import com.phcworld.domain.statistics.UserStatisticsDto;
@@ -42,6 +44,8 @@ public class StatisticsRepository {
     QDiaryAnswer diaryAnswer = QDiaryAnswer.diaryAnswer;
     QFreeBoardAnswer freeBoardAnswer = QFreeBoardAnswer.freeBoardAnswer;
     QDiaryHashtag diaryHashtag = QDiaryHashtag.diaryHashtag;
+
+    QGood good = QGood.good;
 
     public List<StatisticsDto> findRegisterUserStatistics(LocalDate startDate, LocalDate endDate){
         LocalDateTime start = startDate.atStartOfDay();
@@ -168,5 +172,16 @@ public class StatisticsRepository {
             return null;
         }
         return diaryHashtag.diary.writer.eq(searchUser);
+    }
+
+    public List<Tuple> findGoodCountByMember(){
+        return queryFactory.select(good.count(),
+                        good.user.id)
+                .from(good)
+                .orderBy(good.user.name.asc())
+                .groupBy(good.user.id)
+//                .having(good.count().goe(3400))
+                .fetch();
+
     }
 }
