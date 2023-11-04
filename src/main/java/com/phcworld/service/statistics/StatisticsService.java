@@ -59,4 +59,9 @@ public class StatisticsService {
     public List<HashtagStatisticsDto> getDiaryHashtagStatistics(User user){
         return statisticsRepository.findDiaryHashtagStatistics(user);
     }
+
+    @Transactional(readOnly = true)
+    public List<Tuple> getGoodCountByMember(){
+        return statisticsRepository.findGoodCountByMember();
+    }
 }
