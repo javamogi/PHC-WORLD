@@ -16,7 +16,8 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Table(indexes = @Index(name = "idx__diary_id", columnList = "diary_id"))
+@Table(indexes = {@Index(name = "idx__diary_id", columnList = "diary_id"),
+		@Index(name = "idx__writer_id", columnList = "user_id")})
 public class Good {
 
 	@Id
