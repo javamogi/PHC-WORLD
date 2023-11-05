@@ -175,12 +175,31 @@ public class StatisticsRepository {
     }
 
     public List<Tuple> findGoodCountByMember(){
+//        return queryFactory.select(good.count(),
+//                        user.name)
+//                .from(user)
+//                .leftJoin(good).on(good.user.eq(user))
+//                .orderBy(user.name.asc())
+//                .groupBy(user.id)
+////                .having(good.count().goe(3400))
+//                .fetch();
+
+//        return queryFactory.select(
+//                ExpressionUtils.as(
+//                    JPAExpressions
+//                        .select(good.count())
+//                        .from(good)
+//                        .where(good.user.eq(user)), "countOfGood"),
+//                        user.name)
+//                .from(user)
+//                .orderBy(user.name.asc())
+//                .fetch();
+
         return queryFactory.select(good.count(),
                         good.user.id)
                 .from(good)
                 .orderBy(good.user.name.asc())
                 .groupBy(good.user.id)
-//                .having(good.count().goe(3400))
                 .fetch();
 
     }
