@@ -7,6 +7,7 @@ import com.phcworld.domain.board.QDiaryHashtag;
 import com.phcworld.domain.board.QFreeBoard;
 import com.phcworld.domain.board.QHashtag;
 import com.phcworld.domain.good.QGood;
+import com.phcworld.domain.message.dto.MessageSelectDto;
 import com.phcworld.domain.statistics.HashtagStatisticsDto;
 import com.phcworld.domain.statistics.StatisticsDto;
 import com.phcworld.domain.statistics.UserStatisticsDto;
@@ -27,8 +28,13 @@ import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
+
+import static com.querydsl.core.group.GroupBy.groupBy;
+import static com.querydsl.core.group.GroupBy.list;
 
 @Repository
 @RequiredArgsConstructor
@@ -46,6 +52,8 @@ public class StatisticsRepository {
     QDiaryHashtag diaryHashtag = QDiaryHashtag.diaryHashtag;
 
     QGood good = QGood.good;
+
+    QHashtag hashtag = QHashtag.hashtag;
 
     public List<StatisticsDto> findRegisterUserStatistics(LocalDate startDate, LocalDate endDate){
         LocalDateTime start = startDate.atStartOfDay();
@@ -156,12 +164,12 @@ public class StatisticsRepository {
 
     public List<HashtagStatisticsDto> findDiaryHashtagStatistics(User searchUser){
         return queryFactory.select(Projections.fields(HashtagStatisticsDto.class,
-                        diaryHashtag.hashtag.name.count().as("count"),
+                        diaryHashtag.hashtag.id.count().as("count"),
                         diaryHashtag.hashtag.name.as("hashtagName")))
                 .from(diaryHashtag)
                 .where(eqWriter(searchUser))
-                .orderBy(diaryHashtag.hashtag.name.count().desc())
-                .groupBy(diaryHashtag.hashtag.name)
+                .orderBy(diaryHashtag.hashtag.id.count().desc())
+                .groupBy(diaryHashtag.hashtag.id)
                 .offset(0)
                 .limit(5)
                 .fetch();
@@ -203,4 +211,5 @@ public class StatisticsRepository {
                 .fetch();
 
     }
+
 }
