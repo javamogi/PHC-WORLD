@@ -24,6 +24,8 @@ flowchart LR
     B --> D[일기게시판]
     B --> E[네이버API]
 ```
+### ERD
+![PHC-WORLD](https://github.com/javamogi/PHC-WORLD/assets/40781237/b297e320-9d66-48e7-9a46-ac7cbd95996d)
 ### 프로젝트 기능
 * 게시판을 이용할 수 있는 사이트입니다.
 * 사이트의 모든 기능은 회원만 이용 가능합니다.
