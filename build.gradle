@@ -99,6 +99,9 @@ dependencies {
     // Srping Rest Docs
     asciidoctorExt 'org.springframework.restdocs:spring-restdocs-asciidoctor'
     testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
+
+    // slack
+    implementation 'com.slack.api:slack-api-client:1.36.1'
 }
 
 group = 'com.phcworld'
