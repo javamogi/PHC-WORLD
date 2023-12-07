@@ -65,7 +65,8 @@ public class SecurityConfig {
                         "/h2-console/**")
                 .mvcMatchers(
                 "/h2-console/**",
-                "/favicon.ico"
+                "/favicon.ico",
+                        "/hello-error-slack-client"
         );
     }
 
