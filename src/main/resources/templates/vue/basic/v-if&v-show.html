@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>뷰 기초 익히기</title>    
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<body>
+    <div id="app">        
+        <!-- <template v-if="number === 1">
+            <div>1</div>
+            <div>2</div>
+            <div>3</div>
+        </template>        
+        <div v-else-if="number === 2">Hi</div>
+        <div v-else>No</div> -->
+        <div v-show="show">Yes</div>
+        <!-- <button @click="increase">Increase</button> {{number}} -->
+        <button @click="toggle">Toggle</button>
+    </div>
+    <script>
+        // v-if 는 토글 비용이 높고 v-show는 초기 랜더링 비용이 높다.
+        // 매운 자주 바꾸기를 원한다면 v-show를, 런타임 시 조건이 바뀌지 않으면 v-if를 권장
+        new Vue({
+            el: '#app',
+            data: {
+              number: 1,
+              show: true
+            },
+            methods: {
+                increase(){
+                    this.number++;
+                },
+                toggle(){
+                    this.show = !this.show;
+                }
+            }
+        })
+    </script>
+</body>
+</html>

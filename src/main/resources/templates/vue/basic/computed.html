@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>뷰 기초 익히기</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<body>
+    <div id="app">        
+        <button @click="changeMessage">Click</button>
+        <!-- {{ reversedMessage() }} -->
+        {{ reversedMessage }}
+        {{ reversedMessage }}
+    </div>
+    <script>
+        new Vue({
+            el: '#app',
+            data: {
+                message: '안녕하세요'
+            },
+            methods: {
+                // reversedMessage(){
+                //     return this.message.split('').reverse().join('');
+                // },
+                changeMessage(){
+                    this.message = "헬로우테스트"
+                }
+            },
+            computed: {
+                // computed와 method 사용의 차이는 ()괄호의 유무
+                // computed는 캐싱O, method는 캐싱x
+                reversedMessage(){
+                    // message의 값이 변경되면 변경을 감지하여 적용된다
+                    return this.message.split('').reverse().join('');
+                }
+            }
+        })
+    </script>
+</body>
+</html>
