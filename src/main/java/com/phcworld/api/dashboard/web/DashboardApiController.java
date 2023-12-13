@@ -5,19 +5,15 @@ import com.phcworld.domain.user.User;
 import com.phcworld.exception.model.NotFoundException;
 import com.phcworld.repository.user.UserRepository;
 import com.phcworld.service.dashboard.DashboardService;
-import com.phcworld.utils.HttpSessionUtils;
 import lombok.RequiredArgsConstructor;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.http.HttpSession;
-
 @RestController
 @RequestMapping("/api/dashboard")
 @RequiredArgsConstructor
-public class DashboardRestController {
+public class DashboardApiController {
 
     private final DashboardService dashboardService;
 

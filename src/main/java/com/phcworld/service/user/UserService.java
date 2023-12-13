@@ -1,8 +1,10 @@
 package com.phcworld.service.user;
 
+import com.phcworld.api.user.dto.UserRequestDto;
 import com.phcworld.domain.user.Authority;
 import com.phcworld.domain.user.LoginRequestUser;
 import com.phcworld.domain.user.User;
+import com.phcworld.exception.model.CustomException;
 import com.phcworld.exception.model.NotFoundException;
 import com.phcworld.jwt.TokenProvider;
 import com.phcworld.jwt.dto.TokenDto;
@@ -28,6 +30,24 @@ public class UserService {
 	private final PasswordEncoder passwordEncoder;
 	private final CustomUserDetailsService userDetailsService;
 	private final TokenProvider tokenProvider;
+
+	public User registerUser(UserRequestDto requestUser) {
+		User findedUser = userRepository.findByEmail(requestUser.getEmail());
+		if(findedUser != null){
+			throw new CustomException("400", "이미 존재하는 회원입니다.");
+		}
+
+		User user = User.builder()
+				.email(requestUser.getEmail())
+				.name(requestUser.getName())
+				.password(passwordEncoder.encode(requestUser.getPassword()))
+				.authority(Authority.ROLE_USER)
+				.createDate(LocalDateTime.now())
+				.profileImage("blank-profile-picture.png")
+				.build();
+
+		return userRepository.save(user);
+	}
 
 	public User createUser(User user) {
 //		String password = SecurityUtils.getEncSHA256(user.getPassword());
