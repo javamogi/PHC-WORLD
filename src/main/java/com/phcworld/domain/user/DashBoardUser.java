@@ -1,18 +1,17 @@
 package com.phcworld.domain.user;
 
-import java.util.List;
-
-import com.phcworld.domain.timeline.Timeline;
-
+import com.phcworld.api.dashboard.dto.UserResponseDto;
 import com.phcworld.domain.timeline.dto.TimelineResponseDto;
 import lombok.Builder;
 import lombok.Data;
+
+import java.util.List;
 
 @Data
 @Builder
 public class DashBoardUser {
 	
-	private User user;
+	private UserResponseDto user;
 	
 	private Long countOfAnswer;
 	
