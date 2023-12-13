@@ -41,7 +41,7 @@ public class TimelineServiceImpl implements TimelineService {
 
 	@Override
 	public List<Timeline> findTimelineList(Integer timelinePageNum, User user) {
-		PageRequest pageRequest = PageRequest.of(timelinePageNum, 5, Sort.by("id").descending());
+		PageRequest pageRequest = PageRequest.of(timelinePageNum - 1, 5, Sort.by("id").descending());
 		Page<Timeline> timelineList = timelineRepository.findByUser(user, pageRequest);
 		return timelineList.getContent();
 	}
