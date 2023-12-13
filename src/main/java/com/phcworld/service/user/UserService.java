@@ -4,7 +4,9 @@ import com.phcworld.api.user.dto.UserRequestDto;
 import com.phcworld.domain.user.Authority;
 import com.phcworld.domain.user.LoginRequestUser;
 import com.phcworld.domain.user.User;
+import com.phcworld.exception.model.BadRequestException;
 import com.phcworld.exception.model.CustomException;
+import com.phcworld.exception.model.DuplicationException;
 import com.phcworld.exception.model.NotFoundException;
 import com.phcworld.jwt.TokenProvider;
 import com.phcworld.jwt.dto.TokenDto;
@@ -34,7 +36,7 @@ public class UserService {
 	public User registerUser(UserRequestDto requestUser) {
 		User findedUser = userRepository.findByEmail(requestUser.getEmail());
 		if(findedUser != null){
-			throw new CustomException("400", "이미 존재하는 회원입니다.");
+			throw new DuplicationException();
 		}
 
 		User user = User.builder()
