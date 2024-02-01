@@ -11,7 +11,7 @@ spring:
       matching-strategy: ant_path_matcher
 
   profiles:
-    active: dev
+    active: mysql
     include: mail
 
   mustache:
@@ -21,6 +21,7 @@ spring:
     suffix: .html
 
 server:
+  port: 8081
   servlet:
     encoding:
       charset: UTF-8
@@ -38,3 +39,8 @@ jwt:
 naver:
   client-id: id
   client-secret: secret
+
+notification:
+  slack:
+    webhook:
+      url: https://hooks.slack.com/services/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
