@@ -84,7 +84,7 @@ public class SecurityConfig {
                         "/users/login",
                         "/login",
                         "/email/check",
-                        "/users").permitAll()
+                        "/api/**").permitAll()
                 .anyRequest().authenticated()   // 나머지는 전부 인증 필요
 
 //                .and()

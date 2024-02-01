@@ -124,6 +124,7 @@ public class DiaryRepositoryCustomImpl implements DiaryRepositoryCustom{
     @Override
     public Page<DiarySelectDto> findAllPage(User user, Pageable pageable, String searchKeyword){
         List<DiarySelectDto> content = findAllList(user, pageable, searchKeyword);
+//        List<DiarySelectDto> content = findAllList(user, pageable);
         Long count = getDiaryCount(null);
         return new PageImpl<>(content, pageable, count);
     }
@@ -276,6 +277,7 @@ public class DiaryRepositoryCustomImpl implements DiaryRepositoryCustom{
     // 쓰기에서 이전보다 더 많은 비용이 발생할 것으로 예상
 //    private List<DiarySelectDto> findAllListByIndexColumn(User user, Pageable pageable){
     private List<DiarySelectDto> findAllListWithoutHashtag(User user, Pageable pageable){
+//    private List<DiarySelectDto> findAllList(User user, Pageable pageable){
 
         List<OrderSpecifier> orders = getOrderSpecifier(pageable);
 
@@ -315,14 +317,26 @@ public class DiaryRepositoryCustomImpl implements DiaryRepositoryCustom{
 
         List<OrderSpecifier> orders = getOrderSpecifier(pageable);
 
+//        List<DiarySelectDto> ids = queryFactory
+//                .select(Projections.fields(DiarySelectDto.class,
+//                        diary.id))
+//                .from(diary)
+//                .leftJoin(diaryHashtag).on(diaryHashtag.diary.eq(diary))
+//                .leftJoin(hashtag).on(hashtag.eq(diaryHashtag.hashtag))
+//                .where(eqWriter(user),
+//                        findByHashtag(searchKeyword))
+//                .offset(pageable.getOffset())
+//                .limit(pageable.getPageSize())
+//                .orderBy(orders.stream().toArray(OrderSpecifier[]::new))
+//                .fetch();
+
         List<DiarySelectDto> ids = queryFactory
                 .select(Projections.fields(DiarySelectDto.class,
                         diary.id))
                 .from(diary)
-                .leftJoin(diaryHashtag).on(diaryHashtag.diary.eq(diary))
-                .leftJoin(hashtag).on(hashtag.eq(diaryHashtag.hashtag))
                 .where(eqWriter(user),
-                        findByHashtag(searchKeyword))
+                        findByHashtag2(searchKeyword))
+
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .orderBy(orders.stream().toArray(OrderSpecifier[]::new))
@@ -359,6 +373,19 @@ public class DiaryRepositoryCustomImpl implements DiaryRepositoryCustom{
             return null;
         }
         return hashtag.name.eq(keyword);
+    }
+
+    private BooleanExpression findByHashtag2(String keyword) {
+        if(keyword == null || keyword.equals("")){
+            return null;
+        }
+        return diary.id.in(JPAExpressions
+                .select(diaryHashtag.diary.id)
+                .from(diaryHashtag)
+                .where(diaryHashtag.hashtag.id.in(JPAExpressions
+                        .select(hashtag.id)
+                        .from(hashtag)
+                        .where(hashtag.name.eq(keyword)))));
     }
 
 }

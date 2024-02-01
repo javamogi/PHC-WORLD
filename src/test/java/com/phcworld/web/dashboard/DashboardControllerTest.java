@@ -1,5 +1,6 @@
 package com.phcworld.web.dashboard;
 
+import com.phcworld.api.dashboard.dto.UserResponseDto;
 import com.phcworld.domain.answer.DiaryAnswer;
 import com.phcworld.domain.answer.FreeBoardAnswer;
 import com.phcworld.domain.board.Diary;
@@ -102,7 +103,7 @@ public class DashboardControllerTest {
 		mockSession.setAttribute("countMessages", "");
 		mockSession.setAttribute("alerts", null);
 		DashBoardUser dashboardUser = DashBoardUser.builder()
-				.user(user)
+				.user(UserResponseDto.of(user))
 				.countOfAnswer(0L)
 				.countOfFreeBoard(0L)
 				.countOfDiary(0L)

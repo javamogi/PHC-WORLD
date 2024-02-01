@@ -1,6 +1,5 @@
 package com.phcworld.exception.handler;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.phcworld.exception.model.CustomBaseException;
 import com.phcworld.exception.model.CustomException;
@@ -8,18 +7,21 @@ import com.phcworld.exception.model.ErrorCode;
 import com.phcworld.exception.model.ErrorResponse;
 import com.phcworld.utils.SlackErrorMessage;
 import com.slack.api.Slack;
-import com.slack.api.webhook.WebhookResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.validation.BindException;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestControllerAdvice
@@ -68,6 +70,20 @@ public class CommonsExceptionHandler {
     public ResponseEntity<ErrorResponse> handle(CustomBaseException e){
         log.error("Exception");
         return createErrorResponseEntity(e.getErrorCode());
+    }
+
+    @ExceptionHandler(BindException.class)
+    public ResponseEntity handle(BindException e){
+        log.error("Exception");
+        Map<String, Object> map = new HashMap<>();
+        List<FieldError> errors = e.getFieldErrors();
+        List<String> errorMessages = new ArrayList<>();
+        for (int i = 0; i < errors.size(); i++){
+            FieldError error = errors.get(i);
+            errorMessages.add(error.getDefaultMessage());
+        }
+        map.put("messages", errorMessages);
+        return new ResponseEntity(map, HttpStatus.BAD_REQUEST);
     }
 
     private ResponseEntity<ErrorResponse> createErrorResponseEntity(ErrorCode errorCode) {

@@ -3,6 +3,7 @@ package com.phcworld.service.dashboard;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.phcworld.api.dashboard.dto.UserResponseDto;
 import com.phcworld.domain.dashboard.dto.DashBoardSelectDto;
 import com.phcworld.domain.timeline.dto.TimelineResponseDto;
 import com.phcworld.repository.dashboard.DashBoardRepositoryCustom;
@@ -34,7 +35,7 @@ public class DashboardService {
 		DashBoardSelectDto count = dashBoardRepository.findActiveCountByUser(user);
 
 //		List<Timeline> timelineList = timelineService.findTimelineList(0, user);
-		List<TimelineResponseDto> timelineList = timelineService.findTimelineList(0, user)
+		List<TimelineResponseDto> timelineList = timelineService.findTimelineList(1, user)
 				.stream()
 				.map(TimelineResponseDto::of)
 				.collect(Collectors.toList());
@@ -52,7 +53,7 @@ public class DashboardService {
 //		Integer countOfAnswers = freeBoardAnswerList.size() + diaryAnswerList.size();
 		
 		DashBoardUser dashboardUser = DashBoardUser.builder()
-				.user(user)
+				.user(UserResponseDto.of(user))
 				.countOfAnswer(count.getAnswerCount())
 				.countOfFreeBoard(count.getFreeBoardCount())
 				.countOfDiary(count.getDiaryCount())
