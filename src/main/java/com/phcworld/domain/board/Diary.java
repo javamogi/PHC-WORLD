@@ -28,9 +28,9 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 @EntityListeners(AuditingEntityListener.class)
 @ToString(exclude = {"writer", "diaryAnswers", "goodPushedUser", "diaryHashtags"})
-@Table(indexes = {@Index(name = "idx__writer_id_create_date", columnList = "writer_id, createDate"),
-				@Index(name = "idx__create_date", columnList = "createDate"),
-				@Index(name = "idx__count_good_create_date", columnList = "countGood, createDate")})
+@Table(indexes = {@Index(name = "idx_diary_writer_id_count_good", columnList = "writer_id, countGood"),
+				@Index(name = "idx_diary_count_good_create_date", columnList = "countGood, createDate"),
+})
 public class Diary {
 
 	@Id
