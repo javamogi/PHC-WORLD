@@ -3,13 +3,16 @@ package com.phcworld.domain.board;
 import lombok.*;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Getter
-@Table(indexes = @Index(name = "idx__diary_id", columnList = "diary_id"))
+@Data
+@Table(indexes = {
+        @Index(name = "idx_diar_hashtag_diary_id_hashtag_id", columnList = "diary_id, hashtag_id")
+})
 @ToString
 public class DiaryHashtag {
     @Id

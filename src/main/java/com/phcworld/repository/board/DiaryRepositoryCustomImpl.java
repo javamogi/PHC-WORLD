@@ -5,22 +5,32 @@ import com.phcworld.domain.board.QDiary;
 import com.phcworld.domain.board.QDiaryHashtag;
 import com.phcworld.domain.board.QHashtag;
 import com.phcworld.domain.good.QGood;
-import com.phcworld.domain.message.dto.ChatRoomSelectDto;
 import com.phcworld.domain.user.QUser;
 import com.phcworld.domain.user.User;
 import com.phcworld.repository.board.dto.DiarySelectDto;
-import com.querydsl.core.types.*;
-import com.querydsl.core.types.dsl.*;
+import com.querydsl.core.Query;
+import com.querydsl.core.types.ExpressionUtils;
+import com.querydsl.core.types.Order;
+import com.querydsl.core.types.OrderSpecifier;
+import com.querydsl.core.types.Projections;
+import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.Expressions;
+import com.querydsl.core.types.dsl.NumberPath;
+import com.querydsl.core.types.dsl.StringTemplate;
 import com.querydsl.jpa.JPAExpressions;
+import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.query.NativeQuery;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
 
+import javax.persistence.EntityManager;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -35,6 +45,7 @@ import static com.querydsl.core.group.GroupBy.list;
 @Slf4j
 public class DiaryRepositoryCustomImpl implements DiaryRepositoryCustom{
     private final JPAQueryFactory queryFactory;
+    private final EntityManager entityManager;
     QDiary diary = QDiary.diary;
     QUser qUser = QUser.user;
     QGood good = QGood.good;
@@ -317,6 +328,42 @@ public class DiaryRepositoryCustomImpl implements DiaryRepositoryCustom{
 
         List<OrderSpecifier> orders = getOrderSpecifier(pageable);
 
+        String queryString = "SELECT STRAIGHT_JOIN d.id " +
+                "FROM test.diary d " +
+                "JOIN test.diary_hashtag dh USE INDEX(idx_diary_hashtag_diary_id_hashtag_id) ON d.id = dh.diary_id " +
+                "JOIN test.hashtag h USE INDEX(UK_tnicok67w95ajkoau49jeg9fm) ON dh.hashtag_id = h.id " +
+                "WHERE d.writer_id = :writerId " +
+                "AND h.name = :hashtagName " +
+                "ORDER BY d.count_good DESC " +
+                "LIMIT :limit " +
+                "OFFSET :offset";
+
+        List<BigInteger> BIs = entityManager.createNativeQuery(queryString)
+                .setParameter("writerId", user.getId())
+                .setParameter("hashtagName", searchKeyword)
+                .setParameter("limit", pageable.getPageSize())
+                .setParameter("offset", pageable.getOffset())
+                .getResultList();
+
+        List<Long> ids = BIs.stream()
+                .map(v -> {
+                    return v.longValue();
+                })
+                .collect(Collectors.toList());
+
+
+//        List<Long> ids = queryFactory
+//                .select(diary.id)
+//                .from(diary)
+//                .leftJoin(diaryHashtag).on(diaryHashtag.diary.eq(diary))
+//                .leftJoin(hashtag).on(hashtag.eq(diaryHashtag.hashtag))
+//                .where(eqWriter(user),
+//                        findByHashtag(searchKeyword))
+//                .offset(pageable.getOffset())
+//                .limit(pageable.getPageSize())
+//                .orderBy(orders.stream().toArray(OrderSpecifier[]::new))
+//                .fetch();
+
 //        List<DiarySelectDto> ids = queryFactory
 //                .select(Projections.fields(DiarySelectDto.class,
 //                        diary.id))
@@ -330,24 +377,24 @@ public class DiaryRepositoryCustomImpl implements DiaryRepositoryCustom{
 //                .orderBy(orders.stream().toArray(OrderSpecifier[]::new))
 //                .fetch();
 
-        List<DiarySelectDto> ids = queryFactory
-                .select(Projections.fields(DiarySelectDto.class,
-                        diary.id))
-                .from(diary)
-                .where(eqWriter(user),
-                        findByHashtag2(searchKeyword))
-
-                .offset(pageable.getOffset())
-                .limit(pageable.getPageSize())
-                .orderBy(orders.stream().toArray(OrderSpecifier[]::new))
-                .fetch();
+//        List<DiarySelectDto> ids = queryFactory
+//                .select(Projections.fields(DiarySelectDto.class,
+//                        diary.id))
+//                .from(diary)
+//                .where(eqWriter(user),
+//                        findByHashtag2(searchKeyword))
+//
+//                .offset(pageable.getOffset())
+//                .limit(pageable.getPageSize())
+//                .orderBy(orders.stream().toArray(OrderSpecifier[]::new))
+//                .fetch();
 
         Map<Long, DiarySelectDto> map =  queryFactory
                 .from(diary)
                 .leftJoin(diaryHashtag).on(diaryHashtag.diary.eq(diary))
                 .leftJoin(hashtag).on(hashtag.eq(diaryHashtag.hashtag))
-                .where(diary.id.in(ids.stream().map(DiarySelectDto::getId).collect(Collectors.toList())))
-                .orderBy(orders.stream().toArray(OrderSpecifier[]::new))
+//                .where(diary.id.in(ids.stream().map(DiarySelectDto::getId).collect(Collectors.toList())))
+                .where(diary.id.in(ids))
                 .transform(groupBy(diary.id).as(Projections.fields(DiarySelectDto.class,
                         diary.id,
                         diary.writer,
