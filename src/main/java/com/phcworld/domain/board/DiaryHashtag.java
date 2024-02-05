@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @Builder
 @Data
 @Table(indexes = {
-        @Index(name = "idx_diar_hashtag_diary_id_hashtag_id", columnList = "diary_id, hashtag_id")
+        @Index(name = "idx_diary_hashtag_diary_id_hashtag_id", columnList = "diary_id, hashtag_id")
 })
 @ToString
 public class DiaryHashtag {
