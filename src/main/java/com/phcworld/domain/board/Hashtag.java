@@ -12,6 +12,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
+@Table(indexes = {@Index(name = "idx_hashtag_name", columnList = "name")})
 public class Hashtag {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

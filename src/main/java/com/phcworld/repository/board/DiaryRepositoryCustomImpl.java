@@ -328,15 +328,25 @@ public class DiaryRepositoryCustomImpl implements DiaryRepositoryCustom{
 
         List<OrderSpecifier> orders = getOrderSpecifier(pageable);
 
-        String queryString = "SELECT STRAIGHT_JOIN d.id " +
-                "FROM test.diary d " +
-                "JOIN test.diary_hashtag dh USE INDEX(idx_diary_hashtag_diary_id_hashtag_id) ON d.id = dh.diary_id " +
-                "JOIN test.hashtag h USE INDEX(UK_tnicok67w95ajkoau49jeg9fm) ON dh.hashtag_id = h.id " +
-                "WHERE d.writer_id = :writerId " +
-                "AND h.name = :hashtagName " +
-                "ORDER BY d.count_good DESC " +
-                "LIMIT :limit " +
-                "OFFSET :offset";
+//        String queryString = "SELECT STRAIGHT_JOIN d.id " +
+//                "FROM test.diary d " +
+//                "JOIN test.diary_hashtag dh ON d.id = dh.diary_id " +
+//                "JOIN test.hashtag h use index(idx_hashtag_name) ON dh.hashtag_id = h.id " +
+//                "WHERE d.writer_id = :writerId " +
+//                "AND h.name = :hashtagName " +
+//                "ORDER BY d.count_good DESC " +
+//                "LIMIT :limit " +
+//                "OFFSET :offset";
+
+        String queryString = "select d.id from test.diary d use index(idx_diary_writer_id_count_good) " +
+                "where d.writer_id = :writerId " +
+                "and " +
+                "d.id in(select diary_hashtag.diary_id from diary_hashtag use index(idx_diary_hashtag_diary_id_hashtag_id) " +
+                "where(diary_hashtag.hashtag_id in(select hashtag.id from hashtag use index(idx_hashtag_name) " +
+                "where(hashtag.name = :hashtagName)))) " +
+                "order by d.count_good desc " +
+                "limit :limit " +
+                "offset :offset";
 
         List<BigInteger> BIs = entityManager.createNativeQuery(queryString)
                 .setParameter("writerId", user.getId())
@@ -355,13 +365,14 @@ public class DiaryRepositoryCustomImpl implements DiaryRepositoryCustom{
 //        List<Long> ids = queryFactory
 //                .select(diary.id)
 //                .from(diary)
-//                .leftJoin(diaryHashtag).on(diaryHashtag.diary.eq(diary))
-//                .leftJoin(hashtag).on(hashtag.eq(diaryHashtag.hashtag))
+//                .join(diaryHashtag).on(diaryHashtag.diary.eq(diary))
+//                .join(hashtag).on(hashtag.eq(diaryHashtag.hashtag))
 //                .where(eqWriter(user),
 //                        findByHashtag(searchKeyword))
 //                .offset(pageable.getOffset())
 //                .limit(pageable.getPageSize())
-//                .orderBy(orders.stream().toArray(OrderSpecifier[]::new))
+////                .orderBy(orders.stream().toArray(OrderSpecifier[]::new))
+//                .orderBy(diary.countGood.desc())
 //                .fetch();
 
 //        List<DiarySelectDto> ids = queryFactory
@@ -374,7 +385,8 @@ public class DiaryRepositoryCustomImpl implements DiaryRepositoryCustom{
 //                        findByHashtag(searchKeyword))
 //                .offset(pageable.getOffset())
 //                .limit(pageable.getPageSize())
-//                .orderBy(orders.stream().toArray(OrderSpecifier[]::new))
+////                .orderBy(orders.stream().toArray(OrderSpecifier[]::new))
+//                .orderBy(diary.countGood.desc())
 //                .fetch();
 
 //        List<DiarySelectDto> ids = queryFactory
@@ -383,7 +395,6 @@ public class DiaryRepositoryCustomImpl implements DiaryRepositoryCustom{
 //                .from(diary)
 //                .where(eqWriter(user),
 //                        findByHashtag2(searchKeyword))
-//
 //                .offset(pageable.getOffset())
 //                .limit(pageable.getPageSize())
 //                .orderBy(orders.stream().toArray(OrderSpecifier[]::new))
