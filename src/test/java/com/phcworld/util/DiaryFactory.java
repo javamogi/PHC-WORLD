@@ -2,6 +2,7 @@ package com.phcworld.util;
 
 import com.phcworld.domain.answer.DiaryAnswer;
 import com.phcworld.domain.board.Diary;
+import com.phcworld.domain.board.Hashtag;
 import com.phcworld.domain.good.Good;
 import com.phcworld.domain.user.User;
 import org.jeasy.random.EasyRandom;
@@ -16,12 +17,12 @@ import static org.jeasy.random.FieldPredicates.*;
 
 public class DiaryFactory {
     public static EasyRandom getDiaryRandomEntity(){
-        User user = User.builder()
-                .id(1L)
-                .email("user@test.test")
-                .password("user")
-                .name("user")
-                .build();
+//        User user = User.builder()
+//                .id((long) (Math.random() * 10000) + 1)
+//                .email("user@test.test")
+//                .password("user")
+//                .name("user")
+//                .build();
         Predicate<Field> idPredicate = named("id")
                 .and(ofType(Long.class))
                 .and(inClass(Diary.class));
@@ -39,8 +40,11 @@ public class DiaryFactory {
         EasyRandomParameters param = new EasyRandomParameters()
                 .excludeField(idPredicate)
                 .dateRange(firstDate, lastDate)
-                .randomize(writerIdPredicate, () -> user)
-                .randomize(countPredicate, () -> (long) (Math.random() * 1000));
+                .randomize(writerIdPredicate, () -> User.builder()
+                        .id((long) (Math.random() * 10000) + 1)
+//                        .id(810L)
+                        .build())
+                .randomize(countPredicate, () -> (long) (Math.random() * 100000));
 
         return new EasyRandom(param);
     }
@@ -90,4 +94,5 @@ public class DiaryFactory {
 
         return new EasyRandom(param);
     }
+
 }

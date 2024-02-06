@@ -30,6 +30,7 @@ import lombok.experimental.Accessors;
 @ToString(exclude = {"writer", "diaryAnswers", "goodPushedUser", "diaryHashtags"})
 @Table(indexes = {@Index(name = "idx_diary_writer_id_count_good", columnList = "writer_id, countGood"),
 				@Index(name = "idx_diary_count_good_create_date", columnList = "countGood, createDate"),
+				@Index(name = "idx_diary_count_good", columnList = "countGood"),
 })
 public class Diary {
 

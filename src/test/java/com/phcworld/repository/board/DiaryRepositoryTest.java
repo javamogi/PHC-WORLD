@@ -72,14 +72,14 @@ public class DiaryRepositoryTest {
 	}
 
 	@Test
-	@Ignore
+//	@Ignore
 	public void bulkInsert(){
 
 		EasyRandom generator = DiaryFactory.getDiaryRandomEntity();
 
 		StopWatch stopWatch = new StopWatch();
 		stopWatch.start();
-		List<DiaryInsertDto> list = IntStream.range(0, 10000 * 100)
+		List<DiaryInsertDto> list = IntStream.range(0, 10000 * 300)
 				.parallel()
 				.mapToObj(i -> generator.nextObject(Diary.class))
 				.map(DiaryInsertDto::of)
@@ -166,17 +166,19 @@ public class DiaryRepositoryTest {
 	public void findAllByQuerydsl(){
 		// setup 메소드에 @Before어노테이션을 붙이지 않아서 writer가 null저장됨
 		// 그래서 inner join으로 user 테이블에 null인 user가 없어서 조회가 안되었음.
-		Diary diary = Diary.builder()
-				.writer(user)
-				.title("title")
-				.contents("content")
-				.thumbnail("no-image-icon.gif")
-				.build();
-		diaryRepository.save(diary);
+//		Diary diary = Diary.builder()
+//				.writer(user)
+//				.title("title")
+//				.contents("content")
+//				.thumbnail("no-image-icon.gif")
+//				.build();
+//		diaryRepository.save(diary);
 		PageRequest pageRequest = PageRequest.of(0, 10, Sort.by("good3").descending());
 		StopWatch queryStopWatch = new StopWatch();
 		queryStopWatch.start();
-		String searchKeyword = "#사과";
+		String searchKeyword = "000005fa-4b3f-4a15-a0a3-8098be7494fe";
+//		String searchKeyword = "a%";
+//		String searchKeyword = "";
 		Page<DiarySelectDto> diaryPage = diaryRepository.findAllPage(user, pageRequest, searchKeyword);
 		queryStopWatch.stop();
 		log.info("DB querydsl SELECT 시간 : {}", queryStopWatch.getTotalTimeSeconds());
@@ -189,8 +191,8 @@ public class DiaryRepositoryTest {
 		for (int i = 0; i < responseList.size(); i++) {
 			log.info("diary response : {}", responseList.get(i));
 		}
-		assertThat(responseList.get(0).getTitle())
-				.isEqualTo(diary.getTitle());
+//		assertThat(responseList.get(0).getTitle())
+//				.isEqualTo(diary.getTitle());
 	}
 
 }

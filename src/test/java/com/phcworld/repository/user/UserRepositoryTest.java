@@ -1,27 +1,73 @@
 package com.phcworld.repository.user;
 
+import com.phcworld.domain.board.Diary;
+import com.phcworld.domain.board.DiaryHashtag;
+import com.phcworld.domain.board.Hashtag;
 import com.phcworld.domain.user.Authority;
 import com.phcworld.domain.user.User;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
+import org.jeasy.random.EasyRandom;
+import org.jeasy.random.EasyRandomParameters;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.lang.reflect.Field;
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.UUID;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
+import static org.jeasy.random.FieldPredicates.*;
 import static org.junit.Assert.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest
-@Transactional
+//@Transactional
 @Slf4j
 public class UserRepositoryTest {
 	
 	@Autowired
 	private UserRepository userRepository;
+
+	@Autowired
+	private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
+
+	@Test
+//    @Ignore
+	public void insert(){
+
+		List<User> list = IntStream.range(0, 10000 * 1)
+				.parallel()
+				.mapToObj(i -> User.builder()
+						.email(UUID.randomUUID().toString().substring(0, 7))
+						.password(UUID.randomUUID().toString().substring(0, 10))
+						.name(UUID.randomUUID().toString().substring(0, 4))
+						.profileImage("blank-profile-picture.png")
+//						.authority(Authority.ROLE_USER)
+						.build())
+				.collect(Collectors.toList());
+
+		String sql = String.format("INSERT INTO %s (email, password, name, profile_image) " +
+				"VALUES (:email, :password, :name, :profileImage)", "users");
+
+		SqlParameterSource[] params = list
+				.stream()
+				.map(BeanPropertySqlParameterSource::new)
+				.toArray(SqlParameterSource[]::new);
+		namedParameterJdbcTemplate.batchUpdate(sql, params);
+
+	}
 
 	@Test
 	public void createUser() {
