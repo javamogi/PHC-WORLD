@@ -390,8 +390,8 @@ public class DiaryRepositoryCustomImpl implements DiaryRepositoryCustom{
                 .select(Projections.fields(DiarySelectDto.class,
                         diary.id))
                 .from(diary)
-                .leftJoin(diaryHashtag).on(diaryHashtag.diary.eq(diary))
-                .leftJoin(hashtag).on(hashtag.eq(diaryHashtag.hashtag))
+                .join(diaryHashtag).on(diaryHashtag.diary.eq(diary))
+                .join(hashtag).on(hashtag.eq(diaryHashtag.hashtag))
                 .where(eqWriter(user),
                         findByHashtag(searchKeyword))
                 .offset(pageable.getOffset())
