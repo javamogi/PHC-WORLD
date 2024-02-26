@@ -19,3 +19,5 @@ insert into timeline(ID, SAVE_TYPE, POST_ID, REDIRECT_ID, USER_ID, SAVE_DATE) va
 insert into timeline(ID, SAVE_TYPE, POST_ID, REDIRECT_ID, USER_ID, SAVE_DATE) values('2', 'FREE_BOARD', '2', '2', '1', '2018-07-16 15:55:20.879');
 insert into timeline(ID, SAVE_TYPE, POST_ID, REDIRECT_ID, USER_ID, SAVE_DATE) values('3', 'FREE_BOARD', '3', '3', '1', '2018-07-16 15:55:20.879');
 insert into timeline(ID, SAVE_TYPE, POST_ID, REDIRECT_ID, USER_ID, SAVE_DATE) values('4', 'FREE_BOARD', '4', '4', '2', '2018-07-16 15:55:20.879');
+
+insert into diary(ID, WRITER_ID, TITLE, CONTENTS, THUMBNAIL, COUNT_GOOD, CREATE_DATE, UPDATE_DATE) values('1', '1', 'title', 'contents', '', '0', CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP());
