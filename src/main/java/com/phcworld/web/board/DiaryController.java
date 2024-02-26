@@ -181,8 +181,7 @@ public class DiaryController {
 	}
 	
 	@PutMapping("/{id}/good")
-	public @ResponseBody SuccessResponse updateGoodCount(@PathVariable Long id, HttpSession session) 
-			throws LoginNotUserException {
+	public @ResponseBody SuccessResponse updateGoodCount(@PathVariable Long id, HttpSession session) {
 		if(!HttpSessionUtils.isLoginUser(session)) {
 			throw new LoginNotUserException("로그인을 해야합니다.");
 		}
