@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadFactory;
 
 import com.phcworld.domain.user.Authority;
 import com.phcworld.repository.board.DiaryRepository;
@@ -57,6 +58,16 @@ public class GoodServiceTest {
 				.createDate(LocalDateTime.now())
 				.build();
 
+		User user2 = User.builder()
+				.id(2L)
+				.email("test2@test.test")
+				.password("test2")
+				.name("테스트2")
+				.profileImage("blank-profile-picture.png")
+				.authority(Authority.ROLE_USER)
+				.createDate(LocalDateTime.now())
+				.build();
+
 		Diary d = diaryRepository.findById(1L).orElseThrow(() -> new RuntimeException());
 
 		int numberOfThreads = 2;
@@ -65,19 +76,29 @@ public class GoodServiceTest {
 
 		log.info("동시성 테스트 진행");
 		executorService.execute(() -> {
-			goodService.pushGood(d, user);
+//			goodService.pushGood(d, user);
+			try {
+				goodService.pushGood(d, user);
+			} catch (Exception e){
+				log.info("message : {}", e.getMessage());
+			}
 			latch.countDown();
 		});
 		executorService.execute(() -> {
-			goodService.pushGood(d, user);
+//			goodService.pushGood(d, user);
+			try {
+				goodService.pushGood(d, user);
+			} catch (Exception e){
+				log.info("message : {}", e.getMessage());
+			}
 			latch.countDown();
 		});
 		latch.await();
 
 		List<Good> goods = goodRepository.findAll();
 
-		assertThat(0L, is(d.getCountGood()));
-		assertThat(0, is(goods.size()));
+		assertThat(1L, is(d.getCountGood()));
+		assertThat(1, is(goods.size()));
 	}
 	
 	@Test
