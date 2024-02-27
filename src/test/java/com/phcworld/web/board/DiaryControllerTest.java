@@ -11,6 +11,7 @@ import com.phcworld.repository.board.dto.DiarySelectDto;
 import com.phcworld.service.board.DiaryServiceImpl;
 import com.phcworld.service.user.UserService;
 import com.phcworld.utils.HttpSessionUtils;
+import com.slack.api.Slack;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +26,9 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import static org.hamcrest.Matchers.containsString;
@@ -49,6 +52,9 @@ public class DiaryControllerTest {
 	
 	@MockBean
 	private DiaryServiceImpl diaryService;
+
+	@MockBean
+	private Slack slack;
 
 	@Test
 	@WithMockUser(username = "test3@test.test", authorities = "ROLE_USER")

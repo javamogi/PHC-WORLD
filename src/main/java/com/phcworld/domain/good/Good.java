@@ -17,7 +17,12 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Builder
 @Table(indexes = {@Index(name = "idx__diary_id", columnList = "diary_id"),
-		@Index(name = "idx__writer_id", columnList = "user_id")})
+		@Index(name = "idx__writer_id", columnList = "user_id")},
+uniqueConstraints = {
+		@UniqueConstraint(
+				name = "constraintGood",
+				columnNames = {"diary_id", "user_id"})
+})
 public class Good {
 
 	@Id
@@ -33,7 +38,7 @@ public class Good {
 	private User user;
 	
 	private LocalDateTime createDate;
-	
+
 	public String getFormattedCreateDate() {
 		return LocalDateTimeUtils.getTime(createDate);
 	}
