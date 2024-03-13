@@ -72,21 +72,21 @@ public class TokenProvider {
                 .compact();
     }
 
-    public boolean validateToken(String token) {
-        try {
-            Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
-            return true;
-        } catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
-            throw new CustomException("401", "잘못된 JWT 서명입니다.");
-//            throw new NotMatchUserException();
-        } catch (ExpiredJwtException e) {
-            throw new CustomException("401", "만료된 JWT 토큰입니다.");
-        } catch (UnsupportedJwtException e) {
-            throw new CustomException("401", "지원되지 않는 JWT 토큰입니다.");
-        } catch (IllegalArgumentException e) {
-            throw new CustomException("400", "JWT 토큰이 잘못되었습니다.");
+        public boolean validateToken(String token) {
+            try {
+                Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
+                return true;
+            } catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
+                throw new CustomException("401", "잘못된 JWT 서명입니다.");
+    //            throw new NotMatchUserException();
+            } catch (ExpiredJwtException e) {
+                throw new CustomException("401", "만료된 JWT 토큰입니다.");
+            } catch (UnsupportedJwtException e) {
+                throw new CustomException("401", "지원되지 않는 JWT 토큰입니다.");
+            } catch (IllegalArgumentException e) {
+                throw new CustomException("400", "JWT 토큰이 잘못되었습니다.");
+            }
         }
-    }
 
     public TokenDto generateTokenDto(User user) {
 
@@ -132,9 +132,9 @@ public class TokenProvider {
         // Refresh Token 생성
         String refreshToken = generateRefreshToken(authentication, now);
 
-        ValueOperations<String, String> ops = redisTemplate.opsForValue();
-        Duration expireDuration = Duration.ofMillis(REFRESH_TOKEN_EXPIRE_TIME);
-        ops.set(userKey, refreshToken, expireDuration.getSeconds());
+//        ValueOperations<String, String> ops = redisTemplate.opsForValue();
+//        Duration expireDuration = Duration.ofMillis(REFRESH_TOKEN_EXPIRE_TIME);
+//        ops.set(userKey, refreshToken, expireDuration.getSeconds());
 
         return TokenDto.builder()
                 .grantType(BEARER_TYPE)

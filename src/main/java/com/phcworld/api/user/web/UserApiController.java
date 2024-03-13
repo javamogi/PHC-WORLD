@@ -2,6 +2,8 @@ package com.phcworld.api.user.web;
 
 import com.phcworld.api.dashboard.dto.UserResponseDto;
 import com.phcworld.api.user.dto.UserRequestDto;
+import com.phcworld.domain.user.LoginRequestUser;
+import com.phcworld.jwt.dto.TokenDto;
 import com.phcworld.service.user.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,5 +25,10 @@ public class UserApiController {
     @PostMapping("")
     public UserResponseDto create(@Valid @ModelAttribute UserRequestDto user) {
         return UserResponseDto.of(userService.registerUser(user));
+    }
+
+    @PostMapping("/login")
+    public TokenDto login(@Valid @ModelAttribute LoginRequestUser user) {
+        return userService.tokenLogin(user);
     }
 }
