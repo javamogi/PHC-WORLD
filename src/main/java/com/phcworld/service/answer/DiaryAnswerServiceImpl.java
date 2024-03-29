@@ -6,6 +6,7 @@ import com.phcworld.domain.common.SaveType;
 import com.phcworld.exception.model.ErrorCode;
 import com.phcworld.exception.model.NotFoundException;
 import com.phcworld.exception.model.NotMatchUserException;
+import com.phcworld.user.infrastructure.UserEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,8 +16,6 @@ import com.phcworld.domain.api.model.request.DiaryAnswerRequest;
 import com.phcworld.domain.api.model.response.DiaryAnswerApiResponse;
 import com.phcworld.domain.api.model.response.SuccessResponse;
 import com.phcworld.domain.board.Diary;
-import com.phcworld.domain.exception.MatchNotUserException;
-import com.phcworld.domain.user.User;
 import com.phcworld.ifs.CrudInterface;
 import com.phcworld.repository.answer.DiaryAnswerRepository;
 import com.phcworld.repository.board.DiaryRepository;
@@ -37,7 +36,7 @@ public class DiaryAnswerServiceImpl implements CrudInterface<DiaryAnswerRequest,
 	private final TimelineServiceImpl timelineService;
 	
 	@Override
-	public DiaryAnswerApiResponse create(User loginUser, Long diaryId, DiaryAnswerRequest request) {
+	public DiaryAnswerApiResponse create(UserEntity loginUser, Long diaryId, DiaryAnswerRequest request) {
 		Diary diary = diaryRepository.findById(diaryId)
 				.orElseThrow(() -> new NotFoundException(ErrorCode.NOT_FOUND));
 		DiaryAnswer diaryAnswer = DiaryAnswer.builder()
@@ -58,7 +57,7 @@ public class DiaryAnswerServiceImpl implements CrudInterface<DiaryAnswerRequest,
 	}
 	
 	@Override
-	public DiaryAnswerApiResponse read(Long id, User loginUser) {
+	public DiaryAnswerApiResponse read(Long id, UserEntity loginUser) {
 		DiaryAnswer diaryAnswer = diaryAnswerRepository.findById(id)
 				.orElseThrow(() -> new NotFoundException(ErrorCode.NOT_FOUND));
 		if(!diaryAnswer.isSameWriter(loginUser)) {
@@ -68,7 +67,7 @@ public class DiaryAnswerServiceImpl implements CrudInterface<DiaryAnswerRequest,
 	}
 	
 	@Override
-	public DiaryAnswerApiResponse update(DiaryAnswerRequest request, User loginUser) {
+	public DiaryAnswerApiResponse update(DiaryAnswerRequest request, UserEntity loginUser) {
 		DiaryAnswer answer = diaryAnswerRepository.findById(request.getId())
 				.orElseThrow(() -> new NotFoundException(ErrorCode.NOT_FOUND));
 		if(!answer.isSameWriter(loginUser)) {
@@ -82,7 +81,7 @@ public class DiaryAnswerServiceImpl implements CrudInterface<DiaryAnswerRequest,
 	}
 	
 	@Override
-	public SuccessResponse delete(Long id, User loginUser) {
+	public SuccessResponse delete(Long id, UserEntity loginUser) {
 		DiaryAnswer diaryAnswer = diaryAnswerRepository.findById(id)
 				.orElseThrow(() -> new NotFoundException(ErrorCode.NOT_FOUND));
 		if(!diaryAnswer.isSameWriter(loginUser)) {
@@ -99,7 +98,7 @@ public class DiaryAnswerServiceImpl implements CrudInterface<DiaryAnswerRequest,
 				.build();
 	}
 	
-	public List<DiaryAnswer> findDiaryAnswerListByWriter(User loginUser) {
+	public List<DiaryAnswer> findDiaryAnswerListByWriter(UserEntity loginUser) {
 		return diaryAnswerRepository.findByWriter(loginUser);
 	}
 

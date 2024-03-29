@@ -1,6 +1,6 @@
 package com.phcworld.domain.message;
 
-import com.phcworld.domain.user.User;
+import com.phcworld.user.infrastructure.UserEntity;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -29,7 +29,7 @@ public class ChatRoom {
         this.messages = messages;
     }
 
-    public boolean containsUser(User loginUser) {
+    public boolean containsUser(UserEntity loginUser) {
         for (ChatRoomUser chatRoomUser : users){
             if(chatRoomUser.getUser().equals(loginUser))
                 return true;

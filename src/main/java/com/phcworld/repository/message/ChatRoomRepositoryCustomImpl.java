@@ -4,7 +4,7 @@ import com.phcworld.domain.message.*;
 import com.phcworld.domain.message.dto.ChatRoomSelectDto;
 import com.phcworld.domain.message.dto.MessageSelectDto;
 import com.phcworld.domain.user.QUser;
-import com.phcworld.domain.user.User;
+import com.phcworld.user.infrastructure.UserEntity;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.Expressions;
@@ -33,7 +33,7 @@ public class ChatRoomRepositoryCustomImpl implements ChatRoomRepositoryCustom{
     QUser user = QUser.user;
 
     @Override
-    public List<ChatRoomSelectDto> findChatRoomListByUser(User user){
+    public List<ChatRoomSelectDto> findChatRoomListByUser(UserEntity user){
         Map<Long, ChatRoomSelectDto> map = queryFactory
                 .from(chatRoom)
                 .leftJoin(chatRoom.users, chatRoomUser)

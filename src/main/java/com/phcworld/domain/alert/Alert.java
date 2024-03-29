@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 import javax.persistence.*;
 
 import com.phcworld.domain.embedded.PostInfo;
-import com.phcworld.domain.user.User;
+import com.phcworld.user.infrastructure.UserEntity;
 import com.phcworld.utils.LocalDateTimeUtils;
 
 import lombok.AllArgsConstructor;
@@ -47,11 +47,11 @@ public class Alert {
 //	private FreeBoardAnswer freeBoardAnswer;
 
 	@ManyToOne
-	private User registerUser;
+	private UserEntity registerUser;
 
 	@ManyToOne
 	@JoinColumn(foreignKey = @ForeignKey(name = "fk_alert_post_writer"))
-	private User postWriter;
+	private UserEntity postWriter;
 	
 	private LocalDateTime createDate;
 

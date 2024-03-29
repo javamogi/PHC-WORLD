@@ -2,7 +2,7 @@ package com.phcworld.utils;
 
 import javax.servlet.http.HttpSession;
 
-import com.phcworld.domain.user.User;
+import com.phcworld.user.infrastructure.UserEntity;
 
 public class HttpSessionUtils {
 
@@ -16,10 +16,10 @@ public class HttpSessionUtils {
 		return true;
 	}
 	
-	public static User getUserFromSession(HttpSession session) {
+	public static UserEntity getUserFromSession(HttpSession session) {
 		if(!isLoginUser(session)) {
 			return null;
 		}
-		return (User)session.getAttribute(USER_SESSION_KEY);
+		return (UserEntity)session.getAttribute(USER_SESSION_KEY);
 	}
 }

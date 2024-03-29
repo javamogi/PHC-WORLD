@@ -5,13 +5,13 @@ import java.util.List;
 import com.phcworld.domain.board.TempFreeBoard;
 import com.phcworld.domain.board.dto.TempFreeBoardRequest;
 import com.phcworld.domain.board.dto.TempFreeBoardResponse;
-import com.phcworld.domain.user.User;
+import com.phcworld.user.infrastructure.UserEntity;
 
 public interface TempFreeBoardService {
 	
 	List<TempFreeBoardResponse> findFreeBoardAllListAndSetNewBadge();
 	
-	TempFreeBoardResponse createFreeBoard(User user, TempFreeBoardRequest freeBoardRequest);
+	TempFreeBoardResponse createFreeBoard(UserEntity user, TempFreeBoardRequest freeBoardRequest);
 	
 	TempFreeBoardResponse getOneFreeBoard(Long id);
 	
@@ -21,5 +21,5 @@ public interface TempFreeBoardService {
 	
 	void deleteFreeBoard(Long id);
 	
-	List<TempFreeBoard> findFreeBoardListByWriter(User loginUser);
+	List<TempFreeBoard> findFreeBoardListByWriter(UserEntity loginUser);
 }

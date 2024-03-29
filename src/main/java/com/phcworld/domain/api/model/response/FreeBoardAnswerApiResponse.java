@@ -2,7 +2,7 @@ package com.phcworld.domain.api.model.response;
 
 
 import com.phcworld.domain.answer.FreeBoardAnswer;
-import com.phcworld.domain.user.User;
+import com.phcworld.user.infrastructure.UserEntity;
 
 import lombok.Builder;
 import lombok.Data;
@@ -13,7 +13,7 @@ public class FreeBoardAnswerApiResponse {
 
 	private Long id;
 
-	private User writer;
+	private UserEntity writer;
 
 	private String contents;
 	

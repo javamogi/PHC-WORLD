@@ -2,8 +2,8 @@ package com.phcworld.web.dashboard;
 
 import javax.servlet.http.HttpSession;
 
+import com.phcworld.user.infrastructure.UserEntity;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,8 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.phcworld.domain.timeline.Timeline;
-import com.phcworld.domain.user.DashBoardUser;
-import com.phcworld.domain.user.User;
+import com.phcworld.user.controller.port.DashBoardUser;
 import com.phcworld.service.dashboard.DashboardService;
 import com.phcworld.service.timeline.TimelineServiceImpl;
 import com.phcworld.utils.HttpSessionUtils;
@@ -36,7 +35,7 @@ public class DashboardController {
 			model.addAttribute("errorMessage", "로그인이 필요합니다.");
 			return "user/login";
 		}
-		User loginUser = HttpSessionUtils.getUserFromSession(session);
+		UserEntity loginUser = HttpSessionUtils.getUserFromSession(session);
 		DashBoardUser dashBoardUser = dashboardService.getDashBoardUser(loginUser);
 		
 //		List<TempTimeline> tempTimelineList = tempTimelineService.getTimeline(loginUser);

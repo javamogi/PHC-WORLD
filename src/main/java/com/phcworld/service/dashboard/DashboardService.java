@@ -7,11 +7,11 @@ import com.phcworld.api.dashboard.dto.UserResponseDto;
 import com.phcworld.domain.dashboard.dto.DashBoardSelectDto;
 import com.phcworld.domain.timeline.dto.TimelineResponseDto;
 import com.phcworld.repository.dashboard.DashBoardRepositoryCustom;
+import com.phcworld.user.infrastructure.UserEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import com.phcworld.domain.user.DashBoardUser;
-import com.phcworld.domain.user.User;
+import com.phcworld.user.controller.port.DashBoardUser;
 import com.phcworld.service.timeline.TimelineServiceImpl;
 
 @Service
@@ -31,7 +31,7 @@ public class DashboardService {
 //
 //	private final AlertServiceImpl alertService;
 
-	public DashBoardUser getDashBoardUser(User user) {
+	public DashBoardUser getDashBoardUser(UserEntity user) {
 		DashBoardSelectDto count = dashBoardRepository.findActiveCountByUser(user);
 
 //		List<Timeline> timelineList = timelineService.findTimelineList(0, user);

@@ -17,7 +17,7 @@ import com.phcworld.domain.api.model.response.SuccessResponse;
 import com.phcworld.domain.board.TempDiary;
 import com.phcworld.domain.board.dto.TempDiaryRequest;
 import com.phcworld.domain.board.dto.TempDiaryResponse;
-import com.phcworld.domain.user.User;
+import com.phcworld.user.infrastructure.UserEntity;
 import com.phcworld.repository.board.TempDiaryRepository;
 import com.phcworld.service.alert.AlertServiceImpl;
 import com.phcworld.service.good.TempGoodService;
@@ -57,7 +57,7 @@ public class TempDiaryServiceImpl implements TempDiaryService {
 	}
 	
 	@Override
-	public Page<TempDiary> findPageDiary(User loginUser, Integer pageNum, User requestUser) {
+	public Page<TempDiary> findPageDiary(UserEntity loginUser, Integer pageNum, UserEntity requestUser) {
 //		PageRequest pageRequest = PageRequest.of(pageNum - 1, 6, new Sort(Direction.DESC, "id"));
 		PageRequest pageRequest = PageRequest.of(pageNum - 1, 6, Sort.by("id").descending());
 		if(isLoginUser(loginUser, requestUser)) {
@@ -66,12 +66,12 @@ public class TempDiaryServiceImpl implements TempDiaryService {
 		return diaryRepository.findByWriter(loginUser, pageRequest);
 	}
 
-	private boolean isLoginUser(User loginUser, User requestUser) {
+	private boolean isLoginUser(UserEntity loginUser, UserEntity requestUser) {
 		return loginUser == null || !requestUser.matchId(loginUser.getId());
 	}
 
 	@Override
-	public TempDiaryResponse createDiary(User user, TempDiaryRequest request) {
+	public TempDiaryResponse createDiary(UserEntity user, TempDiaryRequest request) {
 		TempDiary diary = TempDiary.builder()
 				.writer(user)
 				.title(request.getTitle())
@@ -119,11 +119,11 @@ public class TempDiaryServiceImpl implements TempDiaryService {
 	}
 	
 	@Override
-	public List<TempDiary> findDiaryListByWriter(User loginUser) {
+	public List<TempDiary> findDiaryListByWriter(UserEntity loginUser) {
 		return diaryRepository.findByWriter(loginUser);
 	}
 	
-	public SuccessResponse updateGood(Long diaryId, User loginUser) {
+	public SuccessResponse updateGood(Long diaryId, UserEntity loginUser) {
 		TempDiary diary = diaryRepository.findById(diaryId)
 				.orElseThrow(NotFoundException::new);
 		TempDiary updateDiary = diaryRepository.save(goodService.pushGood(diary, loginUser));

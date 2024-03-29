@@ -5,14 +5,14 @@ import com.phcworld.domain.message.ChatRoomMessage;
 import com.phcworld.domain.message.ChatRoomUser;
 import com.phcworld.domain.message.MessageReadUser;
 import com.phcworld.domain.message.dto.*;
-import com.phcworld.domain.user.User;
+import com.phcworld.user.infrastructure.UserEntity;
 import com.phcworld.exception.model.NotFoundException;
 import com.phcworld.exception.model.NotMatchUserException;
 import com.phcworld.repository.message.ChatRoomMessageRepository;
 import com.phcworld.repository.message.ChatRoomRepository;
 import com.phcworld.repository.message.ChatRoomUserRepository;
 import com.phcworld.repository.message.MessageReadUserRepository;
-import com.phcworld.repository.user.UserRepository;
+import com.phcworld.user.infrastructure.UserJpaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -30,11 +30,11 @@ public class ChatService {
     private final ChatRoomRepository chatRoomRepository;
     private final ChatRoomUserRepository chatRoomUserRepository;
     private final ChatRoomMessageRepository chatRoomMessageRepository;
-    private final UserRepository userRepository;
+    private final UserJpaRepository userRepository;
     private final MessageReadUserRepository messageReadUserRepository;
 
     @Transactional
-    public MessageResponseDto sendMessage(User loginUser, MessageRequestDto dto){
+    public MessageResponseDto sendMessage(UserEntity loginUser, MessageRequestDto dto){
         ChatRoom chatRoom = getChatRoom(loginUser, dto);
 
         ChatRoomMessage message = ChatRoomMessage.builder()
@@ -54,7 +54,7 @@ public class ChatService {
     private List<MessageReadUser> saveReadUser(MessageRequestDto dto, ChatRoomMessage message) {
         List<MessageReadUser> readUsers = new ArrayList<>();
         for (Long id : dto.getToUserIds()) {
-            User readUser = userRepository.findById(id)
+            UserEntity readUser = userRepository.findById(id)
                     .orElseThrow(NotFoundException::new);
             MessageReadUser messageReadUser = MessageReadUser.builder()
                     .user(readUser)
@@ -65,7 +65,7 @@ public class ChatService {
         return readUsers;
     }
 
-    private ChatRoom getChatRoom(User loginUser, MessageRequestDto dto) {
+    private ChatRoom getChatRoom(UserEntity loginUser, MessageRequestDto dto) {
         ChatRoom chatRoom = null;
         if(Objects.nonNull(dto.getChatRoomId())){
             chatRoom = chatRoomRepository.findById(dto.getChatRoomId())
@@ -81,12 +81,12 @@ public class ChatService {
         return chatRoom;
     }
 
-    private ChatRoom getNewChatRoom(User loginUser, List<Long> ids) {
+    private ChatRoom getNewChatRoom(UserEntity loginUser, List<Long> ids) {
         ChatRoom chatRoom = new ChatRoom();
         chatRoomRepository.save(chatRoom);
 
         for (Long id : ids) {
-            User toUser = userRepository.findById(id)
+            UserEntity toUser = userRepository.findById(id)
                     .orElseThrow(NotFoundException::new);
             ChatRoomUser chatRoomUser = ChatRoomUser.builder()
                     .user(toUser)
@@ -104,12 +104,12 @@ public class ChatService {
     }
 
     @Transactional(readOnly = true)
-    public List<ChatRoomSelectDto> getChatRoomList(User loginUser){
+    public List<ChatRoomSelectDto> getChatRoomList(UserEntity loginUser){
         return chatRoomRepository.findChatRoomListByUser(loginUser);
     }
 
     @Transactional(readOnly = true)
-    public List<ChatRoomMessageResponseDto> getMessagesByChatRoom(Long chatRoomId, int pageNum, User loginUser){
+    public List<ChatRoomMessageResponseDto> getMessagesByChatRoom(Long chatRoomId, int pageNum, UserEntity loginUser){
         ChatRoom chatRoom = chatRoomRepository.findById(chatRoomId)
                 .orElseThrow(NotFoundException::new);
         if(!chatRoom.containsUser(loginUser)){
@@ -124,11 +124,11 @@ public class ChatService {
                 .collect(Collectors.toList());
     }
 
-    private void removeReader(User loginUser, List<MessageSelectDto> list) {
+    private void removeReader(UserEntity loginUser, List<MessageSelectDto> list) {
         for (int i = 0; i < list.size(); i++){
             MessageSelectDto message = list.get(0);
             for(int j = 0; j < message.getReadUsers().size(); j++){
-                User readUser = message.getReadUsers().get(j);
+                UserEntity readUser = message.getReadUsers().get(j);
                 if(readUser.equals(loginUser)){
                     message.removeReadUser(readUser);
                 }
@@ -149,7 +149,7 @@ public class ChatService {
 //    }
 
     @Transactional
-    public MessageResponseDto deleteMessage(Long messageId, User loginUser){
+    public MessageResponseDto deleteMessage(Long messageId, UserEntity loginUser){
         ChatRoomMessage message = chatRoomMessageRepository.findById(messageId)
                 .orElseThrow(NotFoundException::new);
         if(!message.isSameWriter(loginUser)){

@@ -4,14 +4,13 @@ import java.time.LocalDateTime;
 
 import javax.persistence.*;
 
+import com.phcworld.user.infrastructure.UserEntity;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.phcworld.domain.board.Diary;
-import com.phcworld.domain.user.User;
 import com.phcworld.utils.LocalDateTimeUtils;
 
 import lombok.AllArgsConstructor;
@@ -38,7 +37,7 @@ public class DiaryAnswer {
 	@ManyToOne
 	@JoinColumn(foreignKey = @ForeignKey(name = "fk_diaryAnswer_writer"))
 //	@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
-	private User writer;
+	private UserEntity writer;
 
 	@ManyToOne
 	@JoinColumn(foreignKey = @ForeignKey(name = "fk_diaryAnswer_to_diary"), nullable = false)
@@ -69,7 +68,7 @@ public class DiaryAnswer {
 		return LocalDateTimeUtils.getTime(updateDate);
 	}
 
-	public boolean isSameWriter(User loginUser) {
+	public boolean isSameWriter(UserEntity loginUser) {
 		return this.writer.equals(loginUser);
 	}
 	

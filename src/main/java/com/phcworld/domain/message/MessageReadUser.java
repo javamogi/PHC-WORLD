@@ -1,6 +1,6 @@
 package com.phcworld.domain.message;
 
-import com.phcworld.domain.user.User;
+import com.phcworld.user.infrastructure.UserEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -20,12 +20,12 @@ public class MessageReadUser {
     private Long id;
 
     @ManyToOne
-    private User user;
+    private UserEntity user;
 
     @ManyToOne
     private ChatRoomMessage message;
 
-    public boolean readUser(User loginUser) {
+    public boolean readUser(UserEntity loginUser) {
         return this.user.equals(loginUser);
     }
 }

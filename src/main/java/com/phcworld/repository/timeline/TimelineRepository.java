@@ -1,18 +1,17 @@
 package com.phcworld.repository.timeline;
 
-import com.phcworld.domain.common.SaveType;
 import com.phcworld.domain.embedded.PostInfo;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.phcworld.domain.timeline.Timeline;
-import com.phcworld.domain.user.User;
+import com.phcworld.user.infrastructure.UserEntity;
 
 import java.util.Optional;
 
 public interface TimelineRepository extends JpaRepository<Timeline, Long>, TimelineRepositoryCustom {
-	Page<Timeline> findByUser(User user, Pageable Pageable);
+	Page<Timeline> findByUser(UserEntity user, Pageable Pageable);
 
 //	Timeline findBySaveTypeAndPostIdAndRedirectId(SaveType saveType, Long postId, Long redirectId);
 	Optional<Timeline> findByPostInfo(PostInfo postInfo);

@@ -3,8 +3,7 @@ package com.phcworld.service.good;
 import com.phcworld.domain.board.Diary;
 import com.phcworld.domain.common.SaveType;
 import com.phcworld.domain.good.Good;
-import com.phcworld.domain.user.User;
-import com.phcworld.exception.model.CustomBaseException;
+import com.phcworld.user.infrastructure.UserEntity;
 import com.phcworld.exception.model.InternalServerErrorException;
 import com.phcworld.repository.good.GoodRepository;
 import com.phcworld.service.alert.AlertServiceImpl;
@@ -30,7 +29,7 @@ public class GoodService {
 	private final AlertServiceImpl alertService;
 
 	@Transactional
-	public Diary pushGood(Diary diary, User loginUser) {
+	public Diary pushGood(Diary diary, UserEntity loginUser) {
 		Good good = goodRepository.findByDiaryAndUser(diary, loginUser);
 		if(good == null) {
 			Good createdGood = Good.builder()
@@ -59,7 +58,7 @@ public class GoodService {
 		return diary;
 	}
 	
-	public List<Good> getGoodList(User user){
+	public List<Good> getGoodList(UserEntity user){
 		List<Good> goodList = goodRepository.findByUser(user);
 		return goodList;
 	}

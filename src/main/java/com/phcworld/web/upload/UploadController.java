@@ -8,10 +8,10 @@ import java.util.UUID;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import com.phcworld.user.infrastructure.UserEntity;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,8 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.phcworld.domain.image.Image;
 import com.phcworld.domain.image.ImageServiceImpl;
-import com.phcworld.domain.user.User;
-import com.phcworld.service.user.UserService;
+import com.phcworld.user.service.UserServiceImpl;
 import com.phcworld.utils.HttpSessionUtils;
 
 @RestController
@@ -34,7 +33,7 @@ public class UploadController {
 	
 	private final ImageServiceImpl imageService;
 	
-	private final UserService userService;
+	private final UserServiceImpl userService;
 	
 	@PostMapping("/imageUpload")
 	public Image create(@RequestParam("imageFile") MultipartFile multipartFile, HttpServletRequest request, HttpSession session, Exception exception) {
@@ -47,7 +46,7 @@ public class UploadController {
 			log.debug("fileExtension : {}", fileExtension);
 			randName = UUID.randomUUID().toString().replaceAll("-", "") + fileExtension;
 		}
-		User sessionedUser = HttpSessionUtils.getUserFromSession(session);
+		UserEntity sessionedUser = HttpSessionUtils.getUserFromSession(session);
 
 		Path path = Paths.get("");
 		String pathStr = path.toAbsolutePath().toString();
@@ -97,11 +96,11 @@ public class UploadController {
 	}
 	
 	@PostMapping("/profileUpload")
-	public User profileUpload(@RequestParam("profileImage") MultipartFile multipartFile, HttpServletRequest request, HttpSession session, Exception exception) {
+	public UserEntity profileUpload(@RequestParam("profileImage") MultipartFile multipartFile, HttpServletRequest request, HttpSession session, Exception exception) {
 		String originalName = multipartFile.getOriginalFilename();
 		String fileExtension = originalName.substring(originalName.lastIndexOf("."));
 		String randName = UUID.randomUUID().toString().replaceAll("-", "") + fileExtension;
-		User sessionedUser = HttpSessionUtils.getUserFromSession(session);
+		UserEntity sessionedUser = HttpSessionUtils.getUserFromSession(session);
 
 		Path path = Paths.get("");
 		String pathStr = path.toAbsolutePath().toString();

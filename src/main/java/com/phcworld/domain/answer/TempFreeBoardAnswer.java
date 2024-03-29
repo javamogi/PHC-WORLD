@@ -10,7 +10,7 @@ import javax.persistence.ManyToOne;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.phcworld.domain.board.TempFreeBoard;
 import com.phcworld.domain.parent.BasicBoardAndAnswer;
-import com.phcworld.domain.user.User;
+import com.phcworld.user.infrastructure.UserEntity;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -29,12 +29,12 @@ public class TempFreeBoardAnswer extends BasicBoardAndAnswer{
 	private TempFreeBoard tempFreeBoard;
 	
 	@Builder
-	public TempFreeBoardAnswer(Long id, User writer, String contents, TempFreeBoard tempFreeBoard, LocalDateTime createDate) {
+	public TempFreeBoardAnswer(Long id, UserEntity writer, String contents, TempFreeBoard tempFreeBoard, LocalDateTime createDate) {
 		super(id, writer, contents, createDate);
 		this.tempFreeBoard = tempFreeBoard;
 	}
 
-	public boolean isSameWriter(User loginUser) {
+	public boolean isSameWriter(UserEntity loginUser) {
 		return super.getWriter().equals(loginUser);
 	}
 

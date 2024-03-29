@@ -1,9 +1,9 @@
 package com.phcworld.domain.image;
 
-import com.phcworld.domain.user.User;
+import com.phcworld.user.infrastructure.UserEntity;
 
 public interface ImageService {
-	Image createImage(User user, String originalName, String randName, Long size);
+	Image createImage(UserEntity user, String originalName, String randName, Long size);
 	
 	Image findImageByRandFileName(String randName);
 	

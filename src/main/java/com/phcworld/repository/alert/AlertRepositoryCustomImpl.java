@@ -1,23 +1,17 @@
 package com.phcworld.repository.alert;
 
-import com.phcworld.domain.alert.Alert;
 import com.phcworld.domain.alert.QAlert;
 import com.phcworld.domain.alert.dto.AlertSelectDto;
-import com.phcworld.domain.answer.QDiaryAnswer;
-import com.phcworld.domain.answer.QFreeBoardAnswer;
 import com.phcworld.domain.board.QDiary;
 import com.phcworld.domain.board.QFreeBoard;
 import com.phcworld.domain.common.SaveType;
-import com.phcworld.domain.good.QGood;
-import com.phcworld.domain.user.User;
+import com.phcworld.user.infrastructure.UserEntity;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
-import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
-import java.util.Iterator;
 import java.util.List;
 
 @Repository
@@ -28,7 +22,7 @@ public class AlertRepositoryCustomImpl implements AlertRepositoryCustom {
     QFreeBoard freeBoard = QFreeBoard.freeBoard;
     QDiary diary = QDiary.diary;
 
-    public List<AlertSelectDto> findAlertListByPostWriter(User user){
+    public List<AlertSelectDto> findAlertListByPostWriter(UserEntity user){
         return queryFactory
                 .select(Projections.fields(AlertSelectDto.class,
                         alert.id,

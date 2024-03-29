@@ -3,7 +3,7 @@ package com.phcworld.domain.board.dto;
 import java.util.List;
 
 import com.phcworld.domain.api.model.response.DiaryAnswerApiResponse;
-import com.phcworld.domain.user.User;
+import com.phcworld.user.infrastructure.UserEntity;
 
 import lombok.Builder;
 import lombok.Data;
@@ -14,7 +14,7 @@ public class TempDiaryResponse {
 
 	private Long id;
 
-	private User writer;
+	private UserEntity writer;
 
 	private String title;
 

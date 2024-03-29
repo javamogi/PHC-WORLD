@@ -11,7 +11,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 
-import com.phcworld.domain.user.User;
+import com.phcworld.user.infrastructure.UserEntity;
 import com.phcworld.utils.LocalDateTimeUtils;
 
 import lombok.AllArgsConstructor;
@@ -32,11 +32,11 @@ public class Message {
 
 	@ManyToOne
 	@JoinColumn(foreignKey = @ForeignKey(name = "fk_message_fromUser"))
-	private User sender;
+	private UserEntity sender;
 
 	@ManyToOne
 	@JoinColumn(foreignKey = @ForeignKey(name = "fk_message_toUser"))
-	private User receiver;
+	private UserEntity receiver;
 
 	@Lob
 	private String contents;

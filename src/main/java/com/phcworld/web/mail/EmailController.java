@@ -1,14 +1,13 @@
 package com.phcworld.web.mail;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.phcworld.domain.emailAuth.EmailAuth;
-import com.phcworld.repository.emailAuth.EmailAuthRepository;
+import com.phcworld.user.infrastructure.EmailAuth;
+import com.phcworld.user.infrastructure.EmailAuthRepository;
 
 @Controller
 @RequestMapping("/email")

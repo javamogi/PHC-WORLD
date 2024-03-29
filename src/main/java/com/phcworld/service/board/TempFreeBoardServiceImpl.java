@@ -15,7 +15,7 @@ import com.phcworld.domain.api.model.response.FreeBoardAnswerApiResponse;
 import com.phcworld.domain.board.TempFreeBoard;
 import com.phcworld.domain.board.dto.TempFreeBoardRequest;
 import com.phcworld.domain.board.dto.TempFreeBoardResponse;
-import com.phcworld.domain.user.User;
+import com.phcworld.user.infrastructure.UserEntity;
 import com.phcworld.repository.board.TempFreeBoardRepository;
 import com.phcworld.service.alert.AlertServiceImpl;
 import com.phcworld.service.timeline.TimelineServiceImpl;
@@ -67,7 +67,7 @@ public class TempFreeBoardServiceImpl implements TempFreeBoardService {
 	}
 
 	@Override
-	public TempFreeBoardResponse createFreeBoard(User user, TempFreeBoardRequest request) {
+	public TempFreeBoardResponse createFreeBoard(UserEntity user, TempFreeBoardRequest request) {
 		TempFreeBoard freeBoard = TempFreeBoard.builder()
 				.writer(user)
 				.title(request.getTitle())
@@ -120,7 +120,7 @@ public class TempFreeBoardServiceImpl implements TempFreeBoardService {
 	}
 	
 	@Override
-	public List<TempFreeBoard> findFreeBoardListByWriter(User loginUser) {
+	public List<TempFreeBoard> findFreeBoardListByWriter(UserEntity loginUser) {
 		return freeBoardRepository.findByWriter(loginUser);
 	}
 	

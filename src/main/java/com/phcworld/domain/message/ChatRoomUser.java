@@ -1,6 +1,6 @@
 package com.phcworld.domain.message;
 
-import com.phcworld.domain.user.User;
+import com.phcworld.user.infrastructure.UserEntity;
 import lombok.*;
 
 import javax.persistence.*;
@@ -17,13 +17,13 @@ public class ChatRoomUser {
     private Long id;
 
     @ManyToOne
-    private User user;
+    private UserEntity user;
 
     @ManyToOne
     private ChatRoom chatRoom;
 
     @Builder
-    public ChatRoomUser(Long id, User user, ChatRoom chatRoom) {
+    public ChatRoomUser(Long id, UserEntity user, ChatRoom chatRoom) {
         this.id = id;
         this.user = user;
         this.chatRoom = chatRoom;

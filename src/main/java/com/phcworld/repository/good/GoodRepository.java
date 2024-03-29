@@ -6,10 +6,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.phcworld.domain.board.Diary;
 import com.phcworld.domain.good.Good;
-import com.phcworld.domain.user.User;
+import com.phcworld.user.infrastructure.UserEntity;
 
 public interface GoodRepository extends JpaRepository<Good, Long>{
-	Good findByDiaryAndUser(Diary diary, User user);
+	Good findByDiaryAndUser(Diary diary, UserEntity user);
 	
-	List<Good> findByUser(User user);
+	List<Good> findByUser(UserEntity user);
 }

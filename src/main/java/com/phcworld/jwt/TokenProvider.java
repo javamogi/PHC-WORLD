@@ -1,8 +1,7 @@
 package com.phcworld.jwt;
 
-import com.phcworld.domain.user.User;
+import com.phcworld.user.infrastructure.UserEntity;
 import com.phcworld.exception.model.CustomException;
-import com.phcworld.exception.model.NotMatchUserException;
 import com.phcworld.jwt.dto.TokenDto;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
@@ -45,7 +44,7 @@ public class TokenProvider {
         this.key = Keys.hmacShaKeyFor(keyBytes);
     }
 
-    public String generateAccessToken(User user, long now){
+    public String generateAccessToken(UserEntity user, long now){
         String id = user.getId().toString();
         String authority = user.getAuthority().toString();
         // Access Token 생성
@@ -59,7 +58,7 @@ public class TokenProvider {
                 .compact();
     }
 
-    public String generateRefreshToken(User user, long now){
+    public String generateRefreshToken(UserEntity user, long now){
         String id = user.getId().toString();
         String authority = user.getAuthority().toString();
         // Refresh Token 생성
@@ -88,7 +87,7 @@ public class TokenProvider {
             }
         }
 
-    public TokenDto generateTokenDto(User user) {
+    public TokenDto generateTokenDto(UserEntity user) {
 
         String id = user.getId().toString();
         String authorities = user.getAuthority().toString();

@@ -10,7 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
-import com.phcworld.domain.user.User;
+import com.phcworld.user.infrastructure.UserEntity;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -34,7 +34,7 @@ public class Image {
 
 	@ManyToOne
 	@JoinColumn(foreignKey = @ForeignKey(name = "fk_image_writer"))
-	private User writer;
+	private UserEntity writer;
 
 	private Long size;
 

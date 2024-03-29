@@ -1,6 +1,6 @@
 package com.phcworld.domain.message;
 
-import com.phcworld.domain.user.User;
+import com.phcworld.user.infrastructure.UserEntity;
 
 import lombok.Builder;
 import lombok.Data;
@@ -11,9 +11,9 @@ public class MessageResponse {
 
 	private Long id;
 
-	private User sender;
+	private UserEntity sender;
 
-	private User receiver;
+	private UserEntity receiver;
 
 	private String contents;
 

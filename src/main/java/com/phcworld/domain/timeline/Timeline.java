@@ -4,9 +4,8 @@ import java.time.LocalDateTime;
 
 import javax.persistence.*;
 
-import com.phcworld.domain.common.SaveType;
 import com.phcworld.domain.embedded.PostInfo;
-import com.phcworld.domain.user.User;
+import com.phcworld.user.infrastructure.UserEntity;
 import com.phcworld.utils.LocalDateTimeUtils;
 
 import lombok.AllArgsConstructor;
@@ -62,7 +61,7 @@ public class Timeline {
 	@ManyToOne
 	@JoinColumn(foreignKey = @ForeignKey(name = "fk_timeline_user"))
 //	@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
-	private User user;                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
+	private UserEntity user;
 	
 	private LocalDateTime saveDate;
 
