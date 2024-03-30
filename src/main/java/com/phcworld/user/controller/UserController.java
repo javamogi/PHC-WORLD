@@ -17,6 +17,7 @@ import com.phcworld.service.timeline.TimelineServiceImpl;
 import com.phcworld.user.service.UserServiceImpl;
 import com.phcworld.utils.HttpSessionUtils;
 import com.phcworld.utils.PageNationsUtil;
+import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -37,6 +38,7 @@ import java.util.List;
 @RequestMapping("/users")
 @Slf4j
 @RequiredArgsConstructor
+@Builder
 public class UserController {
 
 	private final UserServiceImpl userServiceImpl;
@@ -54,17 +56,7 @@ public class UserController {
 	private final UserService userService;
 
 	@PostMapping("")
-	public String register(@Valid UserRequest requestUser, BindingResult bindingResult, Model model) {
-		log.debug("User : {}", requestUser);
-		if(bindingResult.hasErrors()) {
-			log.debug("Binding Result has Error!");
-			List<ObjectError> errors = bindingResult.getAllErrors();
-			for (ObjectError error : errors) {
-				log.debug("error : {},{}", error.getCode(), error.getDefaultMessage());
-				model.addAttribute("errorMessage", error.getDefaultMessage());
-			}
-			return "user/form";
-		}
+	public String register(@Valid UserRequest requestUser) {
 		userService.registerUser(requestUser);
 
 		return "redirect:/users/loginForm";
