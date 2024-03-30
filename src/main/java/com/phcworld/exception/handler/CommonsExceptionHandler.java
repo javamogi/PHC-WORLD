@@ -72,19 +72,19 @@ public class CommonsExceptionHandler {
 //        return createErrorResponseEntity(e.getErrorCode());
 //    }
 
-    @ExceptionHandler(BindException.class)
-    public ResponseEntity handle(BindException e){
-        log.error("Exception");
-        Map<String, Object> map = new HashMap<>();
-        List<FieldError> errors = e.getFieldErrors();
-        List<String> errorMessages = new ArrayList<>();
-        for (int i = 0; i < errors.size(); i++){
-            FieldError error = errors.get(i);
-            errorMessages.add(error.getDefaultMessage());
-        }
-        map.put("messages", errorMessages);
-        return new ResponseEntity(map, HttpStatus.BAD_REQUEST);
-    }
+//    @ExceptionHandler(BindException.class)
+//    public ResponseEntity handle(BindException e){
+//        log.error("Exception");
+//        Map<String, Object> map = new HashMap<>();
+//        List<FieldError> errors = e.getFieldErrors();
+//        List<String> errorMessages = new ArrayList<>();
+//        for (int i = 0; i < errors.size(); i++){
+//            FieldError error = errors.get(i);
+//            errorMessages.add(error.getDefaultMessage());
+//        }
+//        map.put("messages", errorMessages);
+//        return new ResponseEntity(map, HttpStatus.BAD_REQUEST);
+//    }
 
     private ResponseEntity<ErrorResponse> createErrorResponseEntity(ErrorCode errorCode) {
         return new ResponseEntity<>(ErrorResponse.of(errorCode), errorCode.getHttpStatus());

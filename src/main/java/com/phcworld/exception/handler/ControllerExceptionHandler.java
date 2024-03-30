@@ -2,9 +2,8 @@ package com.phcworld.exception.handler;
 
 import com.phcworld.exception.model.DuplicationException;
 import com.phcworld.exception.model.EmailSendErrorException;
-import org.springframework.validation.BindingResult;
+import org.springframework.validation.BindException;
 import org.springframework.validation.ObjectError;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.ModelAndView;
@@ -32,12 +31,21 @@ public class ControllerExceptionHandler {
         return mav;
     }
 
-    @ExceptionHandler(ConstraintViolationException.class)
-    public ModelAndView handle(ConstraintViolationException e){
-        Set<ConstraintViolation<?>> constraintViolations = e.getConstraintViolations();
+    @ExceptionHandler({ConstraintViolationException.class, BindException.class})
+    public ModelAndView handle(Exception e){
         ModelAndView mav = new ModelAndView();
-        for (ConstraintViolation<?> constraintViolation : constraintViolations) {
-            mav.addObject("errorMessage", constraintViolation.getMessage());
+        if(e instanceof ConstraintViolationException){
+            ConstraintViolationException cve = (ConstraintViolationException) e;
+            Set<ConstraintViolation<?>> constraintViolations = cve.getConstraintViolations();
+            for (ConstraintViolation<?> constraintViolation : constraintViolations) {
+                mav.addObject("errorMessage", constraintViolation.getMessage());
+            }
+        } else {
+            BindException be = (BindException) e;
+            List<ObjectError> errors = be.getAllErrors();
+            for (ObjectError error : errors) {
+                mav.addObject("errorMessage", error.getDefaultMessage());
+            }
         }
         mav.setViewName("user/form");
         return mav;
