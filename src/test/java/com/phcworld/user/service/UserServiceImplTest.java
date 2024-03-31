@@ -1,12 +1,12 @@
 package com.phcworld.user.service;
 
+import com.phcworld.exception.model.BadRequestException;
 import com.phcworld.exception.model.DuplicationException;
-import com.phcworld.mock.FakeEmailAuthService;
-import com.phcworld.mock.FakeLocalDateTimeHolder;
-import com.phcworld.mock.FakePasswordEncode;
-import com.phcworld.mock.FakeUserRepository;
+import com.phcworld.exception.model.NotFoundException;
+import com.phcworld.mock.*;
 import com.phcworld.user.domain.Authority;
 import com.phcworld.user.domain.User;
+import com.phcworld.user.domain.UserStatus;
 import com.phcworld.user.domain.dto.UserRequest;
 import org.junit.Before;
 import org.junit.Test;
@@ -22,16 +22,18 @@ public class UserServiceImplTest {
 
     @Before
     public void init(){
-        LocalDateTime localDateTime = LocalDateTime.of(2024, 3, 29, 12, 00);
+        LocalDateTime localDateTime = LocalDateTime.of(2024, 3, 29, 12, 0);
         FakeUserRepository fakeUserRepository = new FakeUserRepository();
         FakePasswordEncode fakePasswordEncode = new FakePasswordEncode("test2");
         FakeLocalDateTimeHolder fakeLocalDateTimeHolder = new FakeLocalDateTimeHolder(localDateTime);
+        FakeUuidHolder fakeUuidHolder = new FakeUuidHolder("1a2b3c");
 
         this.userService = NewUserServiceImpl.builder()
                 .userRepository(fakeUserRepository)
                 .passwordEncoder(fakePasswordEncode)
-                .emailAuthService(new FakeEmailAuthService())
+                .certificateService(new CertificateService(new FakeMailSender()))
                 .localDateTimeHolder(fakeLocalDateTimeHolder)
+                .uuidHolder(fakeUuidHolder)
                 .build();
         fakeUserRepository.save(User.builder()
                         .id(1L)
@@ -41,6 +43,19 @@ public class UserServiceImplTest {
                         .profileImage("blank-profile-picture.png")
                         .createDate(localDateTime)
                         .authority(Authority.ROLE_USER)
+                        .userStatus(UserStatus.ACTIVE)
+                        .certificationCode("1a2b3c")
+                .build());
+        fakeUserRepository.save(User.builder()
+                .id(2L)
+                .email("test2@test.test")
+                .password("test2")
+                .name("테스트2")
+                .profileImage("blank-profile-picture.png")
+                .createDate(localDateTime)
+                .authority(Authority.ROLE_USER)
+                .userStatus(UserStatus.PENDING)
+                .certificationCode("1a2b3c")
                 .build());
     }
 
@@ -49,9 +64,9 @@ public class UserServiceImplTest {
         // given
         LocalDateTime localDateTime = LocalDateTime.of(2024, 3, 29, 12, 00);
         UserRequest request = UserRequest.builder()
-                .email("test2@test.test")
+                .email("pakoh200@test.test")
                 .password("test")
-                .name("테스트2")
+                .name("박호철")
                 .build();
 
         // when
@@ -66,6 +81,8 @@ public class UserServiceImplTest {
         assertThat(user.getCreateDate()).isEqualTo(localDateTime);
         assertThat(user.getAuthority()).isEqualTo(Authority.ROLE_USER);
         assertThat(user.getProfileImage()).isEqualTo("blank-profile-picture.png");
+        assertThat(user.getCertificationCode()).isEqualTo("1a2b3c");
+        assertThat(user.getUserStatus()).isEqualTo(UserStatus.PENDING);
     }
 
     @Test(expected = DuplicationException.class)
@@ -81,4 +98,5 @@ public class UserServiceImplTest {
         // then
         userService.registerUser(request);
     }
+
 }

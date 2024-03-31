@@ -2,7 +2,6 @@ package com.phcworld.user.controller;
 
 import com.phcworld.domain.alert.dto.AlertResponseDto;
 import com.phcworld.user.controller.port.UserService;
-import com.phcworld.user.infrastructure.EmailAuth;
 import com.phcworld.domain.message.Message;
 import com.phcworld.domain.message.MessageResponse;
 import com.phcworld.domain.timeline.Timeline;
@@ -11,7 +10,7 @@ import com.phcworld.user.domain.dto.UserRequest;
 import com.phcworld.user.infrastructure.UserEntity;
 import com.phcworld.security.utils.SecurityUtil;
 import com.phcworld.service.alert.AlertServiceImpl;
-import com.phcworld.user.infrastructure.EmailAuthServiceImpl;
+import com.phcworld.user.service.CertificateService;
 import com.phcworld.service.message.MessageServiceImpl;
 import com.phcworld.service.timeline.TimelineServiceImpl;
 import com.phcworld.user.service.UserServiceImpl;
@@ -49,7 +48,7 @@ public class UserController {
 	
 	private final AlertServiceImpl alertService;
 	
-	private final EmailAuthServiceImpl emailService;
+	private final CertificateService emailService;
 
 	private final PasswordEncoder passwordEncoder;
 
@@ -58,8 +57,14 @@ public class UserController {
 	@PostMapping("")
 	public String register(@Valid UserRequest requestUser) {
 		userService.registerUser(requestUser);
-
 		return "redirect:/users/loginForm";
+	}
+
+	@RequestMapping("/verify")
+	public String authKeyConfirm(@RequestParam String email, @RequestParam String authKey, Model model) {
+		userService.verifyCertificationCode(email, authKey);
+		model.addAttribute("authMessage", "인증되었습니다.");
+		return "user/login";
 	}
 	
 	private boolean existUser(UserEntity emailUser) {
@@ -96,14 +101,6 @@ public class UserController {
 		if(!passwordEncoder.matches(requestUser.getPassword(), user.getPassword())) {
 			model.addAttribute("errorMessage", "비밀번호가 틀립니다.");
 			return "user/login";
-		}
-		
-		EmailAuth emailAuth = emailService.findByEmail(user.getEmail());
-		if(emailAuth != null) {
-			if(!emailAuth.isAuthenticate()) {
-				model.addAttribute("errorMessage", "이메일 인증이 안됐습니다. 메일에서 인증하세요.");
-				return "user/login";
-			}
 		}
 		
 		session.setAttribute(HttpSessionUtils.USER_SESSION_KEY, user);

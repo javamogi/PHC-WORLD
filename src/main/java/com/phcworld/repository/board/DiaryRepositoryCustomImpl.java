@@ -5,7 +5,7 @@ import com.phcworld.domain.board.QDiary;
 import com.phcworld.domain.board.QDiaryHashtag;
 import com.phcworld.domain.board.QHashtag;
 import com.phcworld.domain.good.QGood;
-import com.phcworld.domain.user.QUser;
+import com.phcworld.user.infrastructure.QUserEntity;
 import com.phcworld.user.infrastructure.UserEntity;
 import com.phcworld.repository.board.dto.DiarySelectDto;
 import com.querydsl.core.types.ExpressionUtils;
@@ -42,7 +42,7 @@ public class DiaryRepositoryCustomImpl implements DiaryRepositoryCustom{
     private final JPAQueryFactory queryFactory;
     private final EntityManager entityManager;
     QDiary diary = QDiary.diary;
-    QUser qUser = QUser.user;
+    QUserEntity qUser = QUserEntity.userEntity;
     QGood good = QGood.good;
     QDiaryAnswer answer = QDiaryAnswer.diaryAnswer;
     QDiaryHashtag diaryHashtag = QDiaryHashtag.diaryHashtag;

@@ -2,6 +2,7 @@ package com.phcworld.user.domain;
 
 import com.phcworld.mock.FakeLocalDateTimeHolder;
 import com.phcworld.mock.FakePasswordEncode;
+import com.phcworld.mock.FakeUuidHolder;
 import com.phcworld.user.domain.dto.UserRequest;
 import org.junit.Test;
 
@@ -22,7 +23,10 @@ public class UserTest {
         LocalDateTime now = LocalDateTime.now();
 
         // when
-        User user = User.from(request, new FakePasswordEncode("test2"), new FakeLocalDateTimeHolder(now));
+        User user = User.from(request,
+                new FakePasswordEncode("test2"),
+                new FakeLocalDateTimeHolder(now),
+                new FakeUuidHolder("1a2b3c"));
 
         // then
         assertThat(user.getId()).isNull();
@@ -32,6 +36,8 @@ public class UserTest {
         assertThat(user.getAuthority()).isEqualTo(Authority.ROLE_USER);
         assertThat(user.getProfileImage()).isEqualTo("blank-profile-picture.png");
         assertThat(user.getCreateDate()).isEqualTo(now);
+        assertThat(user.getUserStatus()).isEqualTo(UserStatus.PENDING);
+        assertThat(user.getCertificationCode()).isEqualTo("1a2b3c");
     }
 
 }

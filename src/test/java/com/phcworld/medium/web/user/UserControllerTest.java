@@ -31,11 +31,10 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
-import com.phcworld.user.infrastructure.EmailAuth;
 import com.phcworld.domain.message.Message;
 import com.phcworld.domain.timeline.Timeline;
 import com.phcworld.service.alert.AlertServiceImpl;
-import com.phcworld.user.infrastructure.EmailAuthServiceImpl;
+import com.phcworld.user.service.CertificateService;
 import com.phcworld.service.message.MessageServiceImpl;
 import com.phcworld.service.timeline.TimelineServiceImpl;
 import com.phcworld.user.service.UserServiceImpl;
@@ -67,7 +66,7 @@ public class UserControllerTest {
 	private AlertServiceImpl alertService;
 	
 	@MockBean
-	private EmailAuthServiceImpl emailService;
+	private CertificateService emailService;
 	
 	@MockBean
 	private HttpSessionUtils sessionUtil;
@@ -181,13 +180,6 @@ public class UserControllerTest {
 				.build();
 		when(this.userService.findUserByEmail("test@test.test"))
 		.thenReturn(user);
-		EmailAuth emailAuth = EmailAuth.builder()
-				.email("test@test.test")
-				.authKey("1234")
-				.authenticate(true)
-				.build();
-		when(this.emailService.findByEmail("test@test.test"))
-		.thenReturn(emailAuth);
 		this.mvc.perform(post("/users/login")
 				.param("email", "test@test.test")
 				.param("password", "test"))
@@ -252,13 +244,6 @@ public class UserControllerTest {
 				.build();
 		when(this.userService.findUserByEmail("test@test.test"))
 		.thenReturn(user);
-		EmailAuth emailAuth = EmailAuth.builder()
-				.email("test@test.test")
-				.authKey("1234")
-				.authenticate(false)
-				.build();
-		when(this.emailService.findByEmail("test@test.test"))
-		.thenReturn(emailAuth);
 		this.mvc.perform(post("/users/login")
 				.param("email", "test@test.test")
 				.param("password", "test"))

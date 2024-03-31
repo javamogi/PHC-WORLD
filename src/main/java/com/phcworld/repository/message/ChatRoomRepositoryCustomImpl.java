@@ -3,7 +3,7 @@ package com.phcworld.repository.message;
 import com.phcworld.domain.message.*;
 import com.phcworld.domain.message.dto.ChatRoomSelectDto;
 import com.phcworld.domain.message.dto.MessageSelectDto;
-import com.phcworld.domain.user.QUser;
+import com.phcworld.user.infrastructure.QUserEntity;
 import com.phcworld.user.infrastructure.UserEntity;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Projections;
@@ -30,7 +30,7 @@ public class ChatRoomRepositoryCustomImpl implements ChatRoomRepositoryCustom{
     QChatRoomUser chatRoomUser = QChatRoomUser.chatRoomUser;
     QChatRoomMessage message = QChatRoomMessage.chatRoomMessage;
     QMessageReadUser readUser = QMessageReadUser.messageReadUser;
-    QUser user = QUser.user;
+    QUserEntity user = QUserEntity.userEntity;
 
     @Override
     public List<ChatRoomSelectDto> findChatRoomListByUser(UserEntity user){

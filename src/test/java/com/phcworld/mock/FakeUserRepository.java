@@ -36,6 +36,8 @@ public class FakeUserRepository implements UserRepository {
                     .profileImage(user.getProfileImage())
                     .createDate(user.getCreateDate())
                     .authority(user.getAuthority())
+                    .certificationCode(user.getCertificationCode())
+                    .userStatus(user.getUserStatus())
                     .build();
             data.add(newUser);
             return newUser;

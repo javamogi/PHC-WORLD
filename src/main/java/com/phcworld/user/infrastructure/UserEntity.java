@@ -14,6 +14,7 @@ import javax.validation.constraints.Size;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.phcworld.user.domain.Authority;
 import com.phcworld.user.domain.User;
+import com.phcworld.user.domain.UserStatus;
 import com.phcworld.utils.LocalDateTimeUtils;
 import com.phcworld.utils.SecurityUtils;
 
@@ -62,6 +63,9 @@ public class UserEntity implements Serializable {
 
 	private String profileImage;
 
+	private UserStatus status;
+	private String certificationCode;
+
 	public static UserEntity from(User user) {
 		return UserEntity.builder()
 				.id(user.getId())
@@ -71,6 +75,8 @@ public class UserEntity implements Serializable {
 				.authority(user.getAuthority())
 				.profileImage(user.getProfileImage())
 				.createDate(user.getCreateDate())
+				.status(user.getUserStatus())
+				.certificationCode(user.getCertificationCode())
 				.build();
 	}
 
@@ -150,6 +156,8 @@ public class UserEntity implements Serializable {
 				.profileImage(profileImage)
 				.authority(authority)
 				.createDate(createDate)
+				.certificationCode(certificationCode)
+				.userStatus(status)
 				.build();
 	}
 }

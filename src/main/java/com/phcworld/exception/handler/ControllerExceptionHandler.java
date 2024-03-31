@@ -1,7 +1,10 @@
 package com.phcworld.exception.handler;
 
+import com.phcworld.exception.model.BadRequestException;
 import com.phcworld.exception.model.DuplicationException;
 import com.phcworld.exception.model.EmailSendErrorException;
+import com.phcworld.exception.model.NotFoundException;
+import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.validation.BindException;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -47,6 +50,22 @@ public class ControllerExceptionHandler {
                 mav.addObject("errorMessage", error.getDefaultMessage());
             }
         }
+        mav.setViewName("user/form");
+        return mav;
+    }
+
+    @ExceptionHandler(NotFoundException.class)
+    public ModelAndView notFoundUser(){
+        ModelAndView mav = new ModelAndView();
+        mav.addObject("errorMessage", "가입되지 않은 이메일입니다.");
+        mav.setViewName("user/form");
+        return mav;
+    }
+
+    @ExceptionHandler(BadRequestException.class)
+    public ModelAndView notMatchCertificationCode(){
+        ModelAndView mav = new ModelAndView();
+        mav.addObject("errorMessage", "인증키가 틀립니다.");
         mav.setViewName("user/form");
         return mav;
     }

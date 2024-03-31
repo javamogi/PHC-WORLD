@@ -10,7 +10,7 @@ import com.phcworld.domain.good.QGood;
 import com.phcworld.domain.statistics.HashtagStatisticsDto;
 import com.phcworld.domain.statistics.StatisticsDto;
 import com.phcworld.domain.statistics.UserStatisticsDto;
-import com.phcworld.domain.user.QUser;
+import com.phcworld.user.infrastructure.QUserEntity;
 import com.phcworld.user.infrastructure.UserEntity;
 import com.querydsl.core.Tuple;
 import com.querydsl.core.types.ExpressionUtils;
@@ -40,7 +40,7 @@ public class StatisticsRepository {
     private final JPAQueryFactory queryFactory;
     QDiary diary = QDiary.diary;
 
-    QUser user = QUser.user;
+    QUserEntity user = QUserEntity.userEntity;
 
     QFreeBoard freeBoard = QFreeBoard.freeBoard;
 

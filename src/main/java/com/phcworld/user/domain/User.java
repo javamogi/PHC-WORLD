@@ -1,6 +1,7 @@
 package com.phcworld.user.domain;
 
 import com.phcworld.common.infrastructure.LocalDateTimeHolder;
+import com.phcworld.common.infrastructure.UuidHolder;
 import com.phcworld.user.domain.dto.UserRequest;
 import lombok.Builder;
 import lombok.Getter;
@@ -25,7 +26,14 @@ public class User {
 
     private String profileImage;
 
-    public static User from(UserRequest userRequest, PasswordEncoder passwordEncoder, LocalDateTimeHolder timeHolder){
+    private String certificationCode;
+
+    private UserStatus userStatus;
+
+    public static User from(UserRequest userRequest,
+                            PasswordEncoder passwordEncoder,
+                            LocalDateTimeHolder timeHolder,
+                            UuidHolder uuidHolder){
         return User.builder()
                 .email(userRequest.getEmail())
                 .password(passwordEncoder.encode(userRequest.getPassword()))
@@ -33,7 +41,26 @@ public class User {
                 .authority(Authority.ROLE_USER)
                 .createDate(timeHolder.now())
                 .profileImage("blank-profile-picture.png")
+                .certificationCode(uuidHolder.random())
+                .userStatus(UserStatus.PENDING)
                 .build();
     }
 
+    public boolean matchCertificationCode(String authKey) {
+        return certificationCode.equals(authKey);
+    }
+
+    public User verify() {
+        return User.builder()
+                .id(id)
+                .email(email)
+                .password(password)
+                .name(name)
+                .authority(authority)
+                .createDate(createDate)
+                .profileImage(profileImage)
+                .certificationCode(certificationCode)
+                .userStatus(UserStatus.ACTIVE)
+                .build();
+    }
 }

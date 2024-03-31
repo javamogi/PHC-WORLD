@@ -1,14 +1,7 @@
 package com.phcworld.user.service;
 
-import com.phcworld.common.infrastructure.LocalDateTimeHolder;
-import com.phcworld.exception.model.DuplicationException;
-import com.phcworld.exception.model.EmailSendErrorException;
-import com.phcworld.user.controller.port.UserService;
 import com.phcworld.user.domain.Authority;
-import com.phcworld.user.domain.User;
 import com.phcworld.user.domain.dto.LoginRequestUser;
-import com.phcworld.user.domain.dto.UserRequest;
-import com.phcworld.user.infrastructure.EmailAuthServiceImpl;
 import com.phcworld.user.infrastructure.UserEntity;
 import com.phcworld.exception.model.NotFoundException;
 import com.phcworld.jwt.TokenProvider;
@@ -16,8 +9,6 @@ import com.phcworld.jwt.dto.TokenDto;
 import com.phcworld.jwt.service.CustomUserDetailsService;
 import com.phcworld.user.infrastructure.UserJpaRepository;
 import com.phcworld.security.utils.SecurityUtil;
-import com.phcworld.user.service.port.EmailAuthService;
-import com.phcworld.user.service.port.UserRepository;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -38,7 +29,7 @@ public class UserServiceImpl {
 	private final PasswordEncoder passwordEncoder;
 	private final CustomUserDetailsService userDetailsService;
 	private final TokenProvider tokenProvider;
-	private final EmailAuthServiceImpl emailAuthServiceImpl;
+	private final CertificateService certificateService;
 
 	public UserEntity createUser(UserEntity user) {
 //		String password = SecurityUtils.getEncSHA256(user.getPassword());
