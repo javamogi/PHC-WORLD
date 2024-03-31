@@ -1,7 +1,15 @@
 package com.phcworld.user.controller;
 
+import com.phcworld.exception.model.BadRequestException;
+import com.phcworld.exception.model.DuplicationException;
+import com.phcworld.exception.model.LoginUserNotFoundException;
+import com.phcworld.exception.model.NotFoundException;
 import com.phcworld.mock.FakeLocalDateTimeHolder;
+import com.phcworld.mock.FakeModel;
 import com.phcworld.mock.TestContainer;
+import com.phcworld.user.domain.Authority;
+import com.phcworld.user.domain.User;
+import com.phcworld.user.domain.UserStatus;
 import com.phcworld.user.domain.dto.UserRequest;
 import org.junit.Test;
 import org.springframework.http.ResponseEntity;
@@ -33,6 +41,104 @@ public class UserControllerTest {
 
         // then
         assertThat(result).isEqualTo("redirect:/users/loginForm");
+    }
+
+    @Test(expected = DuplicationException.class)
+    public void 중복된_이메일은_예외를_던진다(){
+        // given
+        LocalDateTime time = LocalDateTime.of(2024, 3, 29, 12, 0);
+        TestContainer testContainer = TestContainer.builder()
+                .localDateTimeHolder(new FakeLocalDateTimeHolder(time))
+                .build();
+        testContainer.userRepository.save(User.builder()
+                .id(1L)
+                .email("test@test.test")
+                .password("test")
+                .name("테스트")
+                .profileImage("blank-profile-picture.png")
+                .createDate(LocalDateTime.now())
+                .authority(Authority.ROLE_USER)
+                .userStatus(UserStatus.ACTIVE)
+                .certificationCode("1a2b3c")
+                .build());
+        UserRequest requestDto = UserRequest.builder()
+                .email("test@test.test")
+                .password("test")
+                .name("테스트")
+                .build();
+
+        // when
+        // then
+        testContainer.userController.register(requestDto);
+    }
+
+    @Test
+    public void 이메일_인증이_성공하면_login_view_page를_반환한다(){
+        // given
+        TestContainer testContainer = TestContainer.builder()
+                .build();
+        testContainer.userRepository.save(User.builder()
+                .id(1L)
+                .email("test@test.test")
+                .password("test")
+                .name("테스트")
+                .profileImage("blank-profile-picture.png")
+                .createDate(LocalDateTime.now())
+                .authority(Authority.ROLE_USER)
+                .userStatus(UserStatus.ACTIVE)
+                .certificationCode("1a2b3c")
+                .build());
+        String email = "test@test.test";
+        String certificationCode = "1a2b3c";
+
+        // when
+        String result = testContainer.userController.verifyCertificationCode(email,
+                certificationCode,
+                new FakeModel());
+
+        // then
+        assertThat(result).isEqualTo("user/login");
+    }
+
+    @Test(expected = NotFoundException.class)
+    public void 가입된_이메일이_아닌경우_예외를_던진다(){
+        // given
+        TestContainer testContainer = TestContainer.builder()
+                .build();
+        String email = "test@test.test";
+        String certificationCode = "1a2b3c";
+
+        // when
+        // then
+        testContainer.userController.verifyCertificationCode(email,
+                certificationCode,
+                new FakeModel());
+    }
+
+    @Test(expected = BadRequestException.class)
+    public void 인증코드가_다를_경우_예외를_던진다(){
+        // given
+        TestContainer testContainer = TestContainer.builder()
+                .build();
+        testContainer.userRepository.save(User.builder()
+                .id(1L)
+                .email("test@test.test")
+                .password("test")
+                .name("테스트")
+                .profileImage("blank-profile-picture.png")
+                .createDate(LocalDateTime.now())
+                .authority(Authority.ROLE_USER)
+                .userStatus(UserStatus.ACTIVE)
+                .certificationCode("1a2b3c")
+                .build());
+        String email = "test@test.test";
+        String certificationCode = "12345";
+
+        // when
+        // then
+        testContainer.userController.verifyCertificationCode(email,
+                certificationCode,
+                new FakeModel());
     }
 
 }
