@@ -4,13 +4,16 @@ import com.phcworld.exception.model.BadRequestException;
 import com.phcworld.exception.model.DuplicationException;
 import com.phcworld.exception.model.LoginUserNotFoundException;
 import com.phcworld.exception.model.NotFoundException;
+import com.phcworld.mock.FakeHttpSession;
 import com.phcworld.mock.FakeLocalDateTimeHolder;
 import com.phcworld.mock.FakeModel;
 import com.phcworld.mock.TestContainer;
+import com.phcworld.user.controller.port.SessionUser;
 import com.phcworld.user.domain.Authority;
 import com.phcworld.user.domain.User;
 import com.phcworld.user.domain.UserStatus;
 import com.phcworld.user.domain.dto.UserRequest;
+import com.phcworld.utils.HttpSessionUtils;
 import org.junit.Test;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -139,6 +142,116 @@ public class UserControllerTest {
         testContainer.userController.verifyCertificationCode(email,
                 certificationCode,
                 new FakeModel());
+    }
+
+    @Test
+    public void session에_저장된_정보가_있으면_회원가입_화면은_dashboard_리다이렉트_주소를_반환한다(){
+        // given
+        FakeHttpSession fakeHttpSession = new FakeHttpSession();
+        TestContainer testContainer = TestContainer.builder()
+                .build();
+        User user = User.builder()
+                .id(1L)
+                .email("test@test.test")
+                .password("test")
+                .name("테스트")
+                .profileImage("blank-profile-picture.png")
+                .createDate(LocalDateTime.now())
+                .authority(Authority.ROLE_USER)
+                .userStatus(UserStatus.ACTIVE)
+                .certificationCode("1a2b3c")
+                .build();
+
+        fakeHttpSession.setAttribute(HttpSessionUtils.USER_SESSION_KEY, SessionUser.from(user));
+
+        // when
+        String result = testContainer.userController.form(fakeHttpSession);
+
+        // then
+        assertThat(result).isEqualTo("redirect:/dashboard");
+    }
+
+    @Test
+    public void session에_저장된_정보가_없으며_회원가입_화면_view_page를_반환한다(){
+        // given
+        FakeHttpSession fakeHttpSession = new FakeHttpSession();
+        TestContainer testContainer = TestContainer.builder()
+                .build();
+
+        // when
+        String result = testContainer.userController.form(fakeHttpSession);
+
+        // then
+        assertThat(result).isEqualTo("user/form");
+    }
+
+    @Test
+    public void session에_저장된_정보가_있으면_로그인_화면은_dashboard_리다이렉트_주소를_반환한다(){
+        // given
+        FakeHttpSession fakeHttpSession = new FakeHttpSession();
+        TestContainer testContainer = TestContainer.builder()
+                .build();
+        User user = User.builder()
+                .id(1L)
+                .email("test@test.test")
+                .password("test")
+                .name("테스트")
+                .profileImage("blank-profile-picture.png")
+                .createDate(LocalDateTime.now())
+                .authority(Authority.ROLE_USER)
+                .userStatus(UserStatus.ACTIVE)
+                .certificationCode("1a2b3c")
+                .build();
+
+        fakeHttpSession.setAttribute(HttpSessionUtils.USER_SESSION_KEY, SessionUser.from(user));
+
+        // when
+        String result = testContainer.userController.loginForm(fakeHttpSession);
+
+        // then
+        assertThat(result).isEqualTo("redirect:/dashboard");
+    }
+
+    @Test
+    public void session에_저장된_정보가_없으며_로그인_화면_view_page를_반환한다(){
+        // given
+        FakeHttpSession fakeHttpSession = new FakeHttpSession();
+        TestContainer testContainer = TestContainer.builder()
+                .build();
+
+        // when
+        String result = testContainer.userController.loginForm(fakeHttpSession);
+
+        // then
+        assertThat(result).isEqualTo("user/login");
+    }
+
+    @Test
+    public void 로그아웃_요청은_session에_저장된_정보를_삭제하고_회원가입_화면_view_page를_반환한다(){
+        // given
+        FakeHttpSession fakeHttpSession = new FakeHttpSession();
+        TestContainer testContainer = TestContainer.builder()
+                .build();
+        User user = User.builder()
+                .id(1L)
+                .email("test@test.test")
+                .password("test")
+                .name("테스트")
+                .profileImage("blank-profile-picture.png")
+                .createDate(LocalDateTime.now())
+                .authority(Authority.ROLE_USER)
+                .userStatus(UserStatus.ACTIVE)
+                .certificationCode("1a2b3c")
+                .build();
+
+        fakeHttpSession.setAttribute(HttpSessionUtils.USER_SESSION_KEY, SessionUser.from(user));
+
+        // when
+        String result = testContainer.userController.logout(fakeHttpSession);
+
+        // then
+        assertThat(fakeHttpSession.getAttribute(HttpSessionUtils.USER_SESSION_KEY)).isNull();
+        assertThat(result).isEqualTo("redirect:/users/loginForm");
     }
 
 }

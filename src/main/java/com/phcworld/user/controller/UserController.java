@@ -1,5 +1,6 @@
 package com.phcworld.user.controller;
 
+import com.phcworld.user.controller.port.SessionUser;
 import com.phcworld.user.controller.port.UserService;
 import com.phcworld.domain.message.Message;
 import com.phcworld.domain.message.MessageResponse;
@@ -69,7 +70,7 @@ public class UserController {
 	
 	@GetMapping("/form")
 	public String form(HttpSession session) {
-		UserEntity loginUser = HttpSessionUtils.getUserEntityFromSession(session);
+		SessionUser loginUser = HttpSessionUtils.getUserFromSession(session);
 		if(Objects.nonNull(loginUser)) {
 			return "redirect:/dashboard";
 		}
@@ -78,7 +79,7 @@ public class UserController {
 	
 	@GetMapping("/loginForm")
 	public String loginForm(HttpSession session) {
-		UserEntity loginUser = HttpSessionUtils.getUserEntityFromSession(session);
+		SessionUser loginUser = HttpSessionUtils.getUserFromSession(session);
 		if(Objects.nonNull(loginUser)) {
 			return "redirect:/dashboard";
 		}
@@ -106,7 +107,7 @@ public class UserController {
 			model.addAttribute("errorMessage", "로그인이 필요합니다.");
 			return "user/login";
 		}
-		UserEntity loginUser = HttpSessionUtils.getUserEntityFromSession(session);
+		SessionUser loginUser = HttpSessionUtils.getUserFromSession(session);
 		if(!loginUser.matchId(id)) {
 			model.addAttribute("errorMessage", "본인의 정보만 수정 가능합니다.");
 			return "user/login";

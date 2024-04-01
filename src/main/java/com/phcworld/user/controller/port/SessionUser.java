@@ -15,4 +15,8 @@ public class SessionUser {
                 .authority(user.getAuthority())
                 .build();
     }
+
+    public boolean matchId(Long id) {
+        return this.id.equals(id);
+    }
 }
