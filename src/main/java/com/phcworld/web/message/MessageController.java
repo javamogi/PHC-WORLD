@@ -41,7 +41,7 @@ public class MessageController {
 		if(!HttpSessionUtils.isLoginUser(session)) {
 			throw new LoginNotUserException("로그인을 해야합니다.");
 		}
-		UserEntity loginUser = HttpSessionUtils.getUserFromSession(session);
+		UserEntity loginUser = HttpSessionUtils.getUserEntityFromSession(session);
 		UserEntity receiveUser = userService.findUserByEmail(request.getToUserEmail());
 		if(receiveUser == null) {
 			throw new UserNotFoundException("보낼 유저 정보가 없습니다.");
@@ -58,7 +58,7 @@ public class MessageController {
 		if(!HttpSessionUtils.isLoginUser(session)) {
 			throw new LoginNotUserException("로그인을 해야합니다.");
 		}
-		UserEntity loginUser = HttpSessionUtils.getUserFromSession(session);
+		UserEntity loginUser = HttpSessionUtils.getUserEntityFromSession(session);
 		
 		MessageResponse message = messageService.confirmMessage(id, loginUser);
 		
@@ -78,7 +78,7 @@ public class MessageController {
 		if(!HttpSessionUtils.isLoginUser(session)) {
 			throw new LoginNotUserException("로그인을 해야합니다.");
 		}
-		UserEntity loginUser = HttpSessionUtils.getUserFromSession(session);
+		UserEntity loginUser = HttpSessionUtils.getUserEntityFromSession(session);
 		
 		MessageResponse message = messageService.confirmMessage(id, loginUser);
 

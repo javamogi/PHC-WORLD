@@ -26,7 +26,7 @@ public class ChatController {
         if(!HttpSessionUtils.isLoginUser(session)) {
             throw new NotMatchUserException();
         }
-        UserEntity loginUser = HttpSessionUtils.getUserFromSession(session);
+        UserEntity loginUser = HttpSessionUtils.getUserEntityFromSession(session);
 
         return chatService.getChatRoomList(loginUser);
     }
@@ -36,7 +36,7 @@ public class ChatController {
         if(!HttpSessionUtils.isLoginUser(session)) {
             throw new NotMatchUserException();
         }
-        UserEntity loginUser = HttpSessionUtils.getUserFromSession(session);
+        UserEntity loginUser = HttpSessionUtils.getUserEntityFromSession(session);
         return chatService.sendMessage(loginUser, dto);
     }
 
@@ -47,7 +47,7 @@ public class ChatController {
         if(!HttpSessionUtils.isLoginUser(session)) {
             throw new NotMatchUserException();
         }
-        UserEntity loginUser = HttpSessionUtils.getUserFromSession(session);
+        UserEntity loginUser = HttpSessionUtils.getUserEntityFromSession(session);
         return chatService.getMessagesByChatRoom(chatRoomId, pageNum, loginUser);
     }
 
@@ -57,7 +57,7 @@ public class ChatController {
         if(!HttpSessionUtils.isLoginUser(session)) {
             throw new NotMatchUserException();
         }
-        UserEntity loginUser = HttpSessionUtils.getUserFromSession(session);
+        UserEntity loginUser = HttpSessionUtils.getUserEntityFromSession(session);
         return chatService.deleteMessage(messageId, loginUser);
     }
 }

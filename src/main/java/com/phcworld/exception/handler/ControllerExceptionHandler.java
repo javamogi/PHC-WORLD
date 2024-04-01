@@ -1,9 +1,6 @@
 package com.phcworld.exception.handler;
 
-import com.phcworld.exception.model.BadRequestException;
-import com.phcworld.exception.model.DuplicationException;
-import com.phcworld.exception.model.EmailSendErrorException;
-import com.phcworld.exception.model.NotFoundException;
+import com.phcworld.exception.model.*;
 import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.validation.BindException;
 import org.springframework.validation.ObjectError;
@@ -65,8 +62,32 @@ public class ControllerExceptionHandler {
     @ExceptionHandler(BadRequestException.class)
     public ModelAndView notMatchCertificationCode(){
         ModelAndView mav = new ModelAndView();
-        mav.addObject("errorMessage", "인증키가 틀립니다.");
+        mav.addObject("errorMessage", "인증코드가 틀립니다.");
         mav.setViewName("user/form");
+        return mav;
+    }
+
+    @ExceptionHandler(PasswordNotMatchException.class)
+    public ModelAndView notMatchPassword(){
+        ModelAndView mav = new ModelAndView();
+        mav.addObject("errorMessage", "비밀번호가 틀립니다.");
+        mav.setViewName("user/login");
+        return mav;
+    }
+
+    @ExceptionHandler(LoginUserNotFoundException.class)
+    public ModelAndView notFoundLoginUser(){
+        ModelAndView mav = new ModelAndView();
+        mav.addObject("errorMessage", "가입되지 않은 이메일입니다.");
+        mav.setViewName("user/login");
+        return mav;
+    }
+
+    @ExceptionHandler(UnauthenticatedException.class)
+    public ModelAndView unauthenticateUser(){
+        ModelAndView mav = new ModelAndView();
+        mav.addObject("errorMessage", "이메일 인증이 되지 않은 계정입니다.");
+        mav.setViewName("user/login");
         return mav;
     }
 

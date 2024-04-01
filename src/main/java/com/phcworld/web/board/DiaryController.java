@@ -35,7 +35,7 @@ public class DiaryController {
 							   @RequestParam(defaultValue = "1") Integer pageNum,
 			@RequestParam(defaultValue = "") String searchKeyword,
 			Model model, HttpSession session) {
-		UserEntity loginUser = HttpSessionUtils.getUserFromSession(session);
+		UserEntity loginUser = HttpSessionUtils.getUserEntityFromSession(session);
 		UserEntity requestUser = userService.findUserByEmail(email);
 
 		Page<DiarySelectDto> diaryPage = diaryService.findPageDiary(loginUser, pageNum, requestUser, searchKeyword);
@@ -59,7 +59,7 @@ public class DiaryController {
 							   @RequestParam(defaultValue = "") String searchKeyword,
 							   Model model, HttpSession session) {
 
-		UserEntity loginUser = HttpSessionUtils.getUserFromSession(session);
+		UserEntity loginUser = HttpSessionUtils.getUserEntityFromSession(session);
 		UserEntity requestUser = userService.findUserByEmail(email);
 		DiaryResponseDto dto = diaryService.getDiaryResponseListTemp(loginUser, email, pageNum, searchKeyword);
 
@@ -94,7 +94,7 @@ public class DiaryController {
 		if (!HttpSessionUtils.isLoginUser(session)) {
 			return "user/login";
 		}
-		UserEntity loginUser = HttpSessionUtils.getUserFromSession(session);
+		UserEntity loginUser = HttpSessionUtils.getUserEntityFromSession(session);
 		model.addAttribute("user", loginUser);
 		return "board/diary/diary_form";
 	}
@@ -104,7 +104,7 @@ public class DiaryController {
 		if (!HttpSessionUtils.isLoginUser(session)) {
 			return "user/login";
 		}
-		UserEntity sessionUser = HttpSessionUtils.getUserFromSession(session);
+		UserEntity sessionUser = HttpSessionUtils.getUserEntityFromSession(session);
 		DiaryResponse response = diaryService.createDiary(sessionUser, diaryRequest);
 
 		return "redirect:/diaries/" + response.getId();
@@ -115,7 +115,7 @@ public class DiaryController {
 		boolean isLoginUser = false;
 		boolean matchLoginUserAndWriter = false;
 		boolean matchAuthority = false;
-		UserEntity loginUser = HttpSessionUtils.getUserFromSession(session);
+		UserEntity loginUser = HttpSessionUtils.getUserEntityFromSession(session);
 		DiaryResponse diary = diaryService.getOneDiary(id);
 		if (loginUser != null) {
 			isLoginUser = true;
@@ -140,7 +140,7 @@ public class DiaryController {
 		if (!HttpSessionUtils.isLoginUser(session)) {
 			return "user/login";
 		}
-		UserEntity loginUser = HttpSessionUtils.getUserFromSession(session);
+		UserEntity loginUser = HttpSessionUtils.getUserEntityFromSession(session);
 		DiaryResponse diary = diaryService.getOneDiary(id);
 		if (!loginUser.matchId(diary.getWriter().getId())) {
 			model.addAttribute("errorMessage", "본인의 작성한 글만 수정 가능합니다.");
@@ -155,7 +155,7 @@ public class DiaryController {
 		if (!HttpSessionUtils.isLoginUser(session)) {
 			return "user/login";
 		}
-		UserEntity loginUser = HttpSessionUtils.getUserFromSession(session);
+		UserEntity loginUser = HttpSessionUtils.getUserEntityFromSession(session);
 		DiaryResponse diary = diaryService.getOneDiary(diaryRequest.getId());
 		if (!loginUser.matchId(diary.getWriter().getId())) {
 			model.addAttribute("errorMessage", "본인의 작성한 글만 수정 가능합니다.");
@@ -170,7 +170,7 @@ public class DiaryController {
 		if (!HttpSessionUtils.isLoginUser(session)) {
 			return "user/login";
 		}
-		UserEntity loginUser = HttpSessionUtils.getUserFromSession(session);
+		UserEntity loginUser = HttpSessionUtils.getUserEntityFromSession(session);
 		DiaryResponse diary = diaryService.getOneDiary(id);
 		if (!loginUser.matchId(diary.getWriter().getId()) && !loginUser.matchAdminAuthority()) {
 			model.addAttribute("errorMessage", "삭제 권한이 없습니다.");
@@ -185,7 +185,7 @@ public class DiaryController {
 		if(!HttpSessionUtils.isLoginUser(session)) {
 			throw new LoginNotUserException("로그인을 해야합니다.");
 		}
-		UserEntity loginUser = HttpSessionUtils.getUserFromSession(session);
+		UserEntity loginUser = HttpSessionUtils.getUserEntityFromSession(session);
 		return diaryService.updateGood(id, loginUser);
 	}
 }

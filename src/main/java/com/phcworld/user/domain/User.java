@@ -63,4 +63,8 @@ public class User {
                 .userStatus(UserStatus.ACTIVE)
                 .build();
     }
+
+    public boolean matchId(Long id) {
+        return this.id.equals(id);
+    }
 }

@@ -42,7 +42,7 @@ public class DiaryAnswerController {
 		if(!HttpSessionUtils.isLoginUser(session)) {
 			throw new NotMatchUserException();
 		}
-		UserEntity loginUser = HttpSessionUtils.getUserFromSession(session);
+		UserEntity loginUser = HttpSessionUtils.getUserEntityFromSession(session);
 		
 		return diaryAnswerService.create(loginUser, diaryId, request);
 	}
@@ -53,7 +53,7 @@ public class DiaryAnswerController {
 		if(!HttpSessionUtils.isLoginUser(session)) {
 			throw new NotMatchUserException();
 		}
-		UserEntity loginUser = HttpSessionUtils.getUserFromSession(session);
+		UserEntity loginUser = HttpSessionUtils.getUserEntityFromSession(session);
 		return diaryAnswerService.read(id, loginUser);
 	}
 	
@@ -66,7 +66,7 @@ public class DiaryAnswerController {
 		if(!HttpSessionUtils.isLoginUser(session)) {
 			throw new NotMatchUserException();
 		}
-		UserEntity loginUser = HttpSessionUtils.getUserFromSession(session);
+		UserEntity loginUser = HttpSessionUtils.getUserEntityFromSession(session);
 		return diaryAnswerService.update(request, loginUser);
 	}
 	
@@ -76,7 +76,7 @@ public class DiaryAnswerController {
 		if(!HttpSessionUtils.isLoginUser(session)) {
 			throw new NotMatchUserException();
 		}
-		UserEntity loginUser = HttpSessionUtils.getUserFromSession(session);
+		UserEntity loginUser = HttpSessionUtils.getUserEntityFromSession(session);
 		return diaryAnswerService.delete(id, loginUser);
 	}
 }

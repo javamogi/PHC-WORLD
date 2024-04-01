@@ -2,11 +2,11 @@ package com.phcworld.user.service;
 
 import com.phcworld.common.infrastructure.LocalDateTimeHolder;
 import com.phcworld.common.infrastructure.UuidHolder;
-import com.phcworld.exception.model.BadRequestException;
-import com.phcworld.exception.model.DuplicationException;
-import com.phcworld.exception.model.NotFoundException;
+import com.phcworld.exception.model.*;
 import com.phcworld.user.controller.port.UserService;
 import com.phcworld.user.domain.User;
+import com.phcworld.user.domain.UserStatus;
+import com.phcworld.user.domain.dto.LoginRequestUser;
 import com.phcworld.user.domain.dto.UserRequest;
 import com.phcworld.user.service.port.UserRepository;
 import lombok.Builder;
@@ -51,6 +51,19 @@ public class NewUserServiceImpl implements UserService {
 		}
 		user = user.verify();
 		return userRepository.save(user);
+	}
+
+	@Override
+	public User login(LoginRequestUser requestUser){
+		User user = userRepository.findByEmail(requestUser.getEmail())
+				.orElseThrow(LoginUserNotFoundException::new);
+		if(!passwordEncoder.matches(requestUser.getPassword(), user.getPassword())){
+			throw new PasswordNotMatchException();
+		}
+		if(user.getUserStatus() == UserStatus.PENDING){
+			throw new UnauthenticatedException();
+		}
+		return user;
 	}
 
 }

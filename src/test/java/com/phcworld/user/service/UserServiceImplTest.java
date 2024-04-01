@@ -141,5 +141,67 @@ public class UserServiceImplTest {
         // then
         userService.verifyCertificationCode(email, certificationCode);
     }
-    
+
+    @Test
+    public void ACTIVE인_회원은_저장된_비밀번호를_확인하고_같으면_로그인할_수_있다(){
+        // given
+        LoginRequestUser requestUser = LoginRequestUser.builder()
+                .email("test@test.test")
+                .password("test")
+                .build();
+
+        // when
+        User user = userService.login(requestUser);
+
+        // then
+        assertThat(user).isNotNull();
+        assertThat(user.getId()).isNotNull();
+        assertThat(user.getEmail()).isEqualTo("test@test.test");
+        assertThat(user.getPassword()).isEqualTo("test");
+        assertThat(user.getName()).isEqualTo("테스트");
+        assertThat(user.getAuthority()).isEqualTo(Authority.ROLE_USER);
+        assertThat(user.getProfileImage()).isEqualTo("blank-profile-picture.png");
+        assertThat(user.getCertificationCode()).isEqualTo("1a2b3c");
+        assertThat(user.getUserStatus()).isEqualTo(UserStatus.ACTIVE);
+    }
+
+    @Test(expected = LoginUserNotFoundException.class)
+    public void 로그인_시_존재하지_않는_회원은_예외를_던진다(){
+        // given
+        LoginRequestUser requestUser = LoginRequestUser.builder()
+                .email("pakoh200@test.test")
+                .password("pakoh200")
+                .build();
+
+        // when
+        // then
+        userService.login(requestUser);
+    }
+
+    @Test(expected = PasswordNotMatchException.class)
+    public void 로그인_시_ACTIVE인_회원의_비밀번호가_다르면_예외를_던진다(){
+        // given
+        LoginRequestUser requestUser = LoginRequestUser.builder()
+                .email("test@test.test")
+                .password("1234")
+                .build();
+
+        // when
+        // then
+        userService.login(requestUser);
+    }
+
+    @Test(expected = UnauthenticatedException.class)
+    public void 로그인_시_이메일_인증하지_않은_회원은_예외를_던진다(){
+        // given
+        LoginRequestUser requestUser = LoginRequestUser.builder()
+                .email("test2@test.test")
+                .password("test2")
+                .build();
+
+        // when
+        // then
+        userService.login(requestUser);
+    }
+
 }

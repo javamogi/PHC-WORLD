@@ -1,10 +1,10 @@
 package com.phcworld.user.controller;
 
-import com.phcworld.domain.alert.dto.AlertResponseDto;
 import com.phcworld.user.controller.port.UserService;
 import com.phcworld.domain.message.Message;
 import com.phcworld.domain.message.MessageResponse;
 import com.phcworld.domain.timeline.Timeline;
+import com.phcworld.user.domain.User;
 import com.phcworld.user.domain.dto.LoginRequestUser;
 import com.phcworld.user.domain.dto.UserRequest;
 import com.phcworld.user.infrastructure.UserEntity;
@@ -30,8 +30,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
-import java.security.NoSuchAlgorithmException;
 import java.util.List;
+import java.util.Objects;
 
 @Controller
 @RequestMapping("/users")
@@ -61,20 +61,16 @@ public class UserController {
 	}
 
 	@RequestMapping("/verify")
-	public String authKeyConfirm(@RequestParam String email, @RequestParam String authKey, Model model) {
+	public String verifyCertificationCode(@RequestParam String email, @RequestParam String authKey, Model model) {
 		userService.verifyCertificationCode(email, authKey);
 		model.addAttribute("authMessage", "인증되었습니다.");
 		return "user/login";
 	}
 	
-	private boolean existUser(UserEntity emailUser) {
-		return emailUser != null;
-	}
-	
 	@GetMapping("/form")
 	public String form(HttpSession session) {
-		UserEntity loginUser = HttpSessionUtils.getUserFromSession(session);
-		if(existUser(loginUser)) {
+		UserEntity loginUser = HttpSessionUtils.getUserEntityFromSession(session);
+		if(Objects.nonNull(loginUser)) {
 			return "redirect:/dashboard";
 		}
 		return "user/form";
@@ -82,45 +78,19 @@ public class UserController {
 	
 	@GetMapping("/loginForm")
 	public String loginForm(HttpSession session) {
-		UserEntity loginUser = HttpSessionUtils.getUserFromSession(session);
-		if(existUser(loginUser)) {
+		UserEntity loginUser = HttpSessionUtils.getUserEntityFromSession(session);
+		if(Objects.nonNull(loginUser)) {
 			return "redirect:/dashboard";
 		}
 		return "user/login";
 	}
 	
 	@PostMapping("/login")
-	public String login(LoginRequestUser requestUser, Model model, HttpSession session) throws NoSuchAlgorithmException {
-		UserEntity user = userServiceImpl.findUserByEmail(requestUser.getEmail());
-		log.debug("input User : {}", user);
-		if(!existUser(user)) {
-			model.addAttribute("errorMessage", "존재하지 않는 이메일입니다.");
-			return "user/login";
-		}
-//		if(!user.matchPassword(encodedPassword)) {
-		if(!passwordEncoder.matches(requestUser.getPassword(), user.getPassword())) {
-			model.addAttribute("errorMessage", "비밀번호가 틀립니다.");
-			return "user/login";
-		}
-		
-		session.setAttribute(HttpSessionUtils.USER_SESSION_KEY, user);
-		
-//		List<Message> allMessages = messageService.findMessageAllBySenderAndNotConfirmUseProfile(user, "읽지 않음");
-		List<MessageResponse> allMessages = messageService.findMessageAllBySenderAndNotConfirmUseProfile(user, "읽지 않음");
-		
-		List<MessageResponse> messages = messageService.findMessageBySenderAndConfirmUseMenu(user, "읽지 않음");
-//		List<Message> messages = messageService.findMessageBySenderAndConfirmUseMenu(user, "읽지 않음");
-		String countOfMessages = Integer.toString(allMessages.size());
-		if(allMessages.size() == 0) {
-			countOfMessages = "";
-		}
-		session.setAttribute("messages", messages);
-		session.setAttribute("countMessages", countOfMessages);
-		
-//		List<Alert> alerts = alertService.findListAlertByPostUser(user);
-		List<AlertResponseDto> alerts = alertService.findByAlertListByPostUser(user);
-		session.setAttribute("alerts", alerts);
-		SecurityUtil.setSecurityContext(user);
+	public String login(LoginRequestUser requestUser, HttpSession session) {
+		User user = userService.login(requestUser);
+		session.setAttribute(HttpSessionUtils.USER_SESSION_KEY, UserEntity.from(user));
+//		session.setAttribute(HttpSessionUtils.USER_SESSION_KEY, SessionUser.from(user));
+		SecurityUtil.setSecurityContext(UserEntity.from(user));
 		return "redirect:/dashboard";
 	}
 
@@ -136,7 +106,7 @@ public class UserController {
 			model.addAttribute("errorMessage", "로그인이 필요합니다.");
 			return "user/login";
 		}
-		UserEntity loginUser = HttpSessionUtils.getUserFromSession(session);
+		UserEntity loginUser = HttpSessionUtils.getUserEntityFromSession(session);
 		if(!loginUser.matchId(id)) {
 			model.addAttribute("errorMessage", "본인의 정보만 수정 가능합니다.");
 			return "user/login";
@@ -151,7 +121,7 @@ public class UserController {
 			model.addAttribute("errorMessage", "로그인이 필요합니다.");
 			return "user/login";
 		}
-		UserEntity loginUser = HttpSessionUtils.getUserFromSession(session);
+		UserEntity loginUser = HttpSessionUtils.getUserEntityFromSession(session);
 		if(!loginUser.matchId(id)) {
 			model.addAttribute("errorMessage", "본인의 정보만 수정 가능합니다.");
 			return "user/login";
@@ -176,7 +146,7 @@ public class UserController {
 			model.addAttribute("errorMessage", "로그인이 필요합니다.");
 			return "user/login";
 		}
-		UserEntity loginUser = HttpSessionUtils.getUserFromSession(session);
+		UserEntity loginUser = HttpSessionUtils.getUserEntityFromSession(session);
 		UserEntity user = userServiceImpl.findUserById(id);
 		
 		List<Timeline> timelines = timelineService.findTimelineList(0, user);

@@ -41,7 +41,7 @@ public class FreeBoardAnswerController {
 		if(!HttpSessionUtils.isLoginUser(session)) {
 			throw new NotMatchUserException();
 		}
-		UserEntity loginUser = HttpSessionUtils.getUserFromSession(session);
+		UserEntity loginUser = HttpSessionUtils.getUserEntityFromSession(session);
 		
 		return freeBoardAnswerService.create(loginUser, freeboardId, request);
 	}
@@ -52,7 +52,7 @@ public class FreeBoardAnswerController {
 		if(!HttpSessionUtils.isLoginUser(session)) {
 			throw new NotMatchUserException();
 		}
-		UserEntity loginUser = HttpSessionUtils.getUserFromSession(session);
+		UserEntity loginUser = HttpSessionUtils.getUserEntityFromSession(session);
 		return freeBoardAnswerService.read(id, loginUser);
 	}
 	
@@ -65,7 +65,7 @@ public class FreeBoardAnswerController {
 		if(!HttpSessionUtils.isLoginUser(session)) {
 			throw new NotMatchUserException();
 		}
-		UserEntity loginUser = HttpSessionUtils.getUserFromSession(session);
+		UserEntity loginUser = HttpSessionUtils.getUserEntityFromSession(session);
 		return freeBoardAnswerService.update(request, loginUser);
 	}
 	
@@ -75,7 +75,7 @@ public class FreeBoardAnswerController {
 		if(!HttpSessionUtils.isLoginUser(session)) {
 			throw new NotMatchUserException();
 		}
-		UserEntity loginUser = HttpSessionUtils.getUserFromSession(session);
+		UserEntity loginUser = HttpSessionUtils.getUserEntityFromSession(session);
 		
 		return freeBoardAnswerService.delete(id, loginUser);
 	}

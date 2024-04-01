@@ -46,7 +46,7 @@ public class UploadController {
 			log.debug("fileExtension : {}", fileExtension);
 			randName = UUID.randomUUID().toString().replaceAll("-", "") + fileExtension;
 		}
-		UserEntity sessionedUser = HttpSessionUtils.getUserFromSession(session);
+		UserEntity sessionedUser = HttpSessionUtils.getUserEntityFromSession(session);
 
 		Path path = Paths.get("");
 		String pathStr = path.toAbsolutePath().toString();
@@ -100,7 +100,7 @@ public class UploadController {
 		String originalName = multipartFile.getOriginalFilename();
 		String fileExtension = originalName.substring(originalName.lastIndexOf("."));
 		String randName = UUID.randomUUID().toString().replaceAll("-", "") + fileExtension;
-		UserEntity sessionedUser = HttpSessionUtils.getUserFromSession(session);
+		UserEntity sessionedUser = HttpSessionUtils.getUserEntityFromSession(session);
 
 		Path path = Paths.get("");
 		String pathStr = path.toAbsolutePath().toString();

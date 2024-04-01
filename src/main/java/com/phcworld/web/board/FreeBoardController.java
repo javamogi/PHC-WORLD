@@ -53,7 +53,7 @@ public class FreeBoardController {
 		if (!HttpSessionUtils.isLoginUser(session)) {
 			return "user/login";
 		}
-		UserEntity sessionUser = HttpSessionUtils.getUserFromSession(session);
+		UserEntity sessionUser = HttpSessionUtils.getUserEntityFromSession(session);
 		
 		FreeBoardResponse response = freeBoardService.createFreeBoard(sessionUser, request);
 
@@ -65,7 +65,7 @@ public class FreeBoardController {
 		boolean isLoginUser = false;
 		boolean matchLoginUserAndWriter = false;
 		boolean matchAuthority = false;
-		UserEntity loginUser = HttpSessionUtils.getUserFromSession(session);
+		UserEntity loginUser = HttpSessionUtils.getUserEntityFromSession(session);
 
 		FreeBoardResponse freeBoard = freeBoardService.addFreeBoardCount(id);
 
@@ -94,7 +94,7 @@ public class FreeBoardController {
 		if (!HttpSessionUtils.isLoginUser(session)) {
 			return "user/login";
 		}
-		UserEntity loginUser = HttpSessionUtils.getUserFromSession(session);
+		UserEntity loginUser = HttpSessionUtils.getUserEntityFromSession(session);
 		FreeBoardResponse freeBoard = freeBoardService.getOneFreeBoard(id);
 		if (!loginUser.matchId(freeBoard.getWriter().getId())) {
 			model.addAttribute("errorMessage", "본인의 작성한 글만 수정 가능합니다.");
@@ -109,7 +109,7 @@ public class FreeBoardController {
 		if (!HttpSessionUtils.isLoginUser(session)) {
 			return "user/login";
 		}
-		UserEntity loginUser = HttpSessionUtils.getUserFromSession(session);
+		UserEntity loginUser = HttpSessionUtils.getUserEntityFromSession(session);
 		FreeBoardResponse oneFreeBoard = freeBoardService.getOneFreeBoard(request.getId());
 		if (!loginUser.matchId(oneFreeBoard.getWriter().getId())) {
 			model.addAttribute("errorMessage", "본인의 작성한 글만 수정 가능합니다.");
@@ -125,7 +125,7 @@ public class FreeBoardController {
 		if (!HttpSessionUtils.isLoginUser(session)) {
 			return "user/login";
 		}
-		UserEntity loginUser = HttpSessionUtils.getUserFromSession(session);
+		UserEntity loginUser = HttpSessionUtils.getUserEntityFromSession(session);
 		FreeBoardResponse freeBoard = freeBoardService.getOneFreeBoard(id);
 		if (!loginUser.matchAdminAuthority() && !loginUser.matchId(freeBoard.getWriterId())) {
 			model.addAttribute("errorMessage", "삭제 권한이 없습니다.");
