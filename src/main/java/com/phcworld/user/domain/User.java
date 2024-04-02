@@ -3,6 +3,7 @@ package com.phcworld.user.domain;
 import com.phcworld.common.infrastructure.LocalDateTimeHolder;
 import com.phcworld.common.infrastructure.UuidHolder;
 import com.phcworld.user.domain.dto.UserRequest;
+import com.phcworld.user.domain.dto.UserUpdateRequest;
 import lombok.Builder;
 import lombok.Getter;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -66,5 +67,19 @@ public class User {
 
     public boolean matchId(Long id) {
         return this.id.equals(id);
+    }
+
+    public User update(UserUpdateRequest request, PasswordEncoder passwordEncoder) {
+        return User.builder()
+                .id(id)
+                .email(email)
+                .password(passwordEncoder.encode(request.getPassword()))
+                .name(request.getName())
+                .authority(authority)
+                .createDate(createDate)
+                .profileImage(profileImage)
+                .certificationCode(certificationCode)
+                .userStatus(UserStatus.ACTIVE)
+                .build();
     }
 }

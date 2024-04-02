@@ -13,6 +13,8 @@ import com.phcworld.user.domain.Authority;
 import com.phcworld.user.domain.User;
 import com.phcworld.user.domain.UserStatus;
 import com.phcworld.user.domain.dto.UserRequest;
+import com.phcworld.user.domain.dto.UserUpdateRequest;
+import com.phcworld.user.infrastructure.UserEntity;
 import com.phcworld.utils.HttpSessionUtils;
 import org.junit.Test;
 import org.springframework.http.ResponseEntity;
@@ -162,7 +164,7 @@ public class UserControllerTest {
                 .certificationCode("1a2b3c")
                 .build();
 
-        fakeHttpSession.setAttribute(HttpSessionUtils.USER_SESSION_KEY, SessionUser.from(user));
+        fakeHttpSession.setAttribute(HttpSessionUtils.USER_SESSION_KEY, UserEntity.from(user));
 
         // when
         String result = testContainer.userController.form(fakeHttpSession);
@@ -203,7 +205,7 @@ public class UserControllerTest {
                 .certificationCode("1a2b3c")
                 .build();
 
-        fakeHttpSession.setAttribute(HttpSessionUtils.USER_SESSION_KEY, SessionUser.from(user));
+        fakeHttpSession.setAttribute(HttpSessionUtils.USER_SESSION_KEY, UserEntity.from(user));
 
         // when
         String result = testContainer.userController.loginForm(fakeHttpSession);
@@ -244,7 +246,7 @@ public class UserControllerTest {
                 .certificationCode("1a2b3c")
                 .build();
 
-        fakeHttpSession.setAttribute(HttpSessionUtils.USER_SESSION_KEY, SessionUser.from(user));
+        fakeHttpSession.setAttribute(HttpSessionUtils.USER_SESSION_KEY, UserEntity.from(user));
 
         // when
         String result = testContainer.userController.logout(fakeHttpSession);
@@ -254,4 +256,157 @@ public class UserControllerTest {
         assertThat(result).isEqualTo("redirect:/users/loginForm");
     }
 
+    @Test
+    public void 회원정보_변경_페이지_요청시_session에_저장된_정보가_없으며_로그인_화면_view_page를_반환한다(){
+        // given
+        TestContainer testContainer = TestContainer.builder()
+                .build();
+        long id = 1;
+
+        // when
+        String result = testContainer.userController.updateForm(id, new FakeModel(), new FakeHttpSession());
+
+        // then
+        assertThat(result).isEqualTo("user/login");
+    }
+
+    @Test
+    public void 회원정보_변경_페이지_요청시_session에_저장된_정보의_id와_다르면_로그인_화면_view_page를_반환한다(){
+        // given
+        FakeHttpSession fakeHttpSession = new FakeHttpSession();
+        TestContainer testContainer = TestContainer.builder()
+                .build();
+        User user = User.builder()
+                .id(1L)
+                .email("test@test.test")
+                .password("test")
+                .name("테스트")
+                .profileImage("blank-profile-picture.png")
+                .createDate(LocalDateTime.now())
+                .authority(Authority.ROLE_USER)
+                .userStatus(UserStatus.ACTIVE)
+                .certificationCode("1a2b3c")
+                .build();
+
+        fakeHttpSession.setAttribute(HttpSessionUtils.USER_SESSION_KEY, UserEntity.from(user));
+        long id = 2;
+
+        // when
+        String result = testContainer.userController.updateForm(id, new FakeModel(), fakeHttpSession);
+
+        // then
+        assertThat(result).isEqualTo("user/login");
+    }
+
+    @Test
+    public void 회원정보_변경_페이지_요청시_session에_저장된_정보의_id가_같으면_view_page를_반환한다(){
+        // given
+        FakeHttpSession fakeHttpSession = new FakeHttpSession();
+        TestContainer testContainer = TestContainer.builder()
+                .build();
+        User user = User.builder()
+                .id(1L)
+                .email("test@test.test")
+                .password("test")
+                .name("테스트")
+                .profileImage("blank-profile-picture.png")
+                .createDate(LocalDateTime.now())
+                .authority(Authority.ROLE_USER)
+                .userStatus(UserStatus.ACTIVE)
+                .certificationCode("1a2b3c")
+                .build();
+
+        fakeHttpSession.setAttribute(HttpSessionUtils.USER_SESSION_KEY, UserEntity.from(user));
+        long id = 1;
+
+        // when
+        String result = testContainer.userController.updateForm(id, new FakeModel(), fakeHttpSession);
+
+        // then
+        assertThat(result).isEqualTo("user/updateForm");
+    }
+
+    @Test
+    public void 회원정보_수정을_성공하면_리다이렉트_주소를_반환한다(){
+        // given
+        FakeHttpSession fakeHttpSession = new FakeHttpSession();
+        TestContainer testContainer = TestContainer.builder()
+                .build();
+        User user = User.builder()
+                .id(1L)
+                .email("test@test.test")
+                .password("test")
+                .name("테스트")
+                .profileImage("blank-profile-picture.png")
+                .createDate(LocalDateTime.now())
+                .authority(Authority.ROLE_USER)
+                .userStatus(UserStatus.ACTIVE)
+                .certificationCode("1a2b3c")
+                .build();
+        testContainer.userRepository.save(user);
+
+        fakeHttpSession.setAttribute(HttpSessionUtils.USER_SESSION_KEY, UserEntity.from(user));
+        UserUpdateRequest request = UserUpdateRequest.builder()
+                .id(1L)
+                .name("이름수정")
+                .password("updatePassword")
+                .build();
+
+        // when
+        String result = testContainer.userController.update(request, new FakeModel(), fakeHttpSession);
+
+        // then
+        assertThat(result).isEqualTo("redirect:/dashboard");
+    }
+
+    @Test
+    public void 회원정보_수정_요청시_session에_저장된_정보가_없으며_로그인_화면_view_page를_반환한다(){
+        // given
+        TestContainer testContainer = TestContainer.builder()
+                .build();
+        UserUpdateRequest request = UserUpdateRequest.builder()
+                .id(1L)
+                .name("이름수정")
+                .password("updatePassword")
+                .build();
+
+        // when
+        String result = testContainer.userController.update(request, new FakeModel(), new FakeHttpSession());
+
+        // then
+        assertThat(result).isEqualTo("user/login");
+    }
+
+    @Test
+    public void 회원정보_수정_요청시_session에_저장된_정보의_id와_다르면_로그인_화면_view_page를_반환한다(){
+        // given
+        FakeHttpSession fakeHttpSession = new FakeHttpSession();
+        TestContainer testContainer = TestContainer.builder()
+                .build();
+        User user = User.builder()
+                .id(1L)
+                .email("test@test.test")
+                .password("test")
+                .name("테스트")
+                .profileImage("blank-profile-picture.png")
+                .createDate(LocalDateTime.now())
+                .authority(Authority.ROLE_USER)
+                .userStatus(UserStatus.ACTIVE)
+                .certificationCode("1a2b3c")
+                .build();
+        testContainer.userRepository.save(user);
+
+        fakeHttpSession.setAttribute(HttpSessionUtils.USER_SESSION_KEY, UserEntity.from(user));
+        UserUpdateRequest request = UserUpdateRequest.builder()
+                .id(2L)
+                .name("이름수정")
+                .password("updatePassword")
+                .build();
+
+        // when
+        String result = testContainer.userController.update(request, new FakeModel(), fakeHttpSession);
+
+        // then
+        assertThat(result).isEqualTo("user/login");
+    }
 }

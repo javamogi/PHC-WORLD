@@ -1,6 +1,10 @@
 package com.phcworld.exception.handler;
 
 import com.phcworld.exception.model.*;
+import com.phcworld.user.controller.port.SessionUser;
+import com.phcworld.user.infrastructure.UserEntity;
+import com.phcworld.utils.HttpSessionUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.validation.BindException;
 import org.springframework.validation.ObjectError;
@@ -8,12 +12,14 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpSession;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 import java.util.List;
 import java.util.Set;
 
 @ControllerAdvice
+@Slf4j
 public class ControllerExceptionHandler {
     @ExceptionHandler(DuplicationException.class)
     public ModelAndView duplicateEmail(){
@@ -32,7 +38,8 @@ public class ControllerExceptionHandler {
     }
 
     @ExceptionHandler({ConstraintViolationException.class, BindException.class})
-    public ModelAndView handle(Exception e){
+    public ModelAndView handle(Exception e, HttpSession session){
+        boolean bool = HttpSessionUtils.isLoginUser(session);
         ModelAndView mav = new ModelAndView();
         if(e instanceof ConstraintViolationException){
             ConstraintViolationException cve = (ConstraintViolationException) e;
@@ -47,7 +54,14 @@ public class ControllerExceptionHandler {
                 mav.addObject("errorMessage", error.getDefaultMessage());
             }
         }
-        mav.setViewName("user/form");
+        if(bool){
+//            UserEntity loginUser = HttpSessionUtils.getUserEntityFromSession(session);
+            SessionUser loginUser = HttpSessionUtils.getUserFromSession(session);
+            mav.addObject("user", loginUser);
+            mav.setViewName("user/updateForm");
+        } else {
+            mav.setViewName("user/form");
+        }
         return mav;
     }
 

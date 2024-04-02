@@ -8,6 +8,7 @@ import com.phcworld.user.domain.User;
 import com.phcworld.user.domain.UserStatus;
 import com.phcworld.user.domain.dto.LoginRequestUser;
 import com.phcworld.user.domain.dto.UserRequest;
+import com.phcworld.user.domain.dto.UserUpdateRequest;
 import com.phcworld.user.service.port.UserRepository;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
@@ -64,6 +65,17 @@ public class NewUserServiceImpl implements UserService {
 			throw new UnauthenticatedException();
 		}
 		return user;
+	}
+
+	@Override
+	public User update(UserUpdateRequest request) {
+		User user = userRepository.findById(request.getId())
+				.orElseThrow(LoginUserNotFoundException::new);
+		if(user.getUserStatus() == UserStatus.PENDING){
+			throw new UnauthenticatedException();
+		}
+		user = user.update(request, passwordEncoder);
+		return userRepository.save(user);
 	}
 
 }

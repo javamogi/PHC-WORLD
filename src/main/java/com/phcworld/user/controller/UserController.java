@@ -8,6 +8,7 @@ import com.phcworld.domain.timeline.Timeline;
 import com.phcworld.user.domain.User;
 import com.phcworld.user.domain.dto.LoginRequestUser;
 import com.phcworld.user.domain.dto.UserRequest;
+import com.phcworld.user.domain.dto.UserUpdateRequest;
 import com.phcworld.user.infrastructure.UserEntity;
 import com.phcworld.security.utils.SecurityUtil;
 import com.phcworld.service.alert.AlertServiceImpl;
@@ -70,7 +71,8 @@ public class UserController {
 	
 	@GetMapping("/form")
 	public String form(HttpSession session) {
-		SessionUser loginUser = HttpSessionUtils.getUserFromSession(session);
+		UserEntity loginUser = HttpSessionUtils.getUserEntityFromSession(session);
+//		SessionUser loginUser = HttpSessionUtils.getUserFromSession(session);
 		if(Objects.nonNull(loginUser)) {
 			return "redirect:/dashboard";
 		}
@@ -79,7 +81,8 @@ public class UserController {
 	
 	@GetMapping("/loginForm")
 	public String loginForm(HttpSession session) {
-		SessionUser loginUser = HttpSessionUtils.getUserFromSession(session);
+		UserEntity loginUser = HttpSessionUtils.getUserEntityFromSession(session);
+//		SessionUser loginUser = HttpSessionUtils.getUserFromSession(session);
 		if(Objects.nonNull(loginUser)) {
 			return "redirect:/dashboard";
 		}
@@ -107,7 +110,8 @@ public class UserController {
 			model.addAttribute("errorMessage", "로그인이 필요합니다.");
 			return "user/login";
 		}
-		SessionUser loginUser = HttpSessionUtils.getUserFromSession(session);
+		UserEntity loginUser = HttpSessionUtils.getUserEntityFromSession(session);
+//		SessionUser loginUser = HttpSessionUtils.getUserFromSession(session);
 		if(!loginUser.matchId(id)) {
 			model.addAttribute("errorMessage", "본인의 정보만 수정 가능합니다.");
 			return "user/login";
@@ -116,27 +120,19 @@ public class UserController {
 		return "user/updateForm";
 	}
 	
-	@PutMapping("/{id}")
-	public String update(@PathVariable Long id, @Valid UserEntity newUser, BindingResult bindingResult, Model model, HttpSession session, RedirectAttributes redirectAttributes) {
+	@PutMapping("")
+	public String update(@Valid UserUpdateRequest request, Model model, HttpSession session) {
 		if(!HttpSessionUtils.isLoginUser(session)) {
 			model.addAttribute("errorMessage", "로그인이 필요합니다.");
 			return "user/login";
 		}
 		UserEntity loginUser = HttpSessionUtils.getUserEntityFromSession(session);
-		if(!loginUser.matchId(id)) {
+//		SessionUser loginUser = HttpSessionUtils.getUserFromSession(session);
+		if(!loginUser.matchId(request.getId())) {
 			model.addAttribute("errorMessage", "본인의 정보만 수정 가능합니다.");
 			return "user/login";
 		}
-		if(bindingResult.hasErrors()) {
-			log.debug("Binding Result has Error!");
-			List<ObjectError> errors = bindingResult.getAllErrors();
-			for (ObjectError error : errors) {
-				log.debug("error : {},{}", error.getCode(), error.getDefaultMessage());
-				redirectAttributes.addFlashAttribute("errorMessage", error.getDefaultMessage());
-			}
-			return String.format("redirect:/users/%d/form", id);
-		}
-		userServiceImpl.updateUser(loginUser, newUser);
+		userService.update(request);
 		return "redirect:/dashboard";
 	}
 	

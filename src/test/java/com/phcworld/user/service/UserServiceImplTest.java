@@ -7,6 +7,7 @@ import com.phcworld.user.domain.User;
 import com.phcworld.user.domain.UserStatus;
 import com.phcworld.user.domain.dto.LoginRequestUser;
 import com.phcworld.user.domain.dto.UserRequest;
+import com.phcworld.user.domain.dto.UserUpdateRequest;
 import org.assertj.core.api.Assertions;
 import org.junit.Before;
 import org.junit.Test;
@@ -202,6 +203,58 @@ public class UserServiceImplTest {
         // when
         // then
         userService.login(requestUser);
+    }
+
+    @Test
+    public void UserUpdateRequest_요청으로_회원정보를_수정할_수_있다(){
+        // given
+        UserUpdateRequest requestUser = UserUpdateRequest.builder()
+                .id(1L)
+                .password("test2")
+                .name("이름수정")
+                .build();
+
+        // when
+        User user = userService.update(requestUser);
+
+        // then
+        assertThat(user).isNotNull();
+        assertThat(user.getId()).isNotNull();
+        assertThat(user.getEmail()).isEqualTo("test@test.test");
+        assertThat(user.getPassword()).isEqualTo("test2");
+        assertThat(user.getName()).isEqualTo("이름수정");
+        assertThat(user.getAuthority()).isEqualTo(Authority.ROLE_USER);
+        assertThat(user.getProfileImage()).isEqualTo("blank-profile-picture.png");
+        assertThat(user.getCertificationCode()).isEqualTo("1a2b3c");
+        assertThat(user.getUserStatus()).isEqualTo(UserStatus.ACTIVE);
+    }
+
+    @Test(expected = UnauthenticatedException.class)
+    public void 회원정보_수정시_상태가_PENDING인_회원은_예외를_던진다(){
+        // given
+        UserUpdateRequest requestUser = UserUpdateRequest.builder()
+                .id(2L)
+                .password("test2")
+                .name("이름수정")
+                .build();
+
+        // when
+        // then
+        userService.update(requestUser);
+    }
+
+    @Test(expected = LoginUserNotFoundException.class)
+    public void 회원정보_수정시_존재하지_않는_회원은_예외를_던진다(){
+        // given
+        UserUpdateRequest requestUser = UserUpdateRequest.builder()
+                .id(999L)
+                .password("test2")
+                .name("이름수정")
+                .build();
+
+        // when
+        // then
+        userService.update(requestUser);
     }
 
 }

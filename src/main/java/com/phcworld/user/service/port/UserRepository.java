@@ -12,4 +12,6 @@ public interface UserRepository {
     List<UserStatisticsInterface> findRegisterUserStatisticsForNativeQuery(LocalDate startDate, LocalDate endDate);
 
     User save(User user);
+
+    Optional<User> findById(Long id);
 }

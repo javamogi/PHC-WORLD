@@ -36,9 +36,10 @@
                          </div>
                     {{/errorMessage}}
                     	
-                        <form role="form" method="post" action="/users/{{id}}">
+                        <form role="form" method="post" action="/users">
                         	<input type="hidden" name="_method" value="put">
                             <fieldset>
+                                <input type="hidden" name="id" value="{{id}}">
                                 <div class="form-group">
                                     <input class="form-control" placeholder="E-mail" name="email" type="email" autofocus value="{{email}}" readonly="readonly">
                                 </div>
