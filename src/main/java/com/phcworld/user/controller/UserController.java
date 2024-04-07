@@ -135,7 +135,8 @@ public class UserController {
 		userService.update(request);
 		return "redirect:/dashboard";
 	}
-	
+
+	// TO DO 추후 변경
 	@GetMapping("/{id}/profile")
 	public String profile(@PathVariable Long id, @RequestParam(defaultValue = "1") Integer sendPageNum, 
 			@RequestParam(defaultValue = "1") Integer receivePageNum, HttpSession session, Model model) {
@@ -144,9 +145,13 @@ public class UserController {
 			return "user/login";
 		}
 		UserEntity loginUser = HttpSessionUtils.getUserEntityFromSession(session);
+		if(!loginUser.matchId(id)){
+			model.addAttribute("errorMessage", "본인만 조회 가능합니다.");
+			return "user/login";
+		}
 		UserEntity user = userServiceImpl.findUserById(id);
 		
-		List<Timeline> timelines = timelineService.findTimelineList(0, user);
+		List<Timeline> timelines = timelineService.findTimelineList(1, user);
 		boolean showMore = false;
 		if(timelines.size() > 0) {
 			showMore = true;
