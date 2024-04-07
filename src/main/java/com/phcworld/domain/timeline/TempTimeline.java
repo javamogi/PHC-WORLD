@@ -13,7 +13,7 @@ import javax.persistence.OneToOne;
 
 import com.phcworld.domain.good.TempGood;
 import com.phcworld.domain.parent.BasicBoardAndAnswer;
-import com.phcworld.domain.user.User;
+import com.phcworld.user.infrastructure.UserEntity;
 import com.phcworld.utils.LocalDateTimeUtils;
 
 import lombok.AllArgsConstructor;
@@ -48,7 +48,7 @@ public class TempTimeline {
 	
 	@ManyToOne
 	@JoinColumn(foreignKey = @ForeignKey(name = "fk_temptimeline_user"))
-	private User user;                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
+	private UserEntity user;
 	
 	private LocalDateTime saveDate;
 

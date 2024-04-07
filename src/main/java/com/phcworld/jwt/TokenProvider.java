@@ -1,8 +1,7 @@
 package com.phcworld.jwt;
 
-import com.phcworld.domain.user.User;
+import com.phcworld.user.infrastructure.UserEntity;
 import com.phcworld.exception.model.CustomException;
-import com.phcworld.exception.model.NotMatchUserException;
 import com.phcworld.jwt.dto.TokenDto;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
@@ -45,7 +44,7 @@ public class TokenProvider {
         this.key = Keys.hmacShaKeyFor(keyBytes);
     }
 
-    public String generateAccessToken(User user, long now){
+    public String generateAccessToken(UserEntity user, long now){
         String id = user.getId().toString();
         String authority = user.getAuthority().toString();
         // Access Token 생성
@@ -59,7 +58,7 @@ public class TokenProvider {
                 .compact();
     }
 
-    public String generateRefreshToken(User user, long now){
+    public String generateRefreshToken(UserEntity user, long now){
         String id = user.getId().toString();
         String authority = user.getAuthority().toString();
         // Refresh Token 생성
@@ -72,23 +71,23 @@ public class TokenProvider {
                 .compact();
     }
 
-    public boolean validateToken(String token) {
-        try {
-            Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
-            return true;
-        } catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
-            throw new CustomException("401", "잘못된 JWT 서명입니다.");
-//            throw new NotMatchUserException();
-        } catch (ExpiredJwtException e) {
-            throw new CustomException("401", "만료된 JWT 토큰입니다.");
-        } catch (UnsupportedJwtException e) {
-            throw new CustomException("401", "지원되지 않는 JWT 토큰입니다.");
-        } catch (IllegalArgumentException e) {
-            throw new CustomException("400", "JWT 토큰이 잘못되었습니다.");
+        public boolean validateToken(String token) {
+            try {
+                Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
+                return true;
+            } catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
+                throw new CustomException("401", "잘못된 JWT 서명입니다.");
+    //            throw new NotMatchUserException();
+            } catch (ExpiredJwtException e) {
+                throw new CustomException("401", "만료된 JWT 토큰입니다.");
+            } catch (UnsupportedJwtException e) {
+                throw new CustomException("401", "지원되지 않는 JWT 토큰입니다.");
+            } catch (IllegalArgumentException e) {
+                throw new CustomException("400", "JWT 토큰이 잘못되었습니다.");
+            }
         }
-    }
 
-    public TokenDto generateTokenDto(User user) {
+    public TokenDto generateTokenDto(UserEntity user) {
 
         String id = user.getId().toString();
         String authorities = user.getAuthority().toString();
@@ -132,9 +131,9 @@ public class TokenProvider {
         // Refresh Token 생성
         String refreshToken = generateRefreshToken(authentication, now);
 
-        ValueOperations<String, String> ops = redisTemplate.opsForValue();
-        Duration expireDuration = Duration.ofMillis(REFRESH_TOKEN_EXPIRE_TIME);
-        ops.set(userKey, refreshToken, expireDuration.getSeconds());
+//        ValueOperations<String, String> ops = redisTemplate.opsForValue();
+//        Duration expireDuration = Duration.ofMillis(REFRESH_TOKEN_EXPIRE_TIME);
+//        ops.set(userKey, refreshToken, expireDuration.getSeconds());
 
         return TokenDto.builder()
                 .grantType(BEARER_TYPE)

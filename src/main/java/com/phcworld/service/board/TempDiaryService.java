@@ -3,17 +3,17 @@ package com.phcworld.service.board;
 
 import java.util.List;
 
+import com.phcworld.user.infrastructure.UserEntity;
 import org.springframework.data.domain.Page;
 
 import com.phcworld.domain.board.TempDiary;
 import com.phcworld.domain.board.dto.TempDiaryRequest;
 import com.phcworld.domain.board.dto.TempDiaryResponse;
-import com.phcworld.domain.user.User;
 
 public interface TempDiaryService {
-	Page<TempDiary> findPageDiary(User loginUser, Integer pageNum, User requestUser);
+	Page<TempDiary> findPageDiary(UserEntity loginUser, Integer pageNum, UserEntity requestUser);
 	
-	TempDiaryResponse createDiary(User user, TempDiaryRequest diaryRequest);
+	TempDiaryResponse createDiary(UserEntity user, TempDiaryRequest diaryRequest);
 	
 	TempDiaryResponse getOneDiary(Long id);
 	
@@ -21,5 +21,5 @@ public interface TempDiaryService {
 	
 	void deleteDiary(Long id);
 	
-	List<TempDiary> findDiaryListByWriter(User loginUser);
+	List<TempDiary> findDiaryListByWriter(UserEntity loginUser);
 }

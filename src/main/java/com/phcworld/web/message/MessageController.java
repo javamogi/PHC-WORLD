@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpSession;
 
+import com.phcworld.user.infrastructure.UserEntity;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,9 +20,8 @@ import com.phcworld.domain.exception.MatchNotUserException;
 import com.phcworld.domain.exception.UserNotFoundException;
 import com.phcworld.domain.message.MessageRequest;
 import com.phcworld.domain.message.MessageResponse;
-import com.phcworld.domain.user.User;
 import com.phcworld.service.message.MessageServiceImpl;
-import com.phcworld.service.user.UserService;
+import com.phcworld.user.service.UserServiceImpl;
 import com.phcworld.utils.HttpSessionUtils;
 
 @RestController
@@ -31,7 +31,7 @@ public class MessageController {
 	
 	private static final Logger log = LoggerFactory.getLogger(MessageController.class);
 	
-	private final UserService userService;
+	private final UserServiceImpl userService;
 
 	private final MessageServiceImpl messageService;
 	
@@ -41,8 +41,8 @@ public class MessageController {
 		if(!HttpSessionUtils.isLoginUser(session)) {
 			throw new LoginNotUserException("로그인을 해야합니다.");
 		}
-		User loginUser = HttpSessionUtils.getUserFromSession(session);
-		User receiveUser = userService.findUserByEmail(request.getToUserEmail());
+		UserEntity loginUser = HttpSessionUtils.getUserEntityFromSession(session);
+		UserEntity receiveUser = userService.findUserByEmail(request.getToUserEmail());
 		if(receiveUser == null) {
 			throw new UserNotFoundException("보낼 유저 정보가 없습니다.");
 		}
@@ -58,7 +58,7 @@ public class MessageController {
 		if(!HttpSessionUtils.isLoginUser(session)) {
 			throw new LoginNotUserException("로그인을 해야합니다.");
 		}
-		User loginUser = HttpSessionUtils.getUserFromSession(session);
+		UserEntity loginUser = HttpSessionUtils.getUserEntityFromSession(session);
 		
 		MessageResponse message = messageService.confirmMessage(id, loginUser);
 		
@@ -78,7 +78,7 @@ public class MessageController {
 		if(!HttpSessionUtils.isLoginUser(session)) {
 			throw new LoginNotUserException("로그인을 해야합니다.");
 		}
-		User loginUser = HttpSessionUtils.getUserFromSession(session);
+		UserEntity loginUser = HttpSessionUtils.getUserEntityFromSession(session);
 		
 		MessageResponse message = messageService.confirmMessage(id, loginUser);
 

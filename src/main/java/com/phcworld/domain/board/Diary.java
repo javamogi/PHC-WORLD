@@ -7,6 +7,7 @@ import java.util.Objects;
 import javax.persistence.*;
 
 import com.phcworld.domain.board.dto.DiaryRequest;
+import com.phcworld.user.infrastructure.UserEntity;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -15,7 +16,6 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.phcworld.domain.answer.DiaryAnswer;
 import com.phcworld.domain.good.Good;
-import com.phcworld.domain.user.User;
 import com.phcworld.utils.LocalDateTimeUtils;
 
 import lombok.experimental.Accessors;
@@ -41,7 +41,7 @@ public class Diary {
 	@ManyToOne
 	@JoinColumn(foreignKey = @ForeignKey(name = "fk_dairy_writer"))
 //	@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
-	private User writer;
+	private UserEntity writer;
 
 	private String title;
 
@@ -91,7 +91,7 @@ public class Diary {
 		return goodPushedUser.size();
 	}
 
-	public boolean matchUser(User loginUser) {
+	public boolean matchUser(UserEntity loginUser) {
 		if (loginUser == null) {
 			return false;
 		}

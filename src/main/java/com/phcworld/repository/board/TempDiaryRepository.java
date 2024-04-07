@@ -6,11 +6,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.phcworld.domain.board.Diary;
 import com.phcworld.domain.board.TempDiary;
-import com.phcworld.domain.user.User;
+import com.phcworld.user.infrastructure.UserEntity;
 
 public interface TempDiaryRepository extends JpaRepository<TempDiary, Long> {
-	Page<TempDiary> findByWriter(User user, Pageable Pageable);
-	List<TempDiary> findByWriter(User user);
+	Page<TempDiary> findByWriter(UserEntity user, Pageable Pageable);
+	List<TempDiary> findByWriter(UserEntity user);
 }

@@ -10,7 +10,7 @@ import javax.persistence.ManyToOne;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.phcworld.domain.board.TempDiary;
 import com.phcworld.domain.parent.BasicBoardAndAnswer;
-import com.phcworld.domain.user.User;
+import com.phcworld.user.infrastructure.UserEntity;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -34,12 +34,12 @@ public class TempDiaryAnswer extends BasicBoardAndAnswer {
 //	private Alert alert;
 
 	@Builder
-	public TempDiaryAnswer(Long id, User writer, String contents, TempDiary tempDiary, LocalDateTime createDate) {
+	public TempDiaryAnswer(Long id, UserEntity writer, String contents, TempDiary tempDiary, LocalDateTime createDate) {
 		super(id, writer, contents, createDate);
 		this.tempDiary = tempDiary;
 	}
 
-	public boolean isSameWriter(User loginUser) {
+	public boolean isSameWriter(UserEntity loginUser) {
 		return super.getWriter().equals(loginUser);
 	}
 

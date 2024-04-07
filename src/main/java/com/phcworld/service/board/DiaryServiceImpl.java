@@ -11,8 +11,8 @@ import com.phcworld.exception.model.CustomException;
 import com.phcworld.repository.board.DiaryHashtagRepository;
 import com.phcworld.repository.board.HashtagRepository;
 import com.phcworld.repository.board.dto.DiarySelectDto;
-import com.phcworld.repository.user.UserRepository;
-import com.phcworld.service.user.UserService;
+import com.phcworld.user.infrastructure.UserEntity;
+import com.phcworld.user.service.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -26,7 +26,6 @@ import com.phcworld.domain.api.model.response.SuccessResponse;
 import com.phcworld.domain.board.Diary;
 import com.phcworld.domain.board.dto.DiaryRequest;
 import com.phcworld.domain.board.dto.DiaryResponse;
-import com.phcworld.domain.user.User;
 import com.phcworld.repository.board.DiaryRepository;
 import com.phcworld.service.alert.AlertServiceImpl;
 import com.phcworld.service.good.GoodService;
@@ -45,15 +44,15 @@ public class DiaryServiceImpl implements DiaryService {
 
 	private final GoodService goodService;
 
-	private final UserService userService;
+	private final UserServiceImpl userService;
 
 	private final DiaryHashtagRepository diaryHashtagRepository;
 
 	private final HashtagRepository hashtagRepository;
 
 	@Transactional(readOnly = true)
-	public DiaryResponseDto getDiaryResponseListTemp(User loginUser, String email, int pageNum, String searchKeyword) {
-		User requestUser = userService.findUserByEmail(email);
+	public DiaryResponseDto getDiaryResponseListTemp(UserEntity loginUser, String email, int pageNum, String searchKeyword) {
+		UserEntity requestUser = userService.findUserByEmail(email);
 
 		Page<DiarySelectDto> diaryPage = findPageDiary(loginUser, pageNum, requestUser, searchKeyword);
 
@@ -62,7 +61,7 @@ public class DiaryServiceImpl implements DiaryService {
 
 	@Transactional(readOnly = true)
 	@Override
-	public Page<DiarySelectDto> findPageDiary(User loginUser, Integer pageNum, User requestUser, String searchKeyword) {
+	public Page<DiarySelectDto> findPageDiary(UserEntity loginUser, Integer pageNum, UserEntity requestUser, String searchKeyword) {
 //		PageRequest pageRequest = PageRequest.of(pageNum - 1, 6, new Sort(Direction.DESC, "id"));
 		PageRequest pageRequest = PageRequest.of(pageNum - 1, 6, Sort.by("good3").descending());
 		if(isLoginUser(loginUser, requestUser)) {
@@ -72,19 +71,19 @@ public class DiaryServiceImpl implements DiaryService {
 	}
 
 	@Transactional(readOnly = true)
-	public DiaryResponseDto findPageDiaryTemp2(User requestUser, Integer pageNum, String searchKeyword) {
+	public DiaryResponseDto findPageDiaryTemp2(UserEntity requestUser, Integer pageNum, String searchKeyword) {
 		PageRequest pageRequest = PageRequest.of(pageNum - 1, 6, Sort.by("id").descending());
 		Page<DiarySelectDto> page = diaryRepository.findAllPage(requestUser, pageRequest, searchKeyword);
 		return getDiaryResponseDto(page);
 	}
 
-	private boolean isLoginUser(User loginUser, User requestUser) {
+	private boolean isLoginUser(UserEntity loginUser, UserEntity requestUser) {
 		return loginUser == null || !requestUser.matchId(loginUser.getId());
 	}
 
 	@Transactional
 	@Override
-	public DiaryResponse createDiary(User user, DiaryRequest request) {
+	public DiaryResponse createDiary(UserEntity user, DiaryRequest request) {
 		Diary diary = Diary.builder()
 				.writer(user)
 				.title(request.getTitle())
@@ -142,12 +141,12 @@ public class DiaryServiceImpl implements DiaryService {
 
 	@Transactional(readOnly = true)
 	@Override
-	public List<Diary> findDiaryListByWriter(User loginUser) {
+	public List<Diary> findDiaryListByWriter(UserEntity loginUser) {
 		return diaryRepository.findByWriter(loginUser);
 	}
 
 	@Transactional
-	public SuccessResponse updateGood(Long diaryId, User loginUser) {
+	public SuccessResponse updateGood(Long diaryId, UserEntity loginUser) {
 		Diary diary = diaryRepository.findById(diaryId)
 				.orElseThrow(() -> new CustomException("400", "게시물이 존재하지 않습니다."));
 		

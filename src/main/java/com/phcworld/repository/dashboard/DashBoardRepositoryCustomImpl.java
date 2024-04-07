@@ -7,8 +7,8 @@ import com.phcworld.domain.board.QDiary;
 import com.phcworld.domain.board.QFreeBoard;
 import com.phcworld.domain.dashboard.dto.DashBoardSelectDto;
 import com.phcworld.domain.timeline.QTimeline;
-import com.phcworld.domain.user.QUser;
-import com.phcworld.domain.user.User;
+import com.phcworld.user.infrastructure.QUserEntity;
+import com.phcworld.user.infrastructure.UserEntity;
 import com.querydsl.core.types.ExpressionUtils;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.JPAExpressions;
@@ -27,10 +27,10 @@ public class DashBoardRepositoryCustomImpl implements DashBoardRepositoryCustom 
     QDiary diary = QDiary.diary;
     QDiaryAnswer diaryAnswer = QDiaryAnswer.diaryAnswer;
     QAlert alert = QAlert.alert;
-    QUser quser = QUser.user;
+    QUserEntity quser = QUserEntity.userEntity;
     QTimeline timeline = QTimeline.timeline;
 
-    public DashBoardSelectDto findActiveCountByUser(User user){
+    public DashBoardSelectDto findActiveCountByUser(UserEntity user){
         return queryFactory
                 .select(Projections.fields(DashBoardSelectDto.class,
                         ExpressionUtils.as(

@@ -29,3 +29,6 @@ logging:
     com.phcworld.domain: debug
     org.springframework.jdbc: debug
     org.springframework.security: debug
+
+domain:
+  url: http://localhost:8081

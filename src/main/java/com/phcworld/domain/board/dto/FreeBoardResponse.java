@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.phcworld.domain.api.model.response.FreeBoardAnswerApiResponse;
 import com.phcworld.domain.board.FreeBoard;
-import com.phcworld.domain.user.User;
+import com.phcworld.user.infrastructure.UserEntity;
 
 import com.phcworld.repository.board.dto.FreeBoardSelectDto;
 import lombok.Builder;
@@ -16,7 +16,7 @@ public class FreeBoardResponse {
 	
 	private Long id;
 	
-	private User writer;
+	private UserEntity writer;
 	
 	private String title;
 	
@@ -62,7 +62,7 @@ public class FreeBoardResponse {
 				.build();
 	}
 
-	public boolean matchUser(User loginUser) {
+	public boolean matchUser(UserEntity loginUser) {
 		return this.writer.equals(loginUser);
 	}
 

@@ -5,10 +5,9 @@ import com.phcworld.domain.board.QDiary;
 import com.phcworld.domain.board.QDiaryHashtag;
 import com.phcworld.domain.board.QHashtag;
 import com.phcworld.domain.good.QGood;
-import com.phcworld.domain.user.QUser;
-import com.phcworld.domain.user.User;
+import com.phcworld.user.infrastructure.QUserEntity;
+import com.phcworld.user.infrastructure.UserEntity;
 import com.phcworld.repository.board.dto.DiarySelectDto;
-import com.querydsl.core.Query;
 import com.querydsl.core.types.ExpressionUtils;
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
@@ -16,13 +15,10 @@ import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.core.types.dsl.NumberPath;
-import com.querydsl.core.types.dsl.StringTemplate;
 import com.querydsl.jpa.JPAExpressions;
-import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.hibernate.query.NativeQuery;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -30,7 +26,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
-import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -47,13 +42,13 @@ public class DiaryRepositoryCustomImpl implements DiaryRepositoryCustom{
     private final JPAQueryFactory queryFactory;
     private final EntityManager entityManager;
     QDiary diary = QDiary.diary;
-    QUser qUser = QUser.user;
+    QUserEntity qUser = QUserEntity.userEntity;
     QGood good = QGood.good;
     QDiaryAnswer answer = QDiaryAnswer.diaryAnswer;
     QDiaryHashtag diaryHashtag = QDiaryHashtag.diaryHashtag;
     QHashtag hashtag = QHashtag.hashtag;
 
-    private List<DiarySelectDto> findAllListToSub(User user, Pageable pageable){
+    private List<DiarySelectDto> findAllListToSub(UserEntity user, Pageable pageable){
 
         List<OrderSpecifier> orders = getOrderSpecifier(pageable);
 
@@ -124,7 +119,7 @@ public class DiaryRepositoryCustomImpl implements DiaryRepositoryCustom{
                 .fetch();
     }
 
-    private Long getDiaryCount(User user){
+    private Long getDiaryCount(UserEntity user){
         return queryFactory
                 .select(diary.count())
                 .from(diary)
@@ -133,14 +128,14 @@ public class DiaryRepositoryCustomImpl implements DiaryRepositoryCustom{
     }
 
     @Override
-    public Page<DiarySelectDto> findAllPage(User user, Pageable pageable, String searchKeyword){
+    public Page<DiarySelectDto> findAllPage(UserEntity user, Pageable pageable, String searchKeyword){
         List<DiarySelectDto> content = findAllList(user, pageable, searchKeyword);
 //        List<DiarySelectDto> content = findAllList(user, pageable);
         Long count = getDiaryCount(null);
         return new PageImpl<>(content, pageable, count);
     }
 
-    private BooleanExpression eqWriter(User user){
+    private BooleanExpression eqWriter(UserEntity user){
         if(Objects.isNull(user)){
             return null;
         }
@@ -187,7 +182,7 @@ public class DiaryRepositoryCustomImpl implements DiaryRepositoryCustom{
     // 속도에서는 많이 빨라질 것이라 예상됨
     // 하지만 페이징처리에서 막힘
     // Diary에 좋아요 개수를 담당하는 컬럼을 추가할까 했지만 너무 잘 바뀌는 요소라 추가하지 않음
-    private List<DiarySelectDto> findAllListTemp(User user, Pageable pageable){
+    private List<DiarySelectDto> findAllListTemp(UserEntity user, Pageable pageable){
 
         List<OrderSpecifier> orders = getOrderSpecifier(pageable);
 
@@ -247,7 +242,7 @@ public class DiaryRepositoryCustomImpl implements DiaryRepositoryCustom{
     // 서브쿼리와 같음
     // DiarySelectDto의 countOfGood 자료형을 Integer로 변경해야함
     // 서브쿼리를 사용한다는것은 같지만 속도는 0.5초가량 빠름
-    private List<DiarySelectDto> findAllListGoodPushedUserSize(User user, Pageable pageable){
+    private List<DiarySelectDto> findAllListGoodPushedUserSize(UserEntity user, Pageable pageable){
 //    private List<DiarySelectDto> findAllList(User user, Pageable pageable){
 
         List<OrderSpecifier> orders = getOrderSpecifier(pageable);
@@ -287,7 +282,7 @@ public class DiaryRepositoryCustomImpl implements DiaryRepositoryCustom{
     // 좋아요 카운트 컬럼을 추가하여 index도 추가
     // 쓰기에서 이전보다 더 많은 비용이 발생할 것으로 예상
 //    private List<DiarySelectDto> findAllListByIndexColumn(User user, Pageable pageable){
-    private List<DiarySelectDto> findAllListWithoutHashtag(User user, Pageable pageable){
+    private List<DiarySelectDto> findAllListWithoutHashtag(UserEntity user, Pageable pageable){
 //    private List<DiarySelectDto> findAllList(User user, Pageable pageable){
 
         List<OrderSpecifier> orders = getOrderSpecifier(pageable);
@@ -324,7 +319,7 @@ public class DiaryRepositoryCustomImpl implements DiaryRepositoryCustom{
     }
 
 //    private List<DiarySelectDto> findAllListWithHashtag(User user, Pageable pageable){
-    private List<DiarySelectDto> findAllList(User user, Pageable pageable, String searchKeyword){
+    private List<DiarySelectDto> findAllList(UserEntity user, Pageable pageable, String searchKeyword){
 
         List<OrderSpecifier> orders = getOrderSpecifier(pageable);
 

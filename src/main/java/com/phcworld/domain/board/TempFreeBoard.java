@@ -11,7 +11,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.phcworld.domain.answer.TempFreeBoardAnswer;
 import com.phcworld.domain.board.dto.TempFreeBoardRequest;
 import com.phcworld.domain.parent.BasicBoardAndAnswer;
-import com.phcworld.domain.user.User;
+import com.phcworld.user.infrastructure.UserEntity;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -37,8 +37,8 @@ public class TempFreeBoard extends BasicBoardAndAnswer {
 	private List<TempFreeBoardAnswer> tempFreeBoardAnswers;
 
 	@Builder
-	public TempFreeBoard(Long id, User writer, String contents, String title, String icon, String badge, Integer count,
-			List<TempFreeBoardAnswer> freeBoardAnswers, LocalDateTime createDate) {
+	public TempFreeBoard(Long id, UserEntity writer, String contents, String title, String icon, String badge, Integer count,
+                         List<TempFreeBoardAnswer> freeBoardAnswers, LocalDateTime createDate) {
 		super(id, writer, contents, createDate);
 		this.title = title;
 		this.icon = icon;
@@ -63,7 +63,7 @@ public class TempFreeBoard extends BasicBoardAndAnswer {
 		this.icon = request.getIcon();
 	}
 
-	public boolean matchUser(User loginUser) {
+	public boolean matchUser(UserEntity loginUser) {
 		if (loginUser == null) {
 			return false;
 		}

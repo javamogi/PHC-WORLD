@@ -1,6 +1,6 @@
 package com.phcworld.domain.message;
 
-import com.phcworld.domain.user.User;
+import com.phcworld.user.infrastructure.UserEntity;
 import lombok.*;
 import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.data.annotation.CreatedDate;
@@ -26,7 +26,7 @@ public class ChatRoomMessage {
     private ChatRoom chatRoom;
 
     @ManyToOne
-    private User writer;
+    private UserEntity writer;
 
     @Lob
     private String message;
@@ -38,7 +38,7 @@ public class ChatRoomMessage {
     private List<MessageReadUser> readUsers;
 
     @Builder
-    public ChatRoomMessage(Long id, ChatRoom chatRoom, User writer, String message, LocalDateTime sendDate, List<MessageReadUser> readUsers) {
+    public ChatRoomMessage(Long id, ChatRoom chatRoom, UserEntity writer, String message, LocalDateTime sendDate, List<MessageReadUser> readUsers) {
         this.id = id;
         this.chatRoom = chatRoom;
         this.writer = writer;
@@ -52,7 +52,7 @@ public class ChatRoomMessage {
         this.readUsers = null;
     }
 
-    public boolean isSameWriter(User loginUser) {
+    public boolean isSameWriter(UserEntity loginUser) {
         return this.getWriter().getId().equals(loginUser.getId());
     }
 

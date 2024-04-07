@@ -13,7 +13,7 @@ import com.phcworld.domain.answer.TempDiaryAnswer;
 import com.phcworld.domain.board.dto.TempDiaryRequest;
 import com.phcworld.domain.good.TempGood;
 import com.phcworld.domain.parent.BasicBoardAndAnswer;
-import com.phcworld.domain.user.User;
+import com.phcworld.user.infrastructure.UserEntity;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -39,7 +39,7 @@ public class TempDiary extends BasicBoardAndAnswer {
 	private Set<TempGood> tempGood;
 
 	@Builder
-	public TempDiary(Long id, User writer, String contents, String title, String thumbnail, LocalDateTime createDate) {
+	public TempDiary(Long id, UserEntity writer, String contents, String title, String thumbnail, LocalDateTime createDate) {
 		super(id, writer, contents, createDate);
 		this.title = title;
 		this.thumbnail = thumbnail;
@@ -59,7 +59,7 @@ public class TempDiary extends BasicBoardAndAnswer {
 		return tempGood.size();
 	}
 
-	public boolean matchUser(User loginUser) {
+	public boolean matchUser(UserEntity loginUser) {
 		if (loginUser == null) {
 			return false;
 		}

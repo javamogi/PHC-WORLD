@@ -7,12 +7,11 @@ import com.phcworld.domain.board.QDiaryHashtag;
 import com.phcworld.domain.board.QFreeBoard;
 import com.phcworld.domain.board.QHashtag;
 import com.phcworld.domain.good.QGood;
-import com.phcworld.domain.message.dto.MessageSelectDto;
 import com.phcworld.domain.statistics.HashtagStatisticsDto;
 import com.phcworld.domain.statistics.StatisticsDto;
 import com.phcworld.domain.statistics.UserStatisticsDto;
-import com.phcworld.domain.user.QUser;
-import com.phcworld.domain.user.User;
+import com.phcworld.user.infrastructure.QUserEntity;
+import com.phcworld.user.infrastructure.UserEntity;
 import com.querydsl.core.Tuple;
 import com.querydsl.core.types.ExpressionUtils;
 import com.querydsl.core.types.Predicate;
@@ -28,9 +27,7 @@ import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 
 import static com.querydsl.core.group.GroupBy.groupBy;
@@ -43,7 +40,7 @@ public class StatisticsRepository {
     private final JPAQueryFactory queryFactory;
     QDiary diary = QDiary.diary;
 
-    QUser user = QUser.user;
+    QUserEntity user = QUserEntity.userEntity;
 
     QFreeBoard freeBoard = QFreeBoard.freeBoard;
 
@@ -109,7 +106,7 @@ public class StatisticsRepository {
                 .fetch();
     }
 
-    public List<UserStatisticsDto> findUserPostRegisterStatistics(User searchUser){
+    public List<UserStatisticsDto> findUserPostRegisterStatistics(UserEntity searchUser){
 
         return queryFactory.select(Projections.fields(UserStatisticsDto.class,
                         ExpressionUtils.as(
@@ -138,7 +135,7 @@ public class StatisticsRepository {
                 .fetch();
     }
 
-    private Predicate eqUser(User searchUser) {
+    private Predicate eqUser(UserEntity searchUser) {
         if(Objects.isNull(searchUser)){
             return null;
         }
@@ -162,7 +159,7 @@ public class StatisticsRepository {
                 .fetch();
     }
 
-    public List<HashtagStatisticsDto> findDiaryHashtagStatistics(User searchUser){
+    public List<HashtagStatisticsDto> findDiaryHashtagStatistics(UserEntity searchUser){
         return queryFactory.select(Projections.fields(HashtagStatisticsDto.class,
                         diaryHashtag.hashtag.id.count().as("count"),
                         diaryHashtag.hashtag.name.as("hashtagName")))
@@ -175,7 +172,7 @@ public class StatisticsRepository {
                 .fetch();
     }
 
-    private BooleanExpression eqWriter(User searchUser) {
+    private BooleanExpression eqWriter(UserEntity searchUser) {
         if(searchUser == null){
             return null;
         }

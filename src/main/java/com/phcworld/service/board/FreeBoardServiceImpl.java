@@ -7,6 +7,7 @@ import com.phcworld.domain.board.dto.FreeBoardSearchDto;
 import com.phcworld.domain.common.SaveType;
 import com.phcworld.exception.model.NotFoundException;
 import com.phcworld.repository.board.dto.FreeBoardSelectDto;
+import com.phcworld.user.infrastructure.UserEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -18,7 +19,6 @@ import com.phcworld.domain.api.model.response.FreeBoardAnswerApiResponse;
 import com.phcworld.domain.board.FreeBoard;
 import com.phcworld.domain.board.dto.FreeBoardRequest;
 import com.phcworld.domain.board.dto.FreeBoardResponse;
-import com.phcworld.domain.user.User;
 import com.phcworld.repository.board.FreeBoardRepository;
 import com.phcworld.service.alert.AlertServiceImpl;
 import com.phcworld.service.timeline.TimelineServiceImpl;
@@ -54,7 +54,7 @@ public class FreeBoardServiceImpl implements FreeBoardService {
 
 	@Transactional
 	@Override
-	public FreeBoardResponse createFreeBoard(User user, FreeBoardRequest request) {
+	public FreeBoardResponse createFreeBoard(UserEntity user, FreeBoardRequest request) {
 		FreeBoard freeBoard = FreeBoard.builder()
 				.writer(user)
 				.title(request.getTitle())
@@ -107,7 +107,7 @@ public class FreeBoardServiceImpl implements FreeBoardService {
 
 	@Transactional
 	@Override
-	public List<FreeBoard> findFreeBoardListByWriter(User loginUser) {
+	public List<FreeBoard> findFreeBoardListByWriter(UserEntity loginUser) {
 		return freeBoardRepository.findByWriter(loginUser);
 	}
 

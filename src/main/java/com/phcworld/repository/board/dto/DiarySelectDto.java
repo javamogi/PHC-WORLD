@@ -1,7 +1,7 @@
 package com.phcworld.repository.board.dto;
 
 import com.phcworld.domain.board.Diary;
-import com.phcworld.domain.user.User;
+import com.phcworld.user.infrastructure.UserEntity;
 import com.phcworld.utils.LocalDateTimeUtils;
 import lombok.*;
 
@@ -19,7 +19,7 @@ public class DiarySelectDto {
 
     private Long id;
 
-    private User writer;
+    private UserEntity writer;
 
     private String title;
 

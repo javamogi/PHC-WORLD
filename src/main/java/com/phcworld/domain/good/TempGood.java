@@ -11,7 +11,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 import com.phcworld.domain.board.TempDiary;
-import com.phcworld.domain.user.User;
+import com.phcworld.user.infrastructure.UserEntity;
 import com.phcworld.utils.LocalDateTimeUtils;
 
 import lombok.AllArgsConstructor;
@@ -36,7 +36,7 @@ public class TempGood {
 
 	@ManyToOne
 	@JoinColumn(foreignKey = @ForeignKey(name = "fk_tempGood_user"))
-	private User user;
+	private UserEntity user;
 	
 	private LocalDateTime createDate;
 	

@@ -8,7 +8,7 @@ import com.phcworld.domain.common.SaveType;
 import com.phcworld.domain.embedded.PostInfo;
 import com.phcworld.domain.good.Good;
 import com.phcworld.domain.timeline.Timeline;
-import com.phcworld.domain.user.User;
+import com.phcworld.user.infrastructure.UserEntity;
 import com.phcworld.exception.model.CustomException;
 import com.phcworld.exception.model.ErrorCode;
 import com.phcworld.exception.model.NotFoundException;
@@ -40,7 +40,7 @@ public class TimelineServiceImpl implements TimelineService {
 //	}
 
 	@Override
-	public List<Timeline> findTimelineList(Integer timelinePageNum, User user) {
+	public List<Timeline> findTimelineList(Integer timelinePageNum, UserEntity user) {
 		PageRequest pageRequest = PageRequest.of(timelinePageNum - 1, 5, Sort.by("id").descending());
 		Page<Timeline> timelineList = timelineRepository.findByUser(user, pageRequest);
 		return timelineList.getContent();

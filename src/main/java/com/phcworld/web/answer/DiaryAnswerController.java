@@ -4,9 +4,9 @@ import javax.servlet.http.HttpSession;
 
 import com.phcworld.exception.model.BadRequestException;
 import com.phcworld.exception.model.NotMatchUserException;
+import com.phcworld.user.infrastructure.UserEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -22,7 +22,6 @@ import com.phcworld.domain.api.model.response.SuccessResponse;
 import com.phcworld.domain.exception.ContentsEmptyException;
 import com.phcworld.domain.exception.LoginNotUserException;
 import com.phcworld.domain.exception.MatchNotUserException;
-import com.phcworld.domain.user.User;
 import com.phcworld.service.answer.DiaryAnswerServiceImpl;
 import com.phcworld.utils.HttpSessionUtils;
 
@@ -43,7 +42,7 @@ public class DiaryAnswerController {
 		if(!HttpSessionUtils.isLoginUser(session)) {
 			throw new NotMatchUserException();
 		}
-		User loginUser = HttpSessionUtils.getUserFromSession(session);
+		UserEntity loginUser = HttpSessionUtils.getUserEntityFromSession(session);
 		
 		return diaryAnswerService.create(loginUser, diaryId, request);
 	}
@@ -54,7 +53,7 @@ public class DiaryAnswerController {
 		if(!HttpSessionUtils.isLoginUser(session)) {
 			throw new NotMatchUserException();
 		}
-		User loginUser = HttpSessionUtils.getUserFromSession(session);
+		UserEntity loginUser = HttpSessionUtils.getUserEntityFromSession(session);
 		return diaryAnswerService.read(id, loginUser);
 	}
 	
@@ -67,7 +66,7 @@ public class DiaryAnswerController {
 		if(!HttpSessionUtils.isLoginUser(session)) {
 			throw new NotMatchUserException();
 		}
-		User loginUser = HttpSessionUtils.getUserFromSession(session);
+		UserEntity loginUser = HttpSessionUtils.getUserEntityFromSession(session);
 		return diaryAnswerService.update(request, loginUser);
 	}
 	
@@ -77,7 +76,7 @@ public class DiaryAnswerController {
 		if(!HttpSessionUtils.isLoginUser(session)) {
 			throw new NotMatchUserException();
 		}
-		User loginUser = HttpSessionUtils.getUserFromSession(session);
+		UserEntity loginUser = HttpSessionUtils.getUserEntityFromSession(session);
 		return diaryAnswerService.delete(id, loginUser);
 	}
 }

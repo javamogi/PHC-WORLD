@@ -5,6 +5,7 @@ import java.util.List;
 import com.phcworld.domain.common.SaveType;
 import com.phcworld.exception.model.NotFoundException;
 import com.phcworld.exception.model.NotMatchUserException;
+import com.phcworld.user.infrastructure.UserEntity;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,8 +17,6 @@ import com.phcworld.domain.api.model.request.FreeBoardAnswerRequest;
 import com.phcworld.domain.api.model.response.FreeBoardAnswerApiResponse;
 import com.phcworld.domain.api.model.response.SuccessResponse;
 import com.phcworld.domain.board.FreeBoard;
-import com.phcworld.domain.exception.MatchNotUserException;
-import com.phcworld.domain.user.User;
 import com.phcworld.ifs.CrudInterface;
 import com.phcworld.repository.answer.FreeBoardAnswerRepository;
 import com.phcworld.repository.board.FreeBoardRepository;
@@ -40,7 +39,7 @@ public class FreeBoardAnswerServiceImpl implements CrudInterface<FreeBoardAnswer
 	private final TimelineServiceImpl timelineService;
 	
 	@Override
-	public FreeBoardAnswerApiResponse create(User loginUser, Long freeboardId, FreeBoardAnswerRequest request) {
+	public FreeBoardAnswerApiResponse create(UserEntity loginUser, Long freeboardId, FreeBoardAnswerRequest request) {
 		FreeBoard freeBoard = freeBoardRepository.findById(freeboardId)
 				.orElseThrow(NotFoundException::new);
 		FreeBoardAnswer freeBoardAnswer = FreeBoardAnswer.builder()
@@ -61,7 +60,7 @@ public class FreeBoardAnswerServiceImpl implements CrudInterface<FreeBoardAnswer
 	}
 	
 	@Override
-	public FreeBoardAnswerApiResponse read(Long id, User loginUser) {
+	public FreeBoardAnswerApiResponse read(Long id, UserEntity loginUser) {
 		FreeBoardAnswer freeBoardAnswer = freeBoardAnswerRepository.findById(id)
 				.orElseThrow(NotFoundException::new);
 		if(!freeBoardAnswer.isSameWriter(loginUser)) {
@@ -71,7 +70,7 @@ public class FreeBoardAnswerServiceImpl implements CrudInterface<FreeBoardAnswer
 	}
 	
 	@Override
-	public FreeBoardAnswerApiResponse update(FreeBoardAnswerRequest request, User loginUser) {
+	public FreeBoardAnswerApiResponse update(FreeBoardAnswerRequest request, UserEntity loginUser) {
 		FreeBoardAnswer answer = freeBoardAnswerRepository.findById(request.getId())
 				.orElseThrow(NotFoundException::new);
 		if(!answer.isSameWriter(loginUser)) {
@@ -83,7 +82,7 @@ public class FreeBoardAnswerServiceImpl implements CrudInterface<FreeBoardAnswer
 	}
 	
 	@Override
-	public SuccessResponse delete(Long id, User loginUser) {
+	public SuccessResponse delete(Long id, UserEntity loginUser) {
 		FreeBoardAnswer freeBoardAnswer = freeBoardAnswerRepository.findById(id)
 				.orElseThrow(NotFoundException::new);
 		if(!freeBoardAnswer.isSameWriter(loginUser)) {
@@ -99,7 +98,7 @@ public class FreeBoardAnswerServiceImpl implements CrudInterface<FreeBoardAnswer
 				.build();
 	}
 	
-	public List<FreeBoardAnswer> findFreeBoardAnswerListByWriter(User loginUser) {
+	public List<FreeBoardAnswer> findFreeBoardAnswerListByWriter(UserEntity loginUser) {
 		return freeBoardAnswerRepository.findByWriter(loginUser);
 	}
 }

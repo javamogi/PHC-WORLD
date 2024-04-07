@@ -7,6 +7,7 @@ import java.util.List;
 import javax.persistence.*;
 
 import com.phcworld.domain.board.dto.FreeBoardRequest;
+import com.phcworld.user.infrastructure.UserEntity;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -14,7 +15,6 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.phcworld.domain.answer.FreeBoardAnswer;
-import com.phcworld.domain.user.User;
 import com.phcworld.utils.LocalDateTimeUtils;
 
 import lombok.experimental.Accessors;
@@ -45,7 +45,7 @@ public class FreeBoard {
 	@ManyToOne
 	@JoinColumn(foreignKey = @ForeignKey(name = "fk_freeBoard_writer"))
 //	@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
-	private User writer;
+	private UserEntity writer;
 
 	private String title;
 
@@ -94,7 +94,7 @@ public class FreeBoard {
 		this.icon = request.getIcon();
 	}
 
-	public boolean matchUser(User loginUser) {
+	public boolean matchUser(UserEntity loginUser) {
 		if (loginUser == null) {
 			return false;
 		}

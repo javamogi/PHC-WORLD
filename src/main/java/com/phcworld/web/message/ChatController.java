@@ -4,7 +4,7 @@ import com.phcworld.domain.message.dto.ChatRoomMessageResponseDto;
 import com.phcworld.domain.message.dto.ChatRoomSelectDto;
 import com.phcworld.domain.message.dto.MessageRequestDto;
 import com.phcworld.domain.message.dto.MessageResponseDto;
-import com.phcworld.domain.user.User;
+import com.phcworld.user.infrastructure.UserEntity;
 import com.phcworld.exception.model.NotMatchUserException;
 import com.phcworld.service.message.ChatService;
 import com.phcworld.utils.HttpSessionUtils;
@@ -26,7 +26,7 @@ public class ChatController {
         if(!HttpSessionUtils.isLoginUser(session)) {
             throw new NotMatchUserException();
         }
-        User loginUser = HttpSessionUtils.getUserFromSession(session);
+        UserEntity loginUser = HttpSessionUtils.getUserEntityFromSession(session);
 
         return chatService.getChatRoomList(loginUser);
     }
@@ -36,7 +36,7 @@ public class ChatController {
         if(!HttpSessionUtils.isLoginUser(session)) {
             throw new NotMatchUserException();
         }
-        User loginUser = HttpSessionUtils.getUserFromSession(session);
+        UserEntity loginUser = HttpSessionUtils.getUserEntityFromSession(session);
         return chatService.sendMessage(loginUser, dto);
     }
 
@@ -47,7 +47,7 @@ public class ChatController {
         if(!HttpSessionUtils.isLoginUser(session)) {
             throw new NotMatchUserException();
         }
-        User loginUser = HttpSessionUtils.getUserFromSession(session);
+        UserEntity loginUser = HttpSessionUtils.getUserEntityFromSession(session);
         return chatService.getMessagesByChatRoom(chatRoomId, pageNum, loginUser);
     }
 
@@ -57,7 +57,7 @@ public class ChatController {
         if(!HttpSessionUtils.isLoginUser(session)) {
             throw new NotMatchUserException();
         }
-        User loginUser = HttpSessionUtils.getUserFromSession(session);
+        UserEntity loginUser = HttpSessionUtils.getUserEntityFromSession(session);
         return chatService.deleteMessage(messageId, loginUser);
     }
 }

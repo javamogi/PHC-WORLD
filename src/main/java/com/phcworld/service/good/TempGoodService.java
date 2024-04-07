@@ -1,15 +1,13 @@
 package com.phcworld.service.good;
 
 import java.time.LocalDateTime;
-import java.util.Set;
 
+import com.phcworld.user.infrastructure.UserEntity;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.phcworld.domain.board.TempDiary;
 import com.phcworld.domain.good.TempGood;
-import com.phcworld.domain.user.User;
 import com.phcworld.repository.good.TempGoodRepository;
 import com.phcworld.service.timeline.TempTimelineServiceImpl;
 
@@ -24,7 +22,7 @@ public class TempGoodService {
 //	@Autowired
 //	private AlertServiceImpl alertService;
 	
-	public TempDiary pushGood(TempDiary diary, User loginUser) {
+	public TempDiary pushGood(TempDiary diary, UserEntity loginUser) {
 		TempGood good = goodRepository.findByTempDiaryAndUser(diary, loginUser);
 		if(good == null) {
 			TempGood createdGood = TempGood.builder()

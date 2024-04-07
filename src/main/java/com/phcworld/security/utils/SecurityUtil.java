@@ -1,6 +1,6 @@
 package com.phcworld.security.utils;
 
-import com.phcworld.domain.user.User;
+import com.phcworld.user.infrastructure.UserEntity;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -28,7 +28,7 @@ public class SecurityUtil {
         return Long.valueOf(authentication.getName());
     }
 
-    public static void setSecurityContext(User user){
+    public static void setSecurityContext(UserEntity user){
         Collection<? extends GrantedAuthority> authorities =
                 Arrays.stream(new String[]{user.getAuthority().toString()})
                         .map(SimpleGrantedAuthority::new)

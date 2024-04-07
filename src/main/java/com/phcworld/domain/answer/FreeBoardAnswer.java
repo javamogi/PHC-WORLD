@@ -9,9 +9,8 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.phcworld.domain.board.FreeBoard;
-import com.phcworld.domain.user.User;
+import com.phcworld.user.infrastructure.UserEntity;
 import com.phcworld.utils.LocalDateTimeUtils;
 
 import lombok.AllArgsConstructor;
@@ -38,7 +37,7 @@ public class FreeBoardAnswer {
 	@ManyToOne
 	@JoinColumn(foreignKey = @ForeignKey(name = "fk_freeBoardAnswer_writer"))
 	@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
-	private User writer;
+	private UserEntity writer;
 
 	@ManyToOne
 	@JoinColumn(foreignKey = @ForeignKey(name = "fk_freeBoardAnswer_to_freeBoard"), nullable = false)
@@ -64,7 +63,7 @@ public class FreeBoardAnswer {
 		return LocalDateTimeUtils.getTime(updateDate);
 	}
 
-	public boolean isSameWriter(User loginUser) {
+	public boolean isSameWriter(UserEntity loginUser) {
 		return this.writer.equals(loginUser);
 	}
 

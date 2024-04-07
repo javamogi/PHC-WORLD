@@ -4,6 +4,7 @@ import javax.servlet.http.HttpSession;
 
 import com.phcworld.exception.model.BadRequestException;
 import com.phcworld.exception.model.NotMatchUserException;
+import com.phcworld.user.infrastructure.UserEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -18,10 +19,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.phcworld.domain.api.model.request.FreeBoardAnswerRequest;
 import com.phcworld.domain.api.model.response.FreeBoardAnswerApiResponse;
 import com.phcworld.domain.api.model.response.SuccessResponse;
-import com.phcworld.domain.exception.ContentsEmptyException;
 import com.phcworld.domain.exception.LoginNotUserException;
 import com.phcworld.domain.exception.MatchNotUserException;
-import com.phcworld.domain.user.User;
 import com.phcworld.service.answer.FreeBoardAnswerServiceImpl;
 import com.phcworld.utils.HttpSessionUtils;
 
@@ -42,7 +41,7 @@ public class FreeBoardAnswerController {
 		if(!HttpSessionUtils.isLoginUser(session)) {
 			throw new NotMatchUserException();
 		}
-		User loginUser = HttpSessionUtils.getUserFromSession(session);
+		UserEntity loginUser = HttpSessionUtils.getUserEntityFromSession(session);
 		
 		return freeBoardAnswerService.create(loginUser, freeboardId, request);
 	}
@@ -53,7 +52,7 @@ public class FreeBoardAnswerController {
 		if(!HttpSessionUtils.isLoginUser(session)) {
 			throw new NotMatchUserException();
 		}
-		User loginUser = HttpSessionUtils.getUserFromSession(session);
+		UserEntity loginUser = HttpSessionUtils.getUserEntityFromSession(session);
 		return freeBoardAnswerService.read(id, loginUser);
 	}
 	
@@ -66,7 +65,7 @@ public class FreeBoardAnswerController {
 		if(!HttpSessionUtils.isLoginUser(session)) {
 			throw new NotMatchUserException();
 		}
-		User loginUser = HttpSessionUtils.getUserFromSession(session);
+		UserEntity loginUser = HttpSessionUtils.getUserEntityFromSession(session);
 		return freeBoardAnswerService.update(request, loginUser);
 	}
 	
@@ -76,7 +75,7 @@ public class FreeBoardAnswerController {
 		if(!HttpSessionUtils.isLoginUser(session)) {
 			throw new NotMatchUserException();
 		}
-		User loginUser = HttpSessionUtils.getUserFromSession(session);
+		UserEntity loginUser = HttpSessionUtils.getUserEntityFromSession(session);
 		
 		return freeBoardAnswerService.delete(id, loginUser);
 	}

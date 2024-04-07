@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import com.phcworld.exception.model.NotFoundException;
+import com.phcworld.user.infrastructure.UserEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -14,7 +15,6 @@ import org.springframework.stereotype.Service;
 import com.phcworld.domain.exception.MatchNotUserException;
 import com.phcworld.domain.message.Message;
 import com.phcworld.domain.message.MessageResponse;
-import com.phcworld.domain.user.User;
 import com.phcworld.repository.message.MessageRepository;
 
 @Service
@@ -24,7 +24,7 @@ public class MessageServiceImpl implements MessageService {
 	private final MessageRepository messageRepository;
 
 	@Override
-	public MessageResponse createMessage(User loginUser, User receiveUser, String contents) {
+	public MessageResponse createMessage(UserEntity loginUser, UserEntity receiveUser, String contents) {
 		Message message = Message.builder()
 				.sender(loginUser)
 				.receiver(receiveUser)
@@ -38,7 +38,7 @@ public class MessageServiceImpl implements MessageService {
 	}
 	
 	@Override
-	public MessageResponse confirmMessage(Long id, User loginUser) {
+	public MessageResponse confirmMessage(Long id, UserEntity loginUser) {
 		Message message = messageRepository.findById(id)
 				.orElseThrow(NotFoundException::new);
 		if(!loginUser.matchId(message.getReceiver().getId())) {
@@ -52,7 +52,7 @@ public class MessageServiceImpl implements MessageService {
 	}
 
 	@Override
-	public List<MessageResponse> findMessageAllBySenderAndNotConfirmUseProfile(User loginUser, String confirm) {
+	public List<MessageResponse> findMessageAllBySenderAndNotConfirmUseProfile(UserEntity loginUser, String confirm) {
 		List<Message> messageList = messageRepository.findAllByReceiverAndConfirm(loginUser, confirm);
 		if(messageList != null) {
 			List<MessageResponse> messageResponseList = messageList.stream()
@@ -66,7 +66,7 @@ public class MessageServiceImpl implements MessageService {
 	}
 	
 	@Override
-	public List<MessageResponse> findMessageBySenderAndConfirmUseMenu(User loginUser, String confirm) {
+	public List<MessageResponse> findMessageBySenderAndConfirmUseMenu(UserEntity loginUser, String confirm) {
 //		PageRequest pageRequest = PageRequest.of(0, 5, new Sort(Direction.DESC, "id"));
 		PageRequest pageRequest = PageRequest.of(0, 5, Sort.by("id").descending());
 		Page<Message> pageMessage = messageRepository.findByReceiverAndConfirm(loginUser, "읽지 않음", pageRequest);
@@ -83,7 +83,7 @@ public class MessageServiceImpl implements MessageService {
 	}
 	
 	@Override
-	public Page<Message> findMessageByReceiverMessages(Integer receivePageNum, User user) {
+	public Page<Message> findMessageByReceiverMessages(Integer receivePageNum, UserEntity user) {
 		PageRequest pageRequest = PageRequest.of(0, 10, Sort.by("id").descending());
 		if(receivePageNum > 1) {
 			pageRequest = PageRequest.of(receivePageNum - 1, 10, Sort.by("id").descending());
@@ -92,7 +92,7 @@ public class MessageServiceImpl implements MessageService {
 	}
 	
 	@Override
-	public Page<Message> findMessageBySenderMessage(Integer sendPageNum, User user) {
+	public Page<Message> findMessageBySenderMessage(Integer sendPageNum, UserEntity user) {
 		PageRequest pageRequest = PageRequest.of(0, 10, Sort.by("id").descending());
 		if(sendPageNum > 1) {
 			pageRequest = PageRequest.of(sendPageNum - 1, 10, Sort.by("id").descending());

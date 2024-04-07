@@ -7,7 +7,7 @@ import com.phcworld.domain.answer.FreeBoardAnswer;
 import com.phcworld.domain.common.SaveType;
 import com.phcworld.domain.embedded.PostInfo;
 import com.phcworld.domain.good.Good;
-import com.phcworld.domain.user.User;
+import com.phcworld.user.infrastructure.UserEntity;
 import com.phcworld.exception.model.CustomException;
 import com.phcworld.repository.alert.AlertRepository;
 import lombok.RequiredArgsConstructor;
@@ -34,14 +34,14 @@ public class AlertServiceImpl implements AlertService {
 	}
 	
 	@Override
-	public List<Alert> findListAlertByPostUser(User loginUser) {
+	public List<Alert> findListAlertByPostUser(UserEntity loginUser) {
 //		PageRequest pageRequest = PageRequest.of(0, 5, new Sort(Direction.DESC, "id"));
 		PageRequest pageRequest = PageRequest.of(0, 5, Sort.by("id").descending());
 		Page<Alert> pageAlert = alertRepository.findByPostWriter(loginUser, pageRequest);
 		return pageAlert.getContent();
 	}
 
-	public List<AlertResponseDto> findByAlertListByPostUser(User loginUser){
+	public List<AlertResponseDto> findByAlertListByPostUser(UserEntity loginUser){
 		return alertRepository.findAlertListByPostWriter(loginUser)
 				.stream()
 				.map(AlertResponseDto::of)

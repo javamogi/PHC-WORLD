@@ -12,11 +12,11 @@ import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 
+import com.phcworld.user.infrastructure.UserEntity;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import com.phcworld.domain.user.User;
 import com.phcworld.utils.LocalDateTimeUtils;
 
 import lombok.AllArgsConstructor;
@@ -38,7 +38,7 @@ public class BasicBoardAndAnswer {
 
 	@ManyToOne
 	@JoinColumn(foreignKey = @ForeignKey(name = "fk_writer"))
-	private User writer;
+	private UserEntity writer;
 
 	@Lob
 	private String contents;
@@ -49,7 +49,7 @@ public class BasicBoardAndAnswer {
 	@LastModifiedDate
 	private LocalDateTime updateDate;
 
-	public BasicBoardAndAnswer(Long id, User writer, String contents, LocalDateTime createDate) {
+	public BasicBoardAndAnswer(Long id, UserEntity writer, String contents, LocalDateTime createDate) {
 		this.id = id;
 		this.writer = writer;
 		this.contents = contents;

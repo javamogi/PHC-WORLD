@@ -3,9 +3,9 @@ package com.phcworld.service.statistics;
 import com.phcworld.domain.statistics.HashtagStatisticsDto;
 import com.phcworld.domain.statistics.StatisticsDto;
 import com.phcworld.domain.statistics.UserStatisticsDto;
-import com.phcworld.domain.user.User;
+import com.phcworld.user.infrastructure.UserEntity;
 import com.phcworld.repository.statistics.StatisticsRepository;
-import com.phcworld.repository.user.UserRepository;
+import com.phcworld.user.infrastructure.UserJpaRepository;
 import com.querydsl.core.Tuple;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class StatisticsService {
-    private final UserRepository userRepository;
+    private final UserJpaRepository userRepository;
 
     private final StatisticsRepository statisticsRepository;
 
@@ -46,7 +46,7 @@ public class StatisticsService {
     }
 
     @Transactional
-    public List<UserStatisticsDto> getUserPostStatistics(User user){
+    public List<UserStatisticsDto> getUserPostStatistics(UserEntity user){
         return statisticsRepository.findUserPostRegisterStatistics(user);
     }
 
@@ -56,7 +56,7 @@ public class StatisticsService {
     }
 
     @Transactional(readOnly = true)
-    public List<HashtagStatisticsDto> getDiaryHashtagStatistics(User user){
+    public List<HashtagStatisticsDto> getDiaryHashtagStatistics(UserEntity user){
         return statisticsRepository.findDiaryHashtagStatistics(user);
     }
 

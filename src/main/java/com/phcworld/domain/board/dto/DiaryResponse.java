@@ -6,7 +6,7 @@ import java.util.List;
 import com.phcworld.domain.api.model.response.DiaryAnswerApiResponse;
 import com.phcworld.domain.board.Diary;
 import com.phcworld.domain.board.DiaryHashtag;
-import com.phcworld.domain.user.User;
+import com.phcworld.user.infrastructure.UserEntity;
 
 import com.phcworld.repository.board.dto.DiarySelectDto;
 import lombok.Builder;
@@ -18,7 +18,7 @@ public class DiaryResponse {
 
 	private Long id;
 
-	private User writer;
+	private UserEntity writer;
 
 	private String title;
 

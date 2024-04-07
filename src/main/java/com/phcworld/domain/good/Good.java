@@ -1,7 +1,7 @@
 package com.phcworld.domain.good;
 
 import com.phcworld.domain.board.Diary;
-import com.phcworld.domain.user.User;
+import com.phcworld.user.infrastructure.UserEntity;
 import com.phcworld.utils.LocalDateTimeUtils;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -35,7 +35,7 @@ public class Good {
 
 	@ManyToOne
 	@JoinColumn(foreignKey = @ForeignKey(name = "fk_good_user"))
-	private User user;
+	private UserEntity user;
 	
 	private LocalDateTime createDate;
 
