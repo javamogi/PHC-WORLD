@@ -1,12 +1,14 @@
-package com.phcworld.service.board;
+package com.phcworld.freeboard.service;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.phcworld.domain.board.dto.FreeBoardSearchDto;
+import com.phcworld.freeboard.controller.port.FreeBoardSearchDto;
 import com.phcworld.domain.common.SaveType;
 import com.phcworld.exception.model.NotFoundException;
-import com.phcworld.repository.board.dto.FreeBoardSelectDto;
+import com.phcworld.freeboard.controller.port.FreeBoardService;
+import com.phcworld.freeboard.infrastructure.FreeBoardEntity;
+import com.phcworld.freeboard.infrastructure.dto.FreeBoardSelectDto;
 import com.phcworld.user.infrastructure.UserEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
@@ -16,10 +18,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.phcworld.domain.answer.FreeBoardAnswer;
 import com.phcworld.domain.api.model.response.FreeBoardAnswerApiResponse;
-import com.phcworld.domain.board.FreeBoard;
-import com.phcworld.domain.board.dto.FreeBoardRequest;
-import com.phcworld.domain.board.dto.FreeBoardResponse;
-import com.phcworld.repository.board.FreeBoardRepository;
+import com.phcworld.freeboard.domain.dto.FreeBoardRequest;
+import com.phcworld.freeboard.controller.port.FreeBoardResponse;
+import com.phcworld.freeboard.infrastructure.FreeBoardJpaRepository;
 import com.phcworld.service.alert.AlertServiceImpl;
 import com.phcworld.service.timeline.TimelineServiceImpl;
 
@@ -27,7 +28,7 @@ import com.phcworld.service.timeline.TimelineServiceImpl;
 //@Transactional
 @RequiredArgsConstructor
 public class FreeBoardServiceImpl implements FreeBoardService {
-	private final FreeBoardRepository freeBoardRepository;
+	private final FreeBoardJpaRepository freeBoardRepository;
 	
 	private final TimelineServiceImpl timelineService;
 	
@@ -36,7 +37,7 @@ public class FreeBoardServiceImpl implements FreeBoardService {
 	@Transactional(readOnly = true)
 	@Override
 	public List<FreeBoardResponse> findFreeBoardAllListAndSetNewBadge() {
-		List<FreeBoard> list = freeBoardRepository.findAll();
+		List<FreeBoardEntity> list = freeBoardRepository.findAll();
 		return list.stream()
 				.map(FreeBoardResponse::of)
 				.collect(Collectors.toList());
@@ -55,14 +56,14 @@ public class FreeBoardServiceImpl implements FreeBoardService {
 	@Transactional
 	@Override
 	public FreeBoardResponse createFreeBoard(UserEntity user, FreeBoardRequest request) {
-		FreeBoard freeBoard = FreeBoard.builder()
+		FreeBoardEntity freeBoard = FreeBoardEntity.builder()
 				.writer(user)
 				.title(request.getTitle())
 				.contents(request.getContents())
 				.icon(request.getIcon())
 				.count(0)
 				.build();
-		FreeBoard createdFreeBoard = freeBoardRepository.save(freeBoard);
+		FreeBoardEntity createdFreeBoard = freeBoardRepository.save(freeBoard);
 		
 		timelineService.createTimeline(createdFreeBoard);
 		
@@ -72,7 +73,7 @@ public class FreeBoardServiceImpl implements FreeBoardService {
 	@Transactional
 	@Override
 	public FreeBoardResponse getOneFreeBoard(Long id) {
-		FreeBoard freeBoard = freeBoardRepository.findById(id)
+		FreeBoardEntity freeBoard = freeBoardRepository.findById(id)
 				.orElseThrow(NotFoundException::new);
 		return response(freeBoard);
 	}
@@ -80,7 +81,7 @@ public class FreeBoardServiceImpl implements FreeBoardService {
 	@Transactional
 	@Override
 	public FreeBoardResponse addFreeBoardCount(Long id) {
-		FreeBoard freeBoard = freeBoardRepository.findById(id)
+		FreeBoardEntity freeBoard = freeBoardRepository.findById(id)
 				.orElseThrow(NotFoundException::new);
 		freeBoard.addCount();
 		return response(freeBoard);
@@ -89,7 +90,7 @@ public class FreeBoardServiceImpl implements FreeBoardService {
 	@Transactional
 	@Override
 	public FreeBoardResponse updateFreeBoard(FreeBoardRequest request) {
-		FreeBoard freeBoard = freeBoardRepository.findById(request.getId())
+		FreeBoardEntity freeBoard = freeBoardRepository.findById(request.getId())
 				.orElseThrow(NotFoundException::new);
 		freeBoard.update(request);
 		return response(freeBoard);
@@ -98,7 +99,7 @@ public class FreeBoardServiceImpl implements FreeBoardService {
 	@Transactional
 	@Override
 	public void deleteFreeBoard(Long id) {
-		FreeBoard freeBoard = freeBoardRepository.findById(id)
+		FreeBoardEntity freeBoard = freeBoardRepository.findById(id)
 				.orElseThrow(NotFoundException::new);
 		timelineService.deleteTimeline(SaveType.FREE_BOARD, id);
 		alertService.deleteAlert(SaveType.FREE_BOARD, id);
@@ -107,11 +108,11 @@ public class FreeBoardServiceImpl implements FreeBoardService {
 
 	@Transactional
 	@Override
-	public List<FreeBoard> findFreeBoardListByWriter(UserEntity loginUser) {
+	public List<FreeBoardEntity> findFreeBoardListByWriter(UserEntity loginUser) {
 		return freeBoardRepository.findByWriter(loginUser);
 	}
 
-	private FreeBoardResponse response(FreeBoard freeBoard) {
+	private FreeBoardResponse response(FreeBoardEntity freeBoard) {
 		FreeBoardResponse freeBoardResponse = FreeBoardResponse.of(freeBoard);
 		List<FreeBoardAnswer> answerList = freeBoard.getFreeBoardAnswers();
 		if(answerList != null) {

@@ -16,10 +16,10 @@ import com.phcworld.domain.answer.FreeBoardAnswer;
 import com.phcworld.domain.api.model.request.FreeBoardAnswerRequest;
 import com.phcworld.domain.api.model.response.FreeBoardAnswerApiResponse;
 import com.phcworld.domain.api.model.response.SuccessResponse;
-import com.phcworld.domain.board.FreeBoard;
+import com.phcworld.freeboard.infrastructure.FreeBoardEntity;
 import com.phcworld.ifs.CrudInterface;
 import com.phcworld.repository.answer.FreeBoardAnswerRepository;
-import com.phcworld.repository.board.FreeBoardRepository;
+import com.phcworld.freeboard.infrastructure.FreeBoardJpaRepository;
 import com.phcworld.service.alert.AlertServiceImpl;
 import com.phcworld.service.timeline.TimelineServiceImpl;
 
@@ -30,7 +30,7 @@ public class FreeBoardAnswerServiceImpl implements CrudInterface<FreeBoardAnswer
 	
 	private static final Logger log = LoggerFactory.getLogger(FreeBoardAnswerServiceImpl.class);
 	
-	private final FreeBoardRepository freeBoardRepository;
+	private final FreeBoardJpaRepository freeBoardRepository;
 
 	private final FreeBoardAnswerRepository freeBoardAnswerRepository;
 	
@@ -40,7 +40,7 @@ public class FreeBoardAnswerServiceImpl implements CrudInterface<FreeBoardAnswer
 	
 	@Override
 	public FreeBoardAnswerApiResponse create(UserEntity loginUser, Long freeboardId, FreeBoardAnswerRequest request) {
-		FreeBoard freeBoard = freeBoardRepository.findById(freeboardId)
+		FreeBoardEntity freeBoard = freeBoardRepository.findById(freeboardId)
 				.orElseThrow(NotFoundException::new);
 		FreeBoardAnswer freeBoardAnswer = FreeBoardAnswer.builder()
 				.writer(loginUser)

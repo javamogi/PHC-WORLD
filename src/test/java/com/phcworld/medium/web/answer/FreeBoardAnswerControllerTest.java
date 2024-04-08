@@ -14,6 +14,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.phcworld.freeboard.infrastructure.FreeBoardEntity;
 import com.phcworld.user.domain.Authority;
 import com.phcworld.exception.model.NotMatchUserException;
 import com.phcworld.user.infrastructure.UserEntity;
@@ -33,9 +34,8 @@ import com.phcworld.domain.answer.FreeBoardAnswer;
 import com.phcworld.domain.api.model.request.FreeBoardAnswerRequest;
 import com.phcworld.domain.api.model.response.FreeBoardAnswerApiResponse;
 import com.phcworld.domain.api.model.response.SuccessResponse;
-import com.phcworld.domain.board.FreeBoard;
 import com.phcworld.service.answer.FreeBoardAnswerServiceImpl;
-import com.phcworld.service.board.FreeBoardServiceImpl;
+import com.phcworld.freeboard.service.FreeBoardServiceImpl;
 import com.phcworld.utils.HttpSessionUtils;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -52,7 +52,7 @@ public class FreeBoardAnswerControllerTest {
 	private FreeBoardAnswerServiceImpl freeBoardAnswerService;
 
 	private UserEntity user;
-	private FreeBoard freeBoard;
+	private FreeBoardEntity freeBoard;
 
 	@Before
 	public void setup(){
@@ -65,7 +65,7 @@ public class FreeBoardAnswerControllerTest {
 				.authority(Authority.ROLE_USER)
 				.createDate(LocalDateTime.now())
 				.build();
-		freeBoard = FreeBoard.builder()
+		freeBoard = FreeBoardEntity.builder()
 				.id(1L)
 				.title("title")
 				.contents("content")

@@ -5,7 +5,7 @@ import com.phcworld.domain.alert.dto.AlertResponseDto;
 import com.phcworld.domain.answer.DiaryAnswer;
 import com.phcworld.domain.answer.FreeBoardAnswer;
 import com.phcworld.domain.board.Diary;
-import com.phcworld.domain.board.FreeBoard;
+import com.phcworld.freeboard.infrastructure.FreeBoardEntity;
 import com.phcworld.domain.common.SaveType;
 import com.phcworld.domain.embedded.PostInfo;
 import com.phcworld.domain.good.Good;
@@ -18,7 +18,7 @@ import com.phcworld.exception.model.CustomException;
 import com.phcworld.repository.answer.DiaryAnswerRepository;
 import com.phcworld.repository.answer.FreeBoardAnswerRepository;
 import com.phcworld.repository.board.DiaryRepository;
-import com.phcworld.repository.board.FreeBoardRepository;
+import com.phcworld.freeboard.infrastructure.FreeBoardJpaRepository;
 import com.phcworld.repository.good.GoodRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Before;
@@ -58,7 +58,7 @@ public class AlertRepositoryTest {
 	private DiaryAnswerRepository diaryAnswerRepository;
 	
 	@Autowired
-	private FreeBoardRepository freeBoardRepository;
+	private FreeBoardJpaRepository freeBoardRepository;
 	
 	@Autowired
 	private FreeBoardAnswerRepository freeBoardAnswerRepository;
@@ -71,7 +71,7 @@ public class AlertRepositoryTest {
 
 	private DiaryAnswer diaryAnswer;
 
-	private FreeBoard freeBoard;
+	private FreeBoardEntity freeBoard;
 
 	private FreeBoardAnswer freeBoardAnswer;
 

@@ -6,11 +6,12 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import com.phcworld.freeboard.infrastructure.FreeBoardEntity;
 import com.phcworld.medium.domain.board.FreeBoardInsertDto;
 import com.phcworld.exception.model.CustomException;
 import com.phcworld.medium.util.FreeBoardFactory;
-import com.phcworld.repository.board.FreeBoardRepository;
-import com.phcworld.repository.board.dto.FreeBoardSelectDto;
+import com.phcworld.freeboard.infrastructure.FreeBoardJpaRepository;
+import com.phcworld.freeboard.infrastructure.dto.FreeBoardSelectDto;
 import com.phcworld.user.infrastructure.UserEntity;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -26,8 +27,7 @@ import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.phcworld.domain.board.FreeBoard;
-import com.phcworld.domain.board.dto.FreeBoardRequest;
+import com.phcworld.freeboard.domain.dto.FreeBoardRequest;
 
 import lombok.extern.slf4j.Slf4j;
 import org.jeasy.random.EasyRandom;
@@ -41,10 +41,10 @@ import static org.junit.Assert.assertNotNull;
 @SpringBootTest
 //@Transactional
 @Slf4j
-public class FreeBoardRepositoryTest {
+public class FreeBoardJpaRepositoryTest {
 	
 	@Autowired
-	private FreeBoardRepository freeBoardRepository;
+	private FreeBoardJpaRepository freeBoardRepository;
 
 	@Autowired
 	private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
@@ -60,14 +60,14 @@ public class FreeBoardRepositoryTest {
 	@Test
 	@Transactional
 	public void create() {
-		FreeBoard freeBoard = FreeBoard.builder()
+		FreeBoardEntity freeBoard = FreeBoardEntity.builder()
 				.writer(user)
 				.title("title")
 				.contents("content")
 				.icon("")
 				.count(0)
 				.build();
-		FreeBoard newFreeBoard =  freeBoardRepository.save(freeBoard);
+		FreeBoardEntity newFreeBoard =  freeBoardRepository.save(freeBoard);
 		assertNotNull(newFreeBoard);
 	}
 
@@ -81,7 +81,7 @@ public class FreeBoardRepositoryTest {
 		stopWatch.start();
 		List<FreeBoardInsertDto> list = IntStream.range(0, 10000 * 100)
 				.parallel()
-				.mapToObj(i -> generator.nextObject(FreeBoard.class))
+				.mapToObj(i -> generator.nextObject(FreeBoardEntity.class))
 				.map(FreeBoardInsertDto::of)
 				.collect(Collectors.toList());
 		stopWatch.stop();
@@ -111,9 +111,9 @@ public class FreeBoardRepositoryTest {
 
 		StopWatch stopWatch = new StopWatch();
 		stopWatch.start();
-		List<FreeBoard> list = IntStream.range(0, 10000 * 100)
+		List<FreeBoardEntity> list = IntStream.range(0, 10000 * 100)
 				.parallel()
-				.mapToObj(i -> generator.nextObject(FreeBoard.class))
+				.mapToObj(i -> generator.nextObject(FreeBoardEntity.class))
 				.collect(Collectors.toList());
 		stopWatch.stop();
 		log.info("객체 생성 시간 : {}", stopWatch.getTotalTimeSeconds());
@@ -128,7 +128,7 @@ public class FreeBoardRepositoryTest {
 	@Test
 	@Transactional
 	public void read() {
-		FreeBoard freeBoard = FreeBoard.builder()
+		FreeBoardEntity freeBoard = FreeBoardEntity.builder()
 				.writer(user)
 				.title("title")
 				.contents("content")
@@ -136,7 +136,7 @@ public class FreeBoardRepositoryTest {
 				.count(0)
 				.build();
 		freeBoardRepository.save(freeBoard);
-		List<FreeBoard> freeBoardList = freeBoardRepository.findByWriter(user);
+		List<FreeBoardEntity> freeBoardList = freeBoardRepository.findByWriter(user);
 		assertThat(freeBoardList).contains(freeBoard);
 	}
 
@@ -162,7 +162,7 @@ public class FreeBoardRepositoryTest {
 	@Test
 	@Transactional
 	public void update() {
-		FreeBoard freeBoard = FreeBoard.builder()
+		FreeBoardEntity freeBoard = FreeBoardEntity.builder()
 				.writer(user)
 				.title("title")
 				.contents("content")
@@ -174,28 +174,28 @@ public class FreeBoardRepositoryTest {
 				.contents("new contents")
 				.icon("")
 				.build();
-		FreeBoard newBoard = freeBoardRepository.save(freeBoard);
-		FreeBoard register = freeBoardRepository.findById(newBoard.getId())
+		FreeBoardEntity newBoard = freeBoardRepository.save(freeBoard);
+		FreeBoardEntity register = freeBoardRepository.findById(newBoard.getId())
 				.orElseThrow(() -> new CustomException("400", "게시물이 존재하지 않습니다."));
 		register.update(request);
-		FreeBoard updatedBoard = freeBoardRepository.save(register);
+		FreeBoardEntity updatedBoard = freeBoardRepository.save(register);
 		assertThat(request.getContents()).isEqualTo(updatedBoard.getContents());
 	}
 	
 	@Test
 	@Transactional
 	public void delete() {
-		FreeBoard freeBoard = FreeBoard.builder()
+		FreeBoardEntity freeBoard = FreeBoardEntity.builder()
 				.writer(user)
 				.title("title")
 				.contents("content")
 				.icon("")
 				.count(0)
 				.build();
-		FreeBoard newBoard = freeBoardRepository.save(freeBoard);
+		FreeBoardEntity newBoard = freeBoardRepository.save(freeBoard);
 		assertNotNull(newBoard);
 		freeBoardRepository.delete(newBoard);
-		Optional<FreeBoard> findBoard = freeBoardRepository.findById(newBoard.getId());
+		Optional<FreeBoardEntity> findBoard = freeBoardRepository.findById(newBoard.getId());
 		assertFalse(findBoard.isPresent());
 	}
 

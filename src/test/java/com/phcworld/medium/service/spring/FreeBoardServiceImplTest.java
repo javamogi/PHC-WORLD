@@ -1,8 +1,8 @@
 package com.phcworld.medium.service.spring;
 
-import com.phcworld.domain.board.dto.FreeBoardResponse;
-import com.phcworld.domain.board.dto.FreeBoardSearchDto;
-import com.phcworld.service.board.FreeBoardService;
+import com.phcworld.freeboard.controller.port.FreeBoardResponse;
+import com.phcworld.freeboard.controller.port.FreeBoardSearchDto;
+import com.phcworld.freeboard.controller.port.FreeBoardService;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 import org.junit.runner.RunWith;

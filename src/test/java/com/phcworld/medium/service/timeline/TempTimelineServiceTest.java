@@ -24,7 +24,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import com.phcworld.domain.answer.TempDiaryAnswer;
 import com.phcworld.domain.answer.TempFreeBoardAnswer;
 import com.phcworld.domain.board.TempDiary;
-import com.phcworld.domain.board.TempFreeBoard;
+import com.phcworld.freeboard.infrastructure.TempFreeBoard;
 import com.phcworld.domain.good.TempGood;
 import com.phcworld.domain.timeline.TempTimeline;
 

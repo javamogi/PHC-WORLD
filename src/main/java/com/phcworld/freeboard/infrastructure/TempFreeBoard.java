@@ -1,4 +1,4 @@
-package com.phcworld.domain.board;
+package com.phcworld.freeboard.infrastructure;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -9,7 +9,7 @@ import javax.persistence.OneToMany;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.phcworld.domain.answer.TempFreeBoardAnswer;
-import com.phcworld.domain.board.dto.TempFreeBoardRequest;
+import com.phcworld.freeboard.domain.dto.TempFreeBoardRequest;
 import com.phcworld.domain.parent.BasicBoardAndAnswer;
 import com.phcworld.user.infrastructure.UserEntity;
 

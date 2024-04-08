@@ -1,4 +1,4 @@
-package com.phcworld.domain.board.dto;
+package com.phcworld.freeboard.controller.port;
 
 import lombok.Getter;
 import lombok.Setter;

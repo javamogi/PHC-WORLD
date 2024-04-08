@@ -1,11 +1,9 @@
-package com.phcworld.service.board;
+package com.phcworld.freeboard.controller.port;
 
 import java.util.List;
 
-import com.phcworld.domain.board.FreeBoard;
-import com.phcworld.domain.board.dto.FreeBoardRequest;
-import com.phcworld.domain.board.dto.FreeBoardResponse;
-import com.phcworld.domain.board.dto.FreeBoardSearchDto;
+import com.phcworld.freeboard.infrastructure.FreeBoardEntity;
+import com.phcworld.freeboard.domain.dto.FreeBoardRequest;
 import com.phcworld.user.infrastructure.UserEntity;
 
 public interface FreeBoardService {
@@ -22,7 +20,7 @@ public interface FreeBoardService {
 	
 	void deleteFreeBoard(Long id);
 	
-	List<FreeBoard> findFreeBoardListByWriter(UserEntity loginUser);
+	List<FreeBoardEntity> findFreeBoardListByWriter(UserEntity loginUser);
 
 	List<FreeBoardResponse> getSearchResult(FreeBoardSearchDto search);
 }

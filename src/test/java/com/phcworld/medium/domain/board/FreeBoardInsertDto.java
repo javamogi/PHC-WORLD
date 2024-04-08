@@ -1,6 +1,6 @@
 package com.phcworld.medium.domain.board;
 
-import com.phcworld.domain.board.FreeBoard;
+import com.phcworld.freeboard.infrastructure.FreeBoardEntity;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -18,7 +18,7 @@ public class FreeBoardInsertDto {
     private LocalDateTime createDate;
     private LocalDateTime updateDate;
 
-    public static FreeBoardInsertDto of(FreeBoard freeBoard){
+    public static FreeBoardInsertDto of(FreeBoardEntity freeBoard){
         return FreeBoardInsertDto.builder()
                 .writerId(freeBoard.getWriter().getId())
                 .title(freeBoard.getTitle())

@@ -8,7 +8,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.phcworld.domain.board.TempFreeBoard;
+import com.phcworld.freeboard.infrastructure.TempFreeBoard;
 import com.phcworld.domain.parent.BasicBoardAndAnswer;
 import com.phcworld.user.infrastructure.UserEntity;
 

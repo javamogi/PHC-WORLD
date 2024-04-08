@@ -1,12 +1,12 @@
-package com.phcworld.domain.board.dto;
+package com.phcworld.freeboard.controller.port;
 
 import java.util.List;
 
 import com.phcworld.domain.api.model.response.FreeBoardAnswerApiResponse;
-import com.phcworld.domain.board.FreeBoard;
+import com.phcworld.freeboard.infrastructure.FreeBoardEntity;
 import com.phcworld.user.infrastructure.UserEntity;
 
-import com.phcworld.repository.board.dto.FreeBoardSelectDto;
+import com.phcworld.freeboard.infrastructure.dto.FreeBoardSelectDto;
 import lombok.Builder;
 import lombok.Data;
 
@@ -34,7 +34,7 @@ public class FreeBoardResponse {
 	
 	private List<FreeBoardAnswerApiResponse> freeBoardAnswerList;
 
-	public static FreeBoardResponse of(FreeBoard freeBoard){
+	public static FreeBoardResponse of(FreeBoardEntity freeBoard){
 		return FreeBoardResponse.builder()
 				.id(freeBoard.getId())
 				.writer(freeBoard.getWriter())

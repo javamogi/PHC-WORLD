@@ -1,4 +1,4 @@
-package com.phcworld.service.board;
+package com.phcworld.freeboard.service;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -12,11 +12,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.phcworld.domain.answer.TempFreeBoardAnswer;
 import com.phcworld.domain.api.model.response.FreeBoardAnswerApiResponse;
-import com.phcworld.domain.board.TempFreeBoard;
-import com.phcworld.domain.board.dto.TempFreeBoardRequest;
-import com.phcworld.domain.board.dto.TempFreeBoardResponse;
+import com.phcworld.freeboard.infrastructure.TempFreeBoard;
+import com.phcworld.freeboard.domain.dto.TempFreeBoardRequest;
+import com.phcworld.freeboard.controller.port.TempFreeBoardResponse;
 import com.phcworld.user.infrastructure.UserEntity;
-import com.phcworld.repository.board.TempFreeBoardRepository;
+import com.phcworld.freeboard.infrastructure.TempFreeBoardRepository;
 import com.phcworld.service.alert.AlertServiceImpl;
 import com.phcworld.service.timeline.TimelineServiceImpl;
 

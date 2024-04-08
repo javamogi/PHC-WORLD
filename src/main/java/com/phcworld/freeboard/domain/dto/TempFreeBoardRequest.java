@@ -1,4 +1,4 @@
-package com.phcworld.domain.board.dto;
+package com.phcworld.freeboard.domain.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

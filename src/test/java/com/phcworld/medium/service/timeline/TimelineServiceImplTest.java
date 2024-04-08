@@ -9,7 +9,7 @@ import java.util.List;
 
 import com.phcworld.domain.answer.DiaryAnswer;
 import com.phcworld.domain.answer.FreeBoardAnswer;
-import com.phcworld.domain.board.FreeBoard;
+import com.phcworld.freeboard.infrastructure.FreeBoardEntity;
 import com.phcworld.domain.common.SaveType;
 import com.phcworld.domain.embedded.PostInfo;
 import com.phcworld.domain.good.Good;
@@ -29,7 +29,7 @@ import com.phcworld.domain.timeline.Timeline;
 import com.phcworld.service.answer.DiaryAnswerServiceImpl;
 import com.phcworld.service.answer.FreeBoardAnswerServiceImpl;
 import com.phcworld.service.board.DiaryServiceImpl;
-import com.phcworld.service.board.FreeBoardServiceImpl;
+import com.phcworld.freeboard.service.FreeBoardServiceImpl;
 import org.springframework.transaction.annotation.Transactional;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -54,7 +54,7 @@ public class TimelineServiceImplTest {
 	private UserEntity user;
 	private Diary diary;
 	private DiaryAnswer diaryAnswer;
-	private FreeBoard freeBoard;
+	private FreeBoardEntity freeBoard;
 	private FreeBoardAnswer freeBoardAnswer;
 
 	@Before
@@ -82,7 +82,7 @@ public class TimelineServiceImplTest {
 				.diary(diary)
 				.contents("test")
 				.build();
-		freeBoard = FreeBoard.builder()
+		freeBoard = FreeBoardEntity.builder()
 				.id(1L)
 				.writer(user)
 				.title("test")

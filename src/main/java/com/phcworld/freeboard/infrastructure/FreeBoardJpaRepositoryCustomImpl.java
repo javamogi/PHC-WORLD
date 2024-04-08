@@ -1,8 +1,8 @@
-package com.phcworld.repository.board;
+package com.phcworld.freeboard.infrastructure;
 
 import com.phcworld.domain.answer.QFreeBoardAnswer;
 import com.phcworld.domain.board.QFreeBoard;
-import com.phcworld.repository.board.dto.FreeBoardSelectDto;
+import com.phcworld.freeboard.infrastructure.dto.FreeBoardSelectDto;
 import com.phcworld.user.infrastructure.QUserEntity;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.ExpressionUtils;
@@ -19,7 +19,7 @@ import java.util.Objects;
 
 @Repository
 @RequiredArgsConstructor
-public class FreeBoardRepositoryCustomImpl implements FreeBoardRepositoryCustom{
+public class FreeBoardJpaRepositoryCustomImpl implements FreeBoardJpaRepositoryCustom {
     private final JPAQueryFactory queryFactory;
     QFreeBoard freeBoard = QFreeBoard.freeBoard;
     QUserEntity user = QUserEntity.userEntity;

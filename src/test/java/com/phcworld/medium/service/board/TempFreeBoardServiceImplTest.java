@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.phcworld.service.board.TempFreeBoardServiceImpl;
+import com.phcworld.freeboard.service.TempFreeBoardServiceImpl;
 import com.phcworld.user.domain.Authority;
 import com.phcworld.user.infrastructure.UserEntity;
 import org.junit.Test;
@@ -22,9 +22,9 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.phcworld.domain.answer.TempFreeBoardAnswer;
-import com.phcworld.domain.board.TempFreeBoard;
-import com.phcworld.domain.board.dto.TempFreeBoardRequest;
-import com.phcworld.domain.board.dto.TempFreeBoardResponse;
+import com.phcworld.freeboard.infrastructure.TempFreeBoard;
+import com.phcworld.freeboard.domain.dto.TempFreeBoardRequest;
+import com.phcworld.freeboard.controller.port.TempFreeBoardResponse;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest

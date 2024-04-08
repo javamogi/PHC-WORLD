@@ -4,7 +4,7 @@ import com.phcworld.api.dashboard.dto.UserResponseDto;
 import com.phcworld.domain.answer.DiaryAnswer;
 import com.phcworld.domain.answer.FreeBoardAnswer;
 import com.phcworld.domain.board.Diary;
-import com.phcworld.domain.board.FreeBoard;
+import com.phcworld.freeboard.infrastructure.FreeBoardEntity;
 import com.phcworld.domain.common.SaveType;
 import com.phcworld.domain.embedded.PostInfo;
 import com.phcworld.domain.good.Good;
@@ -16,7 +16,7 @@ import com.phcworld.service.alert.AlertServiceImpl;
 import com.phcworld.service.answer.DiaryAnswerServiceImpl;
 import com.phcworld.service.answer.FreeBoardAnswerServiceImpl;
 import com.phcworld.service.board.DiaryServiceImpl;
-import com.phcworld.service.board.FreeBoardServiceImpl;
+import com.phcworld.freeboard.service.FreeBoardServiceImpl;
 import com.phcworld.service.dashboard.DashboardService;
 import com.phcworld.service.timeline.TimelineServiceImpl;
 import com.phcworld.utils.HttpSessionUtils;
@@ -138,7 +138,7 @@ public class DashboardControllerTest {
 				.authority(Authority.ROLE_USER)
 				.createDate(LocalDateTime.now())
 				.build();
-		FreeBoard freeBoard = FreeBoard.builder()
+		FreeBoardEntity freeBoard = FreeBoardEntity.builder()
 				.id(1L)
 				.writer(user)
 				.title("title")
@@ -180,7 +180,7 @@ public class DashboardControllerTest {
 				.authority(Authority.ROLE_USER)
 				.createDate(LocalDateTime.now())
 				.build();
-		FreeBoard freeBoard = FreeBoard.builder()
+		FreeBoardEntity freeBoard = FreeBoardEntity.builder()
 				.id(1L)
 				.writer(user)
 				.title("title")

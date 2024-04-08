@@ -1,10 +1,10 @@
-package com.phcworld.repository.board;
+package com.phcworld.freeboard.infrastructure;
 
-import com.phcworld.repository.board.dto.FreeBoardSelectDto;
+import com.phcworld.freeboard.infrastructure.dto.FreeBoardSelectDto;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
-public interface FreeBoardRepositoryCustom {
+public interface FreeBoardJpaRepositoryCustom {
     List<FreeBoardSelectDto> findByKeywordOrderById(String keyword, Pageable pageable);
 }

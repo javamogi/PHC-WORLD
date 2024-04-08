@@ -1,4 +1,4 @@
-package com.phcworld.domain.board;
+package com.phcworld.freeboard.infrastructure;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -6,7 +6,7 @@ import java.util.List;
 
 import javax.persistence.*;
 
-import com.phcworld.domain.board.dto.FreeBoardRequest;
+import com.phcworld.freeboard.domain.dto.FreeBoardRequest;
 import com.phcworld.user.infrastructure.UserEntity;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
@@ -35,7 +35,7 @@ import lombok.experimental.Accessors;
 //		sequenceName = "BOARD_SEQ",
 //		initialValue = 1, allocationSize = 10000
 //)
-public class FreeBoard {
+public class FreeBoardEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

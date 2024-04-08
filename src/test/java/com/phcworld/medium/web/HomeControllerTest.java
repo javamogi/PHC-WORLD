@@ -29,7 +29,7 @@ import com.phcworld.domain.alert.Alert;
 import com.phcworld.domain.answer.DiaryAnswer;
 import com.phcworld.domain.answer.FreeBoardAnswer;
 import com.phcworld.domain.board.Diary;
-import com.phcworld.domain.board.FreeBoard;
+import com.phcworld.freeboard.infrastructure.FreeBoardEntity;
 import com.phcworld.domain.good.Good;
 import com.phcworld.service.alert.AlertServiceImpl;
 
@@ -120,7 +120,7 @@ public class HomeControllerTest {
 				.authority(Authority.ROLE_USER)
 				.createDate(LocalDateTime.now())
 				.build();
-		FreeBoard freeBoard = FreeBoard.builder()
+		FreeBoardEntity freeBoard = FreeBoardEntity.builder()
 				.id(1L)
 				.writer(user)
 				.title("title")

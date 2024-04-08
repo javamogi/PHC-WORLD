@@ -3,7 +3,7 @@ package com.phcworld.medium.repository.timeline;
 import com.phcworld.domain.answer.DiaryAnswer;
 import com.phcworld.domain.answer.FreeBoardAnswer;
 import com.phcworld.domain.board.Diary;
-import com.phcworld.domain.board.FreeBoard;
+import com.phcworld.freeboard.infrastructure.FreeBoardEntity;
 import com.phcworld.domain.embedded.PostInfo;
 import com.phcworld.domain.good.Good;
 import com.phcworld.domain.common.SaveType;
@@ -16,7 +16,7 @@ import com.phcworld.exception.model.CustomException;
 import com.phcworld.repository.answer.DiaryAnswerRepository;
 import com.phcworld.repository.answer.FreeBoardAnswerRepository;
 import com.phcworld.repository.board.DiaryRepository;
-import com.phcworld.repository.board.FreeBoardRepository;
+import com.phcworld.freeboard.infrastructure.FreeBoardJpaRepository;
 import com.phcworld.repository.good.GoodRepository;
 import org.junit.Before;
 import org.junit.Test;
@@ -54,7 +54,7 @@ public class TimelineRepositoryTest {
 	private DiaryAnswerRepository diaryAnswerRepository;
 	
 	@Autowired
-	private FreeBoardRepository freeBoardRepository;
+	private FreeBoardJpaRepository freeBoardRepository;
 	
 	@Autowired
 	private FreeBoardAnswerRepository freeBoardAnswerRepository;
@@ -65,7 +65,7 @@ public class TimelineRepositoryTest {
 	private UserEntity user;
 	private Diary diary;
 	private DiaryAnswer diaryAnswer;
-	private FreeBoard freeBoard;
+	private FreeBoardEntity freeBoard;
 	private FreeBoardAnswer freeBoardAnswer;
 
 	@Autowired

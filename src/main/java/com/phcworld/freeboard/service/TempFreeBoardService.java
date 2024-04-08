@@ -1,10 +1,10 @@
-package com.phcworld.service.board;
+package com.phcworld.freeboard.service;
 
 import java.util.List;
 
-import com.phcworld.domain.board.TempFreeBoard;
-import com.phcworld.domain.board.dto.TempFreeBoardRequest;
-import com.phcworld.domain.board.dto.TempFreeBoardResponse;
+import com.phcworld.freeboard.infrastructure.TempFreeBoard;
+import com.phcworld.freeboard.domain.dto.TempFreeBoardRequest;
+import com.phcworld.freeboard.controller.port.TempFreeBoardResponse;
 import com.phcworld.user.infrastructure.UserEntity;
 
 public interface TempFreeBoardService {

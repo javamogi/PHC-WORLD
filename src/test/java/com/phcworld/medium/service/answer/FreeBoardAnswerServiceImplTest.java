@@ -4,7 +4,7 @@ import com.phcworld.domain.answer.FreeBoardAnswer;
 import com.phcworld.domain.api.model.request.FreeBoardAnswerRequest;
 import com.phcworld.domain.api.model.response.FreeBoardAnswerApiResponse;
 import com.phcworld.domain.api.model.response.SuccessResponse;
-import com.phcworld.domain.board.FreeBoard;
+import com.phcworld.freeboard.infrastructure.FreeBoardEntity;
 import com.phcworld.service.answer.FreeBoardAnswerServiceImpl;
 import com.phcworld.user.domain.Authority;
 import com.phcworld.user.infrastructure.UserEntity;
@@ -33,7 +33,7 @@ public class FreeBoardAnswerServiceImplTest {
 	private FreeBoardAnswerServiceImpl freeBoardAnswerService;
 
 	private UserEntity writer;
-	private FreeBoard freeBoard;
+	private FreeBoardEntity freeBoard;
 
 	@Before
 	public void setup(){
@@ -47,7 +47,7 @@ public class FreeBoardAnswerServiceImplTest {
 				.createDate(LocalDateTime.now())
 				.build();
 
-		freeBoard = FreeBoard.builder()
+		freeBoard = FreeBoardEntity.builder()
 				.id(1L)
 				.writer(writer)
 				.title("title")

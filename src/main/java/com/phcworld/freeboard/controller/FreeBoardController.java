@@ -1,10 +1,10 @@
-package com.phcworld.web.board;
+package com.phcworld.freeboard.controller;
 
 import java.util.List;
 
 import javax.servlet.http.HttpSession;
 
-import com.phcworld.domain.board.dto.FreeBoardSearchDto;
+import com.phcworld.freeboard.controller.port.FreeBoardSearchDto;
 import com.phcworld.service.timeline.TimelineServiceImpl;
 import com.phcworld.user.infrastructure.UserEntity;
 import lombok.RequiredArgsConstructor;
@@ -12,9 +12,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import com.phcworld.domain.board.dto.FreeBoardRequest;
-import com.phcworld.domain.board.dto.FreeBoardResponse;
-import com.phcworld.service.board.FreeBoardService;
+import com.phcworld.freeboard.domain.dto.FreeBoardRequest;
+import com.phcworld.freeboard.controller.port.FreeBoardResponse;
+import com.phcworld.freeboard.controller.port.FreeBoardService;
 import com.phcworld.utils.HttpSessionUtils;
 
 @Controller

@@ -1,14 +1,14 @@
 package com.phcworld.medium.web.board;
 
-import com.phcworld.domain.board.FreeBoard;
-import com.phcworld.domain.board.dto.FreeBoardRequest;
-import com.phcworld.domain.board.dto.FreeBoardResponse;
+import com.phcworld.freeboard.infrastructure.FreeBoardEntity;
+import com.phcworld.freeboard.domain.dto.FreeBoardRequest;
+import com.phcworld.freeboard.controller.port.FreeBoardResponse;
 import com.phcworld.user.domain.Authority;
 import com.phcworld.user.infrastructure.UserEntity;
-import com.phcworld.service.board.FreeBoardServiceImpl;
+import com.phcworld.freeboard.service.FreeBoardServiceImpl;
 import com.phcworld.service.timeline.TimelineServiceImpl;
 import com.phcworld.utils.HttpSessionUtils;
-import com.phcworld.web.board.FreeBoardController;
+import com.phcworld.freeboard.controller.FreeBoardController;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -508,7 +508,7 @@ public class FreeBoardControllerTest {
 		mockSession.setAttribute("messages", null);
 		mockSession.setAttribute("countMessages", "");
 		mockSession.setAttribute("alerts", null);
-		FreeBoard board = FreeBoard.builder()
+		FreeBoardEntity board = FreeBoardEntity.builder()
 				.id(1L)
 				.writer(user)
 				.title("title")

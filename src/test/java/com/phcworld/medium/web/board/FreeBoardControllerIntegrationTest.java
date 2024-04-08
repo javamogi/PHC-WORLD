@@ -1,9 +1,9 @@
 package com.phcworld.medium.web.board;
 
-import com.phcworld.domain.board.dto.FreeBoardResponse;
+import com.phcworld.freeboard.controller.port.FreeBoardResponse;
 import com.phcworld.user.domain.Authority;
 import com.phcworld.user.infrastructure.UserEntity;
-import com.phcworld.service.board.FreeBoardService;
+import com.phcworld.freeboard.controller.port.FreeBoardService;
 import com.phcworld.utils.HttpSessionUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;

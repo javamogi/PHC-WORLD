@@ -1,10 +1,10 @@
 package com.phcworld.medium.service.board;
 
 import com.phcworld.domain.answer.FreeBoardAnswer;
-import com.phcworld.domain.board.FreeBoard;
-import com.phcworld.domain.board.dto.FreeBoardRequest;
-import com.phcworld.domain.board.dto.FreeBoardResponse;
-import com.phcworld.service.board.FreeBoardServiceImpl;
+import com.phcworld.freeboard.infrastructure.FreeBoardEntity;
+import com.phcworld.freeboard.domain.dto.FreeBoardRequest;
+import com.phcworld.freeboard.controller.port.FreeBoardResponse;
+import com.phcworld.freeboard.service.FreeBoardServiceImpl;
 import com.phcworld.user.domain.Authority;
 import com.phcworld.user.infrastructure.UserEntity;
 import com.phcworld.exception.model.CustomException;
@@ -49,7 +49,7 @@ public class FreeBoardServiceImplTest {
 				.contents("contents")
 				.icon("")
 				.build();
-		FreeBoard board = FreeBoard.builder()
+		FreeBoardEntity board = FreeBoardEntity.builder()
 				.id(1L)
 				.writer(user)
 				.title(request.getTitle())
@@ -81,7 +81,7 @@ public class FreeBoardServiceImplTest {
 				.contents("contents")
 				.icon("")
 				.build();
-		FreeBoard board = FreeBoard.builder()
+		FreeBoardEntity board = FreeBoardEntity.builder()
 				.id(1L)
 				.writer(user)
 				.title(request.getTitle())
@@ -117,7 +117,7 @@ public class FreeBoardServiceImplTest {
 	
 	@Test
 	public void updateFreeBoard() throws Exception {
-		FreeBoard board = FreeBoard.builder()
+		FreeBoardEntity board = FreeBoardEntity.builder()
 				.id(1L)
 				.writer(user)
 				.title("title")
@@ -155,7 +155,7 @@ public class FreeBoardServiceImplTest {
 	
 	@Test
 	public void deleteFreeBoardWhenEmptyFreeBoardAnswer() {
-		FreeBoard board = FreeBoard.builder()
+		FreeBoardEntity board = FreeBoardEntity.builder()
 				.id(1L)
 				.writer(user)
 				.title("title")
@@ -170,7 +170,7 @@ public class FreeBoardServiceImplTest {
 	
 	@Test
 	public void deleteFreeBoard() {
-		FreeBoard board = FreeBoard.builder()
+		FreeBoardEntity board = FreeBoardEntity.builder()
 				.id(1L)
 				.writer(user)
 				.title("title")
@@ -193,7 +193,7 @@ public class FreeBoardServiceImplTest {
 	
 	@Test
 	public void addFreeBoardCount() throws Exception {
-		FreeBoard board = FreeBoard.builder()
+		FreeBoardEntity board = FreeBoardEntity.builder()
 				.id(1L)
 				.writer(user)
 				.title("title")
@@ -222,7 +222,7 @@ public class FreeBoardServiceImplTest {
 	
 	@Test
 	public void findFreeBoardListByWriter() throws Exception {
-		FreeBoard board = FreeBoard.builder()
+		FreeBoardEntity board = FreeBoardEntity.builder()
 				.id(1L)
 				.writer(user)
 				.title("title")
@@ -231,7 +231,7 @@ public class FreeBoardServiceImplTest {
 				.badge("new")
 				.count(0)
 				.build();
-		FreeBoard board2 = FreeBoard.builder()
+		FreeBoardEntity board2 = FreeBoardEntity.builder()
 				.id(2L)
 				.writer(user)
 				.title("title2")
@@ -240,12 +240,12 @@ public class FreeBoardServiceImplTest {
 				.badge("new")
 				.count(0)
 				.build();
-		List<FreeBoard> freeBoardList = new ArrayList<FreeBoard>();
+		List<FreeBoardEntity> freeBoardList = new ArrayList<FreeBoardEntity>();
 		freeBoardList.add(board);
 		freeBoardList.add(board2);
 		
 		when(freeBoardService.findFreeBoardListByWriter(user)).thenReturn(freeBoardList);
-		List<FreeBoard> findFreeBoardList = freeBoardService.findFreeBoardListByWriter(user);
+		List<FreeBoardEntity> findFreeBoardList = freeBoardService.findFreeBoardListByWriter(user);
 		assertThat(findFreeBoardList)
 				.contains(board)
 				.contains(board2);

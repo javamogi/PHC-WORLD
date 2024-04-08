@@ -2,12 +2,12 @@ package com.phcworld.medium.repository.answer;
 
 
 import com.phcworld.domain.answer.FreeBoardAnswer;
-import com.phcworld.domain.board.FreeBoard;
+import com.phcworld.freeboard.infrastructure.FreeBoardEntity;
 import com.phcworld.medium.util.FreeBoardFactory;
 import com.phcworld.repository.answer.FreeBoardAnswerRepository;
 import com.phcworld.user.infrastructure.UserEntity;
 import com.phcworld.exception.model.NotFoundException;
-import com.phcworld.repository.board.FreeBoardRepository;
+import com.phcworld.freeboard.infrastructure.FreeBoardJpaRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Before;
 import org.junit.Test;
@@ -31,13 +31,13 @@ import static org.junit.Assert.assertNotNull;
 public class FreeBoardAnswerRepositoryTest {
 
 	@Autowired
-	private FreeBoardRepository freeBoardRepository;
+	private FreeBoardJpaRepository freeBoardRepository;
 
 	@Autowired
 	private FreeBoardAnswerRepository freeBoardAnswerRepository;
 
 	private UserEntity user;
-	private FreeBoard freeBoard;
+	private FreeBoardEntity freeBoard;
 
 	@Before
 	public void setup(){

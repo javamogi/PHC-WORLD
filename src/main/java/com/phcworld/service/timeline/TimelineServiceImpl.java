@@ -3,7 +3,7 @@ package com.phcworld.service.timeline;
 import com.phcworld.domain.answer.DiaryAnswer;
 import com.phcworld.domain.answer.FreeBoardAnswer;
 import com.phcworld.domain.board.Diary;
-import com.phcworld.domain.board.FreeBoard;
+import com.phcworld.freeboard.infrastructure.FreeBoardEntity;
 import com.phcworld.domain.common.SaveType;
 import com.phcworld.domain.embedded.PostInfo;
 import com.phcworld.domain.good.Good;
@@ -80,7 +80,7 @@ public class TimelineServiceImpl implements TimelineService {
 		return timelineRepository.save(diaryAnswerTimeline);
 	}
 
-	public Timeline createTimeline(FreeBoard freeBoard) {
+	public Timeline createTimeline(FreeBoardEntity freeBoard) {
 		PostInfo postInfo = PostInfo.builder()
 				.saveType(SaveType.FREE_BOARD)
 				.postId(freeBoard.getId())

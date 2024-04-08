@@ -1,7 +1,7 @@
 package com.phcworld.medium.util;
 
 import com.phcworld.domain.answer.FreeBoardAnswer;
-import com.phcworld.domain.board.FreeBoard;
+import com.phcworld.freeboard.infrastructure.FreeBoardEntity;
 import com.phcworld.user.infrastructure.UserEntity;
 import org.jeasy.random.EasyRandom;
 import org.jeasy.random.EasyRandomParameters;
@@ -25,14 +25,14 @@ public class FreeBoardFactory {
                 .build();
         Predicate<Field> idPredicate = named("id")
                 .and(ofType(Long.class))
-                .and(inClass(FreeBoard.class));
+                .and(inClass(FreeBoardEntity.class));
 
         Predicate<Field> writerIdPredicate = named("writer")
                 .and(ofType(UserEntity.class))
-                .and(inClass(FreeBoard.class));
+                .and(inClass(FreeBoardEntity.class));
         Predicate<Field> countPredicate = named("count")
                 .and(ofType(Integer.class))
-                .and(inClass(FreeBoard.class));
+                .and(inClass(FreeBoardEntity.class));
 
         LocalDate firstDate = LocalDate.of(2010, 1, 1);
         LocalDate lastDate = LocalDate.now().minusDays(1);
@@ -46,8 +46,8 @@ public class FreeBoardFactory {
         return new EasyRandom(param);
     }
 
-    public static FreeBoard getFreeBoardEntity(UserEntity user){
-        return FreeBoard.builder()
+    public static FreeBoardEntity getFreeBoardEntity(UserEntity user){
+        return FreeBoardEntity.builder()
                 .writer(user)
                 .title("test")
                 .contents("test")
@@ -57,7 +57,7 @@ public class FreeBoardFactory {
                 .build();
     }
 
-    public static FreeBoardAnswer getFreeBoardAnswerEntity(UserEntity user, FreeBoard freeBoard){
+    public static FreeBoardAnswer getFreeBoardAnswerEntity(UserEntity user, FreeBoardEntity freeBoard){
         return FreeBoardAnswer.builder()
                 .writer(user)
                 .freeBoard(freeBoard)
