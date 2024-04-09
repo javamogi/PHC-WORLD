@@ -6,7 +6,10 @@ import java.util.List;
 
 import javax.persistence.*;
 
+import com.phcworld.common.infrastructure.LocalDateTimeHolder;
+import com.phcworld.freeboard.domain.FreeBoard;
 import com.phcworld.freeboard.domain.dto.FreeBoardRequest;
+import com.phcworld.user.domain.User;
 import com.phcworld.user.infrastructure.UserEntity;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
@@ -53,10 +56,6 @@ public class FreeBoardEntity {
 //	@Column(nullable = true, columnDefinition = "TEXT")
 	private String contents;
 
-	private String icon;
-
-	private String badge;
-
 	@CreatedDate
 	private LocalDateTime createDate;
 	
@@ -70,7 +69,31 @@ public class FreeBoardEntity {
 	@JsonBackReference
 	private List<FreeBoardAnswer> freeBoardAnswers;
 
-	public String getCountOfAnswer() {
+	public static FreeBoardEntity from(FreeBoard freeBoard) {
+		return FreeBoardEntity.builder()
+				.id(freeBoard.getId())
+				.writer(UserEntity.from(freeBoard.getWriter()))
+				.title(freeBoard.getTitle())
+				.contents(freeBoard.getContents())
+				.count(freeBoard.getCount())
+				.createDate(freeBoard.getCreateDate())
+				.updateDate(freeBoard.getUpdateDate())
+				.build();
+	}
+
+	public FreeBoard toModel() {
+		return FreeBoard.builder()
+				.id(id)
+				.title(title)
+				.contents(contents)
+				.count(count)
+				.createDate(createDate)
+				.updateDate(updateDate)
+				.writer(writer.toModel())
+				.build();
+	}
+
+    public String getCountOfAnswer() {
 		if (this.freeBoardAnswers == null|| this.freeBoardAnswers.size() == 0) {
 			return "";
 		}
@@ -84,14 +107,13 @@ public class FreeBoardEntity {
 	public String getFormattedCreateDate() {
 		return LocalDateTimeUtils.getTime(createDate);
 	}
-	
+
 	public String getFormattedUpdateDate() {
 		return LocalDateTimeUtils.getTime(updateDate);
 	}
 
 	public void update(FreeBoardRequest request) {
 		this.contents = request.getContents();
-		this.icon = request.getIcon();
 	}
 
 	public boolean matchUser(UserEntity loginUser) {
@@ -101,18 +123,4 @@ public class FreeBoardEntity {
 		return this.writer.equals(loginUser);
 	}
 
-	public String getBadge(){
-		final int HOUR_OF_DAY = 24;
-		final int MINUTES_OF_HOUR = 60;
-
-		long createdDateAndNowDifferenceMinutes =
-				Duration.between(createDate == null ? LocalDateTime.now() : createDate, LocalDateTime.now()).toMinutes();
-		if (createdDateAndNowDifferenceMinutes / MINUTES_OF_HOUR < HOUR_OF_DAY) {
-			badge = "New";
-		} else {
-			badge = "";
-		}
-		return badge;
-	}
-	
 }

@@ -60,7 +60,6 @@ public class FreeBoardServiceImpl implements FreeBoardService {
 				.writer(user)
 				.title(request.getTitle())
 				.contents(request.getContents())
-				.icon(request.getIcon())
 				.count(0)
 				.build();
 		FreeBoardEntity createdFreeBoard = freeBoardRepository.save(freeBoard);

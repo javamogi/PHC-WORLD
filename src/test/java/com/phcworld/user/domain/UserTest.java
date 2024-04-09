@@ -13,7 +13,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class UserTest {
 
     @Test
-    public void UserRequest로_회원가입을_할_수_있다(){
+    public void UserRequest로_회원을_만들_수_있다(){
         // given
         UserRequest request = UserRequest.builder()
                 .email("test@test.test")

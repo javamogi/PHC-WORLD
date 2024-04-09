@@ -40,25 +40,25 @@ public class FreeBoardController {
 		return "board/freeboard/freeboard";
 	}
 
-	@GetMapping("/form")
-	public String form(HttpSession session) {
-		if (!HttpSessionUtils.isLoginUser(session)) {
-			return "user/login";
-		}
-		return "board/freeboard/freeboard_form";
-	}
-
-	@PostMapping("")
-	public String create(FreeBoardRequest request, HttpSession session) {
-		if (!HttpSessionUtils.isLoginUser(session)) {
-			return "user/login";
-		}
-		UserEntity sessionUser = HttpSessionUtils.getUserEntityFromSession(session);
-		
-		FreeBoardResponse response = freeBoardService.createFreeBoard(sessionUser, request);
-
-		return "redirect:/freeboards/"+ response.getId();
-	}
+//	@GetMapping("/form")
+//	public String form(HttpSession session) {
+//		if (!HttpSessionUtils.isLoginUser(session)) {
+//			return "user/login";
+//		}
+//		return "board/freeboard/freeboard_form";
+//	}
+//
+//	@PostMapping("")
+//	public String create(FreeBoardRequest request, HttpSession session) {
+//		if (!HttpSessionUtils.isLoginUser(session)) {
+//			return "user/login";
+//		}
+//		UserEntity sessionUser = HttpSessionUtils.getUserEntityFromSession(session);
+//
+//		FreeBoardResponse response = freeBoardService.createFreeBoard(sessionUser, request);
+//
+//		return "redirect:/freeboards/"+ response.getId();
+//	}
 
 	@GetMapping("/{id}")
 	public String read(@PathVariable Long id, HttpSession session, Model model) {
