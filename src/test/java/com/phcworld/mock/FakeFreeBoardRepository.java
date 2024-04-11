@@ -31,4 +31,9 @@ public class FakeFreeBoardRepository implements FreeBoardRepository {
             return freeBoard;
         }
     }
+
+    @Override
+    public List<FreeBoard> findAll() {
+        return data;
+    }
 }

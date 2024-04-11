@@ -10,6 +10,8 @@ import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 @Builder
@@ -22,5 +24,10 @@ public class NewFreeBoardServiceImpl implements NewFreeBoardService {
     public FreeBoard register(FreeBoardRequest request, User user) {
         FreeBoard freeBoard = FreeBoard.from(request, user, localDateTimeHolder);
         return freeBoardRepository.save(freeBoard);
+    }
+
+    @Override
+    public List<FreeBoard> findAllList() {
+        return freeBoardRepository.findAll();
     }
 }

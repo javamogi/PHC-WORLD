@@ -1,5 +1,6 @@
 package com.phcworld.freeboard.controller;
 
+import com.phcworld.freeboard.controller.port.FreeBoardResponse;
 import com.phcworld.freeboard.controller.port.NewFreeBoardService;
 import com.phcworld.freeboard.domain.FreeBoard;
 import com.phcworld.freeboard.domain.dto.FreeBoardRequest;
@@ -8,11 +9,14 @@ import com.phcworld.utils.HttpSessionUtils;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpSession;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/freeboards")
@@ -40,6 +44,16 @@ public class NewFreeBoardController {
 		FreeBoard freeBoard = freeBoardService.register(request, sessionUser.toModel());
 
 		return "redirect:/freeboards/"+ freeBoard.getId();
+	}
+
+	@GetMapping("")
+	public String getAllList(Model model) {
+		List<FreeBoardResponse> list = freeBoardService.findAllList()
+				.stream()
+				.map(FreeBoardResponse::of)
+				.collect(Collectors.toList());
+		model.addAttribute("freeboards", list);
+		return "board/freeboard/freeboard";
 	}
 
 }

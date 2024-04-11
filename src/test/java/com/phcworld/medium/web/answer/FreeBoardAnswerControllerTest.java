@@ -69,7 +69,6 @@ public class FreeBoardAnswerControllerTest {
 				.id(1L)
 				.title("title")
 				.contents("content")
-				.icon("")
 				.createDate(LocalDateTime.now())
 				.count(0)
 				.build();

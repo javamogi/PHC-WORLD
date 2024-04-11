@@ -64,7 +64,6 @@ public class FreeBoardJpaRepositoryTest {
 				.writer(user)
 				.title("title")
 				.contents("content")
-				.icon("")
 				.count(0)
 				.build();
 		FreeBoardEntity newFreeBoard =  freeBoardRepository.save(freeBoard);
@@ -132,7 +131,6 @@ public class FreeBoardJpaRepositoryTest {
 				.writer(user)
 				.title("title")
 				.contents("content")
-				.icon("")
 				.count(0)
 				.build();
 		freeBoardRepository.save(freeBoard);
@@ -166,7 +164,6 @@ public class FreeBoardJpaRepositoryTest {
 				.writer(user)
 				.title("title")
 				.contents("content")
-				.icon("")
 				.count(0)
 				.build();
 		FreeBoardRequest request = FreeBoardRequest.builder()
@@ -189,7 +186,6 @@ public class FreeBoardJpaRepositoryTest {
 				.writer(user)
 				.title("title")
 				.contents("content")
-				.icon("")
 				.count(0)
 				.build();
 		FreeBoardEntity newBoard = freeBoardRepository.save(freeBoard);

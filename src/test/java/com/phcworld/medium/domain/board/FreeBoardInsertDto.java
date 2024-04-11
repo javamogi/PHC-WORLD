@@ -23,8 +23,6 @@ public class FreeBoardInsertDto {
                 .writerId(freeBoard.getWriter().getId())
                 .title(freeBoard.getTitle())
                 .contents(freeBoard.getContents())
-                .icon(freeBoard.getIcon())
-                .badge(freeBoard.getBadge())
                 .count(freeBoard.getCount())
                 .createDate(freeBoard.getCreateDate())
                 .updateDate(freeBoard.getUpdateDate())

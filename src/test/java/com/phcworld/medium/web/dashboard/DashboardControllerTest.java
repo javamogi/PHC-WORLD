@@ -143,7 +143,6 @@ public class DashboardControllerTest {
 				.writer(user)
 				.title("title")
 				.contents("content")
-				.icon("")
 				.createDate(LocalDateTime.now())
 				.count(0)
 				.build();
@@ -185,7 +184,6 @@ public class DashboardControllerTest {
 				.writer(user)
 				.title("title")
 				.contents("content")
-				.icon("")
 				.createDate(LocalDateTime.now())
 				.count(0)
 				.build();

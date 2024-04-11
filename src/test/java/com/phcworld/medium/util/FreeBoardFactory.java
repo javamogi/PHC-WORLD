@@ -52,7 +52,6 @@ public class FreeBoardFactory {
                 .title("test")
                 .contents("test")
                 .count(0)
-                .badge("")
                 .createDate(LocalDateTime.now())
                 .build();
     }

@@ -12,6 +12,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.*;
@@ -83,5 +84,15 @@ public class FreeBoardServiceTest {
         assertThat(freeBoard.getWriter()).isEqualTo(user);
         assertThat(freeBoard.getCreateDate()).isEqualTo(localDateTime);
         assertThat(freeBoard.getUpdateDate()).isEqualTo(localDateTime);
+    }
+
+    @Test
+    public void 등록된_게시글_전체_데이터를_가져올_수_있다(){
+        // given
+        // when
+        List<FreeBoard> list = freeBoardService.findAllList();
+
+        // then
+        assertThat(list).hasSize(1);
     }
 }

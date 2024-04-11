@@ -25,13 +25,13 @@ public class FreeBoardController {
 	private final FreeBoardService freeBoardService;
 	private final TimelineServiceImpl timelineService;
 	
-	@GetMapping("")
-	public String getFreeBoardAllList(Model model) {
-		List<FreeBoardResponse> list = freeBoardService.findFreeBoardAllListAndSetNewBadge();
-//		List<FreeBoardResponse> list = freeBoardService.getByQuerydsl(pageNum, pageSize, keyword);
-		model.addAttribute("freeboards", list);
-		return "board/freeboard/freeboard";
-	}
+//	@GetMapping("")
+//	public String getFreeBoardAllList(Model model) {
+//		List<FreeBoardResponse> list = freeBoardService.findFreeBoardAllListAndSetNewBadge();
+////		List<FreeBoardResponse> list = freeBoardService.getByQuerydsl(pageNum, pageSize, keyword);
+//		model.addAttribute("freeboards", list);
+//		return "board/freeboard/freeboard";
+//	}
 
 	@GetMapping("/temp/test")
 	public String getSearchResult(FreeBoardSearchDto search, Model model) {

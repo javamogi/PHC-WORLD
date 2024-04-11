@@ -52,7 +52,6 @@ public class FreeBoardAnswerServiceImplTest {
 				.writer(writer)
 				.title("title")
 				.contents("content")
-				.icon("")
 				.createDate(LocalDateTime.now())
 				.count(0)
 				.build();

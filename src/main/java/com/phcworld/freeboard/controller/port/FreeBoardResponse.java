@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import com.phcworld.domain.api.model.response.FreeBoardAnswerApiResponse;
+import com.phcworld.freeboard.domain.FreeBoard;
 import com.phcworld.freeboard.infrastructure.FreeBoardEntity;
 import com.phcworld.user.infrastructure.UserEntity;
 
@@ -60,6 +61,20 @@ public class FreeBoardResponse {
 				.createDate(freeBoard.getFormattedCreateDate())
 				.count(freeBoard.getCount())
 				.countOfAnswer(freeBoard.getCountOfAnswer().toString())
+				.build();
+	}
+
+	public static FreeBoardResponse of(FreeBoard freeBoard){
+		String badge = getBadge(freeBoard.getCreateDate());
+		return FreeBoardResponse.builder()
+				.id(freeBoard.getId())
+				.writer(UserEntity.from(freeBoard.getWriter()))
+				.title(freeBoard.getTitle())
+				.contents(freeBoard.getContents())
+				.badge(badge)
+				.createDate(freeBoard.getFormattedCreateDate())
+				.count(freeBoard.getCount())
+				.countOfAnswer(freeBoard.getCountOfAnswer())
 				.build();
 	}
 

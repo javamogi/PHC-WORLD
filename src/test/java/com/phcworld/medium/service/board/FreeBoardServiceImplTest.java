@@ -54,8 +54,6 @@ public class FreeBoardServiceImplTest {
 				.writer(user)
 				.title(request.getTitle())
 				.contents(request.getContents())
-				.icon(request.getIcon())
-				.badge("new")
 				.count(0)
 				.createDate(LocalDateTime.now())
 				.build();
@@ -64,8 +62,6 @@ public class FreeBoardServiceImplTest {
 				.writer(user)
 				.title(board.getTitle())
 				.contents(board.getContents())
-				.icon(board.getIcon())
-				.badge(board.getBadge())
 				.count(board.getCount())
 				.build();
 		when(freeBoardService.createFreeBoard(user, request)).thenReturn(response);
@@ -86,8 +82,6 @@ public class FreeBoardServiceImplTest {
 				.writer(user)
 				.title(request.getTitle())
 				.contents(request.getContents())
-				.icon(request.getIcon())
-				.badge("new")
 				.count(0)
 				.createDate(LocalDateTime.now())
 				.build();
@@ -96,8 +90,6 @@ public class FreeBoardServiceImplTest {
 				.writer(user)
 				.title(board.getTitle())
 				.contents(board.getContents())
-				.icon(board.getIcon())
-				.badge(board.getBadge())
 				.count(board.getCount())
 				.build();
 		when(freeBoardService.createFreeBoard(user, request)).thenReturn(response);
@@ -122,8 +114,6 @@ public class FreeBoardServiceImplTest {
 				.writer(user)
 				.title("title")
 				.contents("content")
-				.icon("")
-				.badge("new")
 				.count(0)
 				.createDate(LocalDateTime.now())
 				.build();
@@ -140,8 +130,6 @@ public class FreeBoardServiceImplTest {
 				.writer(board.getWriter())
 				.title(board.getTitle())
 				.contents(board.getContents())
-				.icon(board.getIcon())
-				.badge(board.getBadge())
 				.count(board.getCount())
 				.countOfAnswer(board.getCountOfAnswer())
 				.createDate(board.getFormattedCreateDate())
@@ -160,8 +148,6 @@ public class FreeBoardServiceImplTest {
 				.writer(user)
 				.title("title")
 				.contents("content")
-				.icon("")
-				.badge("new")
 				.count(0)
 				.build();
 		freeBoardService.deleteFreeBoard(board.getId());
@@ -175,8 +161,6 @@ public class FreeBoardServiceImplTest {
 				.writer(user)
 				.title("title")
 				.contents("content")
-				.icon("")
-				.badge("new")
 				.count(0)
 				.build();
 		FreeBoardAnswer answer = FreeBoardAnswer.builder()
@@ -198,8 +182,6 @@ public class FreeBoardServiceImplTest {
 				.writer(user)
 				.title("title")
 				.contents("content")
-				.icon("")
-				.badge("new")
 				.count(0)
 				.createDate(LocalDateTime.now())
 				.build();
@@ -209,8 +191,6 @@ public class FreeBoardServiceImplTest {
 				.writer(board.getWriter())
 				.title(board.getTitle())
 				.contents(board.getContents())
-				.icon(board.getIcon())
-				.badge(board.getBadge())
 				.count(board.getCount())
 				.countOfAnswer(board.getCountOfAnswer())
 				.createDate(board.getFormattedCreateDate())
@@ -227,8 +207,6 @@ public class FreeBoardServiceImplTest {
 				.writer(user)
 				.title("title")
 				.contents("content")
-				.icon("")
-				.badge("new")
 				.count(0)
 				.build();
 		FreeBoardEntity board2 = FreeBoardEntity.builder()
@@ -236,8 +214,6 @@ public class FreeBoardServiceImplTest {
 				.writer(user)
 				.title("title2")
 				.contents("content2")
-				.icon("")
-				.badge("new")
 				.count(0)
 				.build();
 		List<FreeBoardEntity> freeBoardList = new ArrayList<FreeBoardEntity>();
@@ -266,7 +242,6 @@ public class FreeBoardServiceImplTest {
 				.writer(user)
 				.title("title")
 				.contents("content")
-				.icon("")
 				.badge("new")
 				.count(0)
 				.build();
@@ -275,7 +250,6 @@ public class FreeBoardServiceImplTest {
 				.writer(user2)
 				.title("title2")
 				.contents("content2")
-				.icon("")
 				.badge("new")
 				.count(0)
 				.build();
