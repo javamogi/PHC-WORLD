@@ -3,6 +3,7 @@ package com.phcworld.freeboard.domain;
 import com.phcworld.common.infrastructure.LocalDateTimeHolder;
 import com.phcworld.domain.answer.FreeBoardAnswer;
 import com.phcworld.freeboard.domain.dto.FreeBoardRequest;
+import com.phcworld.freeboard.domain.dto.FreeBoardUpdateRequest;
 import com.phcworld.freeboard.infrastructure.FreeBoardEntity;
 import com.phcworld.user.domain.User;
 import com.phcworld.user.infrastructure.UserEntity;
@@ -43,18 +44,6 @@ public class FreeBoard {
                 .build();
     }
 
-    public static FreeBoard from(FreeBoardEntity freeBoard) {
-        return FreeBoard.builder()
-                .id(freeBoard.getId())
-                .title(freeBoard.getTitle())
-                .contents(freeBoard.getContents())
-                .writer(freeBoard.getWriter().toModel())
-                .count(freeBoard.getCount())
-                .createDate(freeBoard.getCreateDate())
-                .updateDate(freeBoard.getUpdateDate())
-                .build();
-    }
-
     public String getFormattedCreateDate() {
         return LocalDateTimeUtils.getTime(createDate);
     }
@@ -81,4 +70,5 @@ public class FreeBoard {
     public boolean matchWriter(UserEntity loginUser) {
         return writer.getId().equals(loginUser.getId()) && writer.getAuthority() == loginUser.getAuthority();
     }
+
 }
