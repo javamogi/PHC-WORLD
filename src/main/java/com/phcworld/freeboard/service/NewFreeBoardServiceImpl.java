@@ -30,4 +30,11 @@ public class NewFreeBoardServiceImpl implements NewFreeBoardService {
     public List<FreeBoard> findAllList() {
         return freeBoardRepository.findAll();
     }
+
+    @Override
+    public FreeBoard addReadCount(Long freeBoardId) {
+        FreeBoard freeBoard = freeBoardRepository.findById(freeBoardId);
+        freeBoard = freeBoard.addCount();
+        return freeBoardRepository.save(freeBoard);
+    }
 }

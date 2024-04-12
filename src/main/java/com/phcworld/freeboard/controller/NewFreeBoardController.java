@@ -1,6 +1,7 @@
 package com.phcworld.freeboard.controller;
 
 import com.phcworld.freeboard.controller.port.FreeBoardResponse;
+import com.phcworld.freeboard.controller.port.FreeBoardResponseWithAuthority;
 import com.phcworld.freeboard.controller.port.NewFreeBoardService;
 import com.phcworld.freeboard.domain.FreeBoard;
 import com.phcworld.freeboard.domain.dto.FreeBoardRequest;
@@ -11,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -54,6 +56,17 @@ public class NewFreeBoardController {
 				.collect(Collectors.toList());
 		model.addAttribute("freeboards", list);
 		return "board/freeboard/freeboard";
+	}
+
+	@GetMapping("/{id}")
+	public String read(@PathVariable Long id, HttpSession session, Model model) {
+		UserEntity loginUser = HttpSessionUtils.getUserEntityFromSession(session);
+
+		FreeBoardResponseWithAuthority freeBoard =
+				FreeBoardResponseWithAuthority.from(freeBoardService.addReadCount(id), loginUser);
+
+		model.addAttribute("freeBoard", freeBoard);
+		return "board/freeboard/detail_freeboard";
 	}
 
 }

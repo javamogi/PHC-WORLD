@@ -10,4 +10,6 @@ public interface NewFreeBoardService {
     FreeBoard register(FreeBoardRequest request, User user);
 
     List<FreeBoard> findAllList();
+
+    FreeBoard addReadCount(Long freeBoardId);
 }

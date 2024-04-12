@@ -1,5 +1,7 @@
 package com.phcworld.mock;
 
+import com.phcworld.exception.model.FreeBoardNotFoundException;
+import com.phcworld.exception.model.NotFoundException;
 import com.phcworld.freeboard.domain.FreeBoard;
 import com.phcworld.freeboard.service.port.FreeBoardRepository;
 
@@ -35,5 +37,13 @@ public class FakeFreeBoardRepository implements FreeBoardRepository {
     @Override
     public List<FreeBoard> findAll() {
         return data;
+    }
+
+    @Override
+    public FreeBoard findById(Long freeBoardId) {
+        return data.stream()
+                .filter(f -> f.getId().equals(freeBoardId))
+                .findAny()
+                .orElseThrow(FreeBoardNotFoundException::new);
     }
 }

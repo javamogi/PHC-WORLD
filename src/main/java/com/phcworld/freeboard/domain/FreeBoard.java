@@ -66,4 +66,19 @@ public class FreeBoard {
         return "[" + freeBoardAnswers.size() + "]";
     }
 
+    public FreeBoard addCount() {
+        return FreeBoard.builder()
+                .id(id)
+                .title(title)
+                .contents(contents)
+                .writer(writer)
+                .count(count + 1)
+                .createDate(createDate)
+                .updateDate(updateDate)
+                .build();
+    }
+
+    public boolean matchWriter(UserEntity loginUser) {
+        return writer.getId().equals(loginUser.getId()) && writer.getAuthority() == loginUser.getAuthority();
+    }
 }

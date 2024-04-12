@@ -1,5 +1,6 @@
 package com.phcworld.freeboard.infrastructure;
 
+import com.phcworld.exception.model.NotFoundException;
 import com.phcworld.freeboard.domain.FreeBoard;
 import com.phcworld.freeboard.service.port.FreeBoardRepository;
 import lombok.RequiredArgsConstructor;
@@ -25,5 +26,12 @@ public class FreeBoardRepositoryImpl implements FreeBoardRepository {
                 .stream()
                 .map(FreeBoard::from)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public FreeBoard findById(Long freeBoardId) {
+        return freeBoardJpaRepository.findById(freeBoardId)
+                .map(FreeBoardEntity::toModel)
+                .orElseThrow(NotFoundException::new);
     }
 }

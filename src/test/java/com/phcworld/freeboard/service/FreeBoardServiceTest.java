@@ -1,5 +1,6 @@
 package com.phcworld.freeboard.service;
 
+import com.phcworld.exception.model.FreeBoardNotFoundException;
 import com.phcworld.freeboard.domain.FreeBoard;
 import com.phcworld.freeboard.domain.dto.FreeBoardRequest;
 import com.phcworld.mock.*;
@@ -84,6 +85,7 @@ public class FreeBoardServiceTest {
         assertThat(freeBoard.getWriter()).isEqualTo(user);
         assertThat(freeBoard.getCreateDate()).isEqualTo(localDateTime);
         assertThat(freeBoard.getUpdateDate()).isEqualTo(localDateTime);
+        assertThat(freeBoard.getCount()).isEqualTo(0);
     }
 
     @Test
@@ -94,5 +96,35 @@ public class FreeBoardServiceTest {
 
         // then
         assertThat(list).hasSize(1);
+    }
+
+    @Test
+    public void 게시글을_조회하면_조회수가_1_오른_FreeBoard를_얻는다(){
+        // given
+        LocalDateTime localDateTime = LocalDateTime.of(2024, 4, 9, 12, 0);
+        long id = 1;
+
+        // when
+        FreeBoard freeBoard = freeBoardService.addReadCount(id);
+
+        // then
+        assertThat(freeBoard).isNotNull();
+        assertThat(freeBoard.getId()).isNotNull();
+        assertThat(freeBoard.getTitle()).isEqualTo("제목");
+        assertThat(freeBoard.getContents()).isEqualTo("내용");
+        assertThat(freeBoard.getWriter().getEmail()).isEqualTo("test@test.test");
+        assertThat(freeBoard.getCreateDate()).isEqualTo(localDateTime);
+        assertThat(freeBoard.getUpdateDate()).isEqualTo(localDateTime);
+        assertThat(freeBoard.getCount()).isEqualTo(1);
+    }
+
+    @Test(expected = FreeBoardNotFoundException.class)
+    public void 조회할_게시글이_없는_경우_예외를_던진다(){
+        // given
+        long id = 99;
+
+        // when
+        // then
+        FreeBoard freeBoard = freeBoardService.addReadCount(id);
     }
 }

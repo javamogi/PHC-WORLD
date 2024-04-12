@@ -90,7 +90,7 @@
  						</article>
  						</div>
  						
- 						{{#user}}
+ 						{{#existLoginUser}}
  						<!-- answer ajax를 이용하여 댓글 추가하기 댓글 나오는 폼 만들기-->
    						<div class="col-lg-12 col-md-12">
  							<form class="write-answer" id="form-group" action="/freeboards/{{id}}/answers" method="post">
@@ -107,30 +107,30 @@
 							</form>
   						</div>
                		<!-- /.answer -->
-               		{{/user}}
-               		{{^user}}
+               		{{/existLoginUser}}
+               		{{^existLoginUser}}
                		<div class="col-lg-12 col-md-12">
  							<div class="bg-info">
  								<a href="/users/loginForm">로그인</a>을 해야 댓글을 작성할 수 있습니다.
   							</div>
  					</div>
- 					{{/user}}
+ 					{{/existLoginUser}}
  					<div class="col-lg-12 col-md-12"><br></div>
  					<div class="col-lg-12 col-md-12">
 	 					<a class="btn btn-primary" href="/freeboards" role="button">목록</a>
-	 					{{#matchUser}}
+	 					{{#equalWriter}}
    						<a class="btn btn-info" href="/freeboards/{{id}}/form" role="button">수정</a>
+<!--   						<form class="form-delete" action="/freeboards/{{id}}" method="POST" style="display:inline;">-->
+<!--   							<input type="hidden" name="_method" value="DELETE">-->
+<!--   							<button class="btn btn-danger" type="submit">삭제</button>-->
+<!--   						</form>-->
+   						{{/equalWriter}}
+	 					{{#isDeleteAuthority}}
    						<form class="form-delete" action="/freeboards/{{id}}" method="POST" style="display:inline;">
    							<input type="hidden" name="_method" value="DELETE">
    							<button class="btn btn-danger" type="submit">삭제</button>
    						</form>
-   						{{/matchUser}}
-	 					{{#matchAuthority}}
-   						<form class="form-delete" action="/freeboards/{{id}}" method="POST" style="display:inline;">
-   							<input type="hidden" name="_method" value="DELETE">
-   							<button class="btn btn-danger" type="submit">삭제</button>
-   						</form>
-   						{{/matchAuthority}}
+   						{{/isDeleteAuthority}}
  					</div>
                 </div>
                 <!-- /.row -->

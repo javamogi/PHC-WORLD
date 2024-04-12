@@ -25,68 +25,11 @@ public class FreeBoardController {
 	private final FreeBoardService freeBoardService;
 	private final TimelineServiceImpl timelineService;
 	
-//	@GetMapping("")
-//	public String getFreeBoardAllList(Model model) {
-//		List<FreeBoardResponse> list = freeBoardService.findFreeBoardAllListAndSetNewBadge();
-////		List<FreeBoardResponse> list = freeBoardService.getByQuerydsl(pageNum, pageSize, keyword);
-//		model.addAttribute("freeboards", list);
-//		return "board/freeboard/freeboard";
-//	}
-
 	@GetMapping("/temp/test")
 	public String getSearchResult(FreeBoardSearchDto search, Model model) {
 		List<FreeBoardResponse> list = freeBoardService.getSearchResult(search);
 		model.addAttribute("freeboards", list);
 		return "board/freeboard/freeboard";
-	}
-
-//	@GetMapping("/form")
-//	public String form(HttpSession session) {
-//		if (!HttpSessionUtils.isLoginUser(session)) {
-//			return "user/login";
-//		}
-//		return "board/freeboard/freeboard_form";
-//	}
-//
-//	@PostMapping("")
-//	public String create(FreeBoardRequest request, HttpSession session) {
-//		if (!HttpSessionUtils.isLoginUser(session)) {
-//			return "user/login";
-//		}
-//		UserEntity sessionUser = HttpSessionUtils.getUserEntityFromSession(session);
-//
-//		FreeBoardResponse response = freeBoardService.createFreeBoard(sessionUser, request);
-//
-//		return "redirect:/freeboards/"+ response.getId();
-//	}
-
-	@GetMapping("/{id}")
-	public String read(@PathVariable Long id, HttpSession session, Model model) {
-		boolean isLoginUser = false;
-		boolean matchLoginUserAndWriter = false;
-		boolean matchAuthority = false;
-		UserEntity loginUser = HttpSessionUtils.getUserEntityFromSession(session);
-
-		FreeBoardResponse freeBoard = freeBoardService.addFreeBoardCount(id);
-
-		// checkAdminAndWiter
-		if (loginUser != null) {
-			isLoginUser = true;
-			if (freeBoard != null) {
-				if (freeBoard.matchUser(loginUser)) {
-					matchLoginUserAndWriter = true;
-				}
-			}
-			if (!matchLoginUserAndWriter && loginUser.matchAdminAuthority()) {
-				matchAuthority = true;
-			}
-		}
-		
-		model.addAttribute("freeBoard", freeBoard);
-		model.addAttribute("user", isLoginUser);
-		model.addAttribute("matchUser", matchLoginUserAndWriter);
-		model.addAttribute("matchAuthority", matchAuthority);
-		return "board/freeboard/detail_freeboard";
 	}
 
 	@GetMapping("/{id}/form")

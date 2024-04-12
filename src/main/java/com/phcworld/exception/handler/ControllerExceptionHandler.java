@@ -4,6 +4,7 @@ import com.phcworld.exception.model.*;
 import com.phcworld.user.controller.port.SessionUser;
 import com.phcworld.user.infrastructure.UserEntity;
 import com.phcworld.utils.HttpSessionUtils;
+import io.netty.handler.codec.http.HttpResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.validation.BindException;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
@@ -34,6 +36,14 @@ public class ControllerExceptionHandler {
         ModelAndView mav = new ModelAndView();
         mav.addObject("errorMessage", "인증 이메일 보내기 실패. 다시 시도하세요.");
         mav.setViewName("user/form");
+        return mav;
+    }
+
+    @ExceptionHandler(FreeBoardNotFoundException.class)
+    public ModelAndView notFoundFreeBoard(){
+        ModelAndView mav = new ModelAndView();
+        mav.addObject("errorMessage", "게시물이 존재하지 않습니다.");
+        mav.setViewName("redirect:/freeboards");
         return mav;
     }
 
