@@ -118,13 +118,13 @@
  					<div class="col-lg-12 col-md-12"><br></div>
  					<div class="col-lg-12 col-md-12">
 	 					<a class="btn btn-primary" href="/freeboards" role="button">목록</a>
-	 					{{#equalWriter}}
+	 					{{#isModifyAuthority}}
    						<a class="btn btn-info" href="/freeboards/{{id}}/form" role="button">수정</a>
 <!--   						<form class="form-delete" action="/freeboards/{{id}}" method="POST" style="display:inline;">-->
 <!--   							<input type="hidden" name="_method" value="DELETE">-->
 <!--   							<button class="btn btn-danger" type="submit">삭제</button>-->
 <!--   						</form>-->
-   						{{/equalWriter}}
+   						{{/isModifyAuthority}}
 	 					{{#isDeleteAuthority}}
    						<form class="form-delete" action="/freeboards/{{id}}" method="POST" style="display:inline;">
    							<input type="hidden" name="_method" value="DELETE">
