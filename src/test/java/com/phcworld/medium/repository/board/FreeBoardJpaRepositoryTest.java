@@ -169,7 +169,6 @@ public class FreeBoardJpaRepositoryTest {
 		FreeBoardRequest request = FreeBoardRequest.builder()
 				.id(1L)
 				.contents("new contents")
-				.icon("")
 				.build();
 		FreeBoardEntity newBoard = freeBoardRepository.save(freeBoard);
 		FreeBoardEntity register = freeBoardRepository.findById(newBoard.getId())

@@ -9,6 +9,7 @@ import lombok.Getter;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 @Getter
 @Builder
@@ -81,5 +82,18 @@ public class User {
                 .certificationCode(certificationCode)
                 .userStatus(UserStatus.ACTIVE)
                 .build();
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        if (this == object) return true;
+        if (object == null || getClass() != object.getClass()) return false;
+        User user = (User) object;
+        return Objects.equals(id, user.id) && Objects.equals(email, user.email) && Objects.equals(name, user.name) && authority == user.authority && userStatus == user.userStatus;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, email, name, authority, userStatus);
     }
 }

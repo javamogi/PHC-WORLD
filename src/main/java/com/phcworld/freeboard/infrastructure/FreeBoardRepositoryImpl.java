@@ -24,7 +24,7 @@ public class FreeBoardRepositoryImpl implements FreeBoardRepository {
     public List<FreeBoard> findAll() {
         return freeBoardJpaRepository.findAll()
                 .stream()
-                .map(FreeBoard::from)
+                .map(FreeBoardEntity::toModel)
                 .collect(Collectors.toList());
     }
 

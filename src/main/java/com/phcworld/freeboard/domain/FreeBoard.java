@@ -71,4 +71,15 @@ public class FreeBoard {
         return writer.getId().equals(loginUser.getId()) && writer.getAuthority() == loginUser.getAuthority();
     }
 
+    public FreeBoard update(FreeBoardUpdateRequest request, LocalDateTimeHolder localDateTimeHolder) {
+        return FreeBoard.builder()
+                .id(id)
+                .title(title)
+                .contents(request.getContents())
+                .writer(writer)
+                .count(count)
+                .createDate(createDate)
+                .updateDate(localDateTimeHolder.now())
+                .build();
+    }
 }

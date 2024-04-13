@@ -5,16 +5,14 @@ import com.phcworld.freeboard.controller.port.FreeBoardResponseWithAuthority;
 import com.phcworld.freeboard.controller.port.NewFreeBoardService;
 import com.phcworld.freeboard.domain.FreeBoard;
 import com.phcworld.freeboard.domain.dto.FreeBoardRequest;
+import com.phcworld.freeboard.domain.dto.FreeBoardUpdateRequest;
 import com.phcworld.user.infrastructure.UserEntity;
 import com.phcworld.utils.HttpSessionUtils;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 import java.util.List;
@@ -67,6 +65,27 @@ public class NewFreeBoardController {
 
 		model.addAttribute("freeBoard", freeBoard);
 		return "board/freeboard/detail_freeboard";
+	}
+
+	@GetMapping("/{id}/form")
+	public String modifyForm(@PathVariable Long id, HttpSession session, Model model) {
+		if (!HttpSessionUtils.isLoginUser(session)) {
+			return "user/login";
+		}
+		UserEntity loginUser = HttpSessionUtils.getUserEntityFromSession(session);
+		FreeBoard freeBoard = freeBoardService.getFreeBoard(id, loginUser);
+		model.addAttribute("freeBoard", FreeBoardResponse.of(freeBoard));
+		return "board/freeboard/freeboard_updateForm";
+	}
+
+	@PatchMapping("")
+	public String modify(FreeBoardUpdateRequest request, HttpSession session, Model model) {
+		if (!HttpSessionUtils.isLoginUser(session)) {
+			return "user/login";
+		}
+		UserEntity loginUser = HttpSessionUtils.getUserEntityFromSession(session);
+		FreeBoard freeBoard = freeBoardService.update(request, loginUser);
+		return "redirect:/freeboards/" + freeBoard.getId();
 	}
 
 }

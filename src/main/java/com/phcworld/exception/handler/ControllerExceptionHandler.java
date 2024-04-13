@@ -115,4 +115,12 @@ public class ControllerExceptionHandler {
         return mav;
     }
 
+    @ExceptionHandler(NotMatchUserException.class)
+    public ModelAndView notMatchWriter(){
+        ModelAndView mav = new ModelAndView();
+        mav.addObject("errorMessage", "본인의 작성한 글만 수정 가능합니다.");
+        mav.setViewName("user/login");
+        return mav;
+    }
+
 }

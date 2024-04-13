@@ -146,7 +146,6 @@ public class FreeBoardControllerTest {
 		FreeBoardRequest request = FreeBoardRequest.builder()
 				.title("test")
 				.contents("test")
-				.icon("")
 				.build();
 		
 		FreeBoardResponse response = FreeBoardResponse.builder()
@@ -517,7 +516,6 @@ public class FreeBoardControllerTest {
 		FreeBoardRequest request = FreeBoardRequest.builder()
 				.id(1L)
 				.contents("new contents")
-				.icon("")
 				.build();
 		FreeBoardResponse response2 = FreeBoardResponse.builder()
 				.id(1L)

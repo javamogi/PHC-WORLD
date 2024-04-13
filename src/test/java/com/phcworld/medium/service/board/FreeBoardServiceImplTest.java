@@ -47,7 +47,6 @@ public class FreeBoardServiceImplTest {
 		FreeBoardRequest request = FreeBoardRequest.builder()
 				.title("title")
 				.contents("contents")
-				.icon("")
 				.build();
 		FreeBoardEntity board = FreeBoardEntity.builder()
 				.id(1L)
@@ -75,7 +74,6 @@ public class FreeBoardServiceImplTest {
 		FreeBoardRequest request = FreeBoardRequest.builder()
 				.title("title")
 				.contents("contents")
-				.icon("")
 				.build();
 		FreeBoardEntity board = FreeBoardEntity.builder()
 				.id(1L)
@@ -121,7 +119,6 @@ public class FreeBoardServiceImplTest {
 		FreeBoardRequest request = FreeBoardRequest.builder()
 				.id(1L)
 				.contents("new contents")
-				.icon("")
 				.build();
 		board.update(request);
 		

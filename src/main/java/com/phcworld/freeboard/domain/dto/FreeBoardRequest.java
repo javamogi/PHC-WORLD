@@ -17,6 +17,4 @@ public class FreeBoardRequest {
 
 	private String contents;
 
-	private String icon;
-
 }

@@ -1,11 +1,14 @@
 package com.phcworld.freeboard.service;
 
 import com.phcworld.common.infrastructure.LocalDateTimeHolder;
+import com.phcworld.exception.model.NotMatchUserException;
 import com.phcworld.freeboard.controller.port.NewFreeBoardService;
 import com.phcworld.freeboard.domain.FreeBoard;
 import com.phcworld.freeboard.domain.dto.FreeBoardRequest;
+import com.phcworld.freeboard.domain.dto.FreeBoardUpdateRequest;
 import com.phcworld.freeboard.service.port.FreeBoardRepository;
 import com.phcworld.user.domain.User;
+import com.phcworld.user.infrastructure.UserEntity;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -35,6 +38,22 @@ public class NewFreeBoardServiceImpl implements NewFreeBoardService {
     public FreeBoard addReadCount(Long freeBoardId) {
         FreeBoard freeBoard = freeBoardRepository.findById(freeBoardId);
         freeBoard = freeBoard.addCount();
+        return freeBoardRepository.save(freeBoard);
+    }
+
+    @Override
+    public FreeBoard getFreeBoard(Long id, UserEntity loginUser) {
+        FreeBoard freeBoard = freeBoardRepository.findById(id);
+        if(!freeBoard.matchWriter(loginUser)){
+            throw new NotMatchUserException();
+        }
+        return freeBoard;
+    }
+
+    @Override
+    public FreeBoard update(FreeBoardUpdateRequest request, UserEntity loginUser) {
+        FreeBoard freeBoard = getFreeBoard(request.getId(), loginUser);
+        freeBoard = freeBoard.update(request, localDateTimeHolder);
         return freeBoardRepository.save(freeBoard);
     }
 }

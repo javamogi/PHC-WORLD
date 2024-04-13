@@ -194,5 +194,45 @@ public class FreeBoardTest {
         assertThat(matchedWriter).isFalse();
     }
 
+    @Test
+    public void FreeBoardUpdate_로_게시글을_수정할_수_있다(){
+        // given
+        LocalDateTime now = LocalDateTime.now();
+        FreeBoardUpdateRequest request = FreeBoardUpdateRequest.builder()
+                .id(1L)
+                .contents("내용 수정")
+                .build();
+        User user = User.builder()
+                .id(1L)
+                .email("test@test.test")
+                .password("test")
+                .name("테스트")
+                .profileImage("blank-profile-picture.png")
+                .createDate(now)
+                .authority(Authority.ROLE_USER)
+                .userStatus(UserStatus.ACTIVE)
+                .certificationCode("1a2b3c")
+                .build();
+        FreeBoard freeBoard = FreeBoard.builder()
+                .id(1L)
+                .writer(user)
+                .count(0)
+                .title("제목")
+                .contents("내용")
+                .createDate(now)
+                .updateDate(now)
+                .build();
+
+        // when
+        freeBoard = freeBoard.update(request, new FakeLocalDateTimeHolder(now));
+
+        // then
+        assertThat(freeBoard.getId()).isEqualTo(1);
+        assertThat(freeBoard.getTitle()).isEqualTo("제목");
+        assertThat(freeBoard.getContents()).isEqualTo("내용 수정");
+        assertThat(freeBoard.getWriter()).isEqualTo(user);
+        assertThat(freeBoard.getCreateDate()).isEqualTo(now);
+        assertThat(freeBoard.getUpdateDate()).isEqualTo(now);
+    }
 
 }
