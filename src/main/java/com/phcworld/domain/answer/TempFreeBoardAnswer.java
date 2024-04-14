@@ -8,7 +8,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.phcworld.freeboard.infrastructure.TempFreeBoard;
 import com.phcworld.domain.parent.BasicBoardAndAnswer;
 import com.phcworld.user.infrastructure.UserEntity;
 
@@ -23,16 +22,16 @@ import lombok.Setter;
 @Entity
 public class TempFreeBoardAnswer extends BasicBoardAndAnswer{
 
-	@ManyToOne
-	@JoinColumn(foreignKey = @ForeignKey(name = "fk_tempFreeBoardAnswers_to_tempFreeBoard"), nullable = false)
-	@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
-	private TempFreeBoard tempFreeBoard;
+//	@ManyToOne
+//	@JoinColumn(foreignKey = @ForeignKey(name = "fk_tempFreeBoardAnswers_to_tempFreeBoard"), nullable = false)
+//	@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
+//	private TempFreeBoard tempFreeBoard;
 	
-	@Builder
-	public TempFreeBoardAnswer(Long id, UserEntity writer, String contents, TempFreeBoard tempFreeBoard, LocalDateTime createDate) {
-		super(id, writer, contents, createDate);
-		this.tempFreeBoard = tempFreeBoard;
-	}
+//	@Builder
+//	public TempFreeBoardAnswer(Long id, UserEntity writer, String contents, TempFreeBoard tempFreeBoard, LocalDateTime createDate) {
+//		super(id, writer, contents, createDate);
+//		this.tempFreeBoard = tempFreeBoard;
+//	}
 
 	public boolean isSameWriter(UserEntity loginUser) {
 		return super.getWriter().equals(loginUser);

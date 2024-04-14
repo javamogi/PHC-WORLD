@@ -20,7 +20,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class FreeBoardServiceTest {
 
-    private NewFreeBoardServiceImpl freeBoardService;
+    private FreeBoardServiceImpl freeBoardService;
 
     @Before
     public void init(){
@@ -28,7 +28,7 @@ public class FreeBoardServiceTest {
         FakeLocalDateTimeHolder fakeLocalDateTimeHolder = new FakeLocalDateTimeHolder(localDateTime);
         FakeFreeBoardRepository freeBoardRepository = new FakeFreeBoardRepository();
 
-        this.freeBoardService = NewFreeBoardServiceImpl.builder()
+        this.freeBoardService = FreeBoardServiceImpl.builder()
                 .localDateTimeHolder(fakeLocalDateTimeHolder)
                 .freeBoardRepository(freeBoardRepository)
                 .build();
@@ -260,4 +260,73 @@ public class FreeBoardServiceTest {
         FreeBoard freeBoard = freeBoardService.update(request, UserEntity.from(user));
     }
 
+    @Test(expected = FreeBoardNotFoundException.class)
+    public void 게시글_글쓴이와_로그인_회원이_같으면_삭제할_수_있다(){
+        // given
+        LocalDateTime localDateTime = LocalDateTime.of(2024, 4, 9, 12, 0);
+        long id = 1;
+        User user = User.builder()
+                .id(1L)
+                .email("test@test.test")
+                .password("test")
+                .name("테스트")
+                .profileImage("blank-profile-picture.png")
+                .createDate(localDateTime)
+                .authority(Authority.ROLE_USER)
+                .userStatus(UserStatus.ACTIVE)
+                .certificationCode("1a2b3c")
+                .build();
+
+        // when
+        freeBoardService.delete(id, UserEntity.from(user));
+
+        // then
+        freeBoardService.getFreeBoard(id, UserEntity.from(user));
+    }
+
+    @Test(expected = FreeBoardNotFoundException.class)
+    public void 관리자는_게시글을_삭제할_수_있다(){
+        // given
+        LocalDateTime localDateTime = LocalDateTime.of(2024, 4, 9, 12, 0);
+        long id = 1;
+        User user = User.builder()
+                .id(2L)
+                .email("test@test.test")
+                .password("test")
+                .name("테스트")
+                .profileImage("blank-profile-picture.png")
+                .createDate(localDateTime)
+                .authority(Authority.ROLE_ADMIN)
+                .userStatus(UserStatus.ACTIVE)
+                .certificationCode("1a2b3c")
+                .build();
+
+        // when
+        freeBoardService.delete(id, UserEntity.from(user));
+
+        // then
+        freeBoardService.getFreeBoard(id, UserEntity.from(user));
+    }
+
+    @Test(expected = NotMatchUserException.class)
+    public void 삭제_요청시_게시글의_글쓴이와_로그인_회원이_다르면_예외를_던진다(){
+        // given
+        LocalDateTime localDateTime = LocalDateTime.of(2024, 4, 9, 12, 0);
+        long id = 1;
+        User user = User.builder()
+                .id(2L)
+                .email("test@test.test")
+                .password("test")
+                .name("테스트")
+                .profileImage("blank-profile-picture.png")
+                .createDate(localDateTime)
+                .authority(Authority.ROLE_USER)
+                .userStatus(UserStatus.ACTIVE)
+                .certificationCode("1a2b3c")
+                .build();
+
+        // when
+        // then
+        freeBoardService.delete(id, UserEntity.from(user));
+    }
 }

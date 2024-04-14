@@ -4,9 +4,9 @@ import com.phcworld.domain.alert.QAlert;
 import com.phcworld.domain.answer.QDiaryAnswer;
 import com.phcworld.domain.answer.QFreeBoardAnswer;
 import com.phcworld.domain.board.QDiary;
-import com.phcworld.domain.board.QFreeBoard;
 import com.phcworld.domain.dashboard.dto.DashBoardSelectDto;
 import com.phcworld.domain.timeline.QTimeline;
+import com.phcworld.freeboard.infrastructure.QFreeBoardEntity;
 import com.phcworld.user.infrastructure.QUserEntity;
 import com.phcworld.user.infrastructure.UserEntity;
 import com.querydsl.core.types.ExpressionUtils;
@@ -22,7 +22,7 @@ public class DashBoardRepositoryCustomImpl implements DashBoardRepositoryCustom 
 
     private final JPAQueryFactory queryFactory;
 
-    QFreeBoard freeBoard = QFreeBoard.freeBoard;
+    QFreeBoardEntity freeBoard = QFreeBoardEntity.freeBoardEntity;
     QFreeBoardAnswer freeBoardAnswer = QFreeBoardAnswer.freeBoardAnswer;
     QDiary diary = QDiary.diary;
     QDiaryAnswer diaryAnswer = QDiaryAnswer.diaryAnswer;

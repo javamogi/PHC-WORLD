@@ -36,34 +36,6 @@ public class FreeBoardResponse {
 	
 	private List<FreeBoardAnswerApiResponse> freeBoardAnswerList;
 
-	public static FreeBoardResponse of(FreeBoardEntity freeBoard){
-		String badge = getBadge(freeBoard.getCreateDate());
-		return FreeBoardResponse.builder()
-				.id(freeBoard.getId())
-				.writer(freeBoard.getWriter())
-				.title(freeBoard.getTitle())
-				.contents(freeBoard.getContents())
-				.badge(badge)
-				.createDate(freeBoard.getFormattedCreateDate())
-				.count(freeBoard.getCount())
-				.countOfAnswer(freeBoard.getCountOfAnswer())
-				.build();
-	}
-
-	public static FreeBoardResponse of(FreeBoardSelectDto freeBoard){
-		String badge = getBadge(freeBoard.getCreateDate());
-		return FreeBoardResponse.builder()
-				.id(freeBoard.getId())
-				.writer(freeBoard.getWriter())
-				.title(freeBoard.getTitle())
-				.contents(freeBoard.getContents())
-				.badge(badge)
-				.createDate(freeBoard.getFormattedCreateDate())
-				.count(freeBoard.getCount())
-				.countOfAnswer(freeBoard.getCountOfAnswer().toString())
-				.build();
-	}
-
 	public static FreeBoardResponse of(FreeBoard freeBoard){
 		String badge = getBadge(freeBoard.getCreateDate());
 		return FreeBoardResponse.builder()
@@ -97,7 +69,4 @@ public class FreeBoardResponse {
 		return this.writer.equals(loginUser);
 	}
 
-    public Long getWriterId() {
-		return this.writer.getId();
-    }
 }

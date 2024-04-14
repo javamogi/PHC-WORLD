@@ -3,8 +3,8 @@ package com.phcworld.repository.alert;
 import com.phcworld.domain.alert.QAlert;
 import com.phcworld.domain.alert.dto.AlertSelectDto;
 import com.phcworld.domain.board.QDiary;
-import com.phcworld.domain.board.QFreeBoard;
 import com.phcworld.domain.common.SaveType;
+import com.phcworld.freeboard.infrastructure.QFreeBoardEntity;
 import com.phcworld.user.infrastructure.UserEntity;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
@@ -19,7 +19,7 @@ import java.util.List;
 public class AlertRepositoryCustomImpl implements AlertRepositoryCustom {
     private final JPAQueryFactory queryFactory;
     QAlert alert = QAlert.alert;
-    QFreeBoard freeBoard = QFreeBoard.freeBoard;
+    QFreeBoardEntity freeBoard = QFreeBoardEntity.freeBoardEntity;
     QDiary diary = QDiary.diary;
 
     public List<AlertSelectDto> findAlertListByPostWriter(UserEntity user){

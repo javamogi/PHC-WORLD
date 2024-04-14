@@ -12,6 +12,7 @@ import com.phcworld.freeboard.domain.dto.FreeBoardRequest;
 import com.phcworld.user.domain.User;
 import com.phcworld.user.infrastructure.UserEntity;
 import lombok.*;
+import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -30,6 +31,7 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 @EntityListeners(AuditingEntityListener.class)
 @ToString(exclude = {"writer", "freeBoardAnswers"})
+@DynamicUpdate
 @Table(name = "free_board",
 		indexes = {@Index(name = "idx__create_date", columnList = "createDate"),
 				@Index(name = "idx__writer_id_create_date", columnList = "writer_id, createDate")})

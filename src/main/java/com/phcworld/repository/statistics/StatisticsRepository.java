@@ -4,12 +4,12 @@ import com.phcworld.domain.answer.QDiaryAnswer;
 import com.phcworld.domain.answer.QFreeBoardAnswer;
 import com.phcworld.domain.board.QDiary;
 import com.phcworld.domain.board.QDiaryHashtag;
-import com.phcworld.domain.board.QFreeBoard;
 import com.phcworld.domain.board.QHashtag;
 import com.phcworld.domain.good.QGood;
 import com.phcworld.domain.statistics.HashtagStatisticsDto;
 import com.phcworld.domain.statistics.StatisticsDto;
 import com.phcworld.domain.statistics.UserStatisticsDto;
+import com.phcworld.freeboard.infrastructure.QFreeBoardEntity;
 import com.phcworld.user.infrastructure.QUserEntity;
 import com.phcworld.user.infrastructure.UserEntity;
 import com.querydsl.core.Tuple;
@@ -42,7 +42,7 @@ public class StatisticsRepository {
 
     QUserEntity user = QUserEntity.userEntity;
 
-    QFreeBoard freeBoard = QFreeBoard.freeBoard;
+    QFreeBoardEntity freeBoard = QFreeBoardEntity.freeBoardEntity;
 
     QDiaryAnswer diaryAnswer = QDiaryAnswer.diaryAnswer;
     QFreeBoardAnswer freeBoardAnswer = QFreeBoardAnswer.freeBoardAnswer;

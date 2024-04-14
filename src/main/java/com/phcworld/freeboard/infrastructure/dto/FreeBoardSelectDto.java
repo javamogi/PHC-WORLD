@@ -21,6 +21,8 @@ public class FreeBoardSelectDto {
     private Integer count;
     private Long countOfAnswer;
 
+    private Boolean isDeleted;
+
     public String getFormattedCreateDate() {
         return LocalDateTimeUtils.getTime(createDate);
     }

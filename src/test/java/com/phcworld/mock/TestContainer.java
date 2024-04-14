@@ -2,9 +2,9 @@ package com.phcworld.mock;
 
 import com.phcworld.common.infrastructure.LocalDateTimeHolder;
 import com.phcworld.common.infrastructure.UuidHolder;
-import com.phcworld.freeboard.controller.NewFreeBoardController;
-import com.phcworld.freeboard.controller.port.NewFreeBoardService;
-import com.phcworld.freeboard.service.NewFreeBoardServiceImpl;
+import com.phcworld.freeboard.controller.FreeBoardController;
+import com.phcworld.freeboard.controller.port.FreeBoardService;
+import com.phcworld.freeboard.service.FreeBoardServiceImpl;
 import com.phcworld.freeboard.service.port.FreeBoardRepository;
 import com.phcworld.user.controller.UserController;
 import com.phcworld.user.controller.port.UserService;
@@ -28,9 +28,9 @@ public class TestContainer {
 
     public final UuidHolder uuidHolder;
 
-    public final NewFreeBoardController freeBoardController;
+    public final FreeBoardController freeBoardController;
 
-    public final NewFreeBoardService freeBoardService;
+    public final FreeBoardService freeBoardService;
 
     public final FreeBoardRepository freeBoardRepository;
 
@@ -51,11 +51,11 @@ public class TestContainer {
                 .userService(userService)
                 .build();
         this.freeBoardRepository = new FakeFreeBoardRepository();
-        this.freeBoardService = NewFreeBoardServiceImpl.builder()
+        this.freeBoardService = FreeBoardServiceImpl.builder()
                 .freeBoardRepository(freeBoardRepository)
                 .localDateTimeHolder(localDateTimeHolder)
                 .build();
-        this.freeBoardController = NewFreeBoardController.builder()
+        this.freeBoardController = FreeBoardController.builder()
                 .freeBoardService(freeBoardService)
                 .build();
     }

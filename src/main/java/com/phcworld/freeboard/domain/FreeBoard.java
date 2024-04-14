@@ -4,7 +4,7 @@ import com.phcworld.common.infrastructure.LocalDateTimeHolder;
 import com.phcworld.domain.answer.FreeBoardAnswer;
 import com.phcworld.freeboard.domain.dto.FreeBoardRequest;
 import com.phcworld.freeboard.domain.dto.FreeBoardUpdateRequest;
-import com.phcworld.freeboard.infrastructure.FreeBoardEntity;
+import com.phcworld.user.domain.Authority;
 import com.phcworld.user.domain.User;
 import com.phcworld.user.infrastructure.UserEntity;
 import com.phcworld.utils.LocalDateTimeUtils;
@@ -32,6 +32,7 @@ public class FreeBoard {
     private Integer count;
 
     private List<FreeBoardAnswer> freeBoardAnswers;
+
 
     public static FreeBoard from(FreeBoardRequest request, User user, LocalDateTimeHolder localDateTimeHolder) {
         return FreeBoard.builder()
@@ -81,5 +82,9 @@ public class FreeBoard {
                 .createDate(createDate)
                 .updateDate(localDateTimeHolder.now())
                 .build();
+    }
+
+    public boolean matchAdminAuthority(UserEntity loginUser) {
+        return loginUser.getAuthority() == Authority.ROLE_ADMIN;
     }
 }

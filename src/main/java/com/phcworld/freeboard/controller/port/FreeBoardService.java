@@ -1,26 +1,23 @@
 package com.phcworld.freeboard.controller.port;
 
-import java.util.List;
-
-import com.phcworld.freeboard.infrastructure.FreeBoardEntity;
+import com.phcworld.freeboard.domain.FreeBoard;
 import com.phcworld.freeboard.domain.dto.FreeBoardRequest;
+import com.phcworld.freeboard.domain.dto.FreeBoardUpdateRequest;
+import com.phcworld.user.domain.User;
 import com.phcworld.user.infrastructure.UserEntity;
 
-public interface FreeBoardService {
-	
-	List<FreeBoardResponse> findFreeBoardAllListAndSetNewBadge();
-	
-	FreeBoardResponse createFreeBoard(UserEntity user, FreeBoardRequest freeBoardRequest);
-	
-	FreeBoardResponse getOneFreeBoard(Long id);
-	
-	FreeBoardResponse addFreeBoardCount(Long id);
-	
-	FreeBoardResponse updateFreeBoard(FreeBoardRequest freeBoardRequest);
-	
-	void deleteFreeBoard(Long id);
-	
-	List<FreeBoardEntity> findFreeBoardListByWriter(UserEntity loginUser);
+import java.util.List;
 
-	List<FreeBoardResponse> getSearchResult(FreeBoardSearchDto search);
+public interface FreeBoardService {
+    FreeBoard register(FreeBoardRequest request, User user);
+
+    List<FreeBoard> findAllList();
+
+    FreeBoard addReadCount(Long freeBoardId);
+
+    FreeBoard getFreeBoard(Long id, UserEntity loginUser);
+
+    FreeBoard update(FreeBoardUpdateRequest request, UserEntity loginUser);
+
+    void delete(Long id, UserEntity loginUser);
 }

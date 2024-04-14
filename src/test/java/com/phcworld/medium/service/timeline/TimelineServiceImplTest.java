@@ -13,6 +13,7 @@ import com.phcworld.freeboard.infrastructure.FreeBoardEntity;
 import com.phcworld.domain.common.SaveType;
 import com.phcworld.domain.embedded.PostInfo;
 import com.phcworld.domain.good.Good;
+import com.phcworld.freeboard.service.FreeBoardServiceImpl;
 import com.phcworld.service.timeline.TimelineServiceImpl;
 import com.phcworld.user.domain.Authority;
 import com.phcworld.exception.model.NotFoundException;
@@ -29,7 +30,6 @@ import com.phcworld.domain.timeline.Timeline;
 import com.phcworld.service.answer.DiaryAnswerServiceImpl;
 import com.phcworld.service.answer.FreeBoardAnswerServiceImpl;
 import com.phcworld.service.board.DiaryServiceImpl;
-import com.phcworld.freeboard.service.FreeBoardServiceImpl;
 import org.springframework.transaction.annotation.Transactional;
 
 @RunWith(SpringJUnit4ClassRunner.class)

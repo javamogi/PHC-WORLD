@@ -581,4 +581,155 @@ public class FreeBoardControllerTest {
         // then
         String result = testContainer.freeBoardController.modify(request, fakeHttpSession, fakeModel);
     }
+
+    @Test
+    public void 게시글의_글쓴이가_삭제하면_리다이렉트_주소를_받는다(){
+        // given
+        LocalDateTime time = LocalDateTime.of(2024, 4, 9, 12, 0);
+        TestContainer testContainer = TestContainer.builder()
+                .localDateTimeHolder(new FakeLocalDateTimeHolder(time))
+                .build();
+        User user = User.builder()
+                .id(1L)
+                .email("test@test.test")
+                .password("test")
+                .name("테스트")
+                .profileImage("blank-profile-picture.png")
+                .createDate(time)
+                .authority(Authority.ROLE_USER)
+                .userStatus(UserStatus.ACTIVE)
+                .certificationCode("1a2b3c")
+                .build();
+        testContainer.freeBoardRepository.save(FreeBoard.builder()
+                .id(1L)
+                .writer(user)
+                .count(0)
+                .title("제목")
+                .contents("내용")
+                .createDate(time)
+                .updateDate(time)
+                .build());
+        FakeHttpSession fakeHttpSession = new FakeHttpSession();
+        fakeHttpSession.setAttribute(HttpSessionUtils.USER_SESSION_KEY, UserEntity.from(user));
+        long id = 1;
+
+        // when
+        String result = testContainer.freeBoardController.delete(id, fakeHttpSession);
+
+        // then
+        assertThat(result).isEqualTo("redirect:/freeboards");
+    }
+
+    @Test
+    public void 관리자는_게시글을_삭제하면_리다이렉트_주소를_받는다(){
+        // given
+        LocalDateTime time = LocalDateTime.of(2024, 4, 9, 12, 0);
+        TestContainer testContainer = TestContainer.builder()
+                .localDateTimeHolder(new FakeLocalDateTimeHolder(time))
+                .build();
+        User user = User.builder()
+                .id(2L)
+                .email("test2@test.test")
+                .password("test2")
+                .name("테스트2")
+                .profileImage("blank-profile-picture.png")
+                .createDate(time)
+                .authority(Authority.ROLE_ADMIN)
+                .userStatus(UserStatus.ACTIVE)
+                .certificationCode("1a2b3c")
+                .build();
+        testContainer.freeBoardRepository.save(FreeBoard.builder()
+                .id(1L)
+                .writer(user)
+                .count(0)
+                .title("제목")
+                .contents("내용")
+                .createDate(time)
+                .updateDate(time)
+                .build());
+        FakeHttpSession fakeHttpSession = new FakeHttpSession();
+        fakeHttpSession.setAttribute(HttpSessionUtils.USER_SESSION_KEY, UserEntity.from(user));
+        long id = 1;
+
+        // when
+        String result = testContainer.freeBoardController.delete(id, fakeHttpSession);
+
+        // then
+        assertThat(result).isEqualTo("redirect:/freeboards");
+    }
+
+    @Test(expected = NotMatchUserException.class)
+    public void 게시글의_글쓴이가_다르면_예외를_던진다(){
+        // given
+        LocalDateTime time = LocalDateTime.of(2024, 4, 9, 12, 0);
+        TestContainer testContainer = TestContainer.builder()
+                .localDateTimeHolder(new FakeLocalDateTimeHolder(time))
+                .build();
+        User userA = User.builder()
+                .id(1L)
+                .email("test@test.test")
+                .password("test")
+                .name("테스트")
+                .profileImage("blank-profile-picture.png")
+                .createDate(time)
+                .authority(Authority.ROLE_USER)
+                .userStatus(UserStatus.ACTIVE)
+                .certificationCode("1a2b3c")
+                .build();
+        User userB = User.builder()
+                .id(2L)
+                .email("test2@test.test")
+                .password("test2")
+                .name("테스트2")
+                .profileImage("blank-profile-picture.png")
+                .createDate(time)
+                .authority(Authority.ROLE_USER)
+                .userStatus(UserStatus.ACTIVE)
+                .certificationCode("1a2b3c")
+                .build();
+        testContainer.freeBoardRepository.save(FreeBoard.builder()
+                .id(1L)
+                .writer(userA)
+                .count(0)
+                .title("제목")
+                .contents("내용")
+                .createDate(time)
+                .updateDate(time)
+                .build());
+        FakeHttpSession fakeHttpSession = new FakeHttpSession();
+        fakeHttpSession.setAttribute(HttpSessionUtils.USER_SESSION_KEY, UserEntity.from(userB));
+        long id = 1;
+
+        // when
+        // then
+        String result = testContainer.freeBoardController.delete(id, fakeHttpSession);
+    }
+
+    @Test(expected = FreeBoardNotFoundException.class)
+    public void 삭제할_게시글_없다면_예외를_던진다(){
+        // given
+        LocalDateTime time = LocalDateTime.of(2024, 4, 9, 12, 0);
+        TestContainer testContainer = TestContainer.builder()
+                .localDateTimeHolder(new FakeLocalDateTimeHolder(time))
+                .build();
+        User user = User.builder()
+                .id(1L)
+                .email("test@test.test")
+                .password("test")
+                .name("테스트")
+                .profileImage("blank-profile-picture.png")
+                .createDate(time)
+                .authority(Authority.ROLE_USER)
+                .userStatus(UserStatus.ACTIVE)
+                .certificationCode("1a2b3c")
+                .build();
+        FakeHttpSession fakeHttpSession = new FakeHttpSession();
+        fakeHttpSession.setAttribute(HttpSessionUtils.USER_SESSION_KEY, UserEntity.from(user));
+        long id = 1;
+
+        // when
+        // then
+        String result = testContainer.freeBoardController.delete(id, fakeHttpSession);
+    }
+
 }

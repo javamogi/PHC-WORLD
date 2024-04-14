@@ -34,4 +34,9 @@ public class FreeBoardRepositoryImpl implements FreeBoardRepository {
                 .map(FreeBoardEntity::toModel)
                 .orElseThrow(NotFoundException::new);
     }
+
+    @Override
+    public void delete(Long id) {
+        freeBoardJpaRepository.deleteById(id);
+    }
 }

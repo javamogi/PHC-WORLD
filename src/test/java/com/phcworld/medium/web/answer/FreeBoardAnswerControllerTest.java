@@ -1,23 +1,16 @@
 package com.phcworld.medium.web.answer;
 
-import static org.mockito.Mockito.when;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-
-import com.phcworld.freeboard.infrastructure.FreeBoardEntity;
-import com.phcworld.user.domain.Authority;
+import com.phcworld.domain.answer.FreeBoardAnswer;
+import com.phcworld.domain.api.model.request.FreeBoardAnswerRequest;
+import com.phcworld.domain.api.model.response.FreeBoardAnswerApiResponse;
+import com.phcworld.domain.api.model.response.SuccessResponse;
 import com.phcworld.exception.model.NotMatchUserException;
+import com.phcworld.freeboard.infrastructure.FreeBoardEntity;
+import com.phcworld.freeboard.service.FreeBoardServiceImpl;
+import com.phcworld.service.answer.FreeBoardAnswerServiceImpl;
+import com.phcworld.user.domain.Authority;
 import com.phcworld.user.infrastructure.UserEntity;
+import com.phcworld.utils.HttpSessionUtils;
 import com.phcworld.web.answer.FreeBoardAnswerController;
 import org.junit.Before;
 import org.junit.Test;
@@ -30,13 +23,16 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
-import com.phcworld.domain.answer.FreeBoardAnswer;
-import com.phcworld.domain.api.model.request.FreeBoardAnswerRequest;
-import com.phcworld.domain.api.model.response.FreeBoardAnswerApiResponse;
-import com.phcworld.domain.api.model.response.SuccessResponse;
-import com.phcworld.service.answer.FreeBoardAnswerServiceImpl;
-import com.phcworld.freeboard.service.FreeBoardServiceImpl;
-import com.phcworld.utils.HttpSessionUtils;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.mockito.Mockito.when;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebMvcTest(FreeBoardAnswerController.class)
