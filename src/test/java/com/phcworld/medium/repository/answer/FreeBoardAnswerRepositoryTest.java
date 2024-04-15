@@ -1,10 +1,10 @@
 package com.phcworld.medium.repository.answer;
 
 
-import com.phcworld.domain.answer.FreeBoardAnswer;
+import com.phcworld.answer.infrastructure.FreeBoardAnswerEntity;
 import com.phcworld.freeboard.infrastructure.FreeBoardEntity;
 import com.phcworld.medium.util.FreeBoardFactory;
-import com.phcworld.repository.answer.FreeBoardAnswerRepository;
+import com.phcworld.answer.infrastructure.FreeBoardAnswerJpaRepository;
 import com.phcworld.user.infrastructure.UserEntity;
 import com.phcworld.exception.model.NotFoundException;
 import com.phcworld.freeboard.infrastructure.FreeBoardJpaRepository;
@@ -34,7 +34,7 @@ public class FreeBoardAnswerRepositoryTest {
 	private FreeBoardJpaRepository freeBoardRepository;
 
 	@Autowired
-	private FreeBoardAnswerRepository freeBoardAnswerRepository;
+	private FreeBoardAnswerJpaRepository freeBoardAnswerRepository;
 
 	private UserEntity user;
 	private FreeBoardEntity freeBoard;
@@ -49,54 +49,54 @@ public class FreeBoardAnswerRepositoryTest {
 
 	@Test
 	public void create() {
-		FreeBoardAnswer answer = FreeBoardAnswer.builder()
+		FreeBoardAnswerEntity answer = FreeBoardAnswerEntity.builder()
 				.writer(user)
 				.freeBoard(freeBoard)
 				.contents("content")
 				.build();
 		
-		FreeBoardAnswer newAnswer = freeBoardAnswerRepository.save(answer);
+		FreeBoardAnswerEntity newAnswer = freeBoardAnswerRepository.save(answer);
 		assertNotNull(newAnswer);
 	}
 	
 	@Test
 	public void read() {
-		FreeBoardAnswer freeBoardAnswer = FreeBoardAnswer.builder()
+		FreeBoardAnswerEntity freeBoardAnswer = FreeBoardAnswerEntity.builder()
 				.writer(user)
 				.freeBoard(freeBoard)
 				.contents("content")
 				.build();
-		FreeBoardAnswer saveFreeBoardAnswer = freeBoardAnswerRepository.save(freeBoardAnswer);
-		List<FreeBoardAnswer> freeBoardAnswerList = freeBoardAnswerRepository.findByWriter(user);
+		FreeBoardAnswerEntity saveFreeBoardAnswer = freeBoardAnswerRepository.save(freeBoardAnswer);
+		List<FreeBoardAnswerEntity> freeBoardAnswerList = freeBoardAnswerRepository.findByWriter(user);
 		assertThat(freeBoardAnswerList).contains(saveFreeBoardAnswer);
 	}
 	
 	@Test
 	public void update() {
-		FreeBoardAnswer answer = FreeBoardAnswer.builder()
+		FreeBoardAnswerEntity answer = FreeBoardAnswerEntity.builder()
 				.writer(user)
 				.freeBoard(freeBoard)
 				.contents("content")
 				.build();
-		FreeBoardAnswer newAnswer = freeBoardAnswerRepository.save(answer);
-		FreeBoardAnswer registAnswer = freeBoardAnswerRepository.findById(newAnswer.getId())
+		FreeBoardAnswerEntity newAnswer = freeBoardAnswerRepository.save(answer);
+		FreeBoardAnswerEntity registAnswer = freeBoardAnswerRepository.findById(newAnswer.getId())
 				.orElseThrow(NotFoundException::new);
 		registAnswer.update("update content");
-		FreeBoardAnswer updatedAnswer = freeBoardAnswerRepository.save(registAnswer);
+		FreeBoardAnswerEntity updatedAnswer = freeBoardAnswerRepository.save(registAnswer);
 		assertThat("update content").isEqualTo(updatedAnswer.getContents());
 	}
 	
 	@Test
 	public void delete() {
-		FreeBoardAnswer answer = FreeBoardAnswer.builder()
+		FreeBoardAnswerEntity answer = FreeBoardAnswerEntity.builder()
 				.writer(user)
 				.freeBoard(freeBoard)
 				.contents("content")
 				.build();
-		FreeBoardAnswer newAnswer = freeBoardAnswerRepository.save(answer);
+		FreeBoardAnswerEntity newAnswer = freeBoardAnswerRepository.save(answer);
 		assertNotNull(newAnswer);
 		freeBoardAnswerRepository.delete(newAnswer);
-		Optional<FreeBoardAnswer>findAnswer = freeBoardAnswerRepository.findById(newAnswer.getId());
+		Optional<FreeBoardAnswerEntity>findAnswer = freeBoardAnswerRepository.findById(newAnswer.getId());
 		assertFalse(findAnswer.isPresent());
 	}
 

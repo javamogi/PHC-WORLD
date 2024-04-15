@@ -1,11 +1,11 @@
 package com.phcworld.medium.service.answer;
 
-import com.phcworld.domain.answer.FreeBoardAnswer;
-import com.phcworld.domain.api.model.request.FreeBoardAnswerRequest;
-import com.phcworld.domain.api.model.response.FreeBoardAnswerApiResponse;
+import com.phcworld.answer.infrastructure.FreeBoardAnswerEntity;
+import com.phcworld.answer.domain.dto.FreeBoardAnswerRequest;
+import com.phcworld.answer.controller.port.FreeBoardAnswerResponse;
 import com.phcworld.domain.api.model.response.SuccessResponse;
 import com.phcworld.freeboard.infrastructure.FreeBoardEntity;
-import com.phcworld.service.answer.FreeBoardAnswerServiceImpl;
+import com.phcworld.answer.service.FreeBoardAnswerServiceImpl;
 import com.phcworld.user.domain.Authority;
 import com.phcworld.user.infrastructure.UserEntity;
 import com.phcworld.exception.model.NotMatchUserException;
@@ -63,21 +63,21 @@ public class FreeBoardAnswerServiceImplTest {
 		FreeBoardAnswerRequest request = FreeBoardAnswerRequest.builder()
 				.contents("contents")
 				.build();
-		FreeBoardAnswer answer = FreeBoardAnswer.builder()
+		FreeBoardAnswerEntity answer = FreeBoardAnswerEntity.builder()
 				.id(1L)
 				.writer(writer)
 				.freeBoard(freeBoard)
 				.contents(request.getContents())
 				.build();
-		List<FreeBoardAnswer> list = new ArrayList<FreeBoardAnswer>();
+		List<FreeBoardAnswerEntity> list = new ArrayList<FreeBoardAnswerEntity>();
 		list.add(answer);
 		freeBoard.setFreeBoardAnswers(list);
 		
-		FreeBoardAnswerApiResponse freeBoardAnswerApiResponse = FreeBoardAnswerApiResponse.of(answer);
+		FreeBoardAnswerResponse freeBoardAnswerApiResponse = FreeBoardAnswerResponse.of(answer);
 		
 		when(freeBoardAnswerService.create(writer, freeBoard.getId(), request))
 		.thenReturn(freeBoardAnswerApiResponse);
-		FreeBoardAnswerApiResponse createdFreeBoardAnswerApiResponse = 
+		FreeBoardAnswerResponse createdFreeBoardAnswerApiResponse =
 				freeBoardAnswerService.create(writer, freeBoard.getId(), request);
 		assertThat(request.getContents()).isEqualTo(createdFreeBoardAnswerApiResponse.getContents());
 		assertThat("[1]").isEqualTo(createdFreeBoardAnswerApiResponse.getCountOfAnswers());
@@ -86,13 +86,13 @@ public class FreeBoardAnswerServiceImplTest {
 	
 	@Test
 	public void successDelete() {
-		FreeBoardAnswer answer = FreeBoardAnswer.builder()
+		FreeBoardAnswerEntity answer = FreeBoardAnswerEntity.builder()
 				.id(1L)
 				.writer(writer)
 				.freeBoard(freeBoard)
 				.contents("content")
 				.build();
-		List<FreeBoardAnswer> list = new ArrayList<FreeBoardAnswer>();
+		List<FreeBoardAnswerEntity> list = new ArrayList<FreeBoardAnswerEntity>();
 		list.add(answer);
 		freeBoard.setFreeBoardAnswers(list);
 
@@ -118,7 +118,7 @@ public class FreeBoardAnswerServiceImplTest {
 				.authority(Authority.ROLE_USER)
 				.createDate(LocalDateTime.now())
 				.build();
-		FreeBoardAnswer answer = FreeBoardAnswer.builder()
+		FreeBoardAnswerEntity answer = FreeBoardAnswerEntity.builder()
 				.id(1L)
 				.writer(writer)
 				.freeBoard(freeBoard)
@@ -133,24 +133,24 @@ public class FreeBoardAnswerServiceImplTest {
 	@Test
 	@Transactional
 	public void findFreeBoardAnswerListByWriter() throws Exception {
-		FreeBoardAnswer answer = FreeBoardAnswer.builder()
+		FreeBoardAnswerEntity answer = FreeBoardAnswerEntity.builder()
 				.id(1L)
 				.writer(writer)
 				.freeBoard(freeBoard)
 				.contents("content")
 				.build();
-		FreeBoardAnswer answer2 = FreeBoardAnswer.builder()
+		FreeBoardAnswerEntity answer2 = FreeBoardAnswerEntity.builder()
 				.id(2L)
 				.writer(writer)
 				.freeBoard(freeBoard)
 				.contents("content2")
 				.build();
-		List<FreeBoardAnswer> answerList = new ArrayList<FreeBoardAnswer>();
+		List<FreeBoardAnswerEntity> answerList = new ArrayList<FreeBoardAnswerEntity>();
 		answerList.add(answer);
 		answerList.add(answer2);
 		
 		when(freeBoardAnswerService.findFreeBoardAnswerListByWriter(writer)).thenReturn(answerList);
-		List<FreeBoardAnswer> findFreeBoardAnswerList = 
+		List<FreeBoardAnswerEntity> findFreeBoardAnswerList =
 				freeBoardAnswerService.findFreeBoardAnswerListByWriter(writer);
 		assertThat(findFreeBoardAnswerList)
 				.contains(answer)
@@ -159,34 +159,34 @@ public class FreeBoardAnswerServiceImplTest {
 	
 	@Test
 	public void readFreeBoardAnswer() {
-		FreeBoardAnswer answer = FreeBoardAnswer.builder()
+		FreeBoardAnswerEntity answer = FreeBoardAnswerEntity.builder()
 				.id(1L)
 				.writer(writer)
 				.freeBoard(freeBoard)
 				.contents("content")
 				.build();
-		List<FreeBoardAnswer> list = new ArrayList<FreeBoardAnswer>();
+		List<FreeBoardAnswerEntity> list = new ArrayList<FreeBoardAnswerEntity>();
 		list.add(answer);
 		freeBoard.setFreeBoardAnswers(list);
 
-		FreeBoardAnswerApiResponse freeBoardAnswerApiResponse = FreeBoardAnswerApiResponse.of(answer);
+		FreeBoardAnswerResponse freeBoardAnswerApiResponse = FreeBoardAnswerResponse.of(answer);
 		
 		when(freeBoardAnswerService.read(answer.getId(), writer))
 		.thenReturn(freeBoardAnswerApiResponse);
-		FreeBoardAnswerApiResponse createdFreeBoardAnswerApiResponse = 
+		FreeBoardAnswerResponse createdFreeBoardAnswerApiResponse =
 				freeBoardAnswerService.read(answer.getId(), writer);
 		assertThat(freeBoardAnswerApiResponse).isEqualTo(createdFreeBoardAnswerApiResponse);
 	}
 	
 	@Test
 	public void update() {
-		FreeBoardAnswer answer = FreeBoardAnswer.builder()
+		FreeBoardAnswerEntity answer = FreeBoardAnswerEntity.builder()
 				.id(1L)
 				.writer(writer)
 				.freeBoard(freeBoard)
 				.contents("content")
 				.build();
-		List<FreeBoardAnswer> list = new ArrayList<FreeBoardAnswer>();
+		List<FreeBoardAnswerEntity> list = new ArrayList<FreeBoardAnswerEntity>();
 		list.add(answer);
 		freeBoard.setFreeBoardAnswers(list);
 		
@@ -197,11 +197,11 @@ public class FreeBoardAnswerServiceImplTest {
 		
 		answer.update(request.getContents());
 		
-		FreeBoardAnswerApiResponse freeBoardAnswerApiResponse = FreeBoardAnswerApiResponse.of(answer);
+		FreeBoardAnswerResponse freeBoardAnswerApiResponse = FreeBoardAnswerResponse.of(answer);
 		
 		when(freeBoardAnswerService.update(request, writer))
 		.thenReturn(freeBoardAnswerApiResponse);
-		FreeBoardAnswerApiResponse updatedFreeBoardAnswerApiResponse = 
+		FreeBoardAnswerResponse updatedFreeBoardAnswerApiResponse =
 				freeBoardAnswerService.update(request, writer);
 		assertThat(freeBoardAnswerApiResponse).isEqualTo(updatedFreeBoardAnswerApiResponse);
 	}

@@ -1,6 +1,6 @@
 package com.phcworld.medium.util;
 
-import com.phcworld.domain.answer.FreeBoardAnswer;
+import com.phcworld.answer.infrastructure.FreeBoardAnswerEntity;
 import com.phcworld.freeboard.infrastructure.FreeBoardEntity;
 import com.phcworld.user.infrastructure.UserEntity;
 import org.jeasy.random.EasyRandom;
@@ -56,8 +56,8 @@ public class FreeBoardFactory {
                 .build();
     }
 
-    public static FreeBoardAnswer getFreeBoardAnswerEntity(UserEntity user, FreeBoardEntity freeBoard){
-        return FreeBoardAnswer.builder()
+    public static FreeBoardAnswerEntity getFreeBoardAnswerEntity(UserEntity user, FreeBoardEntity freeBoard){
+        return FreeBoardAnswerEntity.builder()
                 .writer(user)
                 .freeBoard(freeBoard)
                 .contents("test")

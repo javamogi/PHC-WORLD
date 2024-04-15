@@ -22,7 +22,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.phcworld.domain.answer.TempDiaryAnswer;
-import com.phcworld.domain.answer.TempFreeBoardAnswer;
 import com.phcworld.domain.board.TempDiary;
 import com.phcworld.domain.good.TempGood;
 import com.phcworld.domain.timeline.TempTimeline;

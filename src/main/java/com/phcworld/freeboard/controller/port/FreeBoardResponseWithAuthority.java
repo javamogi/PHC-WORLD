@@ -1,6 +1,6 @@
 package com.phcworld.freeboard.controller.port;
 
-import com.phcworld.domain.api.model.response.FreeBoardAnswerApiResponse;
+import com.phcworld.answer.controller.port.FreeBoardAnswerResponse;
 import com.phcworld.freeboard.domain.FreeBoard;
 import com.phcworld.user.domain.Authority;
 import com.phcworld.user.infrastructure.UserEntity;
@@ -28,7 +28,7 @@ public class FreeBoardResponseWithAuthority {
 	
 	private String countOfAnswer;
 	
-	private List<FreeBoardAnswerApiResponse> freeBoardAnswerList;
+	private List<FreeBoardAnswerResponse> freeBoardAnswerList;
 
 	private Boolean existLoginUser;
 	private Boolean isModifyAuthority; // 수정권한

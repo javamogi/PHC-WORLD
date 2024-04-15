@@ -3,7 +3,7 @@ package com.phcworld.service.alert;
 import com.phcworld.domain.alert.Alert;
 import com.phcworld.domain.alert.dto.AlertResponseDto;
 import com.phcworld.domain.answer.DiaryAnswer;
-import com.phcworld.domain.answer.FreeBoardAnswer;
+import com.phcworld.answer.infrastructure.FreeBoardAnswerEntity;
 import com.phcworld.domain.common.SaveType;
 import com.phcworld.domain.embedded.PostInfo;
 import com.phcworld.domain.good.Good;
@@ -84,7 +84,7 @@ public class AlertServiceImpl implements AlertService {
 		return alertRepository.save(alert);
 	}
 	
-	public Alert createAlert(FreeBoardAnswer freeBoardAnswer) {
+	public Alert createAlert(FreeBoardAnswerEntity freeBoardAnswer) {
 		PostInfo postInfo = PostInfo.builder()
 				.saveType(SaveType.FREE_BOARD_ANSWER)
 				.postId(freeBoardAnswer.getId())
@@ -124,7 +124,7 @@ public class AlertServiceImpl implements AlertService {
 		alertRepository.delete(alert);
 	}
 	
-	public void deleteAlert(FreeBoardAnswer freeBoardAnswer) {
+	public void deleteAlert(FreeBoardAnswerEntity freeBoardAnswer) {
 		PostInfo postInfo = PostInfo.builder()
 				.saveType(SaveType.FREE_BOARD_ANSWER)
 				.postId(freeBoardAnswer.getId())

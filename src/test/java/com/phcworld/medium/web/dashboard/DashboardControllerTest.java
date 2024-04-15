@@ -1,8 +1,8 @@
 package com.phcworld.medium.web.dashboard;
 
+import com.phcworld.answer.infrastructure.FreeBoardAnswerEntity;
 import com.phcworld.api.dashboard.dto.UserResponseDto;
 import com.phcworld.domain.answer.DiaryAnswer;
-import com.phcworld.domain.answer.FreeBoardAnswer;
 import com.phcworld.domain.board.Diary;
 import com.phcworld.freeboard.infrastructure.FreeBoardEntity;
 import com.phcworld.domain.common.SaveType;
@@ -15,7 +15,7 @@ import com.phcworld.user.controller.port.DashBoardUser;
 import com.phcworld.user.infrastructure.UserEntity;
 import com.phcworld.service.alert.AlertServiceImpl;
 import com.phcworld.service.answer.DiaryAnswerServiceImpl;
-import com.phcworld.service.answer.FreeBoardAnswerServiceImpl;
+import com.phcworld.answer.service.FreeBoardAnswerServiceImpl;
 import com.phcworld.service.board.DiaryServiceImpl;
 import com.phcworld.service.dashboard.DashboardService;
 import com.phcworld.service.timeline.TimelineServiceImpl;
@@ -187,7 +187,7 @@ public class DashboardControllerTest {
 				.createDate(LocalDateTime.now())
 				.count(0)
 				.build();
-		FreeBoardAnswer freeBoardAnswer = FreeBoardAnswer.builder()
+		FreeBoardAnswerEntity freeBoardAnswer = FreeBoardAnswerEntity.builder()
 				.id(1L)
 				.writer(user)
 				.freeBoard(freeBoard)

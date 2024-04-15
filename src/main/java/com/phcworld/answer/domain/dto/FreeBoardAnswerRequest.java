@@ -1,14 +1,10 @@
-package com.phcworld.domain.api.model.request;
+package com.phcworld.answer.domain.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-@Data
-@NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@Getter
 public class FreeBoardAnswerRequest {
 	
 	private Long id;

@@ -1,17 +1,17 @@
 package com.phcworld.medium.web.answer;
 
-import com.phcworld.domain.answer.FreeBoardAnswer;
-import com.phcworld.domain.api.model.request.FreeBoardAnswerRequest;
-import com.phcworld.domain.api.model.response.FreeBoardAnswerApiResponse;
+import com.phcworld.answer.infrastructure.FreeBoardAnswerEntity;
+import com.phcworld.answer.domain.dto.FreeBoardAnswerRequest;
+import com.phcworld.answer.controller.port.FreeBoardAnswerResponse;
 import com.phcworld.domain.api.model.response.SuccessResponse;
 import com.phcworld.exception.model.NotMatchUserException;
 import com.phcworld.freeboard.infrastructure.FreeBoardEntity;
 import com.phcworld.freeboard.service.FreeBoardServiceImpl;
-import com.phcworld.service.answer.FreeBoardAnswerServiceImpl;
+import com.phcworld.answer.service.FreeBoardAnswerServiceImpl;
 import com.phcworld.user.domain.Authority;
 import com.phcworld.user.infrastructure.UserEntity;
 import com.phcworld.utils.HttpSessionUtils;
-import com.phcworld.web.answer.FreeBoardAnswerController;
+import com.phcworld.answer.controller.FreeBoardAnswerController;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -78,17 +78,17 @@ public class FreeBoardAnswerControllerTest {
 		FreeBoardAnswerRequest request = FreeBoardAnswerRequest.builder()
 				.contents("test")
 				.build();
-		FreeBoardAnswer freeBoardAnswer = FreeBoardAnswer.builder()
+		FreeBoardAnswerEntity freeBoardAnswer = FreeBoardAnswerEntity.builder()
 				.id(1L)
 				.writer(user)
 				.freeBoard(freeBoard)
 				.contents(request.getContents())
 				.build();
-		List<FreeBoardAnswer> list = new ArrayList<FreeBoardAnswer>();
+		List<FreeBoardAnswerEntity> list = new ArrayList<FreeBoardAnswerEntity>();
 		list.add(freeBoardAnswer);
 		freeBoard.setFreeBoardAnswers(list);
 		
-		FreeBoardAnswerApiResponse freeBoardAnswerApiResponse = FreeBoardAnswerApiResponse.of(freeBoardAnswer);
+		FreeBoardAnswerResponse freeBoardAnswerApiResponse = FreeBoardAnswerResponse.of(freeBoardAnswer);
 		
 		when(this.freeBoardAnswerService.create(user, freeBoard.getId(), request))
 		.thenReturn(freeBoardAnswerApiResponse);
@@ -132,7 +132,7 @@ public class FreeBoardAnswerControllerTest {
 	public void deleteSuccessFreeBoardAnswer() throws Exception {
 		MockHttpSession mockSession = new MockHttpSession();
 		mockSession.setAttribute(HttpSessionUtils.USER_SESSION_KEY, user);
-		FreeBoardAnswer freeBoardAnswer = FreeBoardAnswer.builder()
+		FreeBoardAnswerEntity freeBoardAnswer = FreeBoardAnswerEntity.builder()
 				.id(1L)
 				.writer(user)
 				.freeBoard(freeBoard)
@@ -175,7 +175,7 @@ public class FreeBoardAnswerControllerTest {
 				.createDate(LocalDateTime.now())
 				.build();
 		mockSession.setAttribute(HttpSessionUtils.USER_SESSION_KEY, user);
-		FreeBoardAnswer freeBoardAnswer = FreeBoardAnswer.builder()
+		FreeBoardAnswerEntity freeBoardAnswer = FreeBoardAnswerEntity.builder()
 				.id(1L)
 				.writer(user2)
 				.freeBoard(freeBoard)
@@ -196,17 +196,17 @@ public class FreeBoardAnswerControllerTest {
 	public void readFreeBoardAnswer() throws Exception {
 		MockHttpSession mockSession = new MockHttpSession();
 		mockSession.setAttribute(HttpSessionUtils.USER_SESSION_KEY, user);
-		FreeBoardAnswer freeBoardAnswer = FreeBoardAnswer.builder()
+		FreeBoardAnswerEntity freeBoardAnswer = FreeBoardAnswerEntity.builder()
 				.id(1L)
 				.writer(user)
 				.freeBoard(freeBoard)
 				.contents("test")
 				.build();
-		List<FreeBoardAnswer> list = new ArrayList<FreeBoardAnswer>();
+		List<FreeBoardAnswerEntity> list = new ArrayList<FreeBoardAnswerEntity>();
 		list.add(freeBoardAnswer);
 		freeBoard.setFreeBoardAnswers(list);
 		
-		FreeBoardAnswerApiResponse freeBoardAnswerApiResponse = FreeBoardAnswerApiResponse.of(freeBoardAnswer);
+		FreeBoardAnswerResponse freeBoardAnswerApiResponse = FreeBoardAnswerResponse.of(freeBoardAnswer);
 		
 		when(this.freeBoardAnswerService.read(freeBoardAnswer.getId(), user))
 		.thenReturn(freeBoardAnswerApiResponse);
@@ -238,13 +238,13 @@ public class FreeBoardAnswerControllerTest {
 	public void updateFreeBoardAnswer() throws Exception {
 		MockHttpSession mockSession = new MockHttpSession();
 		mockSession.setAttribute(HttpSessionUtils.USER_SESSION_KEY, user);
-		FreeBoardAnswer freeBoardAnswer = FreeBoardAnswer.builder()
+		FreeBoardAnswerEntity freeBoardAnswer = FreeBoardAnswerEntity.builder()
 				.id(1L)
 				.writer(user)
 				.freeBoard(freeBoard)
 				.contents("test")
 				.build();
-		List<FreeBoardAnswer> list = new ArrayList<FreeBoardAnswer>();
+		List<FreeBoardAnswerEntity> list = new ArrayList<FreeBoardAnswerEntity>();
 		list.add(freeBoardAnswer);
 		freeBoard.setFreeBoardAnswers(list);
 		FreeBoardAnswerRequest request = FreeBoardAnswerRequest.builder()
@@ -253,7 +253,7 @@ public class FreeBoardAnswerControllerTest {
 				.build();
 		freeBoardAnswer.update(request.getContents());
 		
-		FreeBoardAnswerApiResponse freeBoardAnswerApiResponse = FreeBoardAnswerApiResponse.of(freeBoardAnswer);
+		FreeBoardAnswerResponse freeBoardAnswerApiResponse = FreeBoardAnswerResponse.of(freeBoardAnswer);
 		
 		when(this.freeBoardAnswerService.update(request, user))
 		.thenReturn(freeBoardAnswerApiResponse);

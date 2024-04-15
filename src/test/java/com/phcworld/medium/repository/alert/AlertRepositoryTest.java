@@ -3,7 +3,7 @@ package com.phcworld.medium.repository.alert;
 import com.phcworld.domain.alert.Alert;
 import com.phcworld.domain.alert.dto.AlertResponseDto;
 import com.phcworld.domain.answer.DiaryAnswer;
-import com.phcworld.domain.answer.FreeBoardAnswer;
+import com.phcworld.answer.infrastructure.FreeBoardAnswerEntity;
 import com.phcworld.domain.board.Diary;
 import com.phcworld.freeboard.infrastructure.FreeBoardEntity;
 import com.phcworld.domain.common.SaveType;
@@ -16,7 +16,7 @@ import com.phcworld.user.domain.Authority;
 import com.phcworld.user.infrastructure.UserEntity;
 import com.phcworld.exception.model.CustomException;
 import com.phcworld.repository.answer.DiaryAnswerRepository;
-import com.phcworld.repository.answer.FreeBoardAnswerRepository;
+import com.phcworld.answer.infrastructure.FreeBoardAnswerJpaRepository;
 import com.phcworld.repository.board.DiaryRepository;
 import com.phcworld.freeboard.infrastructure.FreeBoardJpaRepository;
 import com.phcworld.repository.good.GoodRepository;
@@ -61,7 +61,7 @@ public class AlertRepositoryTest {
 	private FreeBoardJpaRepository freeBoardRepository;
 	
 	@Autowired
-	private FreeBoardAnswerRepository freeBoardAnswerRepository;
+	private FreeBoardAnswerJpaRepository freeBoardAnswerRepository;
 	
 	@Autowired
 	private GoodRepository goodRepository;
@@ -73,7 +73,7 @@ public class AlertRepositoryTest {
 
 	private FreeBoardEntity freeBoard;
 
-	private FreeBoardAnswer freeBoardAnswer;
+	private FreeBoardAnswerEntity freeBoardAnswer;
 
 	@Autowired
 	private EntityManager em;

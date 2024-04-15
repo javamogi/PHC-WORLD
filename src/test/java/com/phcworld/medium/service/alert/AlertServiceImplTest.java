@@ -1,9 +1,9 @@
 package com.phcworld.medium.service.alert;
 
+import com.phcworld.answer.infrastructure.FreeBoardAnswerEntity;
 import com.phcworld.domain.alert.Alert;
 import com.phcworld.domain.alert.dto.AlertResponseDto;
 import com.phcworld.domain.answer.DiaryAnswer;
-import com.phcworld.domain.answer.FreeBoardAnswer;
 import com.phcworld.domain.board.Diary;
 import com.phcworld.freeboard.infrastructure.FreeBoardEntity;
 import com.phcworld.domain.common.SaveType;
@@ -39,7 +39,7 @@ public class AlertServiceImplTest {
 	private DiaryAnswer diaryAnswer;
 
 	private FreeBoardEntity freeBoard;
-	private FreeBoardAnswer freeBoardAnswer;
+	private FreeBoardAnswerEntity freeBoardAnswer;
 
 	@Before
 	public void setup(){
@@ -74,7 +74,7 @@ public class AlertServiceImplTest {
 				.count(0)
 				.createDate(LocalDateTime.now())
 				.build();
-		freeBoardAnswer = FreeBoardAnswer.builder()
+		freeBoardAnswer = FreeBoardAnswerEntity.builder()
 				.id(1L)
 				.writer(user)
 				.freeBoard(freeBoard)

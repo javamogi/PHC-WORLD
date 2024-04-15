@@ -1,7 +1,7 @@
 package com.phcworld.service.timeline;
 
+import com.phcworld.answer.infrastructure.FreeBoardAnswerEntity;
 import com.phcworld.domain.answer.DiaryAnswer;
-import com.phcworld.domain.answer.FreeBoardAnswer;
 import com.phcworld.domain.board.Diary;
 import com.phcworld.freeboard.infrastructure.FreeBoardEntity;
 import com.phcworld.domain.common.SaveType;
@@ -94,7 +94,7 @@ public class TimelineServiceImpl implements TimelineService {
 		return timelineRepository.save(freeBoardTimeline);
 	}
 
-	public Timeline createTimeline(FreeBoardAnswer freeBoardAnswer) {
+	public Timeline createTimeline(FreeBoardAnswerEntity freeBoardAnswer) {
 		PostInfo postInfo = PostInfo.builder()
 				.saveType(SaveType.FREE_BOARD_ANSWER)
 				.postId(freeBoardAnswer.getId())

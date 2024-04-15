@@ -1,4 +1,4 @@
-package com.phcworld.web.answer;
+package com.phcworld.answer.controller;
 
 import javax.servlet.http.HttpSession;
 
@@ -16,12 +16,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.phcworld.domain.api.model.request.FreeBoardAnswerRequest;
-import com.phcworld.domain.api.model.response.FreeBoardAnswerApiResponse;
+import com.phcworld.answer.domain.dto.FreeBoardAnswerRequest;
+import com.phcworld.answer.controller.port.FreeBoardAnswerResponse;
 import com.phcworld.domain.api.model.response.SuccessResponse;
 import com.phcworld.domain.exception.LoginNotUserException;
 import com.phcworld.domain.exception.MatchNotUserException;
-import com.phcworld.service.answer.FreeBoardAnswerServiceImpl;
+import com.phcworld.answer.service.FreeBoardAnswerServiceImpl;
 import com.phcworld.utils.HttpSessionUtils;
 
 
@@ -34,7 +34,7 @@ public class FreeBoardAnswerController {
 	
 	@PostMapping("")
 	@ResponseStatus(value = HttpStatus.CREATED)
-	public FreeBoardAnswerApiResponse create(@PathVariable Long freeboardId, FreeBoardAnswerRequest request, HttpSession session) {
+	public FreeBoardAnswerResponse create(@PathVariable Long freeboardId, FreeBoardAnswerRequest request, HttpSession session) {
 		if(request.isContentsEmpty()) {
 			throw new BadRequestException();
 		}
@@ -47,7 +47,7 @@ public class FreeBoardAnswerController {
 	}
 	
 	@GetMapping("/{id}")
-	public FreeBoardAnswerApiResponse read(@PathVariable Long id, HttpSession session) 
+	public FreeBoardAnswerResponse read(@PathVariable Long id, HttpSession session)
 			throws LoginNotUserException, MatchNotUserException {
 		if(!HttpSessionUtils.isLoginUser(session)) {
 			throw new NotMatchUserException();
@@ -57,7 +57,7 @@ public class FreeBoardAnswerController {
 	}
 	
 	@PatchMapping("")
-	public FreeBoardAnswerApiResponse update(FreeBoardAnswerRequest request, HttpSession session) 
+	public FreeBoardAnswerResponse update(FreeBoardAnswerRequest request, HttpSession session)
 			throws LoginNotUserException, MatchNotUserException {
 		if(request.isContentsEmpty()) {
 			throw new BadRequestException();

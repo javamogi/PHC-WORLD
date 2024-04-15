@@ -1,7 +1,7 @@
-package com.phcworld.domain.api.model.response;
+package com.phcworld.answer.controller.port;
 
 
-import com.phcworld.domain.answer.FreeBoardAnswer;
+import com.phcworld.answer.infrastructure.FreeBoardAnswerEntity;
 import com.phcworld.user.infrastructure.UserEntity;
 
 import lombok.Builder;
@@ -9,7 +9,7 @@ import lombok.Data;
 
 @Data
 @Builder
-public class FreeBoardAnswerApiResponse {
+public class FreeBoardAnswerResponse {
 
 	private Long id;
 
@@ -23,8 +23,8 @@ public class FreeBoardAnswerApiResponse {
 
 	private String updateDate;
 
-	public static FreeBoardAnswerApiResponse of(FreeBoardAnswer answer){
-		return FreeBoardAnswerApiResponse.builder()
+	public static FreeBoardAnswerResponse of(FreeBoardAnswerEntity answer){
+		return FreeBoardAnswerResponse.builder()
 				.id(answer.getId())
 				.contents(answer.getContents())
 				.countOfAnswers(answer.getFreeBoard().getCountOfAnswer())

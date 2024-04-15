@@ -10,6 +10,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import java.time.LocalDateTime;
 
+import com.phcworld.answer.infrastructure.FreeBoardAnswerEntity;
 import com.phcworld.domain.common.SaveType;
 import com.phcworld.domain.embedded.PostInfo;
 import com.phcworld.user.domain.Authority;
@@ -27,7 +28,6 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import com.phcworld.domain.alert.Alert;
 import com.phcworld.domain.answer.DiaryAnswer;
-import com.phcworld.domain.answer.FreeBoardAnswer;
 import com.phcworld.domain.board.Diary;
 import com.phcworld.freeboard.infrastructure.FreeBoardEntity;
 import com.phcworld.domain.good.Good;
@@ -128,7 +128,7 @@ public class HomeControllerTest {
 				.createDate(LocalDateTime.now())
 				.count(0)
 				.build();
-		FreeBoardAnswer freeBoardAnswer = FreeBoardAnswer.builder()
+		FreeBoardAnswerEntity freeBoardAnswer = FreeBoardAnswerEntity.builder()
 				.id(1L)
 				.writer(user)
 				.freeBoard(freeBoard)

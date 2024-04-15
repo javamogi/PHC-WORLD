@@ -1,15 +1,12 @@
 package com.phcworld.freeboard.infrastructure;
 
-import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
 
 import javax.persistence.*;
 
-import com.phcworld.common.infrastructure.LocalDateTimeHolder;
 import com.phcworld.freeboard.domain.FreeBoard;
 import com.phcworld.freeboard.domain.dto.FreeBoardRequest;
-import com.phcworld.user.domain.User;
 import com.phcworld.user.infrastructure.UserEntity;
 import lombok.*;
 import org.hibernate.annotations.DynamicUpdate;
@@ -18,7 +15,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.phcworld.domain.answer.FreeBoardAnswer;
+import com.phcworld.answer.infrastructure.FreeBoardAnswerEntity;
 import com.phcworld.utils.LocalDateTimeUtils;
 
 import lombok.experimental.Accessors;
@@ -69,7 +66,7 @@ public class FreeBoardEntity {
 	@OneToMany(mappedBy = "freeBoard", cascade = CascadeType.REMOVE)
 	// @JsonManagedReference
 	@JsonBackReference
-	private List<FreeBoardAnswer> freeBoardAnswers;
+	private List<FreeBoardAnswerEntity> freeBoardAnswers;
 
 	public static FreeBoardEntity from(FreeBoard freeBoard) {
 		return FreeBoardEntity.builder()

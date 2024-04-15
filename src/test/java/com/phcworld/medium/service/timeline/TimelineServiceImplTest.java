@@ -7,8 +7,8 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.phcworld.answer.infrastructure.FreeBoardAnswerEntity;
 import com.phcworld.domain.answer.DiaryAnswer;
-import com.phcworld.domain.answer.FreeBoardAnswer;
 import com.phcworld.freeboard.infrastructure.FreeBoardEntity;
 import com.phcworld.domain.common.SaveType;
 import com.phcworld.domain.embedded.PostInfo;
@@ -28,7 +28,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import com.phcworld.domain.board.Diary;
 import com.phcworld.domain.timeline.Timeline;
 import com.phcworld.service.answer.DiaryAnswerServiceImpl;
-import com.phcworld.service.answer.FreeBoardAnswerServiceImpl;
+import com.phcworld.answer.service.FreeBoardAnswerServiceImpl;
 import com.phcworld.service.board.DiaryServiceImpl;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -55,7 +55,7 @@ public class TimelineServiceImplTest {
 	private Diary diary;
 	private DiaryAnswer diaryAnswer;
 	private FreeBoardEntity freeBoard;
-	private FreeBoardAnswer freeBoardAnswer;
+	private FreeBoardAnswerEntity freeBoardAnswer;
 
 	@Before
 	public void setup(){
@@ -90,7 +90,7 @@ public class TimelineServiceImplTest {
 				.count(0)
 				.createDate(LocalDateTime.now())
 				.build();
-		freeBoardAnswer = FreeBoardAnswer.builder()
+		freeBoardAnswer = FreeBoardAnswerEntity.builder()
 				.id(1L)
 				.writer(user)
 				.freeBoard(freeBoard)

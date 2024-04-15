@@ -1,7 +1,7 @@
 package com.phcworld.freeboard.domain;
 
 import com.phcworld.common.infrastructure.LocalDateTimeHolder;
-import com.phcworld.domain.answer.FreeBoardAnswer;
+import com.phcworld.answer.infrastructure.FreeBoardAnswerEntity;
 import com.phcworld.freeboard.domain.dto.FreeBoardRequest;
 import com.phcworld.freeboard.domain.dto.FreeBoardUpdateRequest;
 import com.phcworld.user.domain.Authority;
@@ -31,7 +31,7 @@ public class FreeBoard {
 
     private Integer count;
 
-    private List<FreeBoardAnswer> freeBoardAnswers;
+    private List<FreeBoardAnswerEntity> freeBoardAnswers;
 
 
     public static FreeBoard from(FreeBoardRequest request, User user, LocalDateTimeHolder localDateTimeHolder) {

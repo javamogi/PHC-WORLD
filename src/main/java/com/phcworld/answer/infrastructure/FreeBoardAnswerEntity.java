@@ -1,4 +1,4 @@
-package com.phcworld.domain.answer;
+package com.phcworld.answer.infrastructure;
 
 import java.time.LocalDateTime;
 
@@ -28,7 +28,7 @@ import lombok.experimental.Accessors;
 @EntityListeners(AuditingEntityListener.class)
 @Table(indexes = {@Index(name = "idx__writer_id_create_date", columnList = "writer_id, createDate"),
 		@Index(name = "idx__free_board_id_create_date", columnList = "free_board_id, createDate")})
-public class FreeBoardAnswer {
+public class FreeBoardAnswerEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -4,12 +4,10 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import com.phcworld.domain.api.model.response.FreeBoardAnswerApiResponse;
+import com.phcworld.answer.controller.port.FreeBoardAnswerResponse;
 import com.phcworld.freeboard.domain.FreeBoard;
-import com.phcworld.freeboard.infrastructure.FreeBoardEntity;
 import com.phcworld.user.infrastructure.UserEntity;
 
-import com.phcworld.freeboard.infrastructure.dto.FreeBoardSelectDto;
 import lombok.Builder;
 import lombok.Data;
 import org.jetbrains.annotations.NotNull;
@@ -34,7 +32,7 @@ public class FreeBoardResponse {
 	
 	private String countOfAnswer;
 	
-	private List<FreeBoardAnswerApiResponse> freeBoardAnswerList;
+	private List<FreeBoardAnswerResponse> freeBoardAnswerList;
 
 	public static FreeBoardResponse of(FreeBoard freeBoard){
 		String badge = getBadge(freeBoard.getCreateDate());
