@@ -3,6 +3,7 @@ package com.phcworld.answer.service;
 import java.util.List;
 
 import com.phcworld.answer.domain.FreeBoardAnswer;
+import com.phcworld.answer.domain.dto.FreeBoardAnswerUpdateRequest;
 import com.phcworld.answer.infrastructure.FreeBoardAnswerEntity;
 import com.phcworld.answer.infrastructure.FreeBoardAnswerRepository;
 import com.phcworld.answer.service.port.FreeBoardAnswerService;
@@ -133,5 +134,16 @@ public class FreeBoardAnswerServiceImpl implements FreeBoardAnswerService {
 			throw new NotMatchUserException();
 		}
 		return answer;
+	}
+
+	@Override
+	public FreeBoardAnswer update(FreeBoardAnswerUpdateRequest request, UserEntity loginUser) {
+		FreeBoardAnswer answer = freeBoardAnswerRepository.findById(request.getId())
+				.orElseThrow(AnswerNotFoundException::new);
+		if(!answer.matchWriter(loginUser)) {
+			throw new NotMatchUserException();
+		}
+		answer = answer.update(request, localDateTimeHolder);
+		return freeBoardAnswerRepository.save(answer);
 	}
 }

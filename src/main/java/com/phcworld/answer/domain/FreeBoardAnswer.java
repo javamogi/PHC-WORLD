@@ -1,6 +1,7 @@
 package com.phcworld.answer.domain;
 
 import com.phcworld.answer.domain.dto.FreeBoardAnswerRequest;
+import com.phcworld.answer.domain.dto.FreeBoardAnswerUpdateRequest;
 import com.phcworld.common.infrastructure.LocalDateTimeHolder;
 import com.phcworld.freeboard.domain.FreeBoard;
 import com.phcworld.user.domain.User;
@@ -35,10 +36,21 @@ public class FreeBoardAnswer {
     }
 
     public String getFormattedUpdateDate() {
-        return LocalDateTimeUtils.getTime(createDate);
+        return LocalDateTimeUtils.getTime(updateDate);
     }
 
     public boolean matchWriter(UserEntity loginUser) {
         return writer.getId().equals(loginUser.getId()) && writer.getAuthority() == loginUser.getAuthority();
+    }
+
+    public FreeBoardAnswer update(FreeBoardAnswerUpdateRequest request, LocalDateTimeHolder localDateTimeHolder) {
+        return FreeBoardAnswer.builder()
+                .id(id)
+                .writer(writer)
+                .freeBoard(freeBoard)
+                .contents(request.getContents())
+                .createDate(createDate)
+                .updateDate(localDateTimeHolder.now())
+                .build();
     }
 }

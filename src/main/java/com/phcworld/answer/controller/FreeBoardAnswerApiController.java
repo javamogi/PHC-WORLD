@@ -3,6 +3,7 @@ package com.phcworld.answer.controller;
 import javax.servlet.http.HttpSession;
 
 import com.phcworld.answer.domain.FreeBoardAnswer;
+import com.phcworld.answer.domain.dto.FreeBoardAnswerUpdateRequest;
 import com.phcworld.answer.service.port.FreeBoardAnswerService;
 import com.phcworld.exception.model.BadRequestException;
 import com.phcworld.exception.model.EmptyContentsException;
@@ -58,8 +59,7 @@ public class FreeBoardAnswerApiController {
 	}
 	
 	@GetMapping("/{id}")
-	public ResponseEntity<FreeBoardAnswerResponse> read(@PathVariable Long id, HttpSession session)
-			throws LoginNotUserException, MatchNotUserException {
+	public ResponseEntity<FreeBoardAnswerResponse> read(@PathVariable Long id, HttpSession session){
 		if(!HttpSessionUtils.isLoginUser(session)) {
 			throw new EmptyLoginUserException();
 		}
@@ -71,16 +71,18 @@ public class FreeBoardAnswerApiController {
 	}
 	
 	@PatchMapping("")
-	public FreeBoardAnswerResponse update(FreeBoardAnswerRequest request, HttpSession session)
-			throws LoginNotUserException, MatchNotUserException {
+	public ResponseEntity<FreeBoardAnswerResponse> update(FreeBoardAnswerUpdateRequest request, HttpSession session){
 		if(request.isContentsEmpty()) {
-			throw new BadRequestException();
+			throw new EmptyContentsException();
 		}
 		if(!HttpSessionUtils.isLoginUser(session)) {
-			throw new NotMatchUserException();
+			throw new EmptyLoginUserException();
 		}
 		UserEntity loginUser = HttpSessionUtils.getUserEntityFromSession(session);
-		return freeBoardAnswerServiceImpl.update(request, loginUser);
+		FreeBoardAnswer freeBoardAnswer = freeBoardAnswerService.update(request, loginUser);
+		return ResponseEntity
+				.status(200)
+				.body(FreeBoardAnswerResponse.from(freeBoardAnswer));
 	}
 	
 	@DeleteMapping("/{id}")

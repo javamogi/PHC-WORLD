@@ -2,9 +2,9 @@ package com.phcworld.answer.service;
 
 import com.phcworld.answer.domain.FreeBoardAnswer;
 import com.phcworld.answer.domain.dto.FreeBoardAnswerRequest;
+import com.phcworld.answer.domain.dto.FreeBoardAnswerUpdateRequest;
 import com.phcworld.exception.model.AnswerNotFoundException;
 import com.phcworld.exception.model.FreeBoardNotFoundException;
-import com.phcworld.exception.model.NotFoundException;
 import com.phcworld.exception.model.NotMatchUserException;
 import com.phcworld.freeboard.domain.FreeBoard;
 import com.phcworld.mock.FakeFreeBoardAnswerRepository;
@@ -16,7 +16,6 @@ import com.phcworld.user.domain.UserStatus;
 import com.phcworld.user.infrastructure.UserEntity;
 import org.junit.Before;
 import org.junit.Test;
-import org.springframework.data.crossstore.ChangeSetPersister;
 
 import java.time.LocalDateTime;
 
@@ -201,6 +200,88 @@ public class FreeBoardAnswerServiceTest {
 
         // then
         FreeBoardAnswer answer = freeBoardAnswerService.getById(answerId, UserEntity.from(user));
+    }
+
+    @Test
+    public void 답변의_글쓴이와_로그인_회원이_같으면_수정할_수_있다(){
+        // given
+        LocalDateTime localDateTime = LocalDateTime.of(2024, 4, 9, 12, 0);
+        User user = User.builder()
+                .id(1L)
+                .email("test@test.test")
+                .password("test")
+                .name("테스트")
+                .profileImage("blank-profile-picture.png")
+                .createDate(localDateTime)
+                .authority(Authority.ROLE_USER)
+                .userStatus(UserStatus.ACTIVE)
+                .certificationCode("1a2b3c")
+                .build();
+        FreeBoardAnswerUpdateRequest request = FreeBoardAnswerUpdateRequest.builder()
+                .id(1L)
+                .contents("답변 수정")
+                .build();
+
+        // when
+        FreeBoardAnswer answer = freeBoardAnswerService.update(request, UserEntity.from(user));
+
+        // then
+        assertThat(answer).isNotNull();
+        assertThat(answer.getId()).isEqualTo(1);
+        assertThat(answer.getContents()).isEqualTo("답변 수정");
+        assertThat(answer.getWriter().getEmail()).isEqualTo("test@test.test");
+        assertThat(answer.getCreateDate()).isEqualTo(localDateTime);
+        assertThat(answer.getUpdateDate()).isEqualTo(localDateTime);
+    }
+
+    @Test(expected = AnswerNotFoundException.class)
+    public void 답변이_존재하지_않으면_예외를_던진다(){
+        // given
+        LocalDateTime localDateTime = LocalDateTime.of(2024, 4, 9, 12, 0);
+        User user = User.builder()
+                .id(1L)
+                .email("test@test.test")
+                .password("test")
+                .name("테스트")
+                .profileImage("blank-profile-picture.png")
+                .createDate(localDateTime)
+                .authority(Authority.ROLE_USER)
+                .userStatus(UserStatus.ACTIVE)
+                .certificationCode("1a2b3c")
+                .build();
+        FreeBoardAnswerUpdateRequest request = FreeBoardAnswerUpdateRequest.builder()
+                .id(99L)
+                .contents("답변 수정")
+                .build();
+
+        // when
+        // then
+        freeBoardAnswerService.update(request, UserEntity.from(user));
+    }
+
+    @Test(expected = NotMatchUserException.class)
+    public void 답변의_글쓴이와_로그인_회원이_다르면_예외를_던진다(){
+        // given
+        LocalDateTime localDateTime = LocalDateTime.of(2024, 4, 9, 12, 0);
+        User user = User.builder()
+                .id(2L)
+                .email("test2@test.test")
+                .password("test2")
+                .name("테스트2")
+                .profileImage("blank-profile-picture.png")
+                .createDate(localDateTime)
+                .authority(Authority.ROLE_USER)
+                .userStatus(UserStatus.ACTIVE)
+                .certificationCode("1a2b3c")
+                .build();
+        FreeBoardAnswerUpdateRequest request = FreeBoardAnswerUpdateRequest.builder()
+                .id(1L)
+                .contents("답변 수정")
+                .build();
+
+        // when
+        // then
+        freeBoardAnswerService.update(request, UserEntity.from(user));
     }
 
 }

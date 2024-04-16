@@ -3,6 +3,7 @@ package com.phcworld.answer.controller;
 import com.phcworld.answer.controller.port.FreeBoardAnswerResponse;
 import com.phcworld.answer.domain.FreeBoardAnswer;
 import com.phcworld.answer.domain.dto.FreeBoardAnswerRequest;
+import com.phcworld.answer.domain.dto.FreeBoardAnswerUpdateRequest;
 import com.phcworld.exception.model.AnswerNotFoundException;
 import com.phcworld.exception.model.EmptyContentsException;
 import com.phcworld.exception.model.EmptyLoginUserException;
@@ -287,4 +288,94 @@ public class FreeBoardAnswerApiControllerTest {
                 .read(answerId, fakeHttpSession);
     }
 
+    @Test
+    public void 답변의_글쓴이와_로그인_회원이_같으면_게시글을_수정할_수_있다(){
+        // given
+        LocalDateTime time = LocalDateTime.of(2024, 3, 13, 11, 11, 11, 111111);
+        TestContainer testContainer = TestContainer.builder()
+                .localDateTimeHolder(LocalDateTime::now)
+                .build();
+        User user = User.builder()
+                .id(1L)
+                .email("test@test.test")
+                .name("테스트")
+                .password("test2")
+                .authority(Authority.ROLE_USER)
+                .profileImage("blank-profile-picture.png")
+                .createDate(time)
+                .build();
+        testContainer.userRepository.save(user);
+        FreeBoard freeBoard = FreeBoard.builder()
+                .id(1L)
+                .title("제목")
+                .contents("내용")
+                .count(0)
+                .writer(user)
+                .createDate(time)
+                .updateDate(time)
+                .build();
+        testContainer.freeBoardRepository.save(freeBoard);
+        testContainer.freeBoardAnswerRepository.save(FreeBoardAnswer.builder()
+                .id(1L)
+                .freeBoard(freeBoard)
+                .writer(user)
+                .contents("답변내용")
+                .createDate(time)
+                .updateDate(time)
+                .build());
+        FakeHttpSession fakeHttpSession = new FakeHttpSession();
+        fakeHttpSession.setAttribute(HttpSessionUtils.USER_SESSION_KEY, UserEntity.from(user));
+        FreeBoardAnswerUpdateRequest request = FreeBoardAnswerUpdateRequest.builder()
+                .id(1L)
+                .contents("답변 수정")
+                .build();
+
+        // when
+        ResponseEntity<FreeBoardAnswerResponse> result = testContainer
+                .freeBoardAnswerApiController
+                .update(request, fakeHttpSession);
+
+        // then
+        assertThat(result.getStatusCode()).isEqualTo(HttpStatus.valueOf(200));
+        assertThat(result.getBody()).isNotNull();
+        assertThat(result.getBody().getContents()).isEqualTo("답변 수정");
+        assertThat(result.getBody().getWriter().getEmail()).isEqualTo("test@test.test");
+        assertThat(result.getBody().getUpdateDate()).isEqualTo("방금전");
+    }
+
+    @Test(expected = EmptyContentsException.class)
+    public void 답변을_수정할_내용이_비어있으면_예외를_던진다(){
+        // given
+        TestContainer testContainer = TestContainer.builder()
+                .build();
+        FakeHttpSession fakeHttpSession = new FakeHttpSession();
+        FreeBoardAnswerUpdateRequest request = FreeBoardAnswerUpdateRequest.builder()
+                .id(1L)
+                .contents("")
+                .build();
+
+        // when
+        // then
+        testContainer
+                .freeBoardAnswerApiController
+                .update(request, fakeHttpSession);
+    }
+
+    @Test(expected = EmptyLoginUserException.class)
+    public void 답변_수정시_로그인회원이_없다면_예외를_던진다(){
+        // given
+        TestContainer testContainer = TestContainer.builder()
+                .build();
+        FakeHttpSession fakeHttpSession = new FakeHttpSession();
+        FreeBoardAnswerUpdateRequest request = FreeBoardAnswerUpdateRequest.builder()
+                .id(1L)
+                .contents("수정 내용")
+                .build();
+
+        // when
+        // then
+        testContainer
+                .freeBoardAnswerApiController
+                .update(request, fakeHttpSession);
+    }
 }

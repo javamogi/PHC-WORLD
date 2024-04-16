@@ -1,7 +1,6 @@
 package com.phcworld.answer.infrastructure;
 
 import com.phcworld.answer.domain.FreeBoardAnswer;
-import com.phcworld.exception.model.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
