@@ -67,26 +67,11 @@ public class FreeBoardAnswerEntity {
 				.build();
     }
 
-    public String getFormattedCreateDate() {
-		return LocalDateTimeUtils.getTime(createDate);
-	}
-	
-	public String getFormattedUpdateDate() {
-		return LocalDateTimeUtils.getTime(updateDate);
-	}
-
-	public boolean isSameWriter(UserEntity loginUser) {
-		return this.writer.equals(loginUser);
-	}
-
-	public void update(String contents) {
-		this.contents = contents;
-	}
-
 	public FreeBoardAnswer toModel() {
 		return FreeBoardAnswer.builder()
 				.id(id)
 				.writer(writer.toModel())
+				.freeBoard(freeBoard.toModelWithoutAnswer())
 				.contents(contents)
 				.createDate(createDate)
 				.updateDate(updateDate)

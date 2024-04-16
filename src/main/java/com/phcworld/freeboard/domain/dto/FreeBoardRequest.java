@@ -11,8 +11,6 @@ import lombok.NoArgsConstructor;
 @Builder
 public class FreeBoardRequest {
 
-	private Long id;
-
 	private String title;
 
 	private String contents;

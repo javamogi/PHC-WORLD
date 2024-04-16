@@ -7,8 +7,6 @@ import lombok.*;
 @Getter
 public class FreeBoardAnswerRequest {
 	
-	private Long id;
-	
 	private String contents;
 
 	public boolean isContentsEmpty() {

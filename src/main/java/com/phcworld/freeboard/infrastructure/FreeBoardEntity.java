@@ -100,4 +100,16 @@ public class FreeBoardEntity {
 				.build();
 	}
 
+	public FreeBoard toModelWithoutAnswer() {
+		return FreeBoard.builder()
+				.id(id)
+				.title(title)
+				.contents(contents)
+				.count(count)
+				.createDate(createDate)
+				.updateDate(updateDate)
+				.writer(writer.toModel())
+				.build();
+	}
+
 }

@@ -234,7 +234,7 @@ public class AlertServiceImplTest {
 				.userName(freeBoardAnswer.getWriter().getName())
 				.isGood(false)
 				.postTitle(freeBoardAnswer.getFreeBoard().getTitle())
-				.formattedCreateDate(freeBoardAnswer.getFormattedCreateDate())
+//				.formattedCreateDate(freeBoardAnswer.getFormattedCreateDate())
 				.build();
 
 		List<AlertResponseDto> list = new ArrayList<>();

@@ -18,22 +18,7 @@ public class FreeBoardAnswerResponse {
 
 	private String contents;
 	
-	private Long freeBoardId;
-
-	private String countOfAnswers;
-
 	private String updateDate;
-
-	public static FreeBoardAnswerResponse of(FreeBoardAnswerEntity answer){
-		return FreeBoardAnswerResponse.builder()
-				.id(answer.getId())
-				.contents(answer.getContents())
-//				.countOfAnswers(answer.getFreeBoard().getCountOfAnswer())
-				.freeBoardId(answer.getFreeBoard().getId())
-				.writer(UserResponseDto.of(answer.getWriter()))
-				.updateDate(answer.getFormattedUpdateDate())
-				.build();
-	}
 
 	public static FreeBoardAnswerResponse from(FreeBoardAnswer answer) {
 		return FreeBoardAnswerResponse.builder()
