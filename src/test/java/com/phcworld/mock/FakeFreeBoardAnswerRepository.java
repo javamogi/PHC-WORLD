@@ -40,4 +40,9 @@ public class FakeFreeBoardAnswerRepository implements FreeBoardAnswerRepository 
                 .findAny();
     }
 
+    @Override
+    public void deleteById(long id) {
+        data.removeIf(a -> Objects.equals(a.getId(), id));
+    }
+
 }

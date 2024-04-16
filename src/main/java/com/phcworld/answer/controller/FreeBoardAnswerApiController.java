@@ -86,14 +86,14 @@ public class FreeBoardAnswerApiController {
 	}
 	
 	@DeleteMapping("/{id}")
-	public SuccessResponse delete(@PathVariable Long id, HttpSession session) 
-			throws LoginNotUserException, MatchNotUserException {
+	public ResponseEntity<SuccessResponse> delete(@PathVariable Long id, HttpSession session) {
 		if(!HttpSessionUtils.isLoginUser(session)) {
-			throw new NotMatchUserException();
+			throw new EmptyLoginUserException();
 		}
 		UserEntity loginUser = HttpSessionUtils.getUserEntityFromSession(session);
-		
-		return freeBoardAnswerServiceImpl.delete(id, loginUser);
+		return ResponseEntity
+				.status(200)
+				.body(freeBoardAnswerService.delete(id, loginUser));
 	}
 
 }

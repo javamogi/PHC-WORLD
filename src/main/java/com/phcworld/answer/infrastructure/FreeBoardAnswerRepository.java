@@ -9,4 +9,6 @@ public interface FreeBoardAnswerRepository {
     FreeBoardAnswer save(FreeBoardAnswer freeBoardAnswer);
 
     Optional<FreeBoardAnswer> findById(long id);
+
+    void deleteById(long id);
 }

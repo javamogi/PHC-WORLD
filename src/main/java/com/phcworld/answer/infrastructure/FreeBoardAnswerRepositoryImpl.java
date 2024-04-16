@@ -21,4 +21,10 @@ public class FreeBoardAnswerRepositoryImpl implements FreeBoardAnswerRepository{
     public Optional<FreeBoardAnswer> findById(long id) {
         return freeBoardAnswerJpaRepository.findById(id).map(FreeBoardAnswerEntity::toModel);
     }
+
+    @Override
+    public void deleteById(long id) {
+        freeBoardAnswerJpaRepository.deleteById(id);
+    }
+
 }

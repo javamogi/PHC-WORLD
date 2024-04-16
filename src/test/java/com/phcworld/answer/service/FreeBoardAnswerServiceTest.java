@@ -3,6 +3,7 @@ package com.phcworld.answer.service;
 import com.phcworld.answer.domain.FreeBoardAnswer;
 import com.phcworld.answer.domain.dto.FreeBoardAnswerRequest;
 import com.phcworld.answer.domain.dto.FreeBoardAnswerUpdateRequest;
+import com.phcworld.domain.api.model.response.SuccessResponse;
 import com.phcworld.exception.model.AnswerNotFoundException;
 import com.phcworld.exception.model.FreeBoardNotFoundException;
 import com.phcworld.exception.model.NotMatchUserException;
@@ -282,6 +283,53 @@ public class FreeBoardAnswerServiceTest {
         // when
         // then
         freeBoardAnswerService.update(request, UserEntity.from(user));
+    }
+
+    @Test
+    public void 답변의_글쓴이와_로그인_회원이_같으면_삭제할_수_있다(){
+        // given
+        LocalDateTime localDateTime = LocalDateTime.of(2024, 4, 9, 12, 0);
+        User user = User.builder()
+                .id(1L)
+                .email("test@test.test")
+                .password("test")
+                .name("테스트")
+                .profileImage("blank-profile-picture.png")
+                .createDate(localDateTime)
+                .authority(Authority.ROLE_USER)
+                .userStatus(UserStatus.ACTIVE)
+                .certificationCode("1a2b3c")
+                .build();
+        long id = 1;
+
+        // when
+        SuccessResponse response = freeBoardAnswerService.delete(id, UserEntity.from(user));
+
+        // then
+        assertThat(response).isNotNull();
+        assertThat(response.getSuccess()).isEqualTo("삭제 성공");
+    }
+
+    @Test(expected = AnswerNotFoundException.class)
+    public void 답변_삭제시_글쓴이와_로그인_회원이_다르면_예외를_던진다(){
+        // given
+        LocalDateTime localDateTime = LocalDateTime.of(2024, 4, 9, 12, 0);
+        User user = User.builder()
+                .id(2L)
+                .email("test2@test.test")
+                .password("test2")
+                .name("테스트2")
+                .profileImage("blank-profile-picture.png")
+                .createDate(localDateTime)
+                .authority(Authority.ROLE_USER)
+                .userStatus(UserStatus.ACTIVE)
+                .certificationCode("1a2b3c")
+                .build();
+        long id = 99;
+
+        // when
+        // then
+        freeBoardAnswerService.delete(id, UserEntity.from(user));
     }
 
 }
