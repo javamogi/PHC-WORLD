@@ -1,8 +1,8 @@
 package com.phcworld.repository.dashboard;
 
+import com.phcworld.answer.infrastructure.QFreeBoardAnswerEntity;
 import com.phcworld.domain.alert.QAlert;
 import com.phcworld.domain.answer.QDiaryAnswer;
-import com.phcworld.domain.answer.QFreeBoardAnswer;
 import com.phcworld.domain.board.QDiary;
 import com.phcworld.domain.dashboard.dto.DashBoardSelectDto;
 import com.phcworld.domain.timeline.QTimeline;
@@ -23,7 +23,7 @@ public class DashBoardRepositoryCustomImpl implements DashBoardRepositoryCustom 
     private final JPAQueryFactory queryFactory;
 
     QFreeBoardEntity freeBoard = QFreeBoardEntity.freeBoardEntity;
-    QFreeBoardAnswer freeBoardAnswer = QFreeBoardAnswer.freeBoardAnswer;
+    QFreeBoardAnswerEntity freeBoardAnswer = QFreeBoardAnswerEntity.freeBoardAnswerEntity;
     QDiary diary = QDiary.diary;
     QDiaryAnswer diaryAnswer = QDiaryAnswer.diaryAnswer;
     QAlert alert = QAlert.alert;

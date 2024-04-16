@@ -173,7 +173,7 @@ public class FreeBoardJpaRepositoryTest {
 		FreeBoardEntity newBoard = freeBoardRepository.save(freeBoard);
 		FreeBoardEntity register = freeBoardRepository.findById(newBoard.getId())
 				.orElseThrow(() -> new CustomException("400", "게시물이 존재하지 않습니다."));
-		register.update(request);
+//		register.update(request);
 		FreeBoardEntity updatedBoard = freeBoardRepository.save(register);
 		assertThat(request.getContents()).isEqualTo(updatedBoard.getContents());
 	}

@@ -11,7 +11,7 @@ import com.phcworld.answer.service.FreeBoardAnswerServiceImpl;
 import com.phcworld.user.domain.Authority;
 import com.phcworld.user.infrastructure.UserEntity;
 import com.phcworld.utils.HttpSessionUtils;
-import com.phcworld.answer.controller.FreeBoardAnswerController;
+import com.phcworld.answer.controller.FreeBoardAnswerApiController;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -35,8 +35,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@WebMvcTest(FreeBoardAnswerController.class)
-public class FreeBoardAnswerControllerTest {
+@WebMvcTest(FreeBoardAnswerApiController.class)
+public class FreeBoardAnswerApiControllerTest {
 	
 	@Autowired
 	private MockMvc mvc;

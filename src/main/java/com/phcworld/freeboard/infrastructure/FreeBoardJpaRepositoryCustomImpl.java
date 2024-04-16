@@ -1,6 +1,6 @@
 package com.phcworld.freeboard.infrastructure;
 
-import com.phcworld.domain.answer.QFreeBoardAnswer;
+import com.phcworld.answer.infrastructure.QFreeBoardAnswerEntity;
 import com.phcworld.freeboard.infrastructure.dto.FreeBoardSelectDto;
 import com.phcworld.user.infrastructure.QUserEntity;
 import com.querydsl.core.BooleanBuilder;
@@ -22,7 +22,7 @@ public class FreeBoardJpaRepositoryCustomImpl implements FreeBoardJpaRepositoryC
     private final JPAQueryFactory queryFactory;
     QFreeBoardEntity freeBoard = QFreeBoardEntity.freeBoardEntity;
     QUserEntity user = QUserEntity.userEntity;
-    QFreeBoardAnswer answer = QFreeBoardAnswer.freeBoardAnswer;
+    QFreeBoardAnswerEntity answer = QFreeBoardAnswerEntity.freeBoardAnswerEntity;
 
     @Override
     public List<FreeBoardSelectDto> findByKeywordOrderById(String keyword, Pageable pageable){

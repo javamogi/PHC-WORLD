@@ -1,5 +1,6 @@
 package com.phcworld.service.alert;
 
+import com.phcworld.answer.domain.FreeBoardAnswer;
 import com.phcworld.domain.alert.Alert;
 import com.phcworld.domain.alert.dto.AlertResponseDto;
 import com.phcworld.domain.answer.DiaryAnswer;
@@ -96,6 +97,24 @@ public class AlertServiceImpl implements AlertService {
 				.postInfo(postInfo)
 				.registerUser(freeBoardAnswer.getWriter())
 				.postWriter(freeBoardAnswer.getFreeBoard().getWriter())
+				.createDate(freeBoardAnswer.getCreateDate())
+				.isRead(false)
+				.build();
+		return alertRepository.save(alert);
+	}
+
+	public Alert createAlert(FreeBoardAnswer freeBoardAnswer) {
+		PostInfo postInfo = PostInfo.builder()
+				.saveType(SaveType.GOOD)
+				.postId(freeBoardAnswer.getId())
+				.redirectId(freeBoardAnswer.getFreeBoard().getId())
+				.build();
+		Alert alert = Alert.builder()
+//				.type("Diary")
+//				.good(good)
+				.postInfo(postInfo)
+				.registerUser(UserEntity.from(freeBoardAnswer.getWriter()))
+				.postWriter(UserEntity.from(freeBoardAnswer.getFreeBoard().getWriter()))
 				.createDate(freeBoardAnswer.getCreateDate())
 				.isRead(false)
 				.build();

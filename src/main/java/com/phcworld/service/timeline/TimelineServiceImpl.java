@@ -1,5 +1,6 @@
 package com.phcworld.service.timeline;
 
+import com.phcworld.answer.domain.FreeBoardAnswer;
 import com.phcworld.answer.infrastructure.FreeBoardAnswerEntity;
 import com.phcworld.domain.answer.DiaryAnswer;
 import com.phcworld.domain.board.Diary;
@@ -120,6 +121,20 @@ public class TimelineServiceImpl implements TimelineService {
 				.saveDate(LocalDateTime.now())
 				.build();
 		return timelineRepository.save(timeline);
+	}
+
+	public Timeline createTimeline(FreeBoardAnswer freeBoardAnswer) {
+		PostInfo postInfo = PostInfo.builder()
+				.saveType(SaveType.DIARY)
+				.postId(freeBoardAnswer.getId())
+				.redirectId(freeBoardAnswer.getFreeBoard().getId())
+				.build();
+		Timeline diaryTimeline = Timeline.builder()
+				.postInfo(postInfo)
+				.user(UserEntity.from(freeBoardAnswer.getWriter()))
+				.saveDate(freeBoardAnswer.getCreateDate())
+				.build();
+		return timelineRepository.save(diaryTimeline);
 	}
 	
 	public void deleteTimeline(Long timelineId){

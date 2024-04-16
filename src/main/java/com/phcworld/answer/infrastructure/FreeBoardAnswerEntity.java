@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 
 import javax.persistence.*;
 
+import com.phcworld.answer.domain.FreeBoardAnswer;
 import com.phcworld.freeboard.infrastructure.FreeBoardEntity;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -54,8 +55,19 @@ public class FreeBoardAnswerEntity {
 	
 	@LastModifiedDate
 	private LocalDateTime updateDate;
-	
-	public String getFormattedCreateDate() {
+
+    public static FreeBoardAnswerEntity from(FreeBoardAnswer freeBoardAnswer) {
+		return FreeBoardAnswerEntity.builder()
+				.id(freeBoardAnswer.getId())
+				.writer(UserEntity.from(freeBoardAnswer.getWriter()))
+				.freeBoard(FreeBoardEntity.from(freeBoardAnswer.getFreeBoard()))
+				.contents(freeBoardAnswer.getContents())
+				.createDate(freeBoardAnswer.getCreateDate())
+				.updateDate(freeBoardAnswer.getUpdateDate())
+				.build();
+    }
+
+    public String getFormattedCreateDate() {
 		return LocalDateTimeUtils.getTime(createDate);
 	}
 	
@@ -71,4 +83,13 @@ public class FreeBoardAnswerEntity {
 		this.contents = contents;
 	}
 
+	public FreeBoardAnswer toModel() {
+		return FreeBoardAnswer.builder()
+				.id(id)
+				.writer(writer.toModel())
+				.contents(contents)
+				.createDate(createDate)
+				.updateDate(updateDate)
+				.build();
+	}
 }

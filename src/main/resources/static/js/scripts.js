@@ -22,7 +22,7 @@ $(document).ready(function(){
 				alert(jqXHR.responseJSON.error);
 			},
 			success : function(data){
-//				console.log(data);
+				console.log(data);
 				var deleteUrl = url + "/" + data.id;
 				var getUrl = url + "/" + data.id;
 				var profileUrl = "/users/"+data.writer.id+"/profile";
@@ -36,7 +36,12 @@ $(document).ready(function(){
 				$(".answer-template").append(answerTemplate);
 				$("textarea[name=contents]").val('');
 				if(url.indexOf("freeboard") > 0){
-					$("#countOfAnswer").text(data.countOfAnswers);
+					let countOfAnswer = $("#countOfAnswer").text();
+					let num = countOfAnswer.replace(/[\[\]]/g, "");
+					let count = parseInt(num) + 1;
+					let countString = "[" + count + "]";
+					// $("#countOfAnswer").text(data.countOfAnswers);
+					$("#countOfAnswer").text(countString);
 				} else {
 					$("#countOfDiaryAnswer").text(data.countOfAnswers);
 				}

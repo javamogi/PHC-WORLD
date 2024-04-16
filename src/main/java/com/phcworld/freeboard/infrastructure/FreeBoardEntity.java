@@ -1,7 +1,10 @@
 package com.phcworld.freeboard.infrastructure;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 import javax.persistence.*;
 
@@ -89,37 +92,12 @@ public class FreeBoardEntity {
 				.createDate(createDate)
 				.updateDate(updateDate)
 				.writer(writer.toModel())
+				.freeBoardAnswers(
+						freeBoardAnswers != null ?
+						freeBoardAnswers.stream()
+						.map(FreeBoardAnswerEntity::toModel)
+						.collect(Collectors.toList()) : new ArrayList<>())
 				.build();
-	}
-
-    public String getCountOfAnswer() {
-		if (this.freeBoardAnswers == null|| this.freeBoardAnswers.size() == 0) {
-			return "";
-		}
-		return "[" + freeBoardAnswers.size() + "]";
-	}
-
-	public void addCount() {
-		this.count += 1;
-	}
-
-	public String getFormattedCreateDate() {
-		return LocalDateTimeUtils.getTime(createDate);
-	}
-
-	public String getFormattedUpdateDate() {
-		return LocalDateTimeUtils.getTime(updateDate);
-	}
-
-	public void update(FreeBoardRequest request) {
-		this.contents = request.getContents();
-	}
-
-	public boolean matchUser(UserEntity loginUser) {
-		if (loginUser == null) {
-			return false;
-		}
-		return this.writer.equals(loginUser);
 	}
 
 }

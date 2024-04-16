@@ -7,8 +7,10 @@ import com.phcworld.user.infrastructure.UserEntity;
 import lombok.Builder;
 import lombok.Data;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Data
 @Builder
@@ -61,6 +63,12 @@ public class FreeBoardResponseWithAuthority {
 				.existLoginUser(existLoginUser)
 				.isModifyAuthority(isModifyAuthority)
 				.isDeleteAuthority(isDeleteAuthority)
+				.freeBoardAnswerList(
+						freeBoard.getFreeBoardAnswers() != null ?
+						freeBoard.getFreeBoardAnswers()
+						.stream()
+						.map(FreeBoardAnswerResponse::from)
+						.collect(Collectors.toList()) : new ArrayList<>())
 				.build();
 	}
 

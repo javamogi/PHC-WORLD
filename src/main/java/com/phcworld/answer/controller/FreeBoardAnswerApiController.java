@@ -2,11 +2,17 @@ package com.phcworld.answer.controller;
 
 import javax.servlet.http.HttpSession;
 
+import com.phcworld.answer.domain.FreeBoardAnswer;
+import com.phcworld.answer.service.port.FreeBoardAnswerService;
 import com.phcworld.exception.model.BadRequestException;
+import com.phcworld.exception.model.EmptyContentsException;
+import com.phcworld.exception.model.EmptyLoginUserException;
 import com.phcworld.exception.model.NotMatchUserException;
 import com.phcworld.user.infrastructure.UserEntity;
+import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -28,22 +34,27 @@ import com.phcworld.utils.HttpSessionUtils;
 @RestController
 @RequestMapping("/freeboards/{freeboardId}/answers")
 @RequiredArgsConstructor
-public class FreeBoardAnswerController {
+@Builder
+public class FreeBoardAnswerApiController {
 	
-	private final FreeBoardAnswerServiceImpl freeBoardAnswerService;
-	
+	private final FreeBoardAnswerServiceImpl freeBoardAnswerServiceImpl;
+	private final FreeBoardAnswerService freeBoardAnswerService;
+
 	@PostMapping("")
 	@ResponseStatus(value = HttpStatus.CREATED)
-	public FreeBoardAnswerResponse create(@PathVariable Long freeboardId, FreeBoardAnswerRequest request, HttpSession session) {
+	public ResponseEntity<FreeBoardAnswerResponse> create(@PathVariable Long freeboardId, FreeBoardAnswerRequest request, HttpSession session) {
 		if(request.isContentsEmpty()) {
-			throw new BadRequestException();
+			throw new EmptyContentsException();
 		}
 		if(!HttpSessionUtils.isLoginUser(session)) {
-			throw new NotMatchUserException();
+			throw new EmptyLoginUserException();
 		}
 		UserEntity loginUser = HttpSessionUtils.getUserEntityFromSession(session);
-		
-		return freeBoardAnswerService.create(loginUser, freeboardId, request);
+
+		FreeBoardAnswer answer = freeBoardAnswerService.register(freeboardId, loginUser.toModel(), request);
+		return ResponseEntity
+				.status(201)
+				.body(FreeBoardAnswerResponse.from(answer));
 	}
 	
 	@GetMapping("/{id}")
@@ -53,7 +64,7 @@ public class FreeBoardAnswerController {
 			throw new NotMatchUserException();
 		}
 		UserEntity loginUser = HttpSessionUtils.getUserEntityFromSession(session);
-		return freeBoardAnswerService.read(id, loginUser);
+		return freeBoardAnswerServiceImpl.read(id, loginUser);
 	}
 	
 	@PatchMapping("")
@@ -66,7 +77,7 @@ public class FreeBoardAnswerController {
 			throw new NotMatchUserException();
 		}
 		UserEntity loginUser = HttpSessionUtils.getUserEntityFromSession(session);
-		return freeBoardAnswerService.update(request, loginUser);
+		return freeBoardAnswerServiceImpl.update(request, loginUser);
 	}
 	
 	@DeleteMapping("/{id}")
@@ -77,7 +88,7 @@ public class FreeBoardAnswerController {
 		}
 		UserEntity loginUser = HttpSessionUtils.getUserEntityFromSession(session);
 		
-		return freeBoardAnswerService.delete(id, loginUser);
+		return freeBoardAnswerServiceImpl.delete(id, loginUser);
 	}
 
 }

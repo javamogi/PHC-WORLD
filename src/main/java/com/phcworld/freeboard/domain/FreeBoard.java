@@ -1,5 +1,6 @@
 package com.phcworld.freeboard.domain;
 
+import com.phcworld.answer.domain.FreeBoardAnswer;
 import com.phcworld.common.infrastructure.LocalDateTimeHolder;
 import com.phcworld.answer.infrastructure.FreeBoardAnswerEntity;
 import com.phcworld.freeboard.domain.dto.FreeBoardRequest;
@@ -31,7 +32,7 @@ public class FreeBoard {
 
     private Integer count;
 
-    private List<FreeBoardAnswerEntity> freeBoardAnswers;
+    private List<FreeBoardAnswer> freeBoardAnswers;
 
 
     public static FreeBoard from(FreeBoardRequest request, User user, LocalDateTimeHolder localDateTimeHolder) {
@@ -65,6 +66,7 @@ public class FreeBoard {
                 .count(count + 1)
                 .createDate(createDate)
                 .updateDate(updateDate)
+                .freeBoardAnswers(freeBoardAnswers)
                 .build();
     }
 

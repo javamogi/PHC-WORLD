@@ -1,10 +1,7 @@
 package com.phcworld.exception.handler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.phcworld.exception.model.CustomBaseException;
-import com.phcworld.exception.model.CustomException;
-import com.phcworld.exception.model.ErrorCode;
-import com.phcworld.exception.model.ErrorResponse;
+import com.phcworld.exception.model.*;
 import com.phcworld.utils.SlackErrorMessage;
 import com.slack.api.Slack;
 import lombok.RequiredArgsConstructor;
@@ -88,5 +85,15 @@ public class CommonsExceptionHandler {
 
     private ResponseEntity<ErrorResponse> createErrorResponseEntity(ErrorCode errorCode) {
         return new ResponseEntity<>(ErrorResponse.of(errorCode), errorCode.getHttpStatus());
+    }
+
+    @ExceptionHandler(EmptyContentsException.class)
+    public ResponseEntity<ErrorResponse> handlerBadRequestException(EmptyContentsException e){
+        return createErrorResponseEntity(e.getErrorCode());
+    }
+
+    @ExceptionHandler(EmptyLoginUserException.class)
+    public ResponseEntity<ErrorResponse> handlerBadRequestException(EmptyLoginUserException e){
+        return createErrorResponseEntity(e.getErrorCode());
     }
 }

@@ -38,7 +38,8 @@ public class FreeBoardServiceImpl implements FreeBoardService {
     public FreeBoard addReadCount(Long freeBoardId) {
         FreeBoard freeBoard = freeBoardRepository.findById(freeBoardId);
         freeBoard = freeBoard.addCount();
-        return freeBoardRepository.save(freeBoard);
+        freeBoardRepository.save(freeBoard);
+        return freeBoard;
     }
 
     @Override

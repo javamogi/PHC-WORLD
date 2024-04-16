@@ -1,7 +1,7 @@
 package com.phcworld.repository.statistics;
 
+import com.phcworld.answer.infrastructure.QFreeBoardAnswerEntity;
 import com.phcworld.domain.answer.QDiaryAnswer;
-import com.phcworld.domain.answer.QFreeBoardAnswer;
 import com.phcworld.domain.board.QDiary;
 import com.phcworld.domain.board.QDiaryHashtag;
 import com.phcworld.domain.board.QHashtag;
@@ -45,7 +45,7 @@ public class StatisticsRepository {
     QFreeBoardEntity freeBoard = QFreeBoardEntity.freeBoardEntity;
 
     QDiaryAnswer diaryAnswer = QDiaryAnswer.diaryAnswer;
-    QFreeBoardAnswer freeBoardAnswer = QFreeBoardAnswer.freeBoardAnswer;
+    QFreeBoardAnswerEntity freeBoardAnswer = QFreeBoardAnswerEntity.freeBoardAnswerEntity;
     QDiaryHashtag diaryHashtag = QDiaryHashtag.diaryHashtag;
 
     QGood good = QGood.good;

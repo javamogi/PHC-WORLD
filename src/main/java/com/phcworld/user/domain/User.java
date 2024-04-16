@@ -4,6 +4,7 @@ import com.phcworld.common.infrastructure.LocalDateTimeHolder;
 import com.phcworld.common.infrastructure.UuidHolder;
 import com.phcworld.user.domain.dto.UserRequest;
 import com.phcworld.user.domain.dto.UserUpdateRequest;
+import com.phcworld.utils.LocalDateTimeUtils;
 import lombok.Builder;
 import lombok.Getter;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -84,6 +85,10 @@ public class User {
                 .build();
     }
 
+    public String getFormattedCreateDate() {
+        return LocalDateTimeUtils.getTime(createDate);
+    }
+
     @Override
     public boolean equals(Object object) {
         if (this == object) return true;
@@ -96,4 +101,5 @@ public class User {
     public int hashCode() {
         return Objects.hash(id, email, name, authority, userStatus);
     }
+
 }

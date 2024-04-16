@@ -1,5 +1,9 @@
 package com.phcworld.mock;
 
+import com.phcworld.answer.controller.FreeBoardAnswerApiController;
+import com.phcworld.answer.infrastructure.FreeBoardAnswerRepository;
+import com.phcworld.answer.service.FreeBoardAnswerServiceImpl;
+import com.phcworld.answer.service.port.FreeBoardAnswerService;
 import com.phcworld.common.infrastructure.LocalDateTimeHolder;
 import com.phcworld.common.infrastructure.UuidHolder;
 import com.phcworld.freeboard.controller.FreeBoardController;
@@ -34,6 +38,12 @@ public class TestContainer {
 
     public final FreeBoardRepository freeBoardRepository;
 
+    public final FreeBoardAnswerRepository freeBoardAnswerRepository;
+
+    public final FreeBoardAnswerService freeBoardAnswerService;
+
+    public final FreeBoardAnswerApiController freeBoardAnswerApiController;
+
     @Builder
     public TestContainer(LocalDateTimeHolder localDateTimeHolder){
         this.passwordEncoder = new FakePasswordEncode("test2");
@@ -57,6 +67,15 @@ public class TestContainer {
                 .build();
         this.freeBoardController = FreeBoardController.builder()
                 .freeBoardService(freeBoardService)
+                .build();
+        this.freeBoardAnswerRepository = new FakeFreeBoardAnswerRepository();
+        this.freeBoardAnswerService = FreeBoardAnswerServiceImpl.builder()
+                .localDateTimeHolder(localDateTimeHolder)
+                .freeBoardAnswerRepository(freeBoardAnswerRepository)
+                .freeBoardRepository(freeBoardRepository)
+                .build();
+        this.freeBoardAnswerApiController = FreeBoardAnswerApiController.builder()
+                .freeBoardAnswerService(freeBoardAnswerService)
                 .build();
     }
 }

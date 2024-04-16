@@ -2,7 +2,9 @@ package com.phcworld.freeboard.controller.port;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import com.phcworld.answer.controller.port.FreeBoardAnswerResponse;
 import com.phcworld.freeboard.domain.FreeBoard;
@@ -45,6 +47,12 @@ public class FreeBoardResponse {
 				.createDate(freeBoard.getFormattedCreateDate())
 				.count(freeBoard.getCount())
 				.countOfAnswer(freeBoard.getCountOfAnswer())
+				.freeBoardAnswerList(
+						freeBoard.getFreeBoardAnswers() != null ?
+						freeBoard.getFreeBoardAnswers()
+						.stream()
+						.map(FreeBoardAnswerResponse::from)
+						.collect(Collectors.toList()) : new ArrayList<>())
 				.build();
 	}
 
