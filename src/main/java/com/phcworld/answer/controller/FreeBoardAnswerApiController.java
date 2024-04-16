@@ -58,13 +58,16 @@ public class FreeBoardAnswerApiController {
 	}
 	
 	@GetMapping("/{id}")
-	public FreeBoardAnswerResponse read(@PathVariable Long id, HttpSession session)
+	public ResponseEntity<FreeBoardAnswerResponse> read(@PathVariable Long id, HttpSession session)
 			throws LoginNotUserException, MatchNotUserException {
 		if(!HttpSessionUtils.isLoginUser(session)) {
-			throw new NotMatchUserException();
+			throw new EmptyLoginUserException();
 		}
 		UserEntity loginUser = HttpSessionUtils.getUserEntityFromSession(session);
-		return freeBoardAnswerServiceImpl.read(id, loginUser);
+		FreeBoardAnswer freeBoardAnswer = freeBoardAnswerService.getById(id, loginUser);
+		return ResponseEntity
+				.status(200)
+				.body(FreeBoardAnswerResponse.from(freeBoardAnswer));
 	}
 	
 	@PatchMapping("")

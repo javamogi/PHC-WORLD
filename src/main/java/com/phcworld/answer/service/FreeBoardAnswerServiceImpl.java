@@ -8,6 +8,7 @@ import com.phcworld.answer.infrastructure.FreeBoardAnswerRepository;
 import com.phcworld.answer.service.port.FreeBoardAnswerService;
 import com.phcworld.common.infrastructure.LocalDateTimeHolder;
 import com.phcworld.domain.common.SaveType;
+import com.phcworld.exception.model.AnswerNotFoundException;
 import com.phcworld.exception.model.NotFoundException;
 import com.phcworld.exception.model.NotMatchUserException;
 import com.phcworld.freeboard.domain.FreeBoard;
@@ -122,5 +123,15 @@ public class FreeBoardAnswerServiceImpl implements FreeBoardAnswerService {
 //		}
 
 		return savedFreeBoardAnswer;
+	}
+
+	@Override
+	public FreeBoardAnswer getById(long id, UserEntity loginUser) {
+		FreeBoardAnswer answer = freeBoardAnswerRepository.findById(id)
+				.orElseThrow(AnswerNotFoundException::new);
+		if(!answer.matchWriter(loginUser)) {
+			throw new NotMatchUserException();
+		}
+		return answer;
 	}
 }

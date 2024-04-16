@@ -4,6 +4,7 @@ import com.phcworld.answer.domain.dto.FreeBoardAnswerRequest;
 import com.phcworld.common.infrastructure.LocalDateTimeHolder;
 import com.phcworld.freeboard.domain.FreeBoard;
 import com.phcworld.user.domain.User;
+import com.phcworld.user.infrastructure.UserEntity;
 import com.phcworld.utils.LocalDateTimeUtils;
 import lombok.Builder;
 import lombok.Getter;
@@ -35,5 +36,9 @@ public class FreeBoardAnswer {
 
     public String getFormattedUpdateDate() {
         return LocalDateTimeUtils.getTime(createDate);
+    }
+
+    public boolean matchWriter(UserEntity loginUser) {
+        return writer.getId().equals(loginUser.getId()) && writer.getAuthority() == loginUser.getAuthority();
     }
 }

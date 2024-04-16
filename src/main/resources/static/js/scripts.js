@@ -38,9 +38,11 @@ $(document).ready(function(){
 				if(url.indexOf("freeboard") > 0){
 					let countOfAnswer = $("#countOfAnswer").text();
 					let num = countOfAnswer.replace(/[\[\]]/g, "");
+					if(num === ""){
+						num = 0;
+					}
 					let count = parseInt(num) + 1;
 					let countString = "[" + count + "]";
-					// $("#countOfAnswer").text(data.countOfAnswers);
 					$("#countOfAnswer").text(countString);
 				} else {
 					$("#countOfDiaryAnswer").text(data.countOfAnswers);

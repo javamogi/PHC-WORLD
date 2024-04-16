@@ -2,10 +2,12 @@ package com.phcworld.mock;
 
 import com.phcworld.answer.domain.FreeBoardAnswer;
 import com.phcworld.answer.infrastructure.FreeBoardAnswerRepository;
+import com.phcworld.exception.model.NotFoundException;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicLong;
 
 public class FakeFreeBoardAnswerRepository implements FreeBoardAnswerRepository {
@@ -29,6 +31,13 @@ public class FakeFreeBoardAnswerRepository implements FreeBoardAnswerRepository 
             data.add(freeBoardAnswer);
             return freeBoardAnswer;
         }
+    }
+
+    @Override
+    public Optional<FreeBoardAnswer> findById(long id) {
+        return data.stream()
+                .filter(a -> a.getId().equals(id))
+                .findAny();
     }
 
 }

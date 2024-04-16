@@ -93,7 +93,12 @@ public class CommonsExceptionHandler {
     }
 
     @ExceptionHandler(EmptyLoginUserException.class)
-    public ResponseEntity<ErrorResponse> handlerBadRequestException(EmptyLoginUserException e){
+    public ResponseEntity<ErrorResponse> emptyLoginUserException(EmptyLoginUserException e){
+        return createErrorResponseEntity(e.getErrorCode());
+    }
+
+    @ExceptionHandler(AnswerNotFoundException.class)
+    public ResponseEntity<ErrorResponse> notFoundException(AnswerNotFoundException e){
         return createErrorResponseEntity(e.getErrorCode());
     }
 }
