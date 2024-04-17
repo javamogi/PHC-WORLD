@@ -1,9 +1,11 @@
 package com.phcworld.freeboard.infrastructure;
 
-import com.phcworld.exception.model.NotFoundException;
 import com.phcworld.freeboard.domain.FreeBoard;
+import com.phcworld.freeboard.infrastructure.dto.FreeBoardAndAnswersSelectDto;
 import com.phcworld.freeboard.service.port.FreeBoardRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -35,7 +37,9 @@ public class FreeBoardRepositoryImpl implements FreeBoardRepository {
     }
 
     @Override
-    public void delete(Long id) {
-        freeBoardJpaRepository.deleteById(id);
+    public Optional<FreeBoard> findByIdAndAnswers(long id, int pageNum){
+        Pageable pageable = PageRequest.of(pageNum - 1, 10);
+        return freeBoardJpaRepository.findByIdAndAnswers(id, pageable)
+                .map(FreeBoard::from);
     }
 }

@@ -27,7 +27,8 @@ import lombok.experimental.Accessors;
 @Builder
 @Accessors(chain = true)
 @EntityListeners(AuditingEntityListener.class)
-@Table(indexes = {@Index(name = "idx__writer_id_create_date", columnList = "writer_id, createDate"),
+@Table(name = "free_board_answer",
+		indexes = {@Index(name = "idx__writer_id_create_date", columnList = "writer_id, createDate"),
 		@Index(name = "idx__free_board_id_create_date", columnList = "free_board_id, createDate")})
 public class FreeBoardAnswerEntity {
 

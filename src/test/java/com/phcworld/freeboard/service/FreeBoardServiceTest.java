@@ -5,6 +5,7 @@ import com.phcworld.exception.model.NotMatchUserException;
 import com.phcworld.freeboard.domain.FreeBoard;
 import com.phcworld.freeboard.domain.dto.FreeBoardRequest;
 import com.phcworld.freeboard.domain.dto.FreeBoardUpdateRequest;
+import com.phcworld.freeboard.infrastructure.dto.FreeBoardAndAnswersSelectDto;
 import com.phcworld.mock.*;
 import com.phcworld.user.domain.Authority;
 import com.phcworld.user.domain.User;
@@ -12,6 +13,8 @@ import com.phcworld.user.domain.UserStatus;
 import com.phcworld.user.infrastructure.UserEntity;
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -344,4 +347,5 @@ public class FreeBoardServiceTest {
         // then
         freeBoardService.delete(id, UserEntity.from(user));
     }
+
 }

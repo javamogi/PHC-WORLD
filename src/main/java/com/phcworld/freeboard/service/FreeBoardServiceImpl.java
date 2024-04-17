@@ -42,9 +42,11 @@ public class FreeBoardServiceImpl implements FreeBoardService {
 
     @Override
     public FreeBoard addReadCount(Long freeBoardId) {
-        FreeBoard freeBoard = freeBoardRepository.findById(freeBoardId)
+//        FreeBoard freeBoard = freeBoardRepository.findById(freeBoardId)
+//                .orElseThrow(FreeBoardNotFoundException::new);
+        FreeBoard freeBoard = freeBoardRepository.findByIdAndAnswers(freeBoardId, 1)
                 .orElseThrow(FreeBoardNotFoundException::new);
-        freeBoard = freeBoard.addCount();
+        freeBoard = freeBoard.addCount(1);
         freeBoardRepository.save(freeBoard);
         return freeBoard;
     }

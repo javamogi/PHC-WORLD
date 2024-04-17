@@ -46,7 +46,7 @@ public class FreeBoardResponse {
 				.badge(badge)
 				.createDate(freeBoard.getFormattedCreateDate())
 				.count(freeBoard.getCount())
-				.countOfAnswer(freeBoard.getCountOfAnswer())
+				.countOfAnswer(freeBoard.getCountOfAnswerString())
 				.freeBoardAnswerList(
 						freeBoard.getFreeBoardAnswers() != null ?
 						freeBoard.getFreeBoardAnswers()

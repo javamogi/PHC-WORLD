@@ -1,6 +1,7 @@
 package com.phcworld.freeboard.service.port;
 
 import com.phcworld.freeboard.domain.FreeBoard;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 import java.util.Optional;
@@ -13,5 +14,5 @@ public interface FreeBoardRepository {
 
     Optional<FreeBoard> findById(Long freeBoardId);
 
-    void delete(Long id);
+    Optional<FreeBoard> findByIdAndAnswers(long id, int pageNum);
 }

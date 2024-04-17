@@ -5,6 +5,8 @@ import com.phcworld.common.infrastructure.LocalDateTimeHolder;
 import com.phcworld.answer.infrastructure.FreeBoardAnswerEntity;
 import com.phcworld.freeboard.domain.dto.FreeBoardRequest;
 import com.phcworld.freeboard.domain.dto.FreeBoardUpdateRequest;
+import com.phcworld.freeboard.infrastructure.dto.AnswerSelectDto;
+import com.phcworld.freeboard.infrastructure.dto.FreeBoardAndAnswersSelectDto;
 import com.phcworld.user.domain.Authority;
 import com.phcworld.user.domain.User;
 import com.phcworld.user.infrastructure.UserEntity;
@@ -14,6 +16,7 @@ import lombok.Getter;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
 @Builder
@@ -35,6 +38,8 @@ public class FreeBoard {
 
     private List<FreeBoardAnswer> freeBoardAnswers;
 
+    private Integer pageNum;
+
 
     public static FreeBoard from(FreeBoardRequest request, User user, LocalDateTimeHolder localDateTimeHolder) {
         return FreeBoard.builder()
@@ -46,18 +51,35 @@ public class FreeBoard {
                 .build();
     }
 
+    public static FreeBoard from(FreeBoardAndAnswersSelectDto dto) {
+        return FreeBoard.builder()
+                .id(dto.getId())
+                .title(dto.getTitle())
+                .contents(dto.getContents())
+                .writer(dto.getWriter().toModel())
+                .count(dto.getCount())
+                .createDate(dto.getCreateDate())
+                .updateDate(dto.getUpdateDate())
+                .freeBoardAnswers(dto.getAnswers()
+                        .stream()
+                        .map(AnswerSelectDto::toModel)
+                        .collect(Collectors.toList()))
+                .isDeleted(dto.getIsDeleted())
+                .build();
+    }
+
     public String getFormattedCreateDate() {
         return LocalDateTimeUtils.getTime(createDate);
     }
 
-    public String getCountOfAnswer() {
+    public String getCountOfAnswerString() {
         if (freeBoardAnswers == null || freeBoardAnswers.isEmpty()) {
             return "";
         }
         return "[" + freeBoardAnswers.size() + "]";
     }
 
-    public FreeBoard addCount() {
+    public FreeBoard addCount(int pageNum) {
         return FreeBoard.builder()
                 .id(id)
                 .title(title)
@@ -68,6 +90,7 @@ public class FreeBoard {
                 .updateDate(updateDate)
                 .freeBoardAnswers(freeBoardAnswers)
                 .isDeleted(isDeleted)
+                .pageNum(pageNum)
                 .build();
     }
 

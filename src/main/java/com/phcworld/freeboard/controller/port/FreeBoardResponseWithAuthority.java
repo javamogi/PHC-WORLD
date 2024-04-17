@@ -36,6 +36,9 @@ public class FreeBoardResponseWithAuthority {
 	private Boolean isModifyAuthority; // 수정권한
 	private Boolean isDeleteAuthority;
 
+	private Integer totalOfPage;
+	private Integer currentPageNum;
+
 	public static FreeBoardResponseWithAuthority from(FreeBoard freeBoard, UserEntity loginUser){
 
 		boolean existLoginUser = false;
@@ -52,6 +55,15 @@ public class FreeBoardResponseWithAuthority {
 				isDeleteAuthority = true;
 			}
 		}
+		int totalPage = 0;
+		if(Objects.nonNull(freeBoard.getFreeBoardAnswers())){
+			if(freeBoard.getFreeBoardAnswers().size() % 10 == 0){
+				totalPage = freeBoard.getFreeBoardAnswers().size()/10;
+			}else{
+				totalPage = (freeBoard.getFreeBoardAnswers().size()/10)+1;
+			}
+		}
+
 		return FreeBoardResponseWithAuthority.builder()
 				.id(freeBoard.getId())
 				.writer(UserEntity.from(freeBoard.getWriter()))
@@ -59,7 +71,7 @@ public class FreeBoardResponseWithAuthority {
 				.contents(freeBoard.getContents())
 				.createDate(freeBoard.getFormattedCreateDate())
 				.count(freeBoard.getCount())
-				.countOfAnswer(freeBoard.getCountOfAnswer())
+				.countOfAnswer(freeBoard.getCountOfAnswerString())
 				.existLoginUser(existLoginUser)
 				.isModifyAuthority(isModifyAuthority)
 				.isDeleteAuthority(isDeleteAuthority)
@@ -69,6 +81,8 @@ public class FreeBoardResponseWithAuthority {
 						.stream()
 						.map(FreeBoardAnswerResponse::from)
 						.collect(Collectors.toList()) : new ArrayList<>())
+				.currentPageNum(freeBoard.getPageNum())
+				.totalOfPage(totalPage)
 				.build();
 	}
 

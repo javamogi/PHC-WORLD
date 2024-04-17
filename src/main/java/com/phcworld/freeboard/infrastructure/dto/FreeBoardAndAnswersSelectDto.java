@@ -1,15 +1,18 @@
 package com.phcworld.freeboard.infrastructure.dto;
 
+import com.phcworld.answer.infrastructure.FreeBoardAnswerEntity;
 import com.phcworld.user.infrastructure.UserEntity;
-import com.phcworld.utils.LocalDateTimeUtils;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
-@Setter
 @Getter
-public class FreeBoardSelectDto {
+@Setter
+@ToString
+public class FreeBoardAndAnswersSelectDto {
     private Long id;
     private UserEntity writer;
     private String title;
@@ -17,15 +20,6 @@ public class FreeBoardSelectDto {
     private LocalDateTime createDate;
     private LocalDateTime updateDate;
     private Integer count;
-    private Long countOfAnswer;
-
     private Boolean isDeleted;
-
-    public String getFormattedCreateDate() {
-        return LocalDateTimeUtils.getTime(createDate);
-    }
-
-    public String getFormattedUpdateDate() {
-        return LocalDateTimeUtils.getTime(updateDate);
-    }
+    private List<AnswerSelectDto> answers;
 }

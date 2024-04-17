@@ -2,21 +2,16 @@ package com.phcworld.freeboard.domain;
 
 import com.phcworld.freeboard.domain.dto.FreeBoardRequest;
 import com.phcworld.freeboard.domain.dto.FreeBoardUpdateRequest;
-import com.phcworld.freeboard.infrastructure.FreeBoardEntity;
 import com.phcworld.mock.FakeLocalDateTimeHolder;
-import com.phcworld.mock.FakePasswordEncode;
-import com.phcworld.mock.FakeUuidHolder;
 import com.phcworld.user.domain.Authority;
 import com.phcworld.user.domain.User;
 import com.phcworld.user.domain.UserStatus;
-import com.phcworld.user.domain.dto.UserRequest;
 import com.phcworld.user.infrastructure.UserEntity;
 import org.junit.Test;
 
 import java.time.LocalDateTime;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.*;
 
 public class FreeBoardTest {
 
@@ -110,7 +105,7 @@ public class FreeBoardTest {
                 .build();
 
         // when
-        String countOfAnswer = freeBoard.getCountOfAnswer();
+        String countOfAnswer = freeBoard.getCountOfAnswerString();
 
         // then
         assertThat(countOfAnswer).isEmpty();
@@ -142,7 +137,7 @@ public class FreeBoardTest {
                 .build();
 
         // when
-        FreeBoard addedCountFreeBoard = freeBoard.addCount();
+        FreeBoard addedCountFreeBoard = freeBoard.addCount(1);
 
         // then
         assertThat(addedCountFreeBoard.getId()).isEqualTo(1);

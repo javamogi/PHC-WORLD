@@ -3,6 +3,7 @@ package com.phcworld.mock;
 import com.phcworld.exception.model.FreeBoardNotFoundException;
 import com.phcworld.freeboard.domain.FreeBoard;
 import com.phcworld.freeboard.service.port.FreeBoardRepository;
+import org.springframework.data.domain.Pageable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,7 +48,9 @@ public class FakeFreeBoardRepository implements FreeBoardRepository {
     }
 
     @Override
-    public void delete(Long id) {
-        data.removeIf(f -> Objects.equals(f.getId(), id));
+    public Optional<FreeBoard> findByIdAndAnswers(long id, int pageNum) {
+        return data.stream()
+                .filter(f -> f.getId().equals(id))
+                .findAny();
     }
 }
