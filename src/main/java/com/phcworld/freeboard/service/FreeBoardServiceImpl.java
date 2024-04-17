@@ -1,6 +1,8 @@
 package com.phcworld.freeboard.service;
 
 import com.phcworld.common.infrastructure.LocalDateTimeHolder;
+import com.phcworld.exception.model.DeletedEntityException;
+import com.phcworld.exception.model.FreeBoardNotFoundException;
 import com.phcworld.exception.model.NotMatchUserException;
 import com.phcworld.freeboard.controller.port.FreeBoardService;
 import com.phcworld.freeboard.domain.FreeBoard;
@@ -14,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -31,12 +34,16 @@ public class FreeBoardServiceImpl implements FreeBoardService {
 
     @Override
     public List<FreeBoard> findAllList() {
-        return freeBoardRepository.findAll();
+        return freeBoardRepository.findAll()
+                .stream()
+                .filter(f -> !f.isDeleted())
+                .collect(Collectors.toList());
     }
 
     @Override
     public FreeBoard addReadCount(Long freeBoardId) {
-        FreeBoard freeBoard = freeBoardRepository.findById(freeBoardId);
+        FreeBoard freeBoard = freeBoardRepository.findById(freeBoardId)
+                .orElseThrow(FreeBoardNotFoundException::new);
         freeBoard = freeBoard.addCount();
         freeBoardRepository.save(freeBoard);
         return freeBoard;
@@ -44,7 +51,8 @@ public class FreeBoardServiceImpl implements FreeBoardService {
 
     @Override
     public FreeBoard getFreeBoard(Long id, UserEntity loginUser) {
-        FreeBoard freeBoard = freeBoardRepository.findById(id);
+        FreeBoard freeBoard = freeBoardRepository.findById(id)
+                .orElseThrow(FreeBoardNotFoundException::new);
         if(!freeBoard.matchWriter(loginUser)){
             throw new NotMatchUserException();
         }
@@ -59,11 +67,16 @@ public class FreeBoardServiceImpl implements FreeBoardService {
     }
 
     @Override
-    public void delete(Long id, UserEntity loginUser) {
-        FreeBoard freeBoard = freeBoardRepository.findById(id);
+    public FreeBoard delete(Long id, UserEntity loginUser) {
+        FreeBoard freeBoard = freeBoardRepository.findById(id)
+                .orElseThrow(FreeBoardNotFoundException::new);
+        if(freeBoard.isDeleted()){
+            throw new DeletedEntityException();
+        }
         if(!freeBoard.matchWriter(loginUser) && !freeBoard.matchAdminAuthority(loginUser)){
             throw new NotMatchUserException();
         }
-        freeBoardRepository.delete(freeBoard.getId());
+        freeBoard = freeBoard.delete(localDateTimeHolder);
+        return freeBoardRepository.save(freeBoard);
     }
 }

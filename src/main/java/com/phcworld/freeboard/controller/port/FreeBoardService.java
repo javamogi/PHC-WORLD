@@ -19,5 +19,5 @@ public interface FreeBoardService {
 
     FreeBoard update(FreeBoardUpdateRequest request, UserEntity loginUser);
 
-    void delete(Long id, UserEntity loginUser);
+    FreeBoard delete(Long id, UserEntity loginUser);
 }

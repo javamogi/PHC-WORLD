@@ -8,6 +8,7 @@ import com.phcworld.answer.service.port.FreeBoardAnswerService;
 import com.phcworld.common.infrastructure.LocalDateTimeHolder;
 import com.phcworld.domain.api.model.response.SuccessResponse;
 import com.phcworld.exception.model.AnswerNotFoundException;
+import com.phcworld.exception.model.FreeBoardNotFoundException;
 import com.phcworld.exception.model.NotMatchUserException;
 import com.phcworld.freeboard.domain.FreeBoard;
 import com.phcworld.freeboard.service.port.FreeBoardRepository;
@@ -35,7 +36,8 @@ public class FreeBoardAnswerServiceImpl implements FreeBoardAnswerService {
 	@Transactional
 	@Override
 	public FreeBoardAnswer register(long freeBoardId, User user, FreeBoardAnswerRequest request) {
-		FreeBoard freeBoard = freeBoardRepository.findById(freeBoardId);
+		FreeBoard freeBoard = freeBoardRepository.findById(freeBoardId)
+				.orElseThrow(FreeBoardNotFoundException::new);
 		FreeBoardAnswer freeBoardAnswer = FreeBoardAnswer.from(freeBoard, user, request, localDateTimeHolder);
 		FreeBoardAnswer savedFreeBoardAnswer = freeBoardAnswerRepository.save(freeBoardAnswer);
 

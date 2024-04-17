@@ -12,6 +12,7 @@ import com.phcworld.freeboard.domain.FreeBoard;
 import com.phcworld.freeboard.domain.dto.FreeBoardRequest;
 import com.phcworld.user.infrastructure.UserEntity;
 import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -63,8 +64,13 @@ public class FreeBoardEntity {
 	
 	@LastModifiedDate
 	private LocalDateTime updateDate;
-	
-	private Integer count;
+
+	@ColumnDefault("0")
+	@Builder.Default
+	private Integer count = 0;
+
+	@ColumnDefault("false")
+	private Boolean isDeleted = false;
 
 	@OneToMany(mappedBy = "freeBoard", cascade = CascadeType.REMOVE)
 	// @JsonManagedReference

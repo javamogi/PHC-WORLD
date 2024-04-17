@@ -7,6 +7,7 @@ import com.phcworld.freeboard.service.port.FreeBoardRepository;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicLong;
 
 public class FakeFreeBoardRepository implements FreeBoardRepository {
@@ -39,11 +40,10 @@ public class FakeFreeBoardRepository implements FreeBoardRepository {
     }
 
     @Override
-    public FreeBoard findById(Long freeBoardId) {
+    public Optional<FreeBoard> findById(Long freeBoardId) {
         return data.stream()
                 .filter(f -> f.getId().equals(freeBoardId))
-                .findAny()
-                .orElseThrow(FreeBoardNotFoundException::new);
+                .findAny();
     }
 
     @Override

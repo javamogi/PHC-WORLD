@@ -659,7 +659,7 @@ public class FreeBoardControllerTest {
     }
 
     @Test(expected = NotMatchUserException.class)
-    public void 게시글의_글쓴이가_다르면_예외를_던진다(){
+    public void 삭제_요청시_게시글의_글쓴이가_다르면_예외를_던진다(){
         // given
         LocalDateTime time = LocalDateTime.of(2024, 4, 9, 12, 0);
         TestContainer testContainer = TestContainer.builder()

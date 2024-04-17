@@ -30,7 +30,8 @@ public class FreeBoard {
 
     private LocalDateTime updateDate;
 
-    private Integer count;
+    private int count;
+    private boolean isDeleted;
 
     private List<FreeBoardAnswer> freeBoardAnswers;
 
@@ -42,7 +43,6 @@ public class FreeBoard {
                 .writer(user)
                 .createDate(localDateTimeHolder.now())
                 .updateDate(localDateTimeHolder.now())
-                .count(0)
                 .build();
     }
 
@@ -67,6 +67,7 @@ public class FreeBoard {
                 .createDate(createDate)
                 .updateDate(updateDate)
                 .freeBoardAnswers(freeBoardAnswers)
+                .isDeleted(isDeleted)
                 .build();
     }
 
@@ -81,6 +82,7 @@ public class FreeBoard {
                 .contents(request.getContents())
                 .writer(writer)
                 .count(count)
+                .isDeleted(isDeleted)
                 .createDate(createDate)
                 .updateDate(localDateTimeHolder.now())
                 .build();
@@ -88,5 +90,18 @@ public class FreeBoard {
 
     public boolean matchAdminAuthority(UserEntity loginUser) {
         return loginUser.getAuthority() == Authority.ROLE_ADMIN;
+    }
+
+    public FreeBoard delete(LocalDateTimeHolder localDateTimeHolder) {
+        return FreeBoard.builder()
+                .id(id)
+                .title(title)
+                .contents(contents)
+                .writer(writer)
+                .count(count)
+                .isDeleted(true)
+                .createDate(createDate)
+                .updateDate(localDateTimeHolder.now())
+                .build();
     }
 }

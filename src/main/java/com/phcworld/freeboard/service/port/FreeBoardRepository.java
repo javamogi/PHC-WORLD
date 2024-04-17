@@ -3,6 +3,7 @@ package com.phcworld.freeboard.service.port;
 import com.phcworld.freeboard.domain.FreeBoard;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface FreeBoardRepository {
 
@@ -10,7 +11,7 @@ public interface FreeBoardRepository {
 
     List<FreeBoard> findAll();
 
-    FreeBoard findById(Long freeBoardId);
+    Optional<FreeBoard> findById(Long freeBoardId);
 
     void delete(Long id);
 }

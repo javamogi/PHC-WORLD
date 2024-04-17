@@ -123,4 +123,12 @@ public class ControllerExceptionHandler {
         return mav;
     }
 
+    @ExceptionHandler(DeletedEntityException.class)
+    public ModelAndView deletedException(){
+        ModelAndView mav = new ModelAndView();
+        mav.addObject("errorMessage", "이미 삭제된 게시글입니다..");
+        mav.setViewName("redirect:/freeboards");
+        return mav;
+    }
+
 }

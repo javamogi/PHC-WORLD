@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Repository
@@ -29,10 +30,8 @@ public class FreeBoardRepositoryImpl implements FreeBoardRepository {
     }
 
     @Override
-    public FreeBoard findById(Long freeBoardId) {
-        return freeBoardJpaRepository.findById(freeBoardId)
-                .map(FreeBoardEntity::toModel)
-                .orElseThrow(NotFoundException::new);
+    public Optional<FreeBoard> findById(Long freeBoardId) {
+        return freeBoardJpaRepository.findById(freeBoardId).map(FreeBoardEntity::toModel);
     }
 
     @Override

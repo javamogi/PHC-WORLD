@@ -51,6 +51,17 @@ public class FreeBoardServiceTest {
                         .contents("내용")
                         .createDate(localDateTime)
                         .updateDate(localDateTime)
+                        .isDeleted(false)
+                        .build());
+        freeBoardRepository.save(FreeBoard.builder()
+                        .id(2L)
+                        .writer(user)
+                        .count(0)
+                        .title("삭제된 글")
+                        .contents("두번째 내용")
+                        .createDate(localDateTime)
+                        .updateDate(localDateTime)
+                        .isDeleted(true)
                         .build());
     }
 
@@ -85,11 +96,12 @@ public class FreeBoardServiceTest {
         assertThat(freeBoard.getWriter()).isEqualTo(user);
         assertThat(freeBoard.getCreateDate()).isEqualTo(localDateTime);
         assertThat(freeBoard.getUpdateDate()).isEqualTo(localDateTime);
-        assertThat(freeBoard.getCount()).isEqualTo(0);
+        assertThat(freeBoard.getCount()).isZero();
+        assertThat(freeBoard.isDeleted()).isFalse();
     }
 
     @Test
-    public void 등록된_게시글_전체_데이터를_가져올_수_있다(){
+    public void 삭제되지_않은_게시글_전체_데이터를_가져올_수_있다(){
         // given
         // when
         List<FreeBoard> list = freeBoardService.findAllList();
@@ -116,6 +128,7 @@ public class FreeBoardServiceTest {
         assertThat(freeBoard.getCreateDate()).isEqualTo(localDateTime);
         assertThat(freeBoard.getUpdateDate()).isEqualTo(localDateTime);
         assertThat(freeBoard.getCount()).isEqualTo(1);
+        assertThat(freeBoard.isDeleted()).isFalse();
     }
 
     @Test(expected = FreeBoardNotFoundException.class)
@@ -156,7 +169,8 @@ public class FreeBoardServiceTest {
         assertThat(freeBoard.getWriter().getEmail()).isEqualTo("test@test.test");
         assertThat(freeBoard.getCreateDate()).isEqualTo(localDateTime);
         assertThat(freeBoard.getUpdateDate()).isEqualTo(localDateTime);
-        assertThat(freeBoard.getCount()).isEqualTo(0);
+        assertThat(freeBoard.getCount()).isZero();
+        assertThat(freeBoard.isDeleted()).isFalse();
     }
 
     @Test(expected = FreeBoardNotFoundException.class)
@@ -233,6 +247,7 @@ public class FreeBoardServiceTest {
         assertThat(freeBoard.getCreateDate()).isEqualTo(localDateTime);
         assertThat(freeBoard.getUpdateDate()).isEqualTo(localDateTime);
         assertThat(freeBoard.getCount()).isZero();
+        assertThat(freeBoard.isDeleted()).isFalse();
     }
 
     @Test(expected = NotMatchUserException.class)
@@ -260,7 +275,7 @@ public class FreeBoardServiceTest {
         FreeBoard freeBoard = freeBoardService.update(request, UserEntity.from(user));
     }
 
-    @Test(expected = FreeBoardNotFoundException.class)
+    @Test
     public void 게시글_글쓴이와_로그인_회원이_같으면_삭제할_수_있다(){
         // given
         LocalDateTime localDateTime = LocalDateTime.of(2024, 4, 9, 12, 0);
@@ -278,13 +293,13 @@ public class FreeBoardServiceTest {
                 .build();
 
         // when
-        freeBoardService.delete(id, UserEntity.from(user));
+        FreeBoard freeBoard = freeBoardService.delete(id, UserEntity.from(user));
 
         // then
-        freeBoardService.getFreeBoard(id, UserEntity.from(user));
+        assertThat(freeBoard.isDeleted()).isTrue();
     }
 
-    @Test(expected = FreeBoardNotFoundException.class)
+    @Test
     public void 관리자는_게시글을_삭제할_수_있다(){
         // given
         LocalDateTime localDateTime = LocalDateTime.of(2024, 4, 9, 12, 0);
@@ -302,10 +317,10 @@ public class FreeBoardServiceTest {
                 .build();
 
         // when
-        freeBoardService.delete(id, UserEntity.from(user));
+        FreeBoard freeBoard = freeBoardService.delete(id, UserEntity.from(user));
 
         // then
-        freeBoardService.getFreeBoard(id, UserEntity.from(user));
+        assertThat(freeBoard.isDeleted()).isTrue();
     }
 
     @Test(expected = NotMatchUserException.class)
