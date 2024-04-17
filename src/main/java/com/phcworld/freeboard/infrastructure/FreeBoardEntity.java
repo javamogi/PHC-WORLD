@@ -86,6 +86,7 @@ public class FreeBoardEntity {
 				.count(freeBoard.getCount())
 				.createDate(freeBoard.getCreateDate())
 				.updateDate(freeBoard.getUpdateDate())
+				.isDeleted(freeBoard.isDeleted())
 				.build();
 	}
 
@@ -103,6 +104,7 @@ public class FreeBoardEntity {
 						freeBoardAnswers.stream()
 						.map(FreeBoardAnswerEntity::toModel)
 						.collect(Collectors.toList()) : new ArrayList<>())
+				.isDeleted(isDeleted)
 				.build();
 	}
 
@@ -115,6 +117,7 @@ public class FreeBoardEntity {
 				.createDate(createDate)
 				.updateDate(updateDate)
 				.writer(writer.toModel())
+				.isDeleted(isDeleted)
 				.build();
 	}
 
