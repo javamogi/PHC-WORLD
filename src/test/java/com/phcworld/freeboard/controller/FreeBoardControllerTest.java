@@ -1,5 +1,6 @@
 package com.phcworld.freeboard.controller;
 
+import com.phcworld.answer.domain.FreeBoardAnswer;
 import com.phcworld.exception.model.FreeBoardNotFoundException;
 import com.phcworld.exception.model.NotMatchUserException;
 import com.phcworld.freeboard.controller.port.FreeBoardResponse;
@@ -20,6 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -116,15 +118,17 @@ public class FreeBoardControllerTest {
                 .userStatus(UserStatus.ACTIVE)
                 .certificationCode("1a2b3c")
                 .build();
-        testContainer.freeBoardRepository.save(FreeBoard.builder()
-                        .id(1L)
-                        .writer(user)
-                        .count(0)
-                        .title("제목")
-                        .contents("내용")
-                        .createDate(time)
-                        .updateDate(time)
-                        .build());
+        FreeBoard freeBoard = FreeBoard.builder()
+                .id(1L)
+                .writer(user)
+                .count(0)
+                .title("제목")
+                .contents("내용")
+                .createDate(time)
+                .updateDate(time)
+                .countOfAnswer(1L)
+                .build();
+        testContainer.freeBoardRepository.save(freeBoard);
         FakeModel fakeModel = new FakeModel();
 
         // when
@@ -135,6 +139,7 @@ public class FreeBoardControllerTest {
         assertThat(freeboards).hasSize(1);
         assertThat(freeboards.get(0).getTitle()).isEqualTo("제목");
         assertThat(freeboards.get(0).getContents()).isEqualTo("내용");
+        assertThat(freeboards.get(0).getCountOfAnswer()).isEqualTo("[1]");
         assertThat(result).isEqualTo("board/freeboard/freeboard");
     }
 
@@ -168,7 +173,7 @@ public class FreeBoardControllerTest {
         FakeHttpSession fakeHttpSession = new FakeHttpSession();
 
         // when
-        String result = testContainer.freeBoardController.read(1L, fakeHttpSession, fakeModel);
+        String result = testContainer.freeBoardController.read(1L, 1, fakeHttpSession, fakeModel);
         FreeBoardResponseWithAuthority freeboards =
                 (FreeBoardResponseWithAuthority) fakeModel.getAttribute("freeBoard");
 
@@ -216,7 +221,7 @@ public class FreeBoardControllerTest {
         fakeHttpSession.setAttribute(HttpSessionUtils.USER_SESSION_KEY, UserEntity.from(user));
 
         // when
-        String result = testContainer.freeBoardController.read(1L, fakeHttpSession, fakeModel);
+        String result = testContainer.freeBoardController.read(1L, 1, fakeHttpSession, fakeModel);
         FreeBoardResponseWithAuthority freeboards =
                 (FreeBoardResponseWithAuthority) fakeModel.getAttribute("freeBoard");
 
@@ -275,7 +280,7 @@ public class FreeBoardControllerTest {
         fakeHttpSession.setAttribute(HttpSessionUtils.USER_SESSION_KEY, UserEntity.from(loginUser));
 
         // when
-        String result = testContainer.freeBoardController.read(1L, fakeHttpSession, fakeModel);
+        String result = testContainer.freeBoardController.read(1L, 1, fakeHttpSession, fakeModel);
         FreeBoardResponseWithAuthority freeboards =
                 (FreeBoardResponseWithAuthority) fakeModel.getAttribute("freeBoard");
 
@@ -334,7 +339,7 @@ public class FreeBoardControllerTest {
         fakeHttpSession.setAttribute(HttpSessionUtils.USER_SESSION_KEY, UserEntity.from(loginUser));
 
         // when
-        String result = testContainer.freeBoardController.read(1L, fakeHttpSession, fakeModel);
+        String result = testContainer.freeBoardController.read(1L, 1, fakeHttpSession, fakeModel);
         FreeBoardResponseWithAuthority freeboards =
                 (FreeBoardResponseWithAuthority) fakeModel.getAttribute("freeBoard");
 
@@ -361,7 +366,7 @@ public class FreeBoardControllerTest {
 
         // when
         // then
-        String result = testContainer.freeBoardController.read(99L, fakeHttpSession, fakeModel);
+        String result = testContainer.freeBoardController.read(99L, 1, fakeHttpSession, fakeModel);
     }
 
     @Test

@@ -13,7 +13,7 @@ public interface FreeBoardService {
 
     List<FreeBoard> findAllList();
 
-    FreeBoard addReadCount(Long freeBoardId);
+    FreeBoard addReadCount(Long freeBoardId, int pageNum);
 
     FreeBoard getFreeBoard(Long id, UserEntity loginUser);
 

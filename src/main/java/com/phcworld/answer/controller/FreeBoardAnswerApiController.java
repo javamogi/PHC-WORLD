@@ -1,35 +1,22 @@
 package com.phcworld.answer.controller;
 
-import javax.servlet.http.HttpSession;
-
+import com.phcworld.answer.controller.port.FreeBoardAnswerResponse;
 import com.phcworld.answer.domain.FreeBoardAnswer;
+import com.phcworld.answer.domain.dto.FreeBoardAnswerRequest;
 import com.phcworld.answer.domain.dto.FreeBoardAnswerUpdateRequest;
 import com.phcworld.answer.service.port.FreeBoardAnswerService;
-import com.phcworld.exception.model.BadRequestException;
+import com.phcworld.domain.api.model.response.SuccessResponse;
 import com.phcworld.exception.model.EmptyContentsException;
 import com.phcworld.exception.model.EmptyLoginUserException;
-import com.phcworld.exception.model.NotMatchUserException;
 import com.phcworld.user.infrastructure.UserEntity;
+import com.phcworld.utils.HttpSessionUtils;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import com.phcworld.answer.domain.dto.FreeBoardAnswerRequest;
-import com.phcworld.answer.controller.port.FreeBoardAnswerResponse;
-import com.phcworld.domain.api.model.response.SuccessResponse;
-import com.phcworld.domain.exception.LoginNotUserException;
-import com.phcworld.domain.exception.MatchNotUserException;
-import com.phcworld.answer.service.FreeBoardAnswerServiceImpl;
-import com.phcworld.utils.HttpSessionUtils;
+import javax.servlet.http.HttpSession;
 
 
 @RestController
@@ -38,7 +25,6 @@ import com.phcworld.utils.HttpSessionUtils;
 @Builder
 public class FreeBoardAnswerApiController {
 	
-	private final FreeBoardAnswerServiceImpl freeBoardAnswerServiceImpl;
 	private final FreeBoardAnswerService freeBoardAnswerService;
 
 	@PostMapping("")

@@ -105,7 +105,7 @@ public class FreeBoardTest {
                 .build();
 
         // when
-        String countOfAnswer = freeBoard.getCountOfAnswerString();
+        String countOfAnswer = freeBoard.getCountOfAnswer();
 
         // then
         assertThat(countOfAnswer).isEmpty();
@@ -137,7 +137,7 @@ public class FreeBoardTest {
                 .build();
 
         // when
-        FreeBoard addedCountFreeBoard = freeBoard.addCount(1);
+        FreeBoard addedCountFreeBoard = freeBoard.addCount(null);
 
         // then
         assertThat(addedCountFreeBoard.getId()).isEqualTo(1);

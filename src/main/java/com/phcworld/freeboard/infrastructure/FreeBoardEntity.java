@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 
 import javax.persistence.*;
 
+import com.phcworld.answer.domain.FreeBoardAnswer;
 import com.phcworld.freeboard.domain.FreeBoard;
 import com.phcworld.freeboard.domain.dto.FreeBoardRequest;
 import com.phcworld.user.infrastructure.UserEntity;
@@ -91,6 +92,10 @@ public class FreeBoardEntity {
 	}
 
 	public FreeBoard toModel() {
+		List<FreeBoardAnswer> answers = freeBoardAnswers != null ?
+				freeBoardAnswers.stream()
+						.map(FreeBoardAnswerEntity::toModel)
+						.collect(Collectors.toList()) : new ArrayList<>();
 		return FreeBoard.builder()
 				.id(id)
 				.title(title)
@@ -99,11 +104,8 @@ public class FreeBoardEntity {
 				.createDate(createDate)
 				.updateDate(updateDate)
 				.writer(writer.toModel())
-				.freeBoardAnswers(
-						freeBoardAnswers != null ?
-						freeBoardAnswers.stream()
-						.map(FreeBoardAnswerEntity::toModel)
-						.collect(Collectors.toList()) : new ArrayList<>())
+				.freeBoardAnswers(answers)
+				.countOfAnswer((long) answers.size())
 				.isDeleted(isDeleted)
 				.build();
 	}

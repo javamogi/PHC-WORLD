@@ -1,5 +1,8 @@
 package com.phcworld.freeboard.service;
 
+import com.phcworld.answer.domain.FreeBoardAnswer;
+import com.phcworld.answer.infrastructure.FreeBoardAnswerRepository;
+import com.phcworld.answer.service.port.FreeBoardAnswerService;
 import com.phcworld.common.infrastructure.LocalDateTimeHolder;
 import com.phcworld.exception.model.DeletedEntityException;
 import com.phcworld.exception.model.FreeBoardNotFoundException;
@@ -11,8 +14,10 @@ import com.phcworld.freeboard.domain.dto.FreeBoardUpdateRequest;
 import com.phcworld.freeboard.service.port.FreeBoardRepository;
 import com.phcworld.user.domain.User;
 import com.phcworld.user.infrastructure.UserEntity;
+import io.swagger.models.auth.In;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -25,6 +30,7 @@ public class FreeBoardServiceImpl implements FreeBoardService {
 
     private final FreeBoardRepository freeBoardRepository;
     private final LocalDateTimeHolder localDateTimeHolder;
+    private final FreeBoardAnswerRepository freeBoardAnswerRepository;
 
     @Override
     public FreeBoard register(FreeBoardRequest request, User user) {
@@ -41,12 +47,12 @@ public class FreeBoardServiceImpl implements FreeBoardService {
     }
 
     @Override
-    public FreeBoard addReadCount(Long freeBoardId) {
-//        FreeBoard freeBoard = freeBoardRepository.findById(freeBoardId)
-//                .orElseThrow(FreeBoardNotFoundException::new);
-        FreeBoard freeBoard = freeBoardRepository.findByIdAndAnswers(freeBoardId, 1)
+    public FreeBoard addReadCount(Long freeBoardId, int pageNum) {
+        Pageable pageable = PageRequest.of(pageNum - 1, 10, Sort.by("updateDate").ascending());
+        FreeBoard freeBoard = freeBoardRepository.findById(freeBoardId)
                 .orElseThrow(FreeBoardNotFoundException::new);
-        freeBoard = freeBoard.addCount(1);
+        Page<FreeBoardAnswer> answers = freeBoardAnswerRepository.findByFreeBoard(freeBoard, pageable);
+        freeBoard = freeBoard.addCount(answers);
         freeBoardRepository.save(freeBoard);
         return freeBoard;
     }

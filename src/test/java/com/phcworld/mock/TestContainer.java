@@ -61,14 +61,15 @@ public class TestContainer {
                 .userService(userService)
                 .build();
         this.freeBoardRepository = new FakeFreeBoardRepository();
+        this.freeBoardAnswerRepository = new FakeFreeBoardAnswerRepository();
         this.freeBoardService = FreeBoardServiceImpl.builder()
                 .freeBoardRepository(freeBoardRepository)
+                .freeBoardAnswerRepository(freeBoardAnswerRepository)
                 .localDateTimeHolder(localDateTimeHolder)
                 .build();
         this.freeBoardController = FreeBoardController.builder()
                 .freeBoardService(freeBoardService)
                 .build();
-        this.freeBoardAnswerRepository = new FakeFreeBoardAnswerRepository();
         this.freeBoardAnswerService = FreeBoardAnswerServiceImpl.builder()
                 .localDateTimeHolder(localDateTimeHolder)
                 .freeBoardAnswerRepository(freeBoardAnswerRepository)

@@ -2,7 +2,6 @@ package com.phcworld.freeboard.domain;
 
 import com.phcworld.answer.domain.FreeBoardAnswer;
 import com.phcworld.common.infrastructure.LocalDateTimeHolder;
-import com.phcworld.answer.infrastructure.FreeBoardAnswerEntity;
 import com.phcworld.freeboard.domain.dto.FreeBoardRequest;
 import com.phcworld.freeboard.domain.dto.FreeBoardUpdateRequest;
 import com.phcworld.freeboard.infrastructure.dto.AnswerSelectDto;
@@ -13,9 +12,12 @@ import com.phcworld.user.infrastructure.UserEntity;
 import com.phcworld.utils.LocalDateTimeUtils;
 import lombok.Builder;
 import lombok.Getter;
+import org.springframework.data.domain.Page;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Getter
@@ -37,9 +39,9 @@ public class FreeBoard {
     private boolean isDeleted;
 
     private List<FreeBoardAnswer> freeBoardAnswers;
-
     private Integer pageNum;
-
+    private Integer totalPage;
+    private Long countOfAnswer;
 
     public static FreeBoard from(FreeBoardRequest request, User user, LocalDateTimeHolder localDateTimeHolder) {
         return FreeBoard.builder()
@@ -72,14 +74,14 @@ public class FreeBoard {
         return LocalDateTimeUtils.getTime(createDate);
     }
 
-    public String getCountOfAnswerString() {
-        if (freeBoardAnswers == null || freeBoardAnswers.isEmpty()) {
+    public String getCountOfAnswer() {
+        if (countOfAnswer == null || countOfAnswer == 0) {
             return "";
         }
-        return "[" + freeBoardAnswers.size() + "]";
+        return "[" + countOfAnswer + "]";
     }
 
-    public FreeBoard addCount(int pageNum) {
+    public FreeBoard addCount(Page<FreeBoardAnswer> answers) {
         return FreeBoard.builder()
                 .id(id)
                 .title(title)
@@ -88,9 +90,11 @@ public class FreeBoard {
                 .count(count + 1)
                 .createDate(createDate)
                 .updateDate(updateDate)
-                .freeBoardAnswers(freeBoardAnswers)
+                .freeBoardAnswers(answers != null ? answers.getContent() : new ArrayList<>())
+                .pageNum(answers != null ? answers.getNumber() + 1 : 0)
+                .totalPage(answers != null ? answers.getTotalPages() : 0)
+                .countOfAnswer(answers != null ? answers.getTotalElements() : 0)
                 .isDeleted(isDeleted)
-                .pageNum(pageNum)
                 .build();
     }
 
@@ -126,5 +130,18 @@ public class FreeBoard {
                 .createDate(createDate)
                 .updateDate(localDateTimeHolder.now())
                 .build();
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        if (this == object) return true;
+        if (object == null || getClass() != object.getClass()) return false;
+        FreeBoard freeBoard = (FreeBoard) object;
+        return isDeleted == freeBoard.isDeleted && Objects.equals(id, freeBoard.id) && Objects.equals(title, freeBoard.title) && Objects.equals(contents, freeBoard.contents) && Objects.equals(createDate, freeBoard.createDate) && Objects.equals(updateDate, freeBoard.updateDate);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, title, contents, createDate, updateDate, isDeleted);
     }
 }

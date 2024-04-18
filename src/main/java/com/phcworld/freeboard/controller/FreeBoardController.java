@@ -57,11 +57,14 @@ public class FreeBoardController {
 	}
 
 	@GetMapping("/{id}")
-	public String read(@PathVariable Long id, HttpSession session, Model model) {
+	public String read(@PathVariable Long id,
+					   @RequestParam(defaultValue = "1") int pageNum,
+					   HttpSession session,
+					   Model model) {
 		UserEntity loginUser = HttpSessionUtils.getUserEntityFromSession(session);
 
 		FreeBoardResponseWithAuthority freeBoard =
-				FreeBoardResponseWithAuthority.from(freeBoardService.addReadCount(id), loginUser);
+				FreeBoardResponseWithAuthority.from(freeBoardService.addReadCount(id, pageNum), loginUser);
 
 		model.addAttribute("freeBoard", freeBoard);
 		return "board/freeboard/detail_freeboard";

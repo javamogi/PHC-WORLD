@@ -1,7 +1,6 @@
 package com.phcworld.freeboard.infrastructure;
 
 import com.phcworld.freeboard.domain.FreeBoard;
-import com.phcworld.freeboard.infrastructure.dto.FreeBoardAndAnswersSelectDto;
 import com.phcworld.freeboard.service.port.FreeBoardRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
@@ -33,7 +32,7 @@ public class FreeBoardRepositoryImpl implements FreeBoardRepository {
 
     @Override
     public Optional<FreeBoard> findById(Long freeBoardId) {
-        return freeBoardJpaRepository.findById(freeBoardId).map(FreeBoardEntity::toModel);
+        return freeBoardJpaRepository.findById(freeBoardId).map(FreeBoardEntity::toModelWithoutAnswer);
     }
 
     @Override

@@ -1,20 +1,20 @@
 package com.phcworld.freeboard.service;
 
+import com.phcworld.answer.domain.FreeBoardAnswer;
 import com.phcworld.exception.model.FreeBoardNotFoundException;
 import com.phcworld.exception.model.NotMatchUserException;
 import com.phcworld.freeboard.domain.FreeBoard;
 import com.phcworld.freeboard.domain.dto.FreeBoardRequest;
 import com.phcworld.freeboard.domain.dto.FreeBoardUpdateRequest;
-import com.phcworld.freeboard.infrastructure.dto.FreeBoardAndAnswersSelectDto;
-import com.phcworld.mock.*;
+import com.phcworld.mock.FakeFreeBoardAnswerRepository;
+import com.phcworld.mock.FakeFreeBoardRepository;
+import com.phcworld.mock.FakeLocalDateTimeHolder;
 import com.phcworld.user.domain.Authority;
 import com.phcworld.user.domain.User;
 import com.phcworld.user.domain.UserStatus;
 import com.phcworld.user.infrastructure.UserEntity;
 import org.junit.Before;
 import org.junit.Test;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -30,10 +30,12 @@ public class FreeBoardServiceTest {
         LocalDateTime localDateTime = LocalDateTime.of(2024, 4, 9, 12, 0);
         FakeLocalDateTimeHolder fakeLocalDateTimeHolder = new FakeLocalDateTimeHolder(localDateTime);
         FakeFreeBoardRepository freeBoardRepository = new FakeFreeBoardRepository();
+        FakeFreeBoardAnswerRepository fakeFreeBoardAnswerRepository = new FakeFreeBoardAnswerRepository();
 
         this.freeBoardService = FreeBoardServiceImpl.builder()
                 .localDateTimeHolder(fakeLocalDateTimeHolder)
                 .freeBoardRepository(freeBoardRepository)
+                .freeBoardAnswerRepository(fakeFreeBoardAnswerRepository)
                 .build();
         User user = User.builder()
                 .id(1L)
@@ -46,16 +48,17 @@ public class FreeBoardServiceTest {
                 .userStatus(UserStatus.ACTIVE)
                 .certificationCode("1a2b3c")
                 .build();
-        freeBoardRepository.save(FreeBoard.builder()
-                        .id(1L)
-                        .writer(user)
-                        .count(0)
-                        .title("제목")
-                        .contents("내용")
-                        .createDate(localDateTime)
-                        .updateDate(localDateTime)
-                        .isDeleted(false)
-                        .build());
+        FreeBoard freeBoard = FreeBoard.builder()
+                .id(1L)
+                .writer(user)
+                .count(0)
+                .title("제목")
+                .contents("내용")
+                .createDate(localDateTime)
+                .updateDate(localDateTime)
+                .isDeleted(false)
+                .build();
+        freeBoardRepository.save(freeBoard);
         freeBoardRepository.save(FreeBoard.builder()
                         .id(2L)
                         .writer(user)
@@ -66,6 +69,14 @@ public class FreeBoardServiceTest {
                         .updateDate(localDateTime)
                         .isDeleted(true)
                         .build());
+        fakeFreeBoardAnswerRepository.save(FreeBoardAnswer.builder()
+                        .id(1L)
+                        .freeBoard(freeBoard)
+                        .writer(user)
+                        .createDate(localDateTime)
+                        .updateDate(localDateTime)
+                        .contents("답변 내용")
+                .build());
     }
 
     @Test
@@ -118,9 +129,10 @@ public class FreeBoardServiceTest {
         // given
         LocalDateTime localDateTime = LocalDateTime.of(2024, 4, 9, 12, 0);
         long id = 1;
+        int pageNum = 1;
 
         // when
-        FreeBoard freeBoard = freeBoardService.addReadCount(id);
+        FreeBoard freeBoard = freeBoardService.addReadCount(id, pageNum);
 
         // then
         assertThat(freeBoard).isNotNull();
@@ -132,16 +144,18 @@ public class FreeBoardServiceTest {
         assertThat(freeBoard.getUpdateDate()).isEqualTo(localDateTime);
         assertThat(freeBoard.getCount()).isEqualTo(1);
         assertThat(freeBoard.isDeleted()).isFalse();
+        assertThat(freeBoard.getFreeBoardAnswers()).hasSize(1);
     }
 
     @Test(expected = FreeBoardNotFoundException.class)
     public void 조회할_게시글이_없는_경우_예외를_던진다(){
         // given
         long id = 99;
+        int pageNum = 1;
 
         // when
         // then
-        FreeBoard freeBoard = freeBoardService.addReadCount(id);
+        FreeBoard freeBoard = freeBoardService.addReadCount(id, pageNum);
     }
 
     @Test
