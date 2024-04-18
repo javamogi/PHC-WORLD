@@ -2,13 +2,15 @@ package com.phcworld.freeboard.infrastructure.dto;
 
 import com.phcworld.user.infrastructure.UserEntity;
 import com.phcworld.utils.LocalDateTimeUtils;
+import lombok.Builder;
 import lombok.Getter;
-import lombok.Setter;
+import lombok.ToString;
 
 import java.time.LocalDateTime;
 
-@Setter
 @Getter
+@ToString
+@Builder
 public class FreeBoardSelectDto {
     private Long id;
     private UserEntity writer;

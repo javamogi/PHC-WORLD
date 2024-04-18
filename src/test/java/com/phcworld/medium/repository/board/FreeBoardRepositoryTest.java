@@ -3,6 +3,7 @@ package com.phcworld.medium.repository.board;
 
 import com.phcworld.freeboard.infrastructure.FreeBoardJpaRepository;
 import com.phcworld.freeboard.infrastructure.dto.FreeBoardAndAnswersSelectDto;
+import com.phcworld.freeboard.infrastructure.dto.FreeBoardSelectDto;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -15,6 +16,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StopWatch;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -43,6 +45,17 @@ public class FreeBoardRepositoryTest {
 		queryStopWatch.stop();
 		log.info("DB querydsl SELECT 시간 : {}", queryStopWatch.getTotalTimeSeconds());
 		log.info("result : {}", result.get());
+	}
+
+	@Test
+	@Transactional
+	public void findAllByQuerydsl(){
+		StopWatch queryStopWatch = new StopWatch();
+		queryStopWatch.start();
+		List<FreeBoardSelectDto> result = freeBoardJpaRepository.findAllWithAnswersCount();
+		queryStopWatch.stop();
+		log.info("DB querydsl SELECT 시간 : {}", queryStopWatch.getTotalTimeSeconds());
+		log.info("result : {}", result);
 	}
 
 }

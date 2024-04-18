@@ -1,28 +1,24 @@
 package com.phcworld.freeboard.infrastructure;
 
-import com.phcworld.answer.infrastructure.FreeBoardAnswerEntity;
 import com.phcworld.answer.infrastructure.QFreeBoardAnswerEntity;
-import com.phcworld.domain.message.dto.ChatRoomSelectDto;
 import com.phcworld.freeboard.infrastructure.dto.AnswerSelectDto;
 import com.phcworld.freeboard.infrastructure.dto.FreeBoardAndAnswersSelectDto;
 import com.phcworld.freeboard.infrastructure.dto.FreeBoardSelectDto;
-import com.phcworld.repository.board.dto.DiarySelectDto;
 import com.phcworld.user.infrastructure.QUserEntity;
-import com.phcworld.user.infrastructure.UserEntity;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.ExpressionUtils;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
-import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
-import java.util.*;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
 
 import static com.querydsl.core.group.GroupBy.groupBy;
 import static com.querydsl.core.group.GroupBy.list;
@@ -134,5 +130,29 @@ public class FreeBoardJpaRepositoryCustomImpl implements FreeBoardJpaRepositoryC
                                         ).as("answers"))
                                 ));
         return result.values().stream().findAny();
+    }
+
+    @Override
+    public List<FreeBoardSelectDto> findAllWithAnswersCount(){
+        return queryFactory
+                .select(Projections.fields(FreeBoardSelectDto.class,
+                        freeBoard.id.as("id"),
+                        user.as("writer"),
+                        freeBoard.title,
+                        freeBoard.contents,
+                        freeBoard.createDate,
+                        freeBoard.updateDate,
+                        freeBoard.count,
+                        freeBoard.isDeleted,
+                        ExpressionUtils.as(
+                                JPAExpressions
+                                        .select(answer.count())
+                                        .from(answer)
+                                        .where(answer.freeBoard.eq(freeBoard)), "countOfAnswer")))
+                .from(freeBoard)
+                .where(freeBoard.isDeleted.eq(false))
+                .leftJoin(freeBoard.writer, user)
+                .orderBy(freeBoard.createDate.desc())
+                .fetch();
     }
 }

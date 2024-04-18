@@ -6,6 +6,7 @@ import com.phcworld.freeboard.domain.dto.FreeBoardRequest;
 import com.phcworld.freeboard.domain.dto.FreeBoardUpdateRequest;
 import com.phcworld.freeboard.infrastructure.dto.AnswerSelectDto;
 import com.phcworld.freeboard.infrastructure.dto.FreeBoardAndAnswersSelectDto;
+import com.phcworld.freeboard.infrastructure.dto.FreeBoardSelectDto;
 import com.phcworld.user.domain.Authority;
 import com.phcworld.user.domain.User;
 import com.phcworld.user.infrastructure.UserEntity;
@@ -143,5 +144,19 @@ public class FreeBoard {
     @Override
     public int hashCode() {
         return Objects.hash(id, title, contents, createDate, updateDate, isDeleted);
+    }
+
+    public static FreeBoard from(FreeBoardSelectDto dto) {
+        return FreeBoard.builder()
+                .id(dto.getId())
+                .title(dto.getTitle())
+                .contents(dto.getContents())
+                .writer(dto.getWriter().toModel())
+                .count(dto.getCount())
+                .createDate(dto.getCreateDate())
+                .updateDate(dto.getUpdateDate())
+                .countOfAnswer(dto.getCountOfAnswer())
+                .isDeleted(dto.getIsDeleted())
+                .build();
     }
 }

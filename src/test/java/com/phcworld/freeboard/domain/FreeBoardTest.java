@@ -2,6 +2,7 @@ package com.phcworld.freeboard.domain;
 
 import com.phcworld.freeboard.domain.dto.FreeBoardRequest;
 import com.phcworld.freeboard.domain.dto.FreeBoardUpdateRequest;
+import com.phcworld.freeboard.infrastructure.dto.FreeBoardSelectDto;
 import com.phcworld.mock.FakeLocalDateTimeHolder;
 import com.phcworld.user.domain.Authority;
 import com.phcworld.user.domain.User;
@@ -228,6 +229,82 @@ public class FreeBoardTest {
         assertThat(freeBoard.getWriter()).isEqualTo(user);
         assertThat(freeBoard.getCreateDate()).isEqualTo(now);
         assertThat(freeBoard.getUpdateDate()).isEqualTo(now);
+    }
+
+    @Test
+    public void 삭제시_delete_값이_true를_반환한다(){
+        // given
+        LocalDateTime now = LocalDateTime.now();
+        FakeLocalDateTimeHolder localDateTimeHolder = new FakeLocalDateTimeHolder(now);
+        User user = User.builder()
+                .id(1L)
+                .email("test@test.test")
+                .password("test")
+                .name("테스트")
+                .profileImage("blank-profile-picture.png")
+                .createDate(now)
+                .authority(Authority.ROLE_USER)
+                .userStatus(UserStatus.ACTIVE)
+                .certificationCode("1a2b3c")
+                .build();
+        FreeBoard freeBoard = FreeBoard.builder()
+                .id(1L)
+                .writer(user)
+                .count(0)
+                .title("제목")
+                .contents("내용")
+                .createDate(now)
+                .updateDate(now)
+                .build();
+
+        // when
+        freeBoard = freeBoard.delete(localDateTimeHolder);
+
+        // then
+        assertThat(freeBoard.isDeleted()).isTrue();
+    }
+
+    @Test
+    public void FreeBoardSelectDto로_게시글을_만들_수_있다(){
+        // given
+        LocalDateTime now = LocalDateTime.now();
+        FakeLocalDateTimeHolder localDateTimeHolder = new FakeLocalDateTimeHolder(now);
+        User user = User.builder()
+                .id(1L)
+                .email("test@test.test")
+                .password("test")
+                .name("테스트")
+                .profileImage("blank-profile-picture.png")
+                .createDate(now)
+                .authority(Authority.ROLE_USER)
+                .userStatus(UserStatus.ACTIVE)
+                .certificationCode("1a2b3c")
+                .build();
+        FreeBoardSelectDto dto = FreeBoardSelectDto.builder()
+                .id(1L)
+                .title("제목")
+                .contents("내용")
+                .writer(UserEntity.from(user))
+                .count(0)
+                .createDate(localDateTimeHolder.now())
+                .updateDate(localDateTimeHolder.now())
+                .isDeleted(false)
+                .countOfAnswer(0L)
+                .build();
+
+        // when
+        FreeBoard freeBoard = FreeBoard.from(dto);
+
+        // then
+        assertThat(freeBoard.getId()).isEqualTo(1);
+        assertThat(freeBoard.getTitle()).isEqualTo("제목");
+        assertThat(freeBoard.getContents()).isEqualTo("내용");
+        assertThat(freeBoard.getCount()).isZero();
+        assertThat(freeBoard.getWriter()).isEqualTo(user);
+        assertThat(freeBoard.getCreateDate()).isEqualTo(now);
+        assertThat(freeBoard.getUpdateDate()).isEqualTo(now);
+        assertThat(freeBoard.isDeleted()).isFalse();
+        assertThat(freeBoard.getCountOfAnswer()).isEmpty();
     }
 
 }

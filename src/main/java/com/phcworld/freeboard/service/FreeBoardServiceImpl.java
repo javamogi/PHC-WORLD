@@ -40,10 +40,7 @@ public class FreeBoardServiceImpl implements FreeBoardService {
 
     @Override
     public List<FreeBoard> findAllList() {
-        return freeBoardRepository.findAll()
-                .stream()
-                .filter(f -> !f.isDeleted())
-                .collect(Collectors.toList());
+        return freeBoardRepository.findAll();
     }
 
     @Override
