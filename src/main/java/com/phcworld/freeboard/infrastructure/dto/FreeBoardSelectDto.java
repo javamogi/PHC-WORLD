@@ -2,14 +2,14 @@ package com.phcworld.freeboard.infrastructure.dto;
 
 import com.phcworld.user.infrastructure.UserEntity;
 import com.phcworld.utils.LocalDateTimeUtils;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.ToString;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
 @Getter
 @ToString
+@NoArgsConstructor
+@AllArgsConstructor
 @Builder
 public class FreeBoardSelectDto {
     private Long id;
@@ -30,4 +30,5 @@ public class FreeBoardSelectDto {
     public String getFormattedUpdateDate() {
         return LocalDateTimeUtils.getTime(updateDate);
     }
+
 }
