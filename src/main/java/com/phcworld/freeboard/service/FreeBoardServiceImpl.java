@@ -2,7 +2,6 @@ package com.phcworld.freeboard.service;
 
 import com.phcworld.answer.domain.FreeBoardAnswer;
 import com.phcworld.answer.infrastructure.FreeBoardAnswerRepository;
-import com.phcworld.answer.service.port.FreeBoardAnswerService;
 import com.phcworld.common.infrastructure.LocalDateTimeHolder;
 import com.phcworld.exception.model.DeletedEntityException;
 import com.phcworld.exception.model.FreeBoardNotFoundException;
@@ -14,14 +13,15 @@ import com.phcworld.freeboard.domain.dto.FreeBoardUpdateRequest;
 import com.phcworld.freeboard.service.port.FreeBoardRepository;
 import com.phcworld.user.domain.User;
 import com.phcworld.user.infrastructure.UserEntity;
-import io.swagger.models.auth.In;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -48,7 +48,7 @@ public class FreeBoardServiceImpl implements FreeBoardService {
         Pageable pageable = PageRequest.of(pageNum - 1, 10, Sort.by("updateDate").ascending());
         FreeBoard freeBoard = freeBoardRepository.findById(freeBoardId)
                 .orElseThrow(FreeBoardNotFoundException::new);
-        Page<FreeBoardAnswer> answers = freeBoardAnswerRepository.findByFreeBoard(freeBoard, pageable);
+        Page<FreeBoardAnswer> answers = freeBoardAnswerRepository.findByFreeBoardId(freeBoardId, pageable);
         freeBoard = freeBoard.addCount(answers);
         freeBoardRepository.save(freeBoard);
         return freeBoard;

@@ -2,6 +2,90 @@
  * 
  */
 $(document).ready(function(){
+
+	$('.page-link').click(function(e) {
+		e.preventDefault();
+		var pageNum = $(this).text();
+		var url = $(".write-answer").attr("action");
+		$.ajax({
+			type : 'get',
+			url : url,
+			data : "pageNum=" + pageNum,
+			dataType : 'json',
+			error : function(jqXHR, txtStatus, errorThrown){
+				console.log(jqXHR);
+				console.log(jqXHR.responseText.error)
+				alert(jqXHR.responseJSON.error);
+			},
+			success : function(data){
+				console.log(data);
+				$("article#answer-article").remove();
+				$("div.text-center").remove();
+				for(let i = 0; i < data.answers.length; i++){
+					var deleteUrl = url + "/" + data.answers[i].id;
+					var getUrl = url + "/" + data.answers[i].id;
+					var profileUrl = "/users/"+data.answers[i].writer.id+"/profile";
+//				console.log(deleteUrl);
+					var answerTemplate = "<article class='answer-article' id='answer-article'>" + "<div class='be-comment'><div class='be-img-comment'><a href='" + profileUrl +
+						"'><img src='/images/profile/" + data.answers[i].writer.profileImage + "' class='be-ava-comment'></a></div>" +
+						"<div class='be-comment-content'><span class='be-comment-name'><a href='" + profileUrl +
+						"'>" + data.answers[i].writer.name + "</a></span><span class='be-comment-time'><a class='answer-get' href='"+ getUrl + "'>수정 </a>"+
+						"<a class='answer-delete' href='"+deleteUrl+"'>삭제 </a><i class='fa fa-clock-o'></i> " +
+						data.answers[i].updateDate + "</span><p class='be-comment-text'>" + data.answers[i].contents + "</p></div></div></article>";
+					$(".answer-template").append(answerTemplate);
+				}
+				let pageNationTemplate = renderPageNation(data);
+				$(".answer-template").after(pageNationTemplate);
+			}
+		})
+	});
+
+	function renderPageNation(data){
+		let previous = false;
+		let next = false;
+		let currentNum = data.currentPageNum;
+		let totalPageNum = data.totalOfPage;
+		let pageSize = 10;
+		let temp = (currentNum - 1) % pageSize;
+		let startNum = currentNum - temp;
+		let endNum = startNum + pageSize - 1;
+		if(endNum > totalPageNum){
+			endNum = totalPageNum;
+		}
+		if(startNum > 1){
+			previous = true;
+			// previous = startNum - pageSize;
+		}
+		if(endNum < totalPageNum) {
+			next = true;
+			// next = endNum + 1;
+		}
+		let pageNationTemplate = "<div class='text-center'>" +
+			"<ul class='pagination justify-content-center'>";
+		if(previous){
+			pageNationTemplate += "<li class='page-item'>" +
+				"<a id='previous' class='page-link' href='' aria-label='Previous'>" +
+					"<span aria-hidden='true'>&laquo;</span>" +
+					"<span class='sr-only'>Previous</span>" +
+				"</a>" +
+			"</li>";
+		}
+		for (let i = startNum; i <= endNum; i++){
+			pageNationTemplate += "<li class='page-item'>" +
+				"<a class='page-link' href=''>" + i + "</a>"
+			"</li>";
+		}
+		if(next){
+			pageNationTemplate += "<li class='page-item'>" +
+				"<a class='page-link' href='' aria-label='Next'>" +
+					"<span aria-hidden='true'>&raquo;</span>" +
+					"<span class='sr-only'>Next</span>" +
+				"</a>" +
+			"</li>";
+		}
+		pageNationTemplate += "</ul></div>";
+		return pageNationTemplate;
+	}
 	
 	$('#save_button').click(function(e){
 		e.preventDefault();
@@ -9,7 +93,6 @@ $(document).ready(function(){
 		var url = $(".write-answer").attr("action");
 //		console.log("query : " + queryString);
 //		console.log("url : " + url);
-		
 		$.ajax({
 			type : 'post',
 			url : url,

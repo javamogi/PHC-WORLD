@@ -8,6 +8,7 @@ import com.phcworld.freeboard.domain.dto.FreeBoardRequest;
 import com.phcworld.freeboard.domain.dto.FreeBoardUpdateRequest;
 import com.phcworld.user.infrastructure.UserEntity;
 import com.phcworld.utils.HttpSessionUtils;
+import com.phcworld.utils.PageNationsUtil;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -66,6 +67,10 @@ public class FreeBoardController {
 		FreeBoardResponseWithAuthority freeBoard =
 				FreeBoardResponseWithAuthority.from(freeBoardService.addReadCount(id, pageNum), loginUser);
 
+		if(!freeBoard.getCountOfAnswer().isEmpty()){
+			PageNationsUtil.viewPageNation("", pageNum, freeBoard.getTotalOfPage(), model);
+			model.addAttribute("isPagination", true);
+		}
 		model.addAttribute("freeBoard", freeBoard);
 		return "board/freeboard/detail_freeboard";
 	}

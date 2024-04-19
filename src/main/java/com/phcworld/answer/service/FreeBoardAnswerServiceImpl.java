@@ -16,9 +16,13 @@ import com.phcworld.user.domain.User;
 import com.phcworld.user.infrastructure.UserEntity;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -79,5 +83,13 @@ public class FreeBoardAnswerServiceImpl implements FreeBoardAnswerService {
 		return SuccessResponse.builder()
 				.success("삭제 성공")
 				.build();
+	}
+
+	@Override
+	public Page<FreeBoardAnswer> getListByFreeBoard(long freeBoardId, int pageNum){
+		Pageable pageable = PageRequest.of(pageNum - 1, 10);
+//		Page<FreeBoardAnswer> answerPage = freeBoardAnswerRepository.findByFreeBoardId(freeBoardId, pageable);
+//		return answerPage.getContent();
+		return freeBoardAnswerRepository.findByFreeBoardId(freeBoardId, pageable);
 	}
 }

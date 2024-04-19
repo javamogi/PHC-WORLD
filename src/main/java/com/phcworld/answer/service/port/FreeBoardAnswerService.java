@@ -6,6 +6,9 @@ import com.phcworld.answer.domain.dto.FreeBoardAnswerUpdateRequest;
 import com.phcworld.domain.api.model.response.SuccessResponse;
 import com.phcworld.user.domain.User;
 import com.phcworld.user.infrastructure.UserEntity;
+import org.springframework.data.domain.Page;
+
+import java.util.List;
 
 public interface FreeBoardAnswerService {
 
@@ -16,4 +19,6 @@ public interface FreeBoardAnswerService {
     FreeBoardAnswer update(FreeBoardAnswerUpdateRequest request, UserEntity loginUser);
 
     SuccessResponse delete(long id, UserEntity loginUser);
+
+    Page<FreeBoardAnswer> getListByFreeBoard(long freeBoardId, int pageNum);
 }

@@ -1,6 +1,7 @@
 package com.phcworld.answer.infrastructure;
 
 import com.phcworld.answer.domain.FreeBoardAnswer;
+import com.phcworld.answer.infrastructure.dto.FreeBoardAnswerSelectDto;
 import com.phcworld.freeboard.domain.FreeBoard;
 import com.phcworld.freeboard.infrastructure.FreeBoardEntity;
 import lombok.RequiredArgsConstructor;
@@ -34,14 +35,26 @@ public class FreeBoardAnswerRepositoryImpl implements FreeBoardAnswerRepository{
         freeBoardAnswerJpaRepository.deleteById(id);
     }
 
+//    @Override
+//    public Page<FreeBoardAnswer> findByFreeBoard(FreeBoard freeBoard, Pageable pageable) {
+//        Page<FreeBoardAnswerEntity> pages = freeBoardAnswerJpaRepository.findByFreeBoard(
+//                FreeBoardEntity.from(freeBoard),
+//                pageable);
+//        List<FreeBoardAnswer> list = pages.getContent()
+//                .stream()
+//                .map(FreeBoardAnswerEntity::toModel)
+//                .collect(Collectors.toList());
+//        return new PageImpl<>(list, pageable, pages.getTotalElements());
+//    }
+
     @Override
-    public Page<FreeBoardAnswer> findByFreeBoard(FreeBoard freeBoard, Pageable pageable) {
-        Page<FreeBoardAnswerEntity> pages = freeBoardAnswerJpaRepository.findByFreeBoard(
-                FreeBoardEntity.from(freeBoard),
+    public Page<FreeBoardAnswer> findByFreeBoardId(long freeBoardId, Pageable pageable) {
+        Page<FreeBoardAnswerSelectDto> pages = freeBoardAnswerJpaRepository.findByFreeBoardId(
+                freeBoardId,
                 pageable);
         List<FreeBoardAnswer> list = pages.getContent()
                 .stream()
-                .map(FreeBoardAnswerEntity::toModel)
+                .map(FreeBoardAnswer::from)
                 .collect(Collectors.toList());
         return new PageImpl<>(list, pageable, pages.getTotalElements());
     }

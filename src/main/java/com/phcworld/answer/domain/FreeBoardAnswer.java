@@ -2,6 +2,7 @@ package com.phcworld.answer.domain;
 
 import com.phcworld.answer.domain.dto.FreeBoardAnswerRequest;
 import com.phcworld.answer.domain.dto.FreeBoardAnswerUpdateRequest;
+import com.phcworld.answer.infrastructure.dto.FreeBoardAnswerSelectDto;
 import com.phcworld.common.infrastructure.LocalDateTimeHolder;
 import com.phcworld.freeboard.domain.FreeBoard;
 import com.phcworld.user.domain.User;
@@ -32,6 +33,14 @@ public class FreeBoardAnswer {
                 .contents(request.getContents().replace("\r\n", "<br>"))
                 .createDate(localDateTimeHolder.now())
                 .updateDate(localDateTimeHolder.now())
+                .build();
+    }
+    public static FreeBoardAnswer from(FreeBoardAnswerSelectDto dto) {
+        return FreeBoardAnswer.builder()
+                .id(dto.getId())
+                .writer(dto.getWriter().toModel())
+                .contents(dto.getContents())
+                .updateDate(dto.getUpdateDate())
                 .build();
     }
 

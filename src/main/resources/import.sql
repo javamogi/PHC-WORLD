@@ -26,3 +26,16 @@ insert into timeline(ID, SAVE_TYPE, POST_ID, REDIRECT_ID, USER_ID, SAVE_DATE) va
 insert into timeline(ID, SAVE_TYPE, POST_ID, REDIRECT_ID, USER_ID, SAVE_DATE) values('4', 'FREE_BOARD', '4', '4', '2', '2018-07-16 15:55:20.879');
 
 insert into diary(ID, WRITER_ID, TITLE, CONTENTS, THUMBNAIL, COUNT_GOOD, CREATE_DATE, UPDATE_DATE) values('1', '1', 'title', 'contents', '', '0', CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP());
+
+insert into free_board_answer(ID, WRITER_ID, FREE_BOARD_ID, CONTENTS, CREATE_DATE, UPDATE_DATE) values('1', '1', '1', 'test1', CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP());
+insert into free_board_answer(ID, WRITER_ID, FREE_BOARD_ID, CONTENTS, CREATE_DATE, UPDATE_DATE) values('2', '1', '1', 'test2', CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP());
+insert into free_board_answer(ID, WRITER_ID, FREE_BOARD_ID, CONTENTS, CREATE_DATE, UPDATE_DATE) values('3', '1', '1', 'test3', CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP());
+insert into free_board_answer(ID, WRITER_ID, FREE_BOARD_ID, CONTENTS, CREATE_DATE, UPDATE_DATE) values('4', '1', '1', 'test4', CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP());
+insert into free_board_answer(ID, WRITER_ID, FREE_BOARD_ID, CONTENTS, CREATE_DATE, UPDATE_DATE) values('5', '1', '1', 'test5', CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP());
+insert into free_board_answer(ID, WRITER_ID, FREE_BOARD_ID, CONTENTS, CREATE_DATE, UPDATE_DATE) values('6', '1', '1', 'test6', CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP());
+insert into free_board_answer(ID, WRITER_ID, FREE_BOARD_ID, CONTENTS, CREATE_DATE, UPDATE_DATE) values('7', '1', '1', 'test7', CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP());
+insert into free_board_answer(ID, WRITER_ID, FREE_BOARD_ID, CONTENTS, CREATE_DATE, UPDATE_DATE) values('8', '1', '1', 'test8', CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP());
+insert into free_board_answer(ID, WRITER_ID, FREE_BOARD_ID, CONTENTS, CREATE_DATE, UPDATE_DATE) values('9', '1', '1', 'test9', CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP());
+insert into free_board_answer(ID, WRITER_ID, FREE_BOARD_ID, CONTENTS, CREATE_DATE, UPDATE_DATE) values('10', '1', '1', 'test10', CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP());
+insert into free_board_answer(ID, WRITER_ID, FREE_BOARD_ID, CONTENTS, CREATE_DATE, UPDATE_DATE) values('11', '1', '1', 'test11', CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP());
+insert into free_board_answer(ID, WRITER_ID, FREE_BOARD_ID, CONTENTS, CREATE_DATE, UPDATE_DATE) values('12', '1', '1', 'test12', CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP());

@@ -15,14 +15,20 @@ import com.phcworld.user.domain.Authority;
 import com.phcworld.user.domain.User;
 import com.phcworld.user.domain.UserStatus;
 import com.phcworld.user.infrastructure.UserEntity;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.*;
 
+@Slf4j
 public class FreeBoardAnswerServiceTest {
 
     private FreeBoardAnswerServiceImpl freeBoardAnswerService;
@@ -69,6 +75,14 @@ public class FreeBoardAnswerServiceTest {
                 .updateDate(localDateTime)
                 .build();
         fakeFreeBoardAnswerRepository.save(freeBoardAnswer);
+        fakeFreeBoardAnswerRepository.save(FreeBoardAnswer.builder()
+                .id(2L)
+                .freeBoard(freeBoard)
+                .writer(user)
+                .contents("답변 내용")
+                .createDate(localDateTime)
+                .updateDate(localDateTime)
+                .build());
     }
 
     @Test
@@ -330,6 +344,19 @@ public class FreeBoardAnswerServiceTest {
         // when
         // then
         freeBoardAnswerService.delete(id, UserEntity.from(user));
+    }
+
+    @Test
+    public void free_board_id로_리스트를_가져올_수_있다(){
+        // given
+        long freeBoardId = 1;
+        int pageNum = 1;
+
+        // when
+        Page<FreeBoardAnswer> list = freeBoardAnswerService.getListByFreeBoard(freeBoardId, pageNum);
+
+        // then
+        assertThat(list.getContent()).hasSize(2);
     }
 
 }

@@ -51,13 +51,23 @@ public class FakeFreeBoardAnswerRepository implements FreeBoardAnswerRepository 
     }
 
     @Override
-    public Page<FreeBoardAnswer> findByFreeBoard(FreeBoard freeBoard, Pageable pageable) {
+    public Page<FreeBoardAnswer> findByFreeBoardId(long freeBoardId, Pageable pageable) {
         List<FreeBoardAnswer> list = data.stream()
-                .filter(a -> a.getFreeBoard().equals(freeBoard))
+                .filter(a -> a.getFreeBoard().getId().equals(freeBoardId))
                 .skip(pageable.getPageNumber() * pageable.getPageSize())
                 .limit(pageable.getPageSize())
                 .collect(Collectors.toList());
         return new PageImpl<>(list);
     }
+
+//    @Override
+//    public Page<FreeBoardAnswer> findByFreeBoard(FreeBoard freeBoard, Pageable pageable) {
+//        List<FreeBoardAnswer> list = data.stream()
+//                .filter(a -> a.getFreeBoard().equals(freeBoard))
+//                .skip(pageable.getPageNumber() * pageable.getPageSize())
+//                .limit(pageable.getPageSize())
+//                .collect(Collectors.toList());
+//        return new PageImpl<>(list);
+//    }
 
 }

@@ -16,5 +16,7 @@ public interface FreeBoardAnswerRepository {
 
     void deleteById(long id);
 
-    Page<FreeBoardAnswer> findByFreeBoard(FreeBoard freeBoard, Pageable pageable);
+//    Page<FreeBoardAnswer> findByFreeBoard(FreeBoard freeBoard, Pageable pageable);
+
+    Page<FreeBoardAnswer> findByFreeBoardId(long freeBoardId, Pageable pageable);
 }
