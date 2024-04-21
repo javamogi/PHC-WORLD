@@ -102,6 +102,9 @@ dependencies {
 
     // slack
     implementation 'com.slack.api:slack-api-client:1.36.1'
+
+    // aop
+    implementation 'org.springframework.boot:spring-boot-starter-aop'
 }
 
 group = 'com.phcworld'
