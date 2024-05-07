@@ -25,12 +25,13 @@ import java.util.stream.Collectors;
 @Builder
 public class FreeBoardController {
 
+	public static final String USER_LOGIN_FORM = "user/login";
 	private final FreeBoardService freeBoardService;
 
 	@GetMapping("/form")
 	public String form(HttpSession session) {
 		if (!HttpSessionUtils.isLoginUser(session)) {
-			return "user/login";
+			return USER_LOGIN_FORM;
 		}
 		return "board/freeboard/freeboard_form";
 	}
@@ -38,11 +39,11 @@ public class FreeBoardController {
 	@PostMapping("")
 	public String register(FreeBoardRequest request, HttpSession session) {
 		if (!HttpSessionUtils.isLoginUser(session)) {
-			return "user/login";
+			return USER_LOGIN_FORM;
 		}
 		UserEntity sessionUser = HttpSessionUtils.getUserEntityFromSession(session);
-		
-		FreeBoard freeBoard = freeBoardService.register(request, sessionUser.toModel());
+
+        FreeBoard freeBoard = freeBoardService.register(request, sessionUser.toModel());
 
 		return "redirect:/freeboards/"+ freeBoard.getId();
 	}
@@ -78,7 +79,7 @@ public class FreeBoardController {
 	@GetMapping("/{id}/form")
 	public String modifyForm(@PathVariable Long id, HttpSession session, Model model) {
 		if (!HttpSessionUtils.isLoginUser(session)) {
-			return "user/login";
+			return USER_LOGIN_FORM;
 		}
 		UserEntity loginUser = HttpSessionUtils.getUserEntityFromSession(session);
 		FreeBoard freeBoard = freeBoardService.getFreeBoard(id, loginUser);
@@ -89,7 +90,7 @@ public class FreeBoardController {
 	@PatchMapping("")
 	public String modify(FreeBoardUpdateRequest request, HttpSession session, Model model) {
 		if (!HttpSessionUtils.isLoginUser(session)) {
-			return "user/login";
+			return USER_LOGIN_FORM;
 		}
 		UserEntity loginUser = HttpSessionUtils.getUserEntityFromSession(session);
 		FreeBoard freeBoard = freeBoardService.update(request, loginUser);
@@ -99,7 +100,7 @@ public class FreeBoardController {
 	@DeleteMapping("/{id}")
 	public String delete(@PathVariable Long id, HttpSession session) {
 		if (!HttpSessionUtils.isLoginUser(session)) {
-			return "user/login";
+			return USER_LOGIN_FORM;
 		}
 		UserEntity loginUser = HttpSessionUtils.getUserEntityFromSession(session);
 		freeBoardService.delete(id, loginUser);
