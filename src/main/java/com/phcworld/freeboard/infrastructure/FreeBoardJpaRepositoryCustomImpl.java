@@ -133,7 +133,31 @@ public class FreeBoardJpaRepositoryCustomImpl implements FreeBoardJpaRepositoryC
     }
 
     @Override
-    public List<FreeBoardSelectDto> findAllWithAnswersCount(Long userId){
+    public List<FreeBoardSelectDto> findAllWithAnswersCount(){
+        return queryFactory
+                .select(Projections.fields(FreeBoardSelectDto.class,
+                        freeBoard.id.as("id"),
+                        user.as("writer"),
+                        freeBoard.title,
+                        freeBoard.contents,
+                        freeBoard.createDate,
+                        freeBoard.updateDate,
+                        freeBoard.count,
+                        freeBoard.isDeleted,
+                        ExpressionUtils.as(
+                                JPAExpressions
+                                        .select(answer.count())
+                                        .from(answer)
+                                        .where(answer.freeBoard.eq(freeBoard)), "countOfAnswer")))
+                .from(freeBoard)
+                .where(freeBoard.isDeleted.eq(false))
+                .leftJoin(freeBoard.writer, user)
+                .orderBy(freeBoard.createDate.desc())
+                .fetch();
+    }
+
+    @Override
+    public List<FreeBoardSelectDto> findByUser(Long userId, Long freeBoardId){
         return queryFactory
                 .select(Projections.fields(FreeBoardSelectDto.class,
                         freeBoard.id.as("id"),
@@ -151,9 +175,11 @@ public class FreeBoardJpaRepositoryCustomImpl implements FreeBoardJpaRepositoryC
                                         .where(answer.freeBoard.eq(freeBoard)), "countOfAnswer")))
                 .from(freeBoard)
                 .where(freeBoard.isDeleted.eq(false),
-                        eqUsers(userId))
+                        eqUsers(userId),
+                        ltFreeBoardId(freeBoardId))
                 .leftJoin(freeBoard.writer, user)
                 .orderBy(freeBoard.createDate.desc())
+                .limit(10)
                 .fetch();
     }
 
@@ -163,5 +189,12 @@ public class FreeBoardJpaRepositoryCustomImpl implements FreeBoardJpaRepositoryC
         }
         BooleanBuilder booleanBuilder = new BooleanBuilder();
         return booleanBuilder.and(freeBoard.writer.id.eq(userId));
+    }
+
+    private BooleanExpression ltFreeBoardId(Long freeBoardId) {
+        if(Objects.isNull(freeBoardId)) {
+            return null;
+        }
+        return freeBoard.id.lt(freeBoardId);
     }
 }

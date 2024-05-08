@@ -21,5 +21,5 @@ public interface FreeBoardService {
 
     FreeBoard delete(Long id, UserEntity loginUser);
 
-    List<FreeBoard> getFreeBoardListByUserId(Long userId);
+    List<FreeBoard> getFreeBoardListByUserId(Long userId, Long freeBoardId);
 }

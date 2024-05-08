@@ -368,7 +368,7 @@ public class FreeBoardServiceTest {
         long userId = 1;
 
         // when
-        List<FreeBoard> list = freeBoardService.getFreeBoardListByUserId(userId);
+        List<FreeBoard> list = freeBoardService.getFreeBoardListByUserId(userId, null);
 
         // then
         assertThat(list).hasSize(2);

@@ -86,7 +86,7 @@ public class FreeBoardServiceImpl implements FreeBoardService {
     }
 
     @Override
-    public List<FreeBoard> getFreeBoardListByUserId(Long userId) {
-        return freeBoardRepository.findByUser(userId);
+    public List<FreeBoard> getFreeBoardListByUserId(Long userId, Long freeBoardId) {
+        return freeBoardRepository.findByUser(userId, freeBoardId);
     }
 }

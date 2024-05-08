@@ -52,7 +52,7 @@ public class FreeBoardRepositoryTest {
 	public void findAllByQuerydsl(){
 		StopWatch queryStopWatch = new StopWatch();
 		queryStopWatch.start();
-		List<FreeBoardSelectDto> result = freeBoardJpaRepository.findAllWithAnswersCount(null);
+		List<FreeBoardSelectDto> result = freeBoardJpaRepository.findAllWithAnswersCount();
 		queryStopWatch.stop();
 		log.info("DB querydsl SELECT 시간 : {}", queryStopWatch.getTotalTimeSeconds());
 		log.info("result : {}", result);

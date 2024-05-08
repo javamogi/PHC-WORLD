@@ -25,7 +25,7 @@ public class FreeBoardRepositoryImpl implements FreeBoardRepository {
 
     @Override
     public List<FreeBoard> findAll() {
-        return freeBoardJpaRepository.findAllWithAnswersCount(null)
+        return freeBoardJpaRepository.findAllWithAnswersCount()
                 .stream()
                 .map(FreeBoard::from)
                 .collect(Collectors.toList());
@@ -44,8 +44,8 @@ public class FreeBoardRepositoryImpl implements FreeBoardRepository {
     }
 
     @Override
-    public List<FreeBoard> findByUser(Long userId) {
-        return freeBoardJpaRepository.findAllWithAnswersCount(userId)
+    public List<FreeBoard> findByUser(Long userId, Long freeBoardId) {
+        return freeBoardJpaRepository.findByUser(userId, freeBoardId)
                 .stream()
                 .map(FreeBoard::from)
                 .collect(Collectors.toList());

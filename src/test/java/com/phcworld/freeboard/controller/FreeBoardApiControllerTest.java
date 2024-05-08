@@ -47,10 +47,11 @@ public class FreeBoardApiControllerTest {
                 .build();
         testContainer.freeBoardRepository.save(freeBoard);
         long userId = user.getId();
+        long freeBoardId = 2;
 
         // when
         ResponseEntity<List<FreeBoardResponse>> result =
-                testContainer.freeBoardApiController.getFreeBoardsByUser(userId);
+                testContainer.freeBoardApiController.getFreeBoardsByUser(userId, freeBoardId);
 
         // then
         assertThat(result.getStatusCode()).isEqualTo(HttpStatus.valueOf(200));

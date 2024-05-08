@@ -6,10 +6,7 @@ import com.phcworld.freeboard.domain.FreeBoard;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -23,8 +20,9 @@ public class FreeBoardApiController {
     private final FreeBoardService freeBoardService;
 
     @GetMapping("/users/{userId}")
-    public ResponseEntity<List<FreeBoardResponse>> getFreeBoardsByUser(@PathVariable Long userId){
-        List<FreeBoardResponse> list = freeBoardService.getFreeBoardListByUserId(userId)
+    public ResponseEntity<List<FreeBoardResponse>> getFreeBoardsByUser(@PathVariable Long userId,
+                                                                       @RequestParam(required = false) Long freeBoardId){
+        List<FreeBoardResponse> list = freeBoardService.getFreeBoardListByUserId(userId, freeBoardId)
                 .stream()
                 .map(FreeBoardResponse::of)
                 .collect(Collectors.toList());
