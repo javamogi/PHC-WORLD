@@ -162,6 +162,6 @@ public class FreeBoardJpaRepositoryCustomImpl implements FreeBoardJpaRepositoryC
             return null;
         }
         BooleanBuilder booleanBuilder = new BooleanBuilder();
-        return booleanBuilder.and(freeBoard.id.eq(userId));
+        return booleanBuilder.and(freeBoard.writer.id.eq(userId));
     }
 }
