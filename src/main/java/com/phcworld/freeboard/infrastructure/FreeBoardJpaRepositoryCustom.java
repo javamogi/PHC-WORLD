@@ -10,5 +10,5 @@ import java.util.Optional;
 public interface FreeBoardJpaRepositoryCustom {
     List<FreeBoardSelectDto> findByKeywordOrderById(String keyword, Pageable pageable);
     Optional<FreeBoardAndAnswersSelectDto> findByIdAndAnswers(long id, Pageable pageable);
-    List<FreeBoardSelectDto> findAllWithAnswersCount();
+    List<FreeBoardSelectDto> findAllWithAnswersCount(Long userId);
 }

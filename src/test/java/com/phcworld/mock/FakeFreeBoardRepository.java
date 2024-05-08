@@ -56,4 +56,11 @@ public class FakeFreeBoardRepository implements FreeBoardRepository {
                 .filter(f -> f.getId().equals(id))
                 .findAny();
     }
+
+    @Override
+    public List<FreeBoard> findByUser(Long userId) {
+        return data.stream()
+                .filter(f -> f.getWriter().getId().equals(userId))
+                .collect(Collectors.toList());
+    }
 }

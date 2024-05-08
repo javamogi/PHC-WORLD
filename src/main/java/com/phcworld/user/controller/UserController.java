@@ -1,20 +1,18 @@
 package com.phcworld.user.controller;
 
-import com.phcworld.user.controller.port.SessionUser;
-import com.phcworld.user.controller.port.UserService;
 import com.phcworld.domain.message.Message;
 import com.phcworld.domain.message.MessageResponse;
 import com.phcworld.domain.timeline.Timeline;
+import com.phcworld.security.utils.SecurityUtil;
+import com.phcworld.service.message.MessageServiceImpl;
+import com.phcworld.service.timeline.TimelineServiceImpl;
+import com.phcworld.user.controller.port.UserService;
 import com.phcworld.user.domain.User;
 import com.phcworld.user.domain.dto.LoginRequestUser;
 import com.phcworld.user.domain.dto.UserRequest;
 import com.phcworld.user.domain.dto.UserUpdateRequest;
 import com.phcworld.user.infrastructure.UserEntity;
-import com.phcworld.security.utils.SecurityUtil;
-import com.phcworld.service.alert.AlertServiceImpl;
 import com.phcworld.user.service.CertificateService;
-import com.phcworld.service.message.MessageServiceImpl;
-import com.phcworld.service.timeline.TimelineServiceImpl;
 import com.phcworld.user.service.UserServiceImpl;
 import com.phcworld.utils.HttpSessionUtils;
 import com.phcworld.utils.PageNationsUtil;
@@ -22,13 +20,9 @@ import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
@@ -48,12 +42,6 @@ public class UserController {
 	
 	private final MessageServiceImpl messageService;
 	
-	private final AlertServiceImpl alertService;
-	
-	private final CertificateService emailService;
-
-	private final PasswordEncoder passwordEncoder;
-
 	private final UserService userService;
 
 	@PostMapping("")

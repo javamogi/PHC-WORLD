@@ -15,4 +15,6 @@ public interface FreeBoardRepository {
     Optional<FreeBoard> findById(Long freeBoardId);
 
     Optional<FreeBoard> findByIdAndAnswers(long id, int pageNum);
+
+    List<FreeBoard> findByUser(Long userId);
 }

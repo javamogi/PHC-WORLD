@@ -133,7 +133,7 @@ public class FreeBoardJpaRepositoryCustomImpl implements FreeBoardJpaRepositoryC
     }
 
     @Override
-    public List<FreeBoardSelectDto> findAllWithAnswersCount(){
+    public List<FreeBoardSelectDto> findAllWithAnswersCount(Long userId){
         return queryFactory
                 .select(Projections.fields(FreeBoardSelectDto.class,
                         freeBoard.id.as("id"),
@@ -150,9 +150,18 @@ public class FreeBoardJpaRepositoryCustomImpl implements FreeBoardJpaRepositoryC
                                         .from(answer)
                                         .where(answer.freeBoard.eq(freeBoard)), "countOfAnswer")))
                 .from(freeBoard)
-                .where(freeBoard.isDeleted.eq(false))
+                .where(freeBoard.isDeleted.eq(false),
+                        eqUsers(userId))
                 .leftJoin(freeBoard.writer, user)
                 .orderBy(freeBoard.createDate.desc())
                 .fetch();
+    }
+
+    private BooleanBuilder eqUsers(Long userId) {
+        if(Objects.isNull(userId) || userId == 0) {
+            return null;
+        }
+        BooleanBuilder booleanBuilder = new BooleanBuilder();
+        return booleanBuilder.and(freeBoard.id.eq(userId));
     }
 }

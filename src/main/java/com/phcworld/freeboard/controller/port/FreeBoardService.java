@@ -20,4 +20,6 @@ public interface FreeBoardService {
     FreeBoard update(FreeBoardUpdateRequest request, UserEntity loginUser);
 
     FreeBoard delete(Long id, UserEntity loginUser);
+
+    List<FreeBoard> getFreeBoardListByUserId(Long userId);
 }

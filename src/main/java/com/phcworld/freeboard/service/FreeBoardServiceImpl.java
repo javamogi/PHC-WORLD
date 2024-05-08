@@ -84,4 +84,9 @@ public class FreeBoardServiceImpl implements FreeBoardService {
         freeBoard = freeBoard.delete(localDateTimeHolder);
         return freeBoardRepository.save(freeBoard);
     }
+
+    @Override
+    public List<FreeBoard> getFreeBoardListByUserId(Long userId) {
+        return freeBoardRepository.findByUser(userId);
+    }
 }

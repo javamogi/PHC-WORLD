@@ -362,4 +362,16 @@ public class FreeBoardServiceTest {
         freeBoardService.delete(id, UserEntity.from(user));
     }
 
+    @Test
+    public void 회원별_삭제되지_않은_게시글_데이터를_가져올_수_있다(){
+        // given
+        long userId = 1;
+
+        // when
+        List<FreeBoard> list = freeBoardService.getFreeBoardListByUserId(userId);
+
+        // then
+        assertThat(list).hasSize(2);
+    }
+
 }

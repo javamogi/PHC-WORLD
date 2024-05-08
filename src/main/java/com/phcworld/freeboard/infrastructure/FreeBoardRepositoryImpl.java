@@ -2,6 +2,7 @@ package com.phcworld.freeboard.infrastructure;
 
 import com.phcworld.freeboard.domain.FreeBoard;
 import com.phcworld.freeboard.service.port.FreeBoardRepository;
+import com.phcworld.user.infrastructure.UserEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -24,7 +25,7 @@ public class FreeBoardRepositoryImpl implements FreeBoardRepository {
 
     @Override
     public List<FreeBoard> findAll() {
-        return freeBoardJpaRepository.findAllWithAnswersCount()
+        return freeBoardJpaRepository.findAllWithAnswersCount(null)
                 .stream()
                 .map(FreeBoard::from)
                 .collect(Collectors.toList());
@@ -40,5 +41,13 @@ public class FreeBoardRepositoryImpl implements FreeBoardRepository {
         Pageable pageable = PageRequest.of(pageNum - 1, 10);
         return freeBoardJpaRepository.findByIdAndAnswers(id, pageable)
                 .map(FreeBoard::from);
+    }
+
+    @Override
+    public List<FreeBoard> findByUser(Long userId) {
+        return freeBoardJpaRepository.findAllWithAnswersCount(userId)
+                .stream()
+                .map(FreeBoard::from)
+                .collect(Collectors.toList());
     }
 }

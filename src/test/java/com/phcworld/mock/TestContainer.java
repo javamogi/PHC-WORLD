@@ -6,6 +6,7 @@ import com.phcworld.answer.service.FreeBoardAnswerServiceImpl;
 import com.phcworld.answer.service.port.FreeBoardAnswerService;
 import com.phcworld.common.infrastructure.LocalDateTimeHolder;
 import com.phcworld.common.infrastructure.UuidHolder;
+import com.phcworld.freeboard.controller.FreeBoardApiController;
 import com.phcworld.freeboard.controller.FreeBoardController;
 import com.phcworld.freeboard.controller.port.FreeBoardService;
 import com.phcworld.freeboard.service.FreeBoardServiceImpl;
@@ -33,6 +34,8 @@ public class TestContainer {
     public final UuidHolder uuidHolder;
 
     public final FreeBoardController freeBoardController;
+
+    public final FreeBoardApiController freeBoardApiController;
 
     public final FreeBoardService freeBoardService;
 
@@ -77,6 +80,9 @@ public class TestContainer {
                 .build();
         this.freeBoardAnswerApiController = FreeBoardAnswerApiController.builder()
                 .freeBoardAnswerService(freeBoardAnswerService)
+                .build();
+        this.freeBoardApiController = FreeBoardApiController.builder()
+                .freeBoardService(freeBoardService)
                 .build();
     }
 }
