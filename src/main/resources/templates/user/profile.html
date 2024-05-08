@@ -24,17 +24,17 @@
 						<span><i class="fa fa-fw fa-clock-o"></i> {{getFormattedCreateDate}}</span>
 						<span><i class="fa fa-fw fa-smile-o"></i>{{name}}</span>
 					</div>
-					<div class="socialIcons clearfix">
-						<a href="#" title="#" class="fb">
-							<i class="fa fa-facebook"></i>
-						</a>
-						<a href="#" title="#" class="twitter">
-							<i class="fa fa-twitter"></i>
-						</a>
-						<a href="#" title="#" class="google-plus">
-							<i class="fa fa-google-plus"></i>
-						</a>
-					</div>
+<!--					<div class="socialIcons clearfix">-->
+<!--						<a href="#" title="#" class="fb">-->
+<!--							<i class="fa fa-facebook"></i>-->
+<!--						</a>-->
+<!--						<a href="#" title="#" class="twitter">-->
+<!--							<i class="fa fa-twitter"></i>-->
+<!--						</a>-->
+<!--						<a href="#" title="#" class="google-plus">-->
+<!--							<i class="fa fa-google-plus"></i>-->
+<!--						</a>-->
+<!--					</div>-->
 				</div>
 			</div>
 		</div>
@@ -44,7 +44,7 @@
 				<h2 class="boxTitle">Personal information</h2>
 				<!-- Tabs -->
 				<ul id="profileTabs" class="nav nav-tabs userProfileTabs" role="tablist">
-					<li role="presentation" class="active"><a href="#tab-item-2" aria-controls="tab-item-2" role="tab" data-toggle="tab" aria-expanded="true">Activities</a></li>
+					<li role="presentation" class="active"><a href="#tab-item-2" aria-controls="tab-item-2" role="tab" data-toggle="tab" aria-expanded="true">FreeBoard</a></li>
 					{{#equalLoginUser}}
 					<li role="presentation" class=""><a href="#tab-item-3" aria-controls="tab-item-3" role="tab" data-toggle="tab" aria-expanded="false">Receive Message<span id="countOfMessagePage" class="badge badge-danger">{{countMessages}}</span></a></li>
 					<li role="presentation" class=""><a href="#tab-item-4" aria-controls="tab-item-4" role="tab" data-toggle="tab" aria-expanded="false">Send Message</a></li>
@@ -54,88 +54,7 @@
 				<div class="tab-content">
 					<!-- Activities -->
 					<div role="tabpanel" class="tab-pane fade active in" id="tab-item-2">
-					{{#timeline}}
-						<div class="userActivities">
-							<div class="i">
-								<a href="#" title="#" class="image">
-								{{#user}}
-									<img src="/images/profile/{{profileImage}}" alt="#" width="44" height="44">
-								{{/user}}
-								</a>
-								<div class="activityContent">
-									<ul class="simpleListings status">
-									{{#diary}}
-										<li>
-											<div class="title">
-												<a href="/diaries/{{diary.id}}" title="{{diary.title}}">{{diary.title}}</a>
-											</div>
-											<div class="info">{{formattedSaveDate}}</div>
-											<p>{{type}}</p>
-											<div class="share">
-												<a href="/diaries/{{diary.id}}" title="#"><i class="fa fa-comments"></i> {{diary.countOfAnswer}}</a>
-											</div>
-										</li>
-									{{/diary}}
-									{{#diaryAnswer}}
-										<li>
-											<div class="title">
-												<a href="/diaries/{{diaryAnswer.diary.id}}" title="{{diary.title}}">{{diary.title}}</a>
-											</div>
-											<div class="info">{{formattedSaveDate}}</div>
-											<p>{{type}}</p>
-											<div class="share">
-												<a href="/diaries/{{diaryAnswer.diary.id}}" title="#"><i class="fa fa-comments"></i> {{diary.countOfAnswer}}</a>
-											</div>
-										</li>									
-									{{/diaryAnswer}}
-									{{#freeBoard}}
-										<li>
-											<div class="title">
-												<a href="/freeboards/{{freeBoard.id}}" title="{{freeBoard.title}}">{{freeBoard.title}}</a>
-											</div>
-											<div class="info">{{formattedSaveDate}}</div>
-											<p>{{type}}</p>
-											<div class="share">
-												<a href="/freeboards/{{freeBoard.id}}" title="#"><i class="fa fa-comments"></i> {{freeBoard.countOfAnswer}}</a>
-											</div>
-										</li>									
-									{{/freeBoard}}
-									{{#freeBoardAnswer}}
-										<li>
-											<div class="title">
-												<a href="/freeboards/{{freeBoardAnswer.freeBoard.id}}" title="{{freeBoard.title}}">{{freeBoard.title}}</a>
-											</div>
-											<div class="info">{{formattedSaveDate}}</div>
-											<p>{{type}}</p>
-											<div class="share">
-												<a href="/freeboards/{{freeBoardAnswer.freeBoard.id}}" title="#"><i class="fa fa-comments"></i> {{freeBoard.countOfAnswer}}</a>
-											</div>
-										</li>									
-									{{/freeBoardAnswer}}
-									{{#good}}
-									<li>
-											<div class="title">
-												<a href="/diaries/{{diary.id}}" title="{{diary.title}}">{{diary.title}}</a>
-											</div>
-											<div class="info">{{formattedSaveDate}}</div>
-											<p>{{type}}</p>
-											<div class="share">
-												<a href="/diaries/{{diary.id}}" title="#"><i class="fa fa-comments"></i> {{diary.countOfAnswer}}</a>
-											</div>
-										</li>		
-									{{/good}}
-									</ul>
-
-								</div>
-							</div>
-						</div>
-					 {{/timeline}}
-						<!-- Show more -->
-						{{#show more}}
-						{{#user}}
-						<a href="/users/{{id}}/timelineList?timelinePageNum=1" title="show more" id="showmore" class="btn btn-primary showMore"><i class="fa fa-refresh"></i> Show more</a>
-						{{/user}}
-						{{/show more}}
+						<input type="hidden" id="userId" value="{{id}}"/>
 					</div>
 
 					<!-- Receive Message -->

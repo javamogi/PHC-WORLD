@@ -2,8 +2,32 @@
  * 
  */
 $(document).ready(function(){
+
+	$("li.active").each(function(){
+		let userId = $("#userId").val();
+		$.ajax({
+			type : 'get',
+			url : "/api/freeboards/users/" + userId,
+			data: {"freeBoardId": null},
+			dataType : 'json',
+			error : function(xhr, status, error){
+				alert("통신 실패");
+			},
+			success : function(data){
+				for(let i = 0; i < data.length; i++){
+					addFreeboardTemplate(data[i]);
+				}
+
+				if(data.length !== 0 && !(data.length < 10)){
+					let showBtn = "<a href='/api/freeboards/users/" + userId + "?freeBoardId=" +
+						data[data.length -1].id + "' title='show more' id='showmore' class='btn btn-primary showMore'><i class='fa fa-refresh'></i> Show more</a>";
+					$("#tab-item-2").append(showBtn);
+				}
+			}
+		})
+	});
 	
-	 if (location.hash == "#tab-item-3"){
+	if (location.hash == "#tab-item-3"){
 		 window.sessionStorage.removeItem('activeTab');
 		 window.sessionStorage.setItem('activeTab', "#tab-item-3");
 	}
@@ -123,35 +147,18 @@ $(document).ready(function(){
 				alert("리스트 불러오기 실패");
 			},
 			success : function(data){
-//				console.log(data);
+				console.log(data);
 				showmore.remove();
 				var list = data;
 //				console.log("list size : " + list.length);
 				
 				for(var i = 0; i < list.length; i++){
-					if(list[i].type === "free board"){
-						addFreeboardTemplate(list[i]);
-//						console.log(list[i].type);
-					} else if(list[i].type === "diary"){
-						addDiaryTemplate(list[i]);
-//						console.log(list[i].type);
-					} else if(list[i].type === "good"){
-						addDiaryTemplate(list[i]);
-					} else if(list[i].type === "Diary Answer"){
-						addDiaryTemplate(list[i]);
-					} else if(list[i].type === "FreeBoard Answer"){
-						addFreeboardTemplate(list[i]);
-//						console.log(list[i].type);
-					} else {
-						console.log("있나?");
-					}
+					addFreeboardTemplate(list[i]);
 				}
-				if(list.length != 0){
-					pageNum = Number(pageNum) + 1;
-					var showMoreTemplate = "<a href='/users/" + list[0].user.id
-					+ "/timelineList?timelinePageNum="+ pageNum +"' title='show more' id='showmore' class='btn btn-primary showMore'>"
-					+"<i class='fa fa-refresh'></i> Show more</a>";
-					$("#tab-item-2").append(showMoreTemplate);
+				if(data.length !== 0 && !(data.length < 10)){
+					let showBtn = "<a href='/api/freeboards/users/" + userId + "?freeBoardId=" +
+						data[data.length -1].id + "' title='show more' id='showmore' class='btn btn-primary showMore'><i class='fa fa-refresh'></i> Show more</a>";
+					$("#tab-item-2").append(showBtn);
 				}
 			}
 		})
@@ -174,15 +181,13 @@ function addDiaryTemplate(data){
 	$("#tab-item-2").append(template);
 }
 function addFreeboardTemplate(data){
-	var template = "<div class='userActivities'><div class='i'><a href='#' title='#' class='image'>"
-		+ "<img src='/images/profile/"+data.freeBoard.writer.profileImage+"' alt='#' width='44' height='44'>"
-		+ "</a><div class='activityContent'><ul class='simpleListings status'>"
+	var template = "<div class='userActivities'><div class='i'><div class='activityContent'><ul class='simpleListings status'>"
 		+ "<li><div class='title'>"
-		+ "<a href='/freeboards/"+ data.freeBoard.id +"'>"+ data.freeBoard.title +"</a>"
-		+ "</div><div class='info'>"+ data.formattedSaveDate +"</div>"
-		+ "	<p>"+ data.type +"</p><div class='share'>"
-		+ "<a href='/freeboards/"+ data.freeBoard.id +"' title='#'>"
-		+ "<i class='fa fa-comments'></i> "+ data.freeBoard.countOfAnswer +"</a></div></li>"
+		+ "<a href='/freeboards/"+ data.id +"'>"+ data.title +"</a>"
+		+ "</div><div class='info'>"+ data.createDate +"</div>"
+		+ "<div class='share'>"
+		+ "<a href='/freeboards/"+ data.id +"' title='#'>"
+		+ "<i class='fa fa-comments'></i> "+ data.countOfAnswer +"</a></div></li>"
 		+ "</ul></div></div></div>";
 	$("#tab-item-2").append(template);
 }
