@@ -521,4 +521,53 @@ public class FreeBoardAnswerApiControllerTest {
         assertThat(result.getBody().getCurrentPageNum()).isEqualTo(1);
     }
 
+    @Test
+    public void 회원은_자신이_등록한_답변_목록을_가져올_수_있다(){
+        // given
+        LocalDateTime time = LocalDateTime.of(2024, 3, 13, 11, 11, 11, 111111);
+        TestContainer testContainer = TestContainer.builder()
+                .localDateTimeHolder(() -> time)
+                .build();
+        User user = User.builder()
+                .id(1L)
+                .email("test@test.test")
+                .name("테스트")
+                .password("test2")
+                .authority(Authority.ROLE_USER)
+                .profileImage("blank-profile-picture.png")
+                .createDate(time)
+                .build();
+        testContainer.userRepository.save(user);
+        FreeBoard freeBoard = FreeBoard.builder()
+                .id(1L)
+                .title("제목")
+                .contents("내용")
+                .count(0)
+                .writer(user)
+                .createDate(time)
+                .updateDate(time)
+                .build();
+        testContainer.freeBoardRepository.save(freeBoard);
+        testContainer.freeBoardAnswerRepository.save(FreeBoardAnswer.builder()
+                .id(1L)
+                .freeBoard(freeBoard)
+                .writer(user)
+                .contents("답변내용")
+                .createDate(time)
+                .updateDate(time)
+                .build());
+        long userId = 1;
+        long answerId = 10;
+
+        // when
+        ResponseEntity<List<FreeBoardAnswerResponse>> result = testContainer
+                .freeBoardAnswerApiController
+                .getListByUser(userId, answerId);
+
+        // then
+        assertThat(result.getStatusCode()).isEqualTo(HttpStatus.valueOf(200));
+        assertThat(result.getBody()).isNotNull();
+        assertThat(result.getBody()).hasSize(1);
+    }
+
 }

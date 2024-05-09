@@ -45,6 +45,7 @@
 				<!-- Tabs -->
 				<ul id="profileTabs" class="nav nav-tabs userProfileTabs" role="tablist">
 					<li role="presentation" class="active"><a href="#tab-item-2" aria-controls="tab-item-2" role="tab" data-toggle="tab" aria-expanded="true">FreeBoard</a></li>
+					<li role="presentation" class=""><a href="#tab-item-5" aria-controls="tab-item-5" role="tab" data-toggle="tab" aria-expanded="true">FreeBoardAnswer</a></li>
 					{{#equalLoginUser}}
 					<li role="presentation" class=""><a href="#tab-item-3" aria-controls="tab-item-3" role="tab" data-toggle="tab" aria-expanded="false">Receive Message<span id="countOfMessagePage" class="badge badge-danger">{{countMessages}}</span></a></li>
 					<li role="presentation" class=""><a href="#tab-item-4" aria-controls="tab-item-4" role="tab" data-toggle="tab" aria-expanded="false">Send Message</a></li>
@@ -55,6 +56,8 @@
 					<!-- Activities -->
 					<div role="tabpanel" class="tab-pane fade active in" id="tab-item-2">
 						<input type="hidden" id="userId" value="{{id}}"/>
+					</div>
+					<div role="tabpanel" class="tab-pane fade" id="tab-item-5">
 					</div>
 
 					<!-- Receive Message -->

@@ -59,4 +59,12 @@ public class FreeBoardAnswerRepositoryImpl implements FreeBoardAnswerRepository{
         return new PageImpl<>(list, pageable, pages.getTotalElements());
     }
 
+    @Override
+    public List<FreeBoardAnswer> findByUserNonOffset(Long userId, Long answerId) {
+        return freeBoardAnswerJpaRepository.findByUserNonOffset(userId, answerId)
+                .stream()
+                .map(FreeBoardAnswer::from)
+                .collect(Collectors.toList());
+    }
+
 }

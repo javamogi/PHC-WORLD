@@ -359,4 +359,17 @@ public class FreeBoardAnswerServiceTest {
         assertThat(list.getContent()).hasSize(2);
     }
 
+    @Test
+    public void user_id로_회원이_등록한_목록을_가져올_수_있다(){
+        // given
+        long userId = 1;
+        long answerId = 10;
+
+        // when
+        List<FreeBoardAnswer> list = freeBoardAnswerService.getListByUser(userId, answerId);
+
+        // then
+        assertThat(list).hasSize(2);
+    }
+
 }

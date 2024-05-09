@@ -20,8 +20,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.transaction.Transactional;
 import java.util.List;
 
 @Service
@@ -91,5 +91,11 @@ public class FreeBoardAnswerServiceImpl implements FreeBoardAnswerService {
 //		Page<FreeBoardAnswer> answerPage = freeBoardAnswerRepository.findByFreeBoardId(freeBoardId, pageable);
 //		return answerPage.getContent();
 		return freeBoardAnswerRepository.findByFreeBoardId(freeBoardId, pageable);
+	}
+
+	@Transactional(readOnly = true)
+	@Override
+	public List<FreeBoardAnswer> getListByUser(Long userId, Long answerId) {
+		return freeBoardAnswerRepository.findByUserNonOffset(userId, answerId);
 	}
 }

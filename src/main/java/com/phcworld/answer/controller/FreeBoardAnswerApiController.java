@@ -24,16 +24,17 @@ import java.util.stream.Collectors;
 
 
 @RestController
-@RequestMapping("/freeboards/{freeboardId}/answers")
 @RequiredArgsConstructor
 @Builder
 public class FreeBoardAnswerApiController {
 	
 	private final FreeBoardAnswerService freeBoardAnswerService;
 
-	@PostMapping("")
+	@PostMapping("/freeboards/{freeboardId}/answers")
 	@ResponseStatus(value = HttpStatus.CREATED)
-	public ResponseEntity<FreeBoardAnswerResponse> create(@PathVariable Long freeboardId, FreeBoardAnswerRequest request, HttpSession session) {
+	public ResponseEntity<FreeBoardAnswerResponse> create(@PathVariable Long freeboardId,
+														  FreeBoardAnswerRequest request,
+														  HttpSession session) {
 		if(request.isContentsEmpty()) {
 			throw new EmptyContentsException();
 		}
@@ -48,7 +49,7 @@ public class FreeBoardAnswerApiController {
 				.body(FreeBoardAnswerResponse.from(answer));
 	}
 	
-	@GetMapping("/{id}")
+	@GetMapping("/freeboards/{freeboardId}/answers/{id}")
 	public ResponseEntity<FreeBoardAnswerResponse> read(@PathVariable Long id, HttpSession session){
 		if(!HttpSessionUtils.isLoginUser(session)) {
 			throw new EmptyLoginUserException();
@@ -60,7 +61,7 @@ public class FreeBoardAnswerApiController {
 				.body(FreeBoardAnswerResponse.from(freeBoardAnswer));
 	}
 	
-	@PatchMapping("")
+	@PatchMapping("/freeboards/{freeboardId}/answers")
 	public ResponseEntity<FreeBoardAnswerResponse> update(FreeBoardAnswerUpdateRequest request, HttpSession session){
 		if(request.isContentsEmpty()) {
 			throw new EmptyContentsException();
@@ -75,7 +76,7 @@ public class FreeBoardAnswerApiController {
 				.body(FreeBoardAnswerResponse.from(freeBoardAnswer));
 	}
 	
-	@DeleteMapping("/{id}")
+	@DeleteMapping("/freeboards/{freeboardId}/answers/{id}")
 	public ResponseEntity<SuccessResponse> delete(@PathVariable Long id, HttpSession session) {
 		if(!HttpSessionUtils.isLoginUser(session)) {
 			throw new EmptyLoginUserException();
@@ -86,21 +87,25 @@ public class FreeBoardAnswerApiController {
 				.body(freeBoardAnswerService.delete(id, loginUser));
 	}
 
-	@GetMapping("")
-//	public ResponseEntity<List<FreeBoardAnswerResponse>> getList(@PathVariable Long freeboardId,
+	@GetMapping("/freeboards/{freeboardId}/answers")
 	public ResponseEntity<FreeBoardAnswerPageResponse> getList(@PathVariable Long freeboardId,
 																 @RequestParam(defaultValue = "1") int pageNum){
-//		List<FreeBoardAnswer> freeBoardAnswer = freeBoardAnswerService.getListByFreeBoard(freeboardId, pageNum);
-//		return ResponseEntity
-//				.status(200)
-//				.body(freeBoardAnswer
-//						.stream()
-//						.map(FreeBoardAnswerResponse::from)
-//						.collect(Collectors.toList()));
 		Page<FreeBoardAnswer> freeBoardAnswer = freeBoardAnswerService.getListByFreeBoard(freeboardId, pageNum);
 		FreeBoardAnswerPageResponse response = FreeBoardAnswerPageResponse.from(freeBoardAnswer);
 		return ResponseEntity
 				.status(200)
 				.body(response);
+	}
+
+	@GetMapping("/answers/users/{userId}")
+	public ResponseEntity<List<FreeBoardAnswerResponse>> getListByUser(@PathVariable Long userId,
+											  @RequestParam(required = false) Long answerId){
+		List<FreeBoardAnswerResponse> list = freeBoardAnswerService.getListByUser(userId, answerId)
+				.stream()
+				.map(FreeBoardAnswerResponse::from)
+				.collect(Collectors.toList());
+		return ResponseEntity
+				.status(200)
+				.body(list);
 	}
 }

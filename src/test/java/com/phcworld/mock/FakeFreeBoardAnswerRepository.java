@@ -60,6 +60,21 @@ public class FakeFreeBoardAnswerRepository implements FreeBoardAnswerRepository 
         return new PageImpl<>(list);
     }
 
+    @Override
+    public List<FreeBoardAnswer> findByUserNonOffset(Long userId, Long answerId) {
+        if(Objects.nonNull(answerId)){
+            return data.stream()
+                    .filter(a -> a.getWriter().getId().equals(userId))
+                    .filter(a -> a.getId() < answerId)
+                    .limit(10)
+                    .collect(Collectors.toList());
+        }
+        return data.stream()
+                .filter(a -> a.getWriter().getId().equals(userId))
+                .limit(10)
+                .collect(Collectors.toList());
+    }
+
 //    @Override
 //    public Page<FreeBoardAnswer> findByFreeBoard(FreeBoard freeBoard, Pageable pageable) {
 //        List<FreeBoardAnswer> list = data.stream()

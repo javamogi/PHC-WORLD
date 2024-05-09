@@ -4,7 +4,9 @@
 $(document).ready(function(){
 
 	$("li.active").each(function(){
+
 		let userId = $("#userId").val();
+
 		$.ajax({
 			type : 'get',
 			url : "/api/freeboards/users/" + userId,
@@ -27,21 +29,21 @@ $(document).ready(function(){
 		})
 	});
 	
-	if (location.hash == "#tab-item-3"){
-		 window.sessionStorage.removeItem('activeTab');
-		 window.sessionStorage.setItem('activeTab', "#tab-item-3");
-	}
+	// if (location.hash == "#tab-item-3"){
+	// 	 window.sessionStorage.removeItem('activeTab');
+	// 	 window.sessionStorage.setItem('activeTab', "#tab-item-3");
+	// }
 	 	
-	$('a[data-toggle="tab"]').on('click', function(e) {
-//        window.localStorage.setItem('activeTab', $(e.target).attr('href'));
-        window.sessionStorage.setItem('activeTab', $(e.target).attr('href'));
-    });
-//    var activeTab = window.localStorage.getItem('activeTab');
-    var activeTab = window.sessionStorage.getItem('activeTab');
-    if (activeTab) {
-        $('#profileTabs a[href="' + activeTab + '"]').tab('show');
-//        window.localStorage.removeItem("activeTab");
-    }
+// 	$('a[data-toggle="tab"]').on('click', function(e) {
+// //        window.localStorage.setItem('activeTab', $(e.target).attr('href'));
+//         window.sessionStorage.setItem('activeTab', $(e.target).attr('href'));
+//     });
+// //    var activeTab = window.localStorage.getItem('activeTab');
+//     var activeTab = window.sessionStorage.getItem('activeTab');
+//     if (activeTab) {
+//         $('#profileTabs a[href="' + activeTab + '"]').tab('show');
+// //        window.localStorage.removeItem("activeTab");
+//     }
     
 	$('#btn-sendMessage').click(function(e){
 		e.preventDefault();
@@ -135,10 +137,7 @@ $(document).ready(function(){
 		
 		var showmore = $(this);
 		var url = showmore.attr("href");
-//		console.log("url : " + url);
-		var pageNum = url.substring(url.length - 1);
-//		console.log("pageNum : " + pageNum);
-		
+
 		$.ajax({
 			type : 'get',
 			url : url,
@@ -151,7 +150,7 @@ $(document).ready(function(){
 				showmore.remove();
 				var list = data;
 //				console.log("list size : " + list.length);
-				
+
 				for(var i = 0; i < list.length; i++){
 					addFreeboardTemplate(list[i]);
 				}
@@ -159,6 +158,64 @@ $(document).ready(function(){
 					let showBtn = "<a href='/api/freeboards/users/" + userId + "?freeBoardId=" +
 						data[data.length -1].id + "' title='show more' id='showmore' class='btn btn-primary showMore'><i class='fa fa-refresh'></i> Show more</a>";
 					$("#tab-item-2").append(showBtn);
+				}
+			}
+		})
+	});
+
+	// $("li a[href='#tab-item-5']").click(function(e){
+	$(document).on("click", "li a[href='#tab-item-5']", function(e){
+		e.preventDefault();
+
+		let userId = $("#userId").val();
+		$.ajax({
+			type : 'get',
+			url : "/answers/users/" + userId,
+			dataType : 'json',
+			error : function(){
+				alert("리스트 불러오기 실패");
+			},
+			success : function(data){
+				$("#tab-item-5").empty();
+				for(let i = 0; i < data.length; i++){
+					addFreeboardAnswerTemplate(data[i]);
+				}
+
+				if(data.length !== 0 && !(data.length < 10)){
+					let showBtn = "<a href='/answers/users/" + userId + "?answerId=" +
+						data[data.length -1].id + "' title='show more' id='showmoreAnswer' class='btn btn-primary showMore'><i class='fa fa-refresh'></i> Show more</a>";
+					$("#tab-item-5").append(showBtn);
+				}
+			}
+		})
+	});
+
+	$(document).on("click", "a#showmoreAnswer", function(e){
+		e.preventDefault();
+
+		var showmore = $(this);
+		var url = showmore.attr("href");
+		let userId = $("#userId").val();
+
+		$.ajax({
+			type : 'get',
+			url : url,
+			dataType : 'json',
+			error : function(){
+				alert("리스트 불러오기 실패");
+			},
+			success : function(data){
+				showmore.remove();
+				var list = data;
+//				console.log("list size : " + list.length);
+
+				for(var i = 0; i < list.length; i++){
+					addFreeboardAnswerTemplate(list[i]);
+				}
+				if(data.length !== 0 && !(data.length < 10)){
+					let showBtn = "<a href='/answers/users/" + userId + "?answerId=" +
+						data[data.length -1].id + "' title='show more' id='showmoreAnswer' class='btn btn-primary showMore'><i class='fa fa-refresh'></i> Show more</a>";
+					$("#tab-item-5").append(showBtn);
 				}
 			}
 		})
@@ -190,4 +247,15 @@ function addFreeboardTemplate(data){
 		+ "<i class='fa fa-comments'></i> "+ data.countOfAnswer +"</a></div></li>"
 		+ "</ul></div></div></div>";
 	$("#tab-item-2").append(template);
+}
+
+function addFreeboardAnswerTemplate(data){
+	var template = "<div class='userActivities'><div class='i'><div class='activityContent'><ul class='simpleListings status'>"
+		+ "<li><div class='title'>"
+		+ "<a href='/freeboards/"+ data.boardId +"'>"+ data.titleOfBoard +"</a>"
+		+ "</div><div class='info'>"+ data.updateDate +"</div>"
+		+ "<div class='share'>"
+		+ data.contents +"</div></li>"
+		+ "</ul></div></div></div>";
+	$("#tab-item-5").append(template);
 }

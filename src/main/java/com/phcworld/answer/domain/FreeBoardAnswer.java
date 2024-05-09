@@ -38,9 +38,11 @@ public class FreeBoardAnswer {
     public static FreeBoardAnswer from(FreeBoardAnswerSelectDto dto) {
         return FreeBoardAnswer.builder()
                 .id(dto.getId())
-                .writer(dto.getWriter().toModel())
+                .writer(dto.getWriter() != null ?
+                        dto.getWriter().toModel() : null)
                 .contents(dto.getContents())
                 .updateDate(dto.getUpdateDate())
+                .freeBoard(dto.getFreeBoard() != null ? dto.getFreeBoard().toModel() : null)
                 .build();
     }
 

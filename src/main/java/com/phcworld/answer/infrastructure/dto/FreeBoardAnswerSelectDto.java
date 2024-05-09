@@ -1,5 +1,7 @@
 package com.phcworld.answer.infrastructure.dto;
 
+import com.phcworld.freeboard.domain.FreeBoard;
+import com.phcworld.freeboard.infrastructure.FreeBoardEntity;
 import com.phcworld.user.infrastructure.UserEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -17,5 +19,5 @@ public class FreeBoardAnswerSelectDto {
     private UserEntity writer;
     private String contents;
     private LocalDateTime updateDate;
-
+    private FreeBoardEntity freeBoard;
 }

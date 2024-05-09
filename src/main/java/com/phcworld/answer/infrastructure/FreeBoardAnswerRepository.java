@@ -19,4 +19,6 @@ public interface FreeBoardAnswerRepository {
 //    Page<FreeBoardAnswer> findByFreeBoard(FreeBoard freeBoard, Pageable pageable);
 
     Page<FreeBoardAnswer> findByFreeBoardId(long freeBoardId, Pageable pageable);
+
+    List<FreeBoardAnswer> findByUserNonOffset(Long userId, Long answerId);
 }
