@@ -2,7 +2,6 @@ package com.phcworld.freeboard.infrastructure;
 
 import com.phcworld.freeboard.domain.FreeBoard;
 import com.phcworld.freeboard.service.port.FreeBoardRepository;
-import com.phcworld.user.infrastructure.UserEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;

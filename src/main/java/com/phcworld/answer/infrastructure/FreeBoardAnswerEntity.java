@@ -6,6 +6,7 @@ import javax.persistence.*;
 
 import com.phcworld.answer.domain.FreeBoardAnswer;
 import com.phcworld.freeboard.infrastructure.FreeBoardEntity;
+import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -14,10 +15,6 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.phcworld.user.infrastructure.UserEntity;
 import com.phcworld.utils.LocalDateTimeUtils;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
 @Entity
@@ -30,6 +27,7 @@ import lombok.experimental.Accessors;
 @Table(name = "free_board_answer",
 		indexes = {@Index(name = "idx__writer_id_create_date", columnList = "writer_id, createDate"),
 		@Index(name = "idx__free_board_id_create_date", columnList = "free_board_id, createDate")})
+@ToString(exclude = {"freeBoard"})
 public class FreeBoardAnswerEntity {
 
 	@Id

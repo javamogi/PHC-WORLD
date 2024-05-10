@@ -13,4 +13,9 @@ public interface FreeBoardJpaRepository extends JpaRepository<FreeBoardEntity, L
 
 	@Query("select f from FreeBoardEntity f join fetch f.writer")
 	List<FreeBoardEntity> findAllByFetch();
+
+	@Query("select distinct f from FreeBoardEntity f " +
+			"join fetch f.writer " +
+			"left join fetch f.freeBoardAnswers")
+	List<FreeBoardEntity> findAllByFetchTemp();
 }

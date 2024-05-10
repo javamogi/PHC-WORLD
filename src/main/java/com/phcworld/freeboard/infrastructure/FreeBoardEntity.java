@@ -32,7 +32,7 @@ import lombok.experimental.Accessors;
 @Builder
 @Accessors(chain = true)
 @EntityListeners(AuditingEntityListener.class)
-@ToString(exclude = {"writer", "freeBoardAnswers"})
+//@ToString(exclude = {"writer", "freeBoardAnswers"})
 @DynamicUpdate
 @Table(name = "free_board",
 		indexes = {@Index(name = "idx__create_date", columnList = "createDate"),
