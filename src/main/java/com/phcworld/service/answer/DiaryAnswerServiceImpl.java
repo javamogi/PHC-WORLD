@@ -19,7 +19,7 @@ import com.phcworld.domain.board.Diary;
 import com.phcworld.ifs.CrudInterface;
 import com.phcworld.repository.answer.DiaryAnswerRepository;
 import com.phcworld.repository.board.DiaryRepository;
-import com.phcworld.service.alert.AlertServiceImpl;
+import com.phcworld.alert.service.AlertServiceImpl;
 import com.phcworld.service.timeline.TimelineServiceImpl;
 
 @Service

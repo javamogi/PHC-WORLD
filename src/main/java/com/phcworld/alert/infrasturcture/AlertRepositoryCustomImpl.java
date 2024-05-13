@@ -1,13 +1,14 @@
-package com.phcworld.repository.alert;
+package com.phcworld.alert.infrasturcture;
 
 import com.phcworld.domain.alert.QAlert;
-import com.phcworld.domain.alert.dto.AlertSelectDto;
+import com.phcworld.alert.infrasturcture.dto.AlertSelectDto;
 import com.phcworld.domain.board.QDiary;
 import com.phcworld.domain.common.SaveType;
 import com.phcworld.freeboard.infrastructure.QFreeBoardEntity;
 import com.phcworld.user.infrastructure.UserEntity;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.CaseBuilder;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;

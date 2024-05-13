@@ -1,8 +1,9 @@
-package com.phcworld.service.alert;
+package com.phcworld.alert.service;
 
+import com.phcworld.alert.infrasturcture.AlertEntity;
+import com.phcworld.alert.service.port.AlertService;
 import com.phcworld.answer.domain.FreeBoardAnswer;
-import com.phcworld.domain.alert.Alert;
-import com.phcworld.domain.alert.dto.AlertResponseDto;
+import com.phcworld.alert.domain.dto.AlertResponseDto;
 import com.phcworld.domain.answer.DiaryAnswer;
 import com.phcworld.answer.infrastructure.FreeBoardAnswerEntity;
 import com.phcworld.domain.common.SaveType;
@@ -10,7 +11,7 @@ import com.phcworld.domain.embedded.PostInfo;
 import com.phcworld.domain.good.Good;
 import com.phcworld.user.infrastructure.UserEntity;
 import com.phcworld.exception.model.CustomException;
-import com.phcworld.repository.alert.AlertRepository;
+import com.phcworld.alert.infrasturcture.AlertRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -29,16 +30,16 @@ public class AlertServiceImpl implements AlertService {
 	private final AlertRepository alertRepository;
 	
 	@Override
-	public Alert getOneAlert(Long id) {
+	public AlertEntity getOneAlert(Long id) {
 		return alertRepository.findById(id)
 				.orElseThrow(() -> new CustomException("400", "알림이 존재하지 않습니다."));
 	}
 	
 	@Override
-	public List<Alert> findListAlertByPostUser(UserEntity loginUser) {
+	public List<AlertEntity> findListAlertByPostUser(UserEntity loginUser) {
 //		PageRequest pageRequest = PageRequest.of(0, 5, new Sort(Direction.DESC, "id"));
 		PageRequest pageRequest = PageRequest.of(0, 5, Sort.by("id").descending());
-		Page<Alert> pageAlert = alertRepository.findByPostWriter(loginUser, pageRequest);
+		Page<AlertEntity> pageAlert = alertRepository.findByPostWriter(loginUser, pageRequest);
 		return pageAlert.getContent();
 	}
 
@@ -49,13 +50,13 @@ public class AlertServiceImpl implements AlertService {
 				.collect(Collectors.toList());
 	}
 
-	public Alert createAlert(Good good) {
+	public AlertEntity createAlert(Good good) {
 		PostInfo postInfo = PostInfo.builder()
 				.saveType(SaveType.GOOD)
 				.postId(good.getId())
 				.redirectId(good.getDiary().getId())
 				.build();
-		Alert alert = Alert.builder()
+		AlertEntity alert = AlertEntity.builder()
 //				.type("Diary")
 //				.good(good)
 				.postInfo(postInfo)
@@ -67,13 +68,13 @@ public class AlertServiceImpl implements AlertService {
 		return alertRepository.save(alert);
 	}
 	
-	public Alert createAlert(DiaryAnswer diaryAnswer) {
+	public AlertEntity createAlert(DiaryAnswer diaryAnswer) {
 		PostInfo postInfo = PostInfo.builder()
 				.saveType(SaveType.DIARY_ANSWER)
 				.postId(diaryAnswer.getId())
 				.redirectId(diaryAnswer.getDiary().getId())
 				.build();
-		Alert alert = Alert.builder()
+		AlertEntity alert = AlertEntity.builder()
 //				.type("Diary")
 //				.diaryAnswer(diaryAnswer)
 //				.registerUser(diaryAnswer.getWriter())
@@ -85,13 +86,13 @@ public class AlertServiceImpl implements AlertService {
 		return alertRepository.save(alert);
 	}
 	
-	public Alert createAlert(FreeBoardAnswerEntity freeBoardAnswer) {
+	public AlertEntity createAlert(FreeBoardAnswerEntity freeBoardAnswer) {
 		PostInfo postInfo = PostInfo.builder()
 				.saveType(SaveType.FREE_BOARD_ANSWER)
 				.postId(freeBoardAnswer.getId())
 				.redirectId(freeBoardAnswer.getFreeBoard().getId())
 				.build();
-		Alert alert = Alert.builder()
+		AlertEntity alert = AlertEntity.builder()
 //				.type("FreeBoard")
 //				.freeBoardAnswer(freeBoardAnswer)
 				.postInfo(postInfo)
@@ -103,13 +104,13 @@ public class AlertServiceImpl implements AlertService {
 		return alertRepository.save(alert);
 	}
 
-	public Alert createAlert(FreeBoardAnswer freeBoardAnswer) {
+	public AlertEntity createAlert(FreeBoardAnswer freeBoardAnswer) {
 		PostInfo postInfo = PostInfo.builder()
-				.saveType(SaveType.GOOD)
+				.saveType(SaveType.FREE_BOARD_ANSWER)
 				.postId(freeBoardAnswer.getId())
 				.redirectId(freeBoardAnswer.getFreeBoard().getId())
 				.build();
-		Alert alert = Alert.builder()
+		AlertEntity alert = AlertEntity.builder()
 //				.type("Diary")
 //				.good(good)
 				.postInfo(postInfo)
@@ -127,7 +128,7 @@ public class AlertServiceImpl implements AlertService {
 				.postId(good.getId())
 				.redirectId(good.getDiary().getId())
 				.build();
-		Alert alert = alertRepository.findByPostInfo(postInfo)
+		AlertEntity alert = alertRepository.findByPostInfo(postInfo)
 				.orElseThrow(() -> new CustomException("400", "알림이 존재하지 않습니다."));
 		alertRepository.delete(alert);
 	}
@@ -138,7 +139,7 @@ public class AlertServiceImpl implements AlertService {
 				.postId(diaryAnswer.getId())
 				.redirectId(diaryAnswer.getDiary().getId())
 				.build();
-		Alert alert = alertRepository.findByPostInfo(postInfo)
+		AlertEntity alert = alertRepository.findByPostInfo(postInfo)
 				.orElseThrow(() -> new CustomException("400", "알림이 존재하지 않습니다."));
 		alertRepository.delete(alert);
 	}
@@ -149,7 +150,7 @@ public class AlertServiceImpl implements AlertService {
 				.postId(freeBoardAnswer.getId())
 				.redirectId(freeBoardAnswer.getFreeBoard().getId())
 				.build();
-		Alert alert = alertRepository.findByPostInfo(postInfo)
+		AlertEntity alert = alertRepository.findByPostInfo(postInfo)
 				.orElseThrow(() -> new CustomException("400", "알림이 존재하지 않습니다."));
 		alertRepository.delete(alert);
 	}

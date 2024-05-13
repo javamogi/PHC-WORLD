@@ -13,7 +13,7 @@ import com.phcworld.freeboard.service.FreeBoardServiceImpl;
 import com.phcworld.user.domain.Authority;
 import com.phcworld.user.controller.port.DashBoardUser;
 import com.phcworld.user.infrastructure.UserEntity;
-import com.phcworld.service.alert.AlertServiceImpl;
+import com.phcworld.alert.service.AlertServiceImpl;
 import com.phcworld.service.answer.DiaryAnswerServiceImpl;
 import com.phcworld.answer.service.FreeBoardAnswerServiceImpl;
 import com.phcworld.service.board.DiaryServiceImpl;

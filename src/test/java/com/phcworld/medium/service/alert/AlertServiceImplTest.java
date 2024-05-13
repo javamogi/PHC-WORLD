@@ -1,15 +1,15 @@
 package com.phcworld.medium.service.alert;
 
+import com.phcworld.alert.infrasturcture.AlertEntity;
 import com.phcworld.answer.infrastructure.FreeBoardAnswerEntity;
-import com.phcworld.domain.alert.Alert;
-import com.phcworld.domain.alert.dto.AlertResponseDto;
+import com.phcworld.alert.domain.dto.AlertResponseDto;
 import com.phcworld.domain.answer.DiaryAnswer;
 import com.phcworld.domain.board.Diary;
 import com.phcworld.freeboard.infrastructure.FreeBoardEntity;
 import com.phcworld.domain.common.SaveType;
 import com.phcworld.domain.embedded.PostInfo;
 import com.phcworld.domain.good.Good;
-import com.phcworld.service.alert.AlertServiceImpl;
+import com.phcworld.alert.service.AlertServiceImpl;
 import com.phcworld.user.domain.Authority;
 import com.phcworld.user.infrastructure.UserEntity;
 import org.junit.Before;
@@ -89,7 +89,7 @@ public class AlertServiceImplTest {
 				.postId(diaryAnswer.getId())
 				.redirectId(diaryAnswer.getDiary().getId())
 				.build();
-		Alert alert = Alert.builder()
+		AlertEntity alert = AlertEntity.builder()
 //				.type("Diary")
 //				.diaryAnswer(diaryAnswer)
 				.postInfo(postInfo)
@@ -99,7 +99,7 @@ public class AlertServiceImplTest {
 				.build();
 		when(alertService.createAlert(diaryAnswer))
 		.thenReturn(alert);
-		Alert alertCreated = alertService.createAlert(diaryAnswer);
+		AlertEntity alertCreated = alertService.createAlert(diaryAnswer);
 		assertThat(diaryAnswer.getId()).isEqualTo(alertCreated.getPostInfo().getPostId());
 	}
 	
@@ -110,7 +110,7 @@ public class AlertServiceImplTest {
 				.postId(freeBoardAnswer.getId())
 				.redirectId(freeBoardAnswer.getFreeBoard().getId())
 				.build();
-		Alert alert = Alert.builder()
+		AlertEntity alert = AlertEntity.builder()
 //				.type("FreeBoard")
 //				.freeBoardAnswer(freeBoardAnswer)
 				.postInfo(postInfo)
@@ -120,7 +120,7 @@ public class AlertServiceImplTest {
 				.build();
 		when(alertService.createAlert(freeBoardAnswer))
 		.thenReturn(alert);
-		Alert alertCreated = alertService.createAlert(freeBoardAnswer);
+		AlertEntity alertCreated = alertService.createAlert(freeBoardAnswer);
 		assertThat(freeBoardAnswer.getId()).isEqualTo(alertCreated.getPostInfo().getPostId());
 	}
 	
@@ -145,7 +145,7 @@ public class AlertServiceImplTest {
 				.postId(good.getId())
 				.redirectId(good.getDiary().getId())
 				.build();
-		Alert alert = Alert.builder()
+		AlertEntity alert = AlertEntity.builder()
 //				.type("Diary")
 //				.good(good)
 				.postInfo(postInfo)
@@ -155,7 +155,7 @@ public class AlertServiceImplTest {
 				.build();
 		when(alertService.createAlert(good))
 		.thenReturn(alert);
-		Alert alertCreated = alertService.createAlert(good);
+		AlertEntity alertCreated = alertService.createAlert(good);
 		assertThat(good.getId()).isEqualTo(alertCreated.getPostInfo().getPostId());
 	}
 	
@@ -166,7 +166,7 @@ public class AlertServiceImplTest {
 				.postId(freeBoardAnswer.getId())
 				.redirectId(freeBoardAnswer.getFreeBoard().getId())
 				.build();
-		Alert alert = Alert.builder()
+		AlertEntity alert = AlertEntity.builder()
 				.id(1L)
 //				.type("FreeBoard")
 //				.freeBoardAnswer(freeBoardAnswer)
@@ -177,7 +177,7 @@ public class AlertServiceImplTest {
 				.build();
 		when(alertService.getOneAlert(alert.getId()))
 		.thenReturn(alert);
-		Alert alertCreated = alertService.getOneAlert(alert.getId());
+		AlertEntity alertCreated = alertService.getOneAlert(alert.getId());
 		assertThat(alert).isEqualTo(alertCreated);
 	}
 	
@@ -188,7 +188,7 @@ public class AlertServiceImplTest {
 				.postId(diaryAnswer.getId())
 				.redirectId(diaryAnswer.getDiary().getId())
 				.build();
-		Alert diaryAnswerAlert = Alert.builder()
+		AlertEntity diaryAnswerAlert = AlertEntity.builder()
 //				.type("Diary")
 //				.diaryAnswer(diaryAnswer)
 				.postInfo(postInfo)
@@ -201,7 +201,7 @@ public class AlertServiceImplTest {
 				.postId(freeBoardAnswer.getId())
 				.redirectId(freeBoardAnswer.getFreeBoard().getId())
 				.build();
-		Alert freeBoardAnswerAlert = Alert.builder()
+		AlertEntity freeBoardAnswerAlert = AlertEntity.builder()
 //				.type("Free Board")
 //				.freeBoardAnswer(freeBoardAnswer)
 				.postInfo(postInfo2)
@@ -209,12 +209,12 @@ public class AlertServiceImplTest {
 				.postWriter(freeBoardAnswer.getFreeBoard().getWriter())
 				.createDate(LocalDateTime.now())
 				.build();
-		List<Alert> list = new ArrayList<Alert>();
+		List<AlertEntity> list = new ArrayList<AlertEntity>();
 		list.add(diaryAnswerAlert);
 		list.add(freeBoardAnswerAlert);
 		when(alertService.findListAlertByPostUser(user))
 		.thenReturn(list);
-		List<Alert> alertList = alertService.findListAlertByPostUser(user);
+		List<AlertEntity> alertList = alertService.findListAlertByPostUser(user);
 		assertThat(alertList)
 				.contains(diaryAnswerAlert)
 				.contains(freeBoardAnswerAlert);

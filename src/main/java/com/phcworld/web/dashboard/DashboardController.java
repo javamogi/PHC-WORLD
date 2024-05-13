@@ -2,10 +2,9 @@ package com.phcworld.web.dashboard;
 
 import javax.servlet.http.HttpSession;
 
-import com.phcworld.domain.alert.dto.AlertResponseDto;
+import com.phcworld.alert.domain.dto.AlertResponseDto;
 import com.phcworld.domain.message.MessageResponse;
-import com.phcworld.service.alert.AlertServiceImpl;
-import com.phcworld.service.message.MessageService;
+import com.phcworld.alert.service.AlertServiceImpl;
 import com.phcworld.service.message.MessageServiceImpl;
 import com.phcworld.user.infrastructure.UserEntity;
 import lombok.RequiredArgsConstructor;

@@ -1,4 +1,4 @@
-package com.phcworld.domain.alert;
+package com.phcworld.alert.infrasturcture;
 
 import java.time.LocalDateTime;
 
@@ -18,7 +18,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Alert {
+public class AlertEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;

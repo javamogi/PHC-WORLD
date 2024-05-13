@@ -33,7 +33,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import com.phcworld.domain.message.Message;
 import com.phcworld.domain.timeline.Timeline;
-import com.phcworld.service.alert.AlertServiceImpl;
+import com.phcworld.alert.service.AlertServiceImpl;
 import com.phcworld.user.service.CertificateService;
 import com.phcworld.service.message.MessageServiceImpl;
 import com.phcworld.service.timeline.TimelineServiceImpl;

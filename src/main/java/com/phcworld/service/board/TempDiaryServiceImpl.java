@@ -19,7 +19,7 @@ import com.phcworld.domain.board.dto.TempDiaryRequest;
 import com.phcworld.domain.board.dto.TempDiaryResponse;
 import com.phcworld.user.infrastructure.UserEntity;
 import com.phcworld.repository.board.TempDiaryRepository;
-import com.phcworld.service.alert.AlertServiceImpl;
+import com.phcworld.alert.service.AlertServiceImpl;
 import com.phcworld.service.good.TempGoodService;
 import com.phcworld.service.timeline.TempTimelineServiceImpl;
 

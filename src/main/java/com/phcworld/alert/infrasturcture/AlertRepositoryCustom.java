@@ -1,6 +1,6 @@
-package com.phcworld.repository.alert;
+package com.phcworld.alert.infrasturcture;
 
-import com.phcworld.domain.alert.dto.AlertSelectDto;
+import com.phcworld.alert.infrasturcture.dto.AlertSelectDto;
 import com.phcworld.domain.common.SaveType;
 import com.phcworld.user.infrastructure.UserEntity;
 

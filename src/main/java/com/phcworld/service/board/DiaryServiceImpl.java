@@ -27,7 +27,7 @@ import com.phcworld.domain.board.Diary;
 import com.phcworld.domain.board.dto.DiaryRequest;
 import com.phcworld.domain.board.dto.DiaryResponse;
 import com.phcworld.repository.board.DiaryRepository;
-import com.phcworld.service.alert.AlertServiceImpl;
+import com.phcworld.alert.service.AlertServiceImpl;
 import com.phcworld.service.good.GoodService;
 import com.phcworld.service.timeline.TimelineServiceImpl;
 

@@ -6,7 +6,7 @@ import com.phcworld.domain.good.Good;
 import com.phcworld.user.infrastructure.UserEntity;
 import com.phcworld.exception.model.InternalServerErrorException;
 import com.phcworld.repository.good.GoodRepository;
-import com.phcworld.service.alert.AlertServiceImpl;
+import com.phcworld.alert.service.AlertServiceImpl;
 import com.phcworld.service.timeline.TimelineServiceImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

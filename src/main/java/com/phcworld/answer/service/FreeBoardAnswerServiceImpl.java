@@ -1,5 +1,6 @@
 package com.phcworld.answer.service;
 
+import com.phcworld.alert.service.AlertServiceImpl;
 import com.phcworld.answer.domain.FreeBoardAnswer;
 import com.phcworld.answer.domain.dto.FreeBoardAnswerRequest;
 import com.phcworld.answer.domain.dto.FreeBoardAnswerUpdateRequest;
@@ -33,8 +34,8 @@ public class FreeBoardAnswerServiceImpl implements FreeBoardAnswerService {
 	private final FreeBoardAnswerRepository freeBoardAnswerRepository;
 	private final LocalDateTimeHolder localDateTimeHolder;
 
-//	private final AlertServiceImpl alertService;
-//
+	private final AlertServiceImpl alertService;
+
 //	private final TimelineServiceImpl timelineService;
 	
 	@Transactional
@@ -46,10 +47,10 @@ public class FreeBoardAnswerServiceImpl implements FreeBoardAnswerService {
 		FreeBoardAnswer savedFreeBoardAnswer = freeBoardAnswerRepository.save(freeBoardAnswer);
 
 //		timelineService.createTimeline(savedFreeBoardAnswer);
-//
-//		if(!freeBoard.matchWriter(UserEntity.from(user))) {
-//			alertService.createAlert(savedFreeBoardAnswer);
-//		}
+
+		if(!freeBoard.matchWriter(UserEntity.from(user))) {
+			alertService.createAlert(savedFreeBoardAnswer);
+		}
 
 		return savedFreeBoardAnswer;
 	}

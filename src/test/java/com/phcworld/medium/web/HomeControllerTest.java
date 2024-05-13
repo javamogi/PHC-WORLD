@@ -10,6 +10,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import java.time.LocalDateTime;
 
+import com.phcworld.alert.infrasturcture.AlertEntity;
 import com.phcworld.answer.infrastructure.FreeBoardAnswerEntity;
 import com.phcworld.domain.common.SaveType;
 import com.phcworld.domain.embedded.PostInfo;
@@ -26,12 +27,11 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
-import com.phcworld.domain.alert.Alert;
 import com.phcworld.domain.answer.DiaryAnswer;
 import com.phcworld.domain.board.Diary;
 import com.phcworld.freeboard.infrastructure.FreeBoardEntity;
 import com.phcworld.domain.good.Good;
-import com.phcworld.service.alert.AlertServiceImpl;
+import com.phcworld.alert.service.AlertServiceImpl;
 
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -88,7 +88,7 @@ public class HomeControllerTest {
 				.postId(diaryAnswer.getId())
 				.redirectId(diaryAnswer.getDiary().getId())
 				.build();
-		Alert diaryAnswerAlert = Alert.builder()
+		AlertEntity diaryAnswerAlert = AlertEntity.builder()
 //				.type("Diary")
 //				.diaryAnswer(diaryAnswer)
 				.postInfo(postInfo)
@@ -139,7 +139,7 @@ public class HomeControllerTest {
 				.postId(freeBoardAnswer.getId())
 				.redirectId(freeBoardAnswer.getFreeBoard().getId())
 				.build();
-		Alert freeBoardAnswerAlert = Alert.builder()
+		AlertEntity freeBoardAnswerAlert = AlertEntity.builder()
 //				.type("FreeBoard")
 //				.freeBoardAnswer(freeBoardAnswer)
 				.postInfo(postInfo)
@@ -187,7 +187,7 @@ public class HomeControllerTest {
 				.postId(good.getId())
 				.redirectId(good.getDiary().getId())
 				.build();
-		Alert goodAlert = Alert.builder()
+		AlertEntity goodAlert = AlertEntity.builder()
 //				.type("good")
 //				.good(good)
 				.postInfo(postInfo)
