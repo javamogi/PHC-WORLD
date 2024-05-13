@@ -28,11 +28,13 @@ public class AlertRepositoryCustomImpl implements AlertRepositoryCustom {
                 .select(Projections.fields(AlertSelectDto.class,
                         alert.id,
                         alert.postInfo.saveType,
-                        diary.title.as("diaryTitle"),
-                        freeBoard.title.as("freeBoardTitle"),
+                        new CaseBuilder()
+                                .when(alert.postInfo.saveType.in(SaveType.GOOD, SaveType.DIARY_ANSWER))
+                                .then(diary.title)
+                                .otherwise(freeBoard.title).as("title"),
                         alert.registerUser.name.as("userName"),
                         alert.createDate
-                        ))
+                ))
                 .from(alert)
                 .leftJoin(diary).on(diary.id.eq(alert.postInfo.redirectId)
                         .and(alert.postInfo.saveType.in(SaveType.GOOD, SaveType.DIARY_ANSWER)))
