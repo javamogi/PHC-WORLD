@@ -1,7 +1,7 @@
 package com.phcworld.freeboard.service;
 
 import com.phcworld.answer.domain.FreeBoardAnswer;
-import com.phcworld.answer.infrastructure.port.FreeBoardAnswerRepository;
+import com.phcworld.answer.service.port.FreeBoardAnswerRepository;
 import com.phcworld.common.infrastructure.LocalDateTimeHolder;
 import com.phcworld.exception.model.DeletedEntityException;
 import com.phcworld.exception.model.FreeBoardNotFoundException;

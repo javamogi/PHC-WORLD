@@ -1,7 +1,7 @@
 package com.phcworld.answer.infrastructure;
 
 import com.phcworld.answer.domain.FreeBoardAnswer;
-import com.phcworld.answer.infrastructure.port.FreeBoardAnswerRepository;
+import com.phcworld.answer.service.port.FreeBoardAnswerRepository;
 import com.phcworld.answer.infrastructure.port.FreeBoardAnswerSelectDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;

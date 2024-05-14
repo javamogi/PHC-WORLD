@@ -1,4 +1,4 @@
-package com.phcworld.answer.service.port;
+package com.phcworld.answer.controller.port;
 
 import com.phcworld.answer.domain.FreeBoardAnswer;
 import com.phcworld.answer.domain.dto.FreeBoardAnswerRequest;

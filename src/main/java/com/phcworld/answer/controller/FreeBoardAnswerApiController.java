@@ -5,7 +5,7 @@ import com.phcworld.answer.controller.port.FreeBoardAnswerResponse;
 import com.phcworld.answer.domain.FreeBoardAnswer;
 import com.phcworld.answer.domain.dto.FreeBoardAnswerRequest;
 import com.phcworld.answer.domain.dto.FreeBoardAnswerUpdateRequest;
-import com.phcworld.answer.service.port.FreeBoardAnswerService;
+import com.phcworld.answer.controller.port.FreeBoardAnswerService;
 import com.phcworld.domain.api.model.response.SuccessResponse;
 import com.phcworld.exception.model.EmptyContentsException;
 import com.phcworld.exception.model.EmptyLoginUserException;
