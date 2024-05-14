@@ -2,7 +2,7 @@ package com.phcworld.answer.domain;
 
 import com.phcworld.answer.domain.dto.FreeBoardAnswerRequest;
 import com.phcworld.answer.domain.dto.FreeBoardAnswerUpdateRequest;
-import com.phcworld.answer.infrastructure.dto.FreeBoardAnswerSelectDto;
+import com.phcworld.answer.infrastructure.port.FreeBoardAnswerSelectDto;
 import com.phcworld.common.infrastructure.LocalDateTimeHolder;
 import com.phcworld.freeboard.domain.FreeBoard;
 import com.phcworld.user.domain.User;

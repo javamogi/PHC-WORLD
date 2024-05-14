@@ -1,9 +1,7 @@
 package com.phcworld.mock;
 
 import com.phcworld.answer.domain.FreeBoardAnswer;
-import com.phcworld.answer.infrastructure.FreeBoardAnswerRepository;
-import com.phcworld.exception.model.NotFoundException;
-import com.phcworld.freeboard.domain.FreeBoard;
+import com.phcworld.answer.infrastructure.port.FreeBoardAnswerRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;

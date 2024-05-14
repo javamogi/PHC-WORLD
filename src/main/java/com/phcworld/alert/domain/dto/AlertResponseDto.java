@@ -1,6 +1,6 @@
 package com.phcworld.alert.domain.dto;
 
-import com.phcworld.alert.infrasturcture.dto.AlertSelectDto;
+import com.phcworld.alert.infrasturcture.port.AlertSelectDto;
 import com.phcworld.domain.common.SaveType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

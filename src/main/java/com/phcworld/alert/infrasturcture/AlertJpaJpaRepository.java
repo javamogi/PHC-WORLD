@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
 
-public interface AlertRepository extends JpaRepository<AlertEntity, Long>, AlertRepositoryCustom {
+public interface AlertJpaJpaRepository extends JpaRepository<AlertEntity, Long>, AlertJpaRepositoryCustom {
 	Page<AlertEntity> findByPostWriter(UserEntity user, Pageable Pageable);
 
 //	Optional<Alert> findBySaveTypeAndPostIdAndRegisterUser(SaveType saveType, Long postId, User registerUser);

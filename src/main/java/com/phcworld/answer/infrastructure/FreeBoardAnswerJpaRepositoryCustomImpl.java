@@ -1,8 +1,7 @@
 package com.phcworld.answer.infrastructure;
 
-import com.phcworld.answer.infrastructure.dto.FreeBoardAnswerSelectDto;
+import com.phcworld.answer.infrastructure.port.FreeBoardAnswerSelectDto;
 import com.phcworld.freeboard.infrastructure.QFreeBoardEntity;
-import com.phcworld.repository.board.dto.DiarySelectDto;
 import com.phcworld.user.infrastructure.QUserEntity;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;

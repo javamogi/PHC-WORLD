@@ -1,4 +1,4 @@
-package com.phcworld.answer.infrastructure;
+package com.phcworld.answer.infrastructure.port;
 
 import com.phcworld.answer.domain.FreeBoardAnswer;
 import com.phcworld.freeboard.domain.FreeBoard;

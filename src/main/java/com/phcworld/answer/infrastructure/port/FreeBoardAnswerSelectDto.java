@@ -1,6 +1,5 @@
-package com.phcworld.answer.infrastructure.dto;
+package com.phcworld.answer.infrastructure.port;
 
-import com.phcworld.freeboard.domain.FreeBoard;
 import com.phcworld.freeboard.infrastructure.FreeBoardEntity;
 import com.phcworld.user.infrastructure.UserEntity;
 import lombok.AllArgsConstructor;

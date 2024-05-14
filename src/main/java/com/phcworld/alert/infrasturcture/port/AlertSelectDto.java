@@ -1,4 +1,4 @@
-package com.phcworld.alert.infrasturcture.dto;
+package com.phcworld.alert.infrasturcture.port;
 
 import com.phcworld.domain.common.SaveType;
 import com.phcworld.utils.LocalDateTimeUtils;

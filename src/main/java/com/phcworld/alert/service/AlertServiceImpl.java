@@ -1,17 +1,17 @@
 package com.phcworld.alert.service;
 
+import com.phcworld.alert.domain.dto.AlertResponseDto;
 import com.phcworld.alert.infrasturcture.AlertEntity;
+import com.phcworld.alert.infrasturcture.AlertJpaJpaRepository;
 import com.phcworld.alert.service.port.AlertService;
 import com.phcworld.answer.domain.FreeBoardAnswer;
-import com.phcworld.alert.domain.dto.AlertResponseDto;
-import com.phcworld.domain.answer.DiaryAnswer;
 import com.phcworld.answer.infrastructure.FreeBoardAnswerEntity;
+import com.phcworld.domain.answer.DiaryAnswer;
 import com.phcworld.domain.common.SaveType;
 import com.phcworld.domain.embedded.PostInfo;
 import com.phcworld.domain.good.Good;
-import com.phcworld.user.infrastructure.UserEntity;
 import com.phcworld.exception.model.CustomException;
-import com.phcworld.alert.infrasturcture.AlertRepository;
+import com.phcworld.user.infrastructure.UserEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -27,11 +27,12 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class AlertServiceImpl implements AlertService {
 	
-	private final AlertRepository alertRepository;
-	
+	private final AlertJpaJpaRepository alertJpaRepository;
+
+
 	@Override
 	public AlertEntity getOneAlert(Long id) {
-		return alertRepository.findById(id)
+		return alertJpaRepository.findById(id)
 				.orElseThrow(() -> new CustomException("400", "알림이 존재하지 않습니다."));
 	}
 	
@@ -39,12 +40,12 @@ public class AlertServiceImpl implements AlertService {
 	public List<AlertEntity> findListAlertByPostUser(UserEntity loginUser) {
 //		PageRequest pageRequest = PageRequest.of(0, 5, new Sort(Direction.DESC, "id"));
 		PageRequest pageRequest = PageRequest.of(0, 5, Sort.by("id").descending());
-		Page<AlertEntity> pageAlert = alertRepository.findByPostWriter(loginUser, pageRequest);
+		Page<AlertEntity> pageAlert = alertJpaRepository.findByPostWriter(loginUser, pageRequest);
 		return pageAlert.getContent();
 	}
 
 	public List<AlertResponseDto> findByAlertListByPostUser(UserEntity loginUser){
-		return alertRepository.findAlertListByPostWriter(loginUser)
+		return alertJpaRepository.findAlertListByPostWriter(loginUser)
 				.stream()
 				.map(AlertResponseDto::of)
 				.collect(Collectors.toList());
@@ -65,7 +66,7 @@ public class AlertServiceImpl implements AlertService {
 				.createDate(good.getCreateDate())
 				.isRead(false)
 				.build();
-		return alertRepository.save(alert);
+		return alertJpaRepository.save(alert);
 	}
 	
 	public AlertEntity createAlert(DiaryAnswer diaryAnswer) {
@@ -83,7 +84,7 @@ public class AlertServiceImpl implements AlertService {
 				.createDate(diaryAnswer.getCreateDate())
 				.isRead(false)
 				.build();
-		return alertRepository.save(alert);
+		return alertJpaRepository.save(alert);
 	}
 	
 	public AlertEntity createAlert(FreeBoardAnswerEntity freeBoardAnswer) {
@@ -101,7 +102,7 @@ public class AlertServiceImpl implements AlertService {
 				.createDate(freeBoardAnswer.getCreateDate())
 				.isRead(false)
 				.build();
-		return alertRepository.save(alert);
+		return alertJpaRepository.save(alert);
 	}
 
 	public AlertEntity createAlert(FreeBoardAnswer freeBoardAnswer) {
@@ -119,7 +120,7 @@ public class AlertServiceImpl implements AlertService {
 				.createDate(freeBoardAnswer.getCreateDate())
 				.isRead(false)
 				.build();
-		return alertRepository.save(alert);
+		return alertJpaRepository.save(alert);
 	}
 	
 	public void deleteAlert(Good good) {
@@ -128,9 +129,9 @@ public class AlertServiceImpl implements AlertService {
 				.postId(good.getId())
 				.redirectId(good.getDiary().getId())
 				.build();
-		AlertEntity alert = alertRepository.findByPostInfo(postInfo)
+		AlertEntity alert = alertJpaRepository.findByPostInfo(postInfo)
 				.orElseThrow(() -> new CustomException("400", "알림이 존재하지 않습니다."));
-		alertRepository.delete(alert);
+		alertJpaRepository.delete(alert);
 	}
 	
 	public void deleteAlert(DiaryAnswer diaryAnswer) {
@@ -139,9 +140,9 @@ public class AlertServiceImpl implements AlertService {
 				.postId(diaryAnswer.getId())
 				.redirectId(diaryAnswer.getDiary().getId())
 				.build();
-		AlertEntity alert = alertRepository.findByPostInfo(postInfo)
+		AlertEntity alert = alertJpaRepository.findByPostInfo(postInfo)
 				.orElseThrow(() -> new CustomException("400", "알림이 존재하지 않습니다."));
-		alertRepository.delete(alert);
+		alertJpaRepository.delete(alert);
 	}
 	
 	public void deleteAlert(FreeBoardAnswerEntity freeBoardAnswer) {
@@ -150,13 +151,13 @@ public class AlertServiceImpl implements AlertService {
 				.postId(freeBoardAnswer.getId())
 				.redirectId(freeBoardAnswer.getFreeBoard().getId())
 				.build();
-		AlertEntity alert = alertRepository.findByPostInfo(postInfo)
+		AlertEntity alert = alertJpaRepository.findByPostInfo(postInfo)
 				.orElseThrow(() -> new CustomException("400", "알림이 존재하지 않습니다."));
-		alertRepository.delete(alert);
+		alertJpaRepository.delete(alert);
 	}
 
 	public void deleteAlert(SaveType saveType, Long id){
-		alertRepository.deleteAlert(saveType, id);
+		alertJpaRepository.deleteAlert(saveType, id);
 	}
-	
+
 }

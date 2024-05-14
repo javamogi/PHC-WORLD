@@ -1,7 +1,7 @@
 package com.phcworld.mock;
 
 import com.phcworld.answer.controller.FreeBoardAnswerApiController;
-import com.phcworld.answer.infrastructure.FreeBoardAnswerRepository;
+import com.phcworld.answer.infrastructure.port.FreeBoardAnswerRepository;
 import com.phcworld.answer.service.FreeBoardAnswerServiceImpl;
 import com.phcworld.answer.service.port.FreeBoardAnswerService;
 import com.phcworld.common.infrastructure.LocalDateTimeHolder;

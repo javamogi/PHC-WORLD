@@ -4,7 +4,7 @@ import com.phcworld.alert.service.AlertServiceImpl;
 import com.phcworld.answer.domain.FreeBoardAnswer;
 import com.phcworld.answer.domain.dto.FreeBoardAnswerRequest;
 import com.phcworld.answer.domain.dto.FreeBoardAnswerUpdateRequest;
-import com.phcworld.answer.infrastructure.FreeBoardAnswerRepository;
+import com.phcworld.answer.infrastructure.port.FreeBoardAnswerRepository;
 import com.phcworld.answer.service.port.FreeBoardAnswerService;
 import com.phcworld.common.infrastructure.LocalDateTimeHolder;
 import com.phcworld.domain.api.model.response.SuccessResponse;

@@ -11,7 +11,7 @@ import com.phcworld.domain.embedded.PostInfo;
 import com.phcworld.domain.good.Good;
 import com.phcworld.medium.util.DiaryFactory;
 import com.phcworld.medium.util.FreeBoardFactory;
-import com.phcworld.alert.infrasturcture.AlertRepository;
+import com.phcworld.alert.infrasturcture.AlertJpaJpaRepository;
 import com.phcworld.user.domain.Authority;
 import com.phcworld.user.infrastructure.UserEntity;
 import com.phcworld.exception.model.CustomException;
@@ -46,10 +46,10 @@ import static org.junit.Assert.assertNotNull;
 @SpringBootTest
 @Transactional
 @Slf4j
-public class AlertRepositoryTest {
+public class AlertJpaRepositoryTest {
 	
 	@Autowired
-	private AlertRepository alertRepository;
+	private AlertJpaJpaRepository alertJpaRepository;
 	
 	@Autowired
 	private DiaryRepository diaryRepository;
@@ -107,7 +107,7 @@ public class AlertRepositoryTest {
 				.createDate(LocalDateTime.now())
 				.isRead(false)
 				.build();
-		AlertEntity createdAlert = alertRepository.save(alert);
+		AlertEntity createdAlert = alertJpaRepository.save(alert);
 		assertNotNull(createdAlert);
 	}
 	
@@ -127,7 +127,7 @@ public class AlertRepositoryTest {
 				.createDate(LocalDateTime.now())
 				.isRead(false)
 				.build();
-		AlertEntity createdAlert = alertRepository.save(alert);
+		AlertEntity createdAlert = alertJpaRepository.save(alert);
 		assertNotNull(createdAlert);
 	}
 	
@@ -154,7 +154,7 @@ public class AlertRepositoryTest {
 				.postWriter(good.getDiary().getWriter())
 				.createDate(LocalDateTime.now())
 				.build();
-		AlertEntity createdAlert = alertRepository.save(alert);
+		AlertEntity createdAlert = alertJpaRepository.save(alert);
 		assertNotNull(createdAlert);
 	}
 	
@@ -173,7 +173,7 @@ public class AlertRepositoryTest {
 				.postWriter(freeBoardAnswer.getFreeBoard().getWriter())
 				.createDate(LocalDateTime.now())
 				.build();
-		AlertEntity createdAlert = alertRepository.save(alert);
+		AlertEntity createdAlert = alertJpaRepository.save(alert);
 		PostInfo postInfo2 = PostInfo.builder()
 				.saveType(SaveType.DIARY_ANSWER)
 				.postId(diaryAnswer.getId())
@@ -187,11 +187,11 @@ public class AlertRepositoryTest {
 				.postWriter(diaryAnswer.getDiary().getWriter())
 				.createDate(LocalDateTime.now())
 				.build();
-		AlertEntity createdAlert2 = alertRepository.save(alert2);
+		AlertEntity createdAlert2 = alertJpaRepository.save(alert2);
 
 //		PageRequest pageRequest = PageRequest.of(0, 5, new Sort(Direction.DESC, "id"));
 		PageRequest pageRequest = PageRequest.of(0, 5, Sort.by("id").descending());
-		Page<AlertEntity> page = alertRepository.findByPostWriter(user, pageRequest);
+		Page<AlertEntity> page = alertJpaRepository.findByPostWriter(user, pageRequest);
 		List<AlertEntity> list = page.getContent();
 		assertThat(list).contains(createdAlert).contains(createdAlert2);
 	}
@@ -209,7 +209,7 @@ public class AlertRepositoryTest {
 				.postWriter(freeBoardAnswer.getFreeBoard().getWriter())
 				.createDate(LocalDateTime.now())
 				.build();
-		alertRepository.save(alert);
+		alertJpaRepository.save(alert);
 		PostInfo postInfo2 = PostInfo.builder()
 				.saveType(SaveType.DIARY_ANSWER)
 				.postId(diaryAnswer.getId())
@@ -221,9 +221,9 @@ public class AlertRepositoryTest {
 				.postWriter(diaryAnswer.getDiary().getWriter())
 				.createDate(LocalDateTime.now())
 				.build();
-		alertRepository.save(alert2);
+		alertJpaRepository.save(alert2);
 
-		List<AlertResponseDto> list = alertRepository.findAlertListByPostWriter(user)
+		List<AlertResponseDto> list = alertJpaRepository.findAlertListByPostWriter(user)
 				.stream()
 				.map(AlertResponseDto::of)
 				.collect(Collectors.toList());
@@ -260,9 +260,9 @@ public class AlertRepositoryTest {
 				.postWriter(good.getDiary().getWriter())
 				.createDate(LocalDateTime.now())
 				.build();
-		AlertEntity createdAlert = alertRepository.save(alert);
-		alertRepository.delete(createdAlert);
-		Optional<AlertEntity> selectAlert = alertRepository.findById(createdAlert.getId());
+		AlertEntity createdAlert = alertJpaRepository.save(alert);
+		alertJpaRepository.delete(createdAlert);
+		Optional<AlertEntity> selectAlert = alertJpaRepository.findById(createdAlert.getId());
 		assertFalse(selectAlert.isPresent());
 	}
 
@@ -293,11 +293,11 @@ public class AlertRepositoryTest {
 				.postWriter(good.getDiary().getWriter())
 				.createDate(LocalDateTime.now())
 				.build();
-		AlertEntity createdAlert = alertRepository.save(alert);
+		AlertEntity createdAlert = alertJpaRepository.save(alert);
 		em.clear();
-		alertRepository.deleteAlert(SaveType.DIARY, diary.getId());
+		alertJpaRepository.deleteAlert(SaveType.DIARY, diary.getId());
 
-		alertRepository.findById(createdAlert.getId())
+		alertJpaRepository.findById(createdAlert.getId())
 				.orElseThrow(() -> new CustomException("400", "게시물 정보가 없습니다."));
 	}
 	
@@ -316,9 +316,9 @@ public class AlertRepositoryTest {
 				.postWriter(diaryAnswer.getDiary().getWriter())
 				.createDate(LocalDateTime.now())
 				.build();
-		AlertEntity createdAlert = alertRepository.save(alert);
-		alertRepository.delete(createdAlert);
-		Optional<AlertEntity> selectAlert = alertRepository.findById(createdAlert.getId());
+		AlertEntity createdAlert = alertJpaRepository.save(alert);
+		alertJpaRepository.delete(createdAlert);
+		Optional<AlertEntity> selectAlert = alertJpaRepository.findById(createdAlert.getId());
 		assertFalse(selectAlert.isPresent());
 	}
 	
@@ -337,9 +337,9 @@ public class AlertRepositoryTest {
 				.postWriter(freeBoardAnswer.getFreeBoard().getWriter())
 				.createDate(LocalDateTime.now())
 				.build();
-		AlertEntity createdAlert = alertRepository.save(alert);
-		alertRepository.delete(createdAlert);
-		Optional<AlertEntity> selectAlert = alertRepository.findById(createdAlert.getId());
+		AlertEntity createdAlert = alertJpaRepository.save(alert);
+		alertJpaRepository.delete(createdAlert);
+		Optional<AlertEntity> selectAlert = alertJpaRepository.findById(createdAlert.getId());
 		assertFalse(selectAlert.isPresent());
 	}
 	
@@ -373,8 +373,8 @@ public class AlertRepositoryTest {
 				.postWriter(createdGood.getDiary().getWriter())
 				.createDate(LocalDateTime.now())
 				.build();
-		AlertEntity createdAlert = alertRepository.save(alert);
-		AlertEntity selectAlert = alertRepository.findByPostInfo(postInfo)
+		AlertEntity createdAlert = alertJpaRepository.save(alert);
+		AlertEntity selectAlert = alertJpaRepository.findByPostInfo(postInfo)
 				.orElseThrow(() -> new CustomException("400", "알림이 존재하지 않습니다."));
 		assertThat(createdAlert).isEqualTo(selectAlert);
 	}
@@ -394,8 +394,8 @@ public class AlertRepositoryTest {
 				.postWriter(diaryAnswer.getDiary().getWriter())
 				.createDate(LocalDateTime.now())
 				.build();
-		AlertEntity createdAlert = alertRepository.save(alert);
-		AlertEntity selectAlert = alertRepository.findByPostInfo(postInfo)
+		AlertEntity createdAlert = alertJpaRepository.save(alert);
+		AlertEntity selectAlert = alertJpaRepository.findByPostInfo(postInfo)
 				.orElseThrow(() -> new CustomException("400", "알림이 존재하지 않습니다."));
 		assertThat(createdAlert).isEqualTo(selectAlert);
 	}
@@ -415,8 +415,8 @@ public class AlertRepositoryTest {
 				.postWriter(freeBoardAnswer.getFreeBoard().getWriter())
 				.createDate(LocalDateTime.now())
 				.build();
-		AlertEntity createdAlert = alertRepository.save(alert);
-		AlertEntity selectAlert = alertRepository.findByPostInfo(postInfo)
+		AlertEntity createdAlert = alertJpaRepository.save(alert);
+		AlertEntity selectAlert = alertJpaRepository.findByPostInfo(postInfo)
 				.orElseThrow(() -> new CustomException("400", "알림이 존재하지 않습니다."));
 		assertThat(createdAlert).isEqualTo(selectAlert);
 	}

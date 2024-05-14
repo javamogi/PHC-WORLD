@@ -1,7 +1,7 @@
 package com.phcworld.alert.infrasturcture;
 
 import com.phcworld.domain.alert.QAlert;
-import com.phcworld.alert.infrasturcture.dto.AlertSelectDto;
+import com.phcworld.alert.infrasturcture.port.AlertSelectDto;
 import com.phcworld.domain.board.QDiary;
 import com.phcworld.domain.common.SaveType;
 import com.phcworld.freeboard.infrastructure.QFreeBoardEntity;
@@ -17,7 +17,7 @@ import java.util.List;
 
 @Repository
 @RequiredArgsConstructor
-public class AlertRepositoryCustomImpl implements AlertRepositoryCustom {
+public class AlertJpaRepositoryCustomImpl implements AlertJpaRepositoryCustom {
     private final JPAQueryFactory queryFactory;
     QAlert alert = QAlert.alert;
     QFreeBoardEntity freeBoard = QFreeBoardEntity.freeBoardEntity;
